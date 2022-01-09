@@ -1,0 +1,6 @@
+This file should be updated each and every time anyone updates firmware.
+
+Current Firmware/Image Version:
+	RoboRIO:
+	SparkMax Brushless:
+  	Radio:Always uses latest firmware
