@@ -26,29 +26,29 @@ public class Drivetrain extends SubsystemBase {
     rightFrontMotor.restoreFactoryDefaults();
     rightBackMotor.restoreFactoryDefaults();
 
-    IdleMode mode = IdleMode.kBrake;//brakes
+    IdleMode mode = IdleMode.kBrake; //brakes
     leftFrontMotor.setIdleMode(mode);
     leftBackMotor.setIdleMode(mode);
     rightFrontMotor.setIdleMode(mode);
     rightBackMotor.setIdleMode(mode);
 
-    double openLoopRampRate = 0.6;//0.6 sec to full velocity
+    double openLoopRampRate = 0.6; //0.6 sec to full velocity
     leftFrontMotor.setOpenLoopRampRate(openLoopRampRate);
     leftBackMotor.setOpenLoopRampRate(openLoopRampRate);
     rightFrontMotor.setOpenLoopRampRate(openLoopRampRate);
     rightBackMotor.setOpenLoopRampRate(openLoopRampRate);
 
-    int currentLimit = 45;//maxmium amps
+    int currentLimit = 45; //maxmium amps
     leftFrontMotor.setSmartCurrentLimit(currentLimit);
     leftBackMotor.setSmartCurrentLimit(currentLimit);
     rightFrontMotor.setSmartCurrentLimit(currentLimit);
     rightBackMotor.setSmartCurrentLimit(currentLimit);
 
-    leftFrontMotor.follow(leftBackMotor, false);//false means not inverted, and true means inverted
+    leftFrontMotor.follow(leftBackMotor, false); //false means not inverted, and true means inverted
     rightFrontMotor.follow(rightBackMotor, false);
 
     diffDrive = new DifferentialDrive(leftBackMotor, rightBackMotor);
-    diffDrive.setDeadband(0.05);//minmal signal
+    diffDrive.setDeadband(0.05); //minmal signal
 
   }
 
