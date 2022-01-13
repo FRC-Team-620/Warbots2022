@@ -56,6 +56,24 @@ public class Drivetrain extends SubsystemBase {
     diffDrive.curvatureDrive(speed, rotation, isCurvatureDrive);
   }
 
+  public void leftBackMotorDrive(double x) {
+    leftBackMotor.set(x);
+  }
+
+  public void rightBackMotorDrive(double x) {
+    rightBackMotor.set(x);
+  }
+
+  public void leftFrontMotorDrive(double x) {
+    leftFrontMotor.set(x);
+  }
+
+  public void rightFrontMotorDrive(double x) {
+    leftBackMotor.set(x);
+  }
+  
+
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

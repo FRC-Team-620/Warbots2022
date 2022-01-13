@@ -23,4 +23,15 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
   } 
 
+  @Override
+  public void testInit() {
+    CommandScheduler.getInstance().cancelAll();
+    robotContainer.init();
+  }
+
+  @Override
+  public void testPeriodic() {
+    //robotContainer.drivetrain.leftFrontMotorDrive(0.3);
+  }
+
 }
