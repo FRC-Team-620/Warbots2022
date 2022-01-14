@@ -14,17 +14,18 @@ import frc.robot.Drive.DriveWithJoystick;
 import edu.wpi.first.wpilibj2.command.Command;
 /** Add your docs here. */
 public class RobotContainer {
-    protected Drivetrain drivetrain = new Drivetrain();
+    public Drivetrain drivetrain = new Drivetrain();
     protected XboxController driver = new XboxController(0);
 
     protected DriveWithJoystick driveWithJoystick;
 
-    public Command getDriveWithJoystick() {
-        return new DriveWithJoystick(drivetrain, driver);
-    }
+    //public Command getDriveWithJoystick() {
+        //return new DriveWithJoystick(drivetrain, driver);
+    //}
 
     public void init() {
-        drivetrain.setDefaultCommand(getDriveWithJoystick());
+        driveWithJoystick = new DriveWithJoystick(drivetrain, driver);
+        drivetrain.setDefaultCommand(driveWithJoystick);
     } 
 
 }

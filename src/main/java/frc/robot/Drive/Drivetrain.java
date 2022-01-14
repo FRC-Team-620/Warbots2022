@@ -49,6 +49,7 @@ public class Drivetrain extends SubsystemBase {
 
     diffDrive = new DifferentialDrive(leftBackMotor, rightBackMotor);
     diffDrive.setDeadband(0.05); //minmal signal
+    rightBackMotor.setInverted(true);
 
   }
 

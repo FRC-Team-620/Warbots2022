@@ -21,6 +21,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+    //robotContainer.drivetrain.leftFrontMotorDrive(0.3);
   } 
 
   @Override
@@ -31,7 +32,17 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic() {
-    //robotContainer.drivetrain.leftFrontMotorDrive(0.3);
+    robotContainer.drivetrain.leftFrontMotorDrive(0.3);
+  }
+
+  @Override
+  public void teleopInit() {
+
+  }
+
+  @Override
+  public void teleopPeriodic() {
+    
   }
 
 }
