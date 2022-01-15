@@ -21,8 +21,8 @@ public class DriveWithJoystick extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //double rotation = -1.0*driverXbox.getX(Hand.kLeft);
-    double rotation = -1.0*driverXbox.getLeftX();
+    //double rotation = -1.0 * driverXbox.getX(Hand.kLeft);
+    double rotation = -1.0 * driverXbox.getLeftX();
     double speed = 0.0;
 
     if (driverXbox.getLeftTriggerAxis() > driverXbox.getRightTriggerAxis()) {
@@ -30,6 +30,11 @@ public class DriveWithJoystick extends CommandBase {
     } else if (driverXbox.getLeftTriggerAxis() < driverXbox.getRightTriggerAxis()) {
       speed = driverXbox.getRightTriggerAxis() * -0.5;
     }
+    
+    if (driverXbox.getLeftBumperPressed()) {
+      //Do Stuff
+    }
+
     drivetrain.curvatureInput(speed, rotation, !(driverXbox.getBButton()));
   }
 

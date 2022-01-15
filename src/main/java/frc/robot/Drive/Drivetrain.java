@@ -53,6 +53,19 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
+  public CANSparkMax getMotor(int idx) {
+    idx = (idx-1)%4+1;
+    switch(idx) {
+      case 1:
+        return leftFrontMotor;
+      case 2:
+        return leftBackMotor;
+      case 3:
+        return rightFrontMotor;
+    }
+    return rightBackMotor;
+  }
+
   public void curvatureInput(double speed, double rotation, boolean isCurvatureDrive) {
     diffDrive.curvatureDrive(speed, rotation, isCurvatureDrive);
   }
@@ -73,8 +86,6 @@ public class Drivetrain extends SubsystemBase {
     rightFrontMotor.set(x);
   }
   
-
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
