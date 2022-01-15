@@ -1,7 +1,25 @@
 package frc.robot.Drive;
 
-public class RotateMotor {
-    
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.XboxController;
+
+public class RotateMotor extends CommandBase {
+    Drivetrain drivetrain;
+    XboxController driverXbox;
+    public RotateMotor(Drivetrain drivetrain, XboxController driverXbox) {
+        addRequirements(drivetrain);
+        this.drivetrain = drivetrain;
+        this.driverXbox = driverXbox;  
+    }
+    public void execute() {
+        if (driverXbox.getLeftBumperPressed()) {
+            //Do Stuff
+        }
+        if (driverXbox.getRightBumperPressed()) {
+            //Do Stuff
+          }
+    }
+
 }
 
 // public void motorRotate(int idx, double v, int rotations) {
