@@ -70,7 +70,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void rightFrontMotorDrive(double x) {
-    leftBackMotor.set(x);
+    rightFrontMotor.set(x);
   }
   
 
