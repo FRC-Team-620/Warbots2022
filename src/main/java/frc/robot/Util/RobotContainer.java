@@ -13,6 +13,8 @@ import frc.robot.Drive.RotateMotor;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Drive.DriveWithJoystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj.XboxController.Button;
 /** Add your docs here. */
 public class RobotContainer {
     protected Drivetrain drivetrain = new Drivetrain();
@@ -27,9 +29,14 @@ public class RobotContainer {
     //}
 
     public void init() {
+        //rotateMotor = new RotateMotor(drivetrain, driver);
         driveWithJoystick = new DriveWithJoystick(drivetrain, driver);
         drivetrain.setDefaultCommand(driveWithJoystick);
         rotateMotor = new RotateMotor(drivetrain, driver);
+        JoystickButton leftBumper = new JoystickButton(driver, Button.kLeftBumper.value);
+        leftBumper.whenPressed(rotateMotor);
+        //drivetrain.setDefaultCommand(rotateMotor);
+        //rotateMotor.schedule(false);
     } 
 
 }
