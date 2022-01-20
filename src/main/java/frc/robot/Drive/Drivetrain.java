@@ -5,14 +5,37 @@
 package frc.robot.Drive;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 
 public class Drivetrain extends SubsystemBase {
   private CANSparkMax leftFrontMotor, rightFrontMotor, leftBackMotor, rightBackMotor;
   private DifferentialDrive diffDrive;
+
+  // The left-side drive encoder
+  private final RelativeEncoder leftEncoder = leftBackMotor.getEncoder();
+
+  // The right-side drive encoder
+  private final RelativeEncoder rightEncoder = rightBackMotor.getEncoder();
+
+
+  // The gyro sensor
+  private final Gyro m_gyro = new AHRS(SerialPort.Port.kUSB);
+  //AHRS gyro = ;
+  
+  // Odometry class for tracking robot pose
+  private final DifferentialDriveOdometry m_odometry;
+
+
 
   /** Creates a new Drivetrain. */
   public Drivetrain() {
@@ -50,6 +73,8 @@ public class Drivetrain extends SubsystemBase {
     diffDrive = new DifferentialDrive(leftBackMotor, rightBackMotor);
     diffDrive.setDeadband(0.05); //minmal signal
     rightBackMotor.setInverted(true);
+    m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
+    
 
   }
 
@@ -89,5 +114,6 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-  }
+    m_odometry.update(m_gyro.getRotation2d(), leftEncoder.getPosition() * Math.PI * 4 * 0.12 * 0.0254, rightEncoder.getPosition() * Math.PI * 4 * 0.12 * 0.0254);
+  }//6 on main bot, 4 on test bot
 }
