@@ -21,22 +21,15 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 
 public class Drivetrain extends SubsystemBase {
-  private CANSparkMax leftFrontMotor, rightFrontMotor, leftBackMotor, rightBackMotor;
-  private DifferentialDrive diffDrive;
-
-  // The left-side drive encoder
-  private final RelativeEncoder leftEncoder = leftBackMotor.getEncoder();
-
-  // The right-side drive encoder
-  private final RelativeEncoder rightEncoder = rightBackMotor.getEncoder();
-
-
+  protected final CANSparkMax leftFrontMotor, rightFrontMotor, leftBackMotor, rightBackMotor;
+  protected final DifferentialDrive diffDrive;
+  protected final RelativeEncoder leftBackEncoder, leftFrontEncoder, rightBackEncoder, rightFrontEncoder;
+  protected final double countsPerMotorRevolution;
   // The gyro sensor
-  private final Gyro m_gyro = new AHRS(SerialPort.Port.kUSB);
-  //AHRS gyro = ;
+  protected final Gyro gyro;
   
   // Odometry class for tracking robot pose
-  private final DifferentialDriveOdometry m_odometry;
+  protected final DifferentialDriveOdometry odometry;
 
 
 
@@ -73,49 +66,54 @@ public class Drivetrain extends SubsystemBase {
     leftFrontMotor.follow(leftBackMotor, false); //false means not inverted, and true means inverted
     rightFrontMotor.follow(rightBackMotor, false);
 
+    // Encoder creation
+    leftBackEncoder = leftBackMotor.getEncoder();
+    leftFrontEncoder = leftFrontMotor.getEncoder();
+    rightBackEncoder = rightBackMotor.getEncoder();
+    rightFrontEncoder = rightFrontMotor.getEncoder();
+
+    countsPerMotorRevolution = leftBackEncoder.getCountsPerRevolution(); 
+    //this choice of encoder is arbitrary -- any other encoder would work just as well
+
+    var conversionFactor = Constants.gearRatio * Constants.wheelDiameterInInches * Constants.inchesToMetersFactor * Math.PI;
+    leftBackEncoder.setPositionConversionFactor(conversionFactor);
+    leftFrontEncoder.setPositionConversionFactor(conversionFactor);
+    rightFrontEncoder.setPositionConversionFactor(conversionFactor);
+    rightBackEncoder.setPositionConversionFactor(conversionFactor);
+
+    gyro = new AHRS(SerialPort.Port.kUSB);
+
     diffDrive = new DifferentialDrive(leftBackMotor, rightBackMotor);
     diffDrive.setDeadband(0.05); //minmal signal
     rightBackMotor.setInverted(true);
-    m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
     resetEncoders();
-    //leftEncoder.setDistancePerPulse(Constants.kEncoderDistancePerPulse);
-    //rightEncoder.setDistancePerPulse(Constants.kEncoderDistancePerPulse);
 
-    //leftEncoder.setPositionConversionFactor(factor)
-
+    odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
   }
 
-  /**
-   * Returns the currently-estimated pose of the robot.
-   *
-   * @return The pose.
-   */
   public Pose2d getPose() {
-    return m_odometry.getPoseMeters();
+    return odometry.getPoseMeters();
   }
 
-  /**
-   * Returns the current wheel speeds of the robot.
-   *
-   * @return The current wheel speeds.
-   */
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(leftEncoder.getVelocity() / 60 * 0.12 * 4 * 0.0254 * Math.PI, rightEncoder.getVelocity() / 60 * 0.12 * 4 * 0.0254 * Math.PI);
+    return new DifferentialDriveWheelSpeeds(getDistance(leftBackEncoder), getDistance(rightBackEncoder));
+  }
+
+  public double getHeading() {
+    return gyro.getRotation2d().getDegrees();
   }
 
   /** Resets the drive encoders to currently read a position of 0. */
   public void resetEncoders() {
-    leftEncoder.setPosition(0);
-    rightEncoder.setPosition(0);
+    leftFrontEncoder.setPosition(0);
+    rightFrontEncoder.setPosition(0);
+    leftBackEncoder.setPosition(0);
+    rightBackEncoder.setPosition(0);
   }
-   /**
-   * Resets the odometry to the specified pose.
-   *
-   * @param pose The pose to which to set the odometry.+
-   */
+
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
-    m_odometry.resetPosition(pose, m_gyro.getRotation2d());
+    odometry.resetPosition(pose, gyro.getRotation2d());
   }
 
   /**
@@ -129,16 +127,6 @@ public class Drivetrain extends SubsystemBase {
     rightBackMotor.setVoltage(rightVolts);
     diffDrive.feed();
   }
-
-  /**
-   * Gets the average distance of the two encoders.
-   *
-   * @return the average of the two encoder readings
-   */
-  public double getAverageEncoderDistance() {
-    return (leftEncoder.getDistance() + rightEncoder.getDistance()) / 2.0;
-  }
-
 
   public CANSparkMax getMotor(int idx) {
     idx = (idx-1)%4+1;
@@ -175,17 +163,10 @@ public class Drivetrain extends SubsystemBase {
   
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    m_odometry.update(m_gyro.getRotation2d(), Drivetrain.findRelativeEncoderDistance(leftEncoder, 4), 
-      Drivetrain.findRelativeEncoderDistance(rightEncoder, 4));
-  }//6 on main bot, 4 on test bot
+    odometry.update(gyro.getRotation2d(), getDistance(leftBackEncoder), getDistance(rightBackEncoder));
+  }
 
-  // A helper method which finds the total distance travelled (ideally) by a wheel using a RelativeEncoder
-  // wheelDiameter is the diameter of the wheels and is measured in inches
-  // this method returns a value in meters
-  private static double findRelativeEncoderDistance(RelativeEncoder enc, double wheelDiameter) {
-    // 0.12 refers to wheel rotations per motor cycle
-    // 0.0254 inches to meters convertion factor 
-    return enc.getPosition() * wheelDiameter * Math.PI * 0.12 * 0.0254;
+  protected double getDistance(RelativeEncoder enc) {
+    return enc.getPosition() * enc.getPositionConversionFactor();
   }
 }
