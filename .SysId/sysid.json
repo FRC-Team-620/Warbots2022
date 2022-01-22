@@ -1,0 +1,11 @@
+{
+  "SysId": {
+    "Analysis Type": "General Mechanism",
+    "AnalyzerJSONLocation": "C:\\Users\\ilyabasin\\Downloads\\sysid_data20220121-150559.json",
+    "NetworkTables Settings": {
+      "serverTeam": "620"
+    },
+    "mode": "Client",
+    "serverTeam": "620"
+  }
+}

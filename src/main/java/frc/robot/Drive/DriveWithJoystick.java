@@ -7,14 +7,19 @@ package frc.robot.Drive;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
+import frc.robot.Drive.RotateMotor; 
+
 public class DriveWithJoystick extends CommandBase {
   protected Drivetrain drivetrain;
   protected XboxController driverXbox;
+
+  protected RotateMotor rotateMotor;
   /** Creates a new DriveWithJoystick. */
   public DriveWithJoystick(Drivetrain drivetrain, XboxController driverXbox) {
     addRequirements(drivetrain);
     this.drivetrain = drivetrain;
     this.driverXbox = driverXbox;
+    //this.rotateMotor = rotateMotor;
     // Use addRequirements() here to declare subsystem dependencies.
   }
   
@@ -31,10 +36,6 @@ public class DriveWithJoystick extends CommandBase {
       speed = driverXbox.getRightTriggerAxis() * -0.5;
     }
     
-    if (driverXbox.getLeftBumperPressed()) {
-      //Do Stuff
-    }
-
     drivetrain.curvatureInput(speed, rotation, !(driverXbox.getBButton()));
   }
 

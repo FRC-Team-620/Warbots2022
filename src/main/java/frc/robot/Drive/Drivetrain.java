@@ -5,14 +5,33 @@
 package frc.robot.Drive;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import com.kauailabs.navx.frc.AHRS;
+import frc.robot.Constants;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 
 public class Drivetrain extends SubsystemBase {
-  private CANSparkMax leftFrontMotor, rightFrontMotor, leftBackMotor, rightBackMotor;
-  private DifferentialDrive diffDrive;
+  protected final CANSparkMax leftFrontMotor, rightFrontMotor, leftBackMotor, rightBackMotor;
+  protected final DifferentialDrive diffDrive;
+  protected final RelativeEncoder leftBackEncoder, leftFrontEncoder, rightBackEncoder, rightFrontEncoder;
+  protected final double countsPerMotorRevolution;
+  // The gyro sensor
+  protected final Gyro gyro;
+  
+  // Odometry class for tracking robot pose
+  protected final DifferentialDriveOdometry odometry;
+
+
 
   /** Creates a new Drivetrain. */
   public Drivetrain() {
@@ -47,10 +66,66 @@ public class Drivetrain extends SubsystemBase {
     leftFrontMotor.follow(leftBackMotor, false); //false means not inverted, and true means inverted
     rightFrontMotor.follow(rightBackMotor, false);
 
+    // Encoder creation
+    leftBackEncoder = leftBackMotor.getEncoder();
+    leftFrontEncoder = leftFrontMotor.getEncoder();
+    rightBackEncoder = rightBackMotor.getEncoder();
+    rightFrontEncoder = rightFrontMotor.getEncoder();
+
+    countsPerMotorRevolution = leftBackEncoder.getCountsPerRevolution(); 
+    //this choice of encoder is arbitrary -- any other encoder would work just as well
+
+    var conversionFactor = Constants.gearRatio * Constants.wheelDiameterInInches * Constants.inchesToMetersFactor * Math.PI;
+    leftBackEncoder.setPositionConversionFactor(conversionFactor);
+    leftFrontEncoder.setPositionConversionFactor(conversionFactor);
+    rightFrontEncoder.setPositionConversionFactor(conversionFactor);
+    rightBackEncoder.setPositionConversionFactor(conversionFactor);
+
+    gyro = new AHRS(SerialPort.Port.kUSB);
+
     diffDrive = new DifferentialDrive(leftBackMotor, rightBackMotor);
     diffDrive.setDeadband(0.05); //minmal signal
     rightBackMotor.setInverted(true);
+    resetEncoders();
 
+    odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
+  }
+
+  public Pose2d getPose() {
+    return odometry.getPoseMeters();
+  }
+
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(getDistance(leftBackEncoder), getDistance(rightBackEncoder));
+  }
+
+  public double getHeading() {
+    return gyro.getRotation2d().getDegrees();
+  }
+
+  /** Resets the drive encoders to currently read a position of 0. */
+  public void resetEncoders() {
+    leftFrontEncoder.setPosition(0);
+    rightFrontEncoder.setPosition(0);
+    leftBackEncoder.setPosition(0);
+    rightBackEncoder.setPosition(0);
+  }
+
+  public void resetOdometry(Pose2d pose) {
+    resetEncoders();
+    odometry.resetPosition(pose, gyro.getRotation2d());
+  }
+
+  /**
+   * Controls the left and right sides of the drive directly with voltages.
+   *
+   * @param leftVolts the commanded left output
+   * @param rightVolts the commanded right output
+   */
+  public void tankDriveVolts(double leftVolts, double rightVolts) {
+    leftBackMotor.setVoltage(leftVolts);
+    rightBackMotor.setVoltage(rightVolts);
+    diffDrive.feed();
   }
 
   public CANSparkMax getMotor(int idx) {
@@ -88,6 +163,10 @@ public class Drivetrain extends SubsystemBase {
   
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    odometry.update(gyro.getRotation2d(), getDistance(leftBackEncoder), getDistance(rightBackEncoder));
+  }
+
+  protected double getDistance(RelativeEncoder enc) {
+    return enc.getPosition() * enc.getPositionConversionFactor();
   }
 }
