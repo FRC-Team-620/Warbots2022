@@ -58,6 +58,7 @@ public class RobotContainer {
         rotateMotor = new RotateMotor(drivetrain, driver);
         JoystickButton leftBumper = new JoystickButton(driver, Button.kLeftBumper.value);
         leftBumper.whenPressed(rotateMotor);
+        shooterCommand = new ShooterCommand(shooterSubsystem, driver);
         shooterSubsystem.setDefaultCommand(shooterCommand);
         //drivetrain.setDefaultCommand(rotateMotor);
         //rotateMotor.schedule(false);
