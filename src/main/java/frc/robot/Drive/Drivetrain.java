@@ -31,8 +31,6 @@ public class Drivetrain extends SubsystemBase {
   // Odometry class for tracking robot pose
   protected final DifferentialDriveOdometry odometry;
 
-
-
   /** Creates a new Drivetrain. */
   public Drivetrain() {
     leftFrontMotor = new CANSparkMax(1, MotorType.kBrushless);

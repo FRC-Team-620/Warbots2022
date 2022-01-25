@@ -10,6 +10,8 @@ package frc.robot.Util;
 
 import frc.robot.Drive.Drivetrain;
 import frc.robot.Drive.RotateMotor;
+import frc.robot.Shooter.ShooterCommand;
+import frc.robot.Shooter.ShooterSubsystem;
 
 import java.util.List;
 
@@ -34,14 +36,20 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 public class RobotContainer {
     protected Drivetrain drivetrain = new Drivetrain();
     protected XboxController driver = new XboxController(0);
+    protected ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+    
     
 
     protected DriveWithJoystick driveWithJoystick;
     protected RotateMotor rotateMotor;
+    protected ShooterCommand shooterCommand;
 
     //public Command getDriveWithJoystick() {
         //return new DriveWithJoystick(drivetrain, driver);
     //}
+    public RobotContainer() {
+        
+    }
 
     public void init() {
         //rotateMotor = new RotateMotor(drivetrain, driver);
@@ -50,6 +58,7 @@ public class RobotContainer {
         rotateMotor = new RotateMotor(drivetrain, driver);
         JoystickButton leftBumper = new JoystickButton(driver, Button.kLeftBumper.value);
         leftBumper.whenPressed(rotateMotor);
+        shooterSubsystem.setDefaultCommand(shooterCommand);
         //drivetrain.setDefaultCommand(rotateMotor);
         //rotateMotor.schedule(false);
     } 
