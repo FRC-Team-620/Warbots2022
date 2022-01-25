@@ -28,12 +28,13 @@ public class DriveWithJoystick extends CommandBase {
   public void execute() {
     //double rotation = -1.0 * driverXbox.getX(Hand.kLeft);
     double rotation = -1.0 * driverXbox.getLeftX();
+    System.out.println("HI");
     double speed = 0.0;
 
-    if (driverXbox.getLeftTriggerAxis() > driverXbox.getRightTriggerAxis()) {
-      speed = driverXbox.getLeftTriggerAxis() * 0.5;
-    } else if (driverXbox.getLeftTriggerAxis() < driverXbox.getRightTriggerAxis()) {
-      speed = driverXbox.getRightTriggerAxis() * -0.5;
+    if (driverXbox.getRightTriggerAxis() > driverXbox.getLeftTriggerAxis()) {
+      speed = driverXbox.getRightTriggerAxis() * 0.5;
+    } else if (driverXbox.getRightTriggerAxis() < driverXbox.getLeftTriggerAxis()) {
+      speed = driverXbox.getLeftTriggerAxis() * -0.5;
     }
     
     drivetrain.curvatureInput(speed, rotation, !(driverXbox.getBButton()));

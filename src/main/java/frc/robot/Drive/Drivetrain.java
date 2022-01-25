@@ -21,7 +21,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 
 public class Drivetrain extends SubsystemBase {
-  protected final CANSparkMax leftFrontMotor, rightFrontMotor, leftBackMotor, rightBackMotor;
+  protected final CANSparkMax rightBackMotor, leftBackMotor, rightFrontMotor, leftFrontMotor;
   protected final DifferentialDrive diffDrive;
   protected final RelativeEncoder leftBackEncoder, leftFrontEncoder, rightBackEncoder, rightFrontEncoder;
   protected final double countsPerMotorRevolution;
@@ -35,42 +35,42 @@ public class Drivetrain extends SubsystemBase {
 
   /** Creates a new Drivetrain. */
   public Drivetrain() {
-    leftFrontMotor = new CANSparkMax(1, MotorType.kBrushless);
-    rightFrontMotor = new CANSparkMax(3, MotorType.kBrushless);
-    leftBackMotor = new CANSparkMax(2, MotorType.kBrushless);
-    rightBackMotor = new CANSparkMax(4, MotorType.kBrushless);
+    rightBackMotor = new CANSparkMax(1, MotorType.kBrushless);
+    leftBackMotor = new CANSparkMax(3, MotorType.kBrushless);
+    rightFrontMotor = new CANSparkMax(2, MotorType.kBrushless);
+    leftFrontMotor = new CANSparkMax(4, MotorType.kBrushless);
 
-    leftFrontMotor.restoreFactoryDefaults();
-    leftBackMotor.restoreFactoryDefaults();
-    rightFrontMotor.restoreFactoryDefaults();
     rightBackMotor.restoreFactoryDefaults();
+    rightFrontMotor.restoreFactoryDefaults();
+    leftBackMotor.restoreFactoryDefaults();
+    leftFrontMotor.restoreFactoryDefaults();
 
     IdleMode mode = IdleMode.kBrake; //brakes
-    leftFrontMotor.setIdleMode(mode);
-    leftBackMotor.setIdleMode(mode);
-    rightFrontMotor.setIdleMode(mode);
     rightBackMotor.setIdleMode(mode);
+    rightFrontMotor.setIdleMode(mode);
+    leftBackMotor.setIdleMode(mode);
+    leftFrontMotor.setIdleMode(mode);
 
     double openLoopRampRate = 0.6; //0.6 sec to full velocity
-    leftFrontMotor.setOpenLoopRampRate(openLoopRampRate);
-    leftBackMotor.setOpenLoopRampRate(openLoopRampRate);
-    rightFrontMotor.setOpenLoopRampRate(openLoopRampRate);
     rightBackMotor.setOpenLoopRampRate(openLoopRampRate);
+    rightFrontMotor.setOpenLoopRampRate(openLoopRampRate);
+    leftBackMotor.setOpenLoopRampRate(openLoopRampRate);
+    leftFrontMotor.setOpenLoopRampRate(openLoopRampRate);
 
     int currentLimit = 45; //maxmium amps
-    leftFrontMotor.setSmartCurrentLimit(currentLimit);
-    leftBackMotor.setSmartCurrentLimit(currentLimit);
-    rightFrontMotor.setSmartCurrentLimit(currentLimit);
     rightBackMotor.setSmartCurrentLimit(currentLimit);
+    rightFrontMotor.setSmartCurrentLimit(currentLimit);
+    leftBackMotor.setSmartCurrentLimit(currentLimit);
+    leftFrontMotor.setSmartCurrentLimit(currentLimit);
 
-    leftFrontMotor.follow(leftBackMotor, false); //false means not inverted, and true means inverted
-    rightFrontMotor.follow(rightBackMotor, false);
+    rightBackMotor.follow(rightFrontMotor, false); //false means not inverted, and true means inverted
+    leftBackMotor.follow(leftFrontMotor, false);
 
     // Encoder creation
-    leftBackEncoder = leftBackMotor.getEncoder();
-    leftFrontEncoder = leftFrontMotor.getEncoder();
-    rightBackEncoder = rightBackMotor.getEncoder();
-    rightFrontEncoder = rightFrontMotor.getEncoder();
+    leftBackEncoder = rightFrontMotor.getEncoder();
+    leftFrontEncoder = rightBackMotor.getEncoder();
+    rightBackEncoder = leftFrontMotor.getEncoder();
+    rightFrontEncoder = leftBackMotor.getEncoder();
 
     countsPerMotorRevolution = leftBackEncoder.getCountsPerRevolution(); 
     //this choice of encoder is arbitrary -- any other encoder would work just as well
@@ -83,9 +83,9 @@ public class Drivetrain extends SubsystemBase {
 
     gyro = new AHRS(SerialPort.Port.kUSB);
 
-    diffDrive = new DifferentialDrive(leftBackMotor, rightBackMotor);
+    diffDrive = new DifferentialDrive(rightFrontMotor, leftFrontMotor);
     diffDrive.setDeadband(0.05); //minmal signal
-    rightBackMotor.setInverted(true);
+    leftFrontMotor.setInverted(true);
     resetEncoders();
 
     odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
@@ -123,8 +123,8 @@ public class Drivetrain extends SubsystemBase {
    * @param rightVolts the commanded right output
    */
   public void tankDriveVolts(double leftVolts, double rightVolts) {
-    leftBackMotor.setVoltage(leftVolts);
-    rightBackMotor.setVoltage(rightVolts);
+    rightFrontMotor.setVoltage(leftVolts);
+    leftFrontMotor.setVoltage(rightVolts);
     diffDrive.feed();
   }
 
@@ -132,13 +132,13 @@ public class Drivetrain extends SubsystemBase {
     idx = (idx-1)%4+1;
     switch(idx) {
       case 1:
-        return leftFrontMotor;
+        return rightBackMotor;
       case 2:
-        return leftBackMotor;
-      case 3:
         return rightFrontMotor;
+      case 3:
+        return leftBackMotor;
     }
-    return rightBackMotor;
+    return leftFrontMotor;
   }
 
   public void curvatureInput(double speed, double rotation, boolean isCurvatureDrive) {
@@ -146,19 +146,19 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void leftBackMotorDrive(double x) {
-    leftBackMotor.set(x);
+    rightFrontMotor.set(x);
   }
 
   public void rightBackMotorDrive(double x) {
-    rightBackMotor.set(x);
-  }
-
-  public void leftFrontMotorDrive(double x) {
     leftFrontMotor.set(x);
   }
 
+  public void leftFrontMotorDrive(double x) {
+    rightBackMotor.set(x);
+  }
+
   public void rightFrontMotorDrive(double x) {
-    rightFrontMotor.set(x);
+    leftBackMotor.set(x);
   }
   
   @Override
