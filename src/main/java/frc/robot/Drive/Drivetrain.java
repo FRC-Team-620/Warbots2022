@@ -4,93 +4,128 @@
 
 package frc.robot.Drive;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import com.kauailabs.navx.frc.AHRS;
-import frc.robot.Constants;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.*;
+import com.revrobotics.RelativeEncoder;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Drivetrain extends SubsystemBase {
-  protected final CANSparkMax leftFrontMotor, rightFrontMotor, leftBackMotor, rightBackMotor;
-  protected final DifferentialDrive diffDrive;
-  protected final RelativeEncoder leftBackEncoder, leftFrontEncoder, rightBackEncoder, rightFrontEncoder;
-  protected final double countsPerMotorRevolution;
-  // The gyro sensor
-  protected final Gyro gyro;
-  
+
+  // motor controllers and drive subsystem
+  private CANSparkMax leftFrontMotor, rightFrontMotor, leftBackMotor, rightBackMotor;
+  private DifferentialDrive diffDrive;
+
+  // sensors
+  private RelativeEncoder leftBackEncoder, leftFrontEncoder, rightBackEncoder, rightFrontEncoder;
+  private AHRS navx;
+
   // Odometry class for tracking robot pose
-  protected final DifferentialDriveOdometry odometry;
+  private DifferentialDriveOdometry odometry;
 
-
+  // Constants (put in separate file later)
+  private double countsPerMotorRevolution;
 
   /** Creates a new Drivetrain. */
   public Drivetrain() {
+    // initialize motors
+    initMotors();
+    initSensors();
+  }
+
+  /* INITIALIZATION */
+  // motors
+  private void initMotors() {
+    //initialize
     leftFrontMotor = new CANSparkMax(1, MotorType.kBrushless);
     rightFrontMotor = new CANSparkMax(3, MotorType.kBrushless);
     leftBackMotor = new CANSparkMax(2, MotorType.kBrushless);
     rightBackMotor = new CANSparkMax(4, MotorType.kBrushless);
 
+    // restore factory defaults
     leftFrontMotor.restoreFactoryDefaults();
     leftBackMotor.restoreFactoryDefaults();
     rightFrontMotor.restoreFactoryDefaults();
     rightBackMotor.restoreFactoryDefaults();
 
-    IdleMode mode = IdleMode.kBrake; //brakes
+    //set idle mode
+    setDriveIdleMode(Constants.idleMode);
+
+    // configure ramping
+    leftFrontMotor.setOpenLoopRampRate(Constants.openLoopRampRate);
+    leftBackMotor.setOpenLoopRampRate(Constants.openLoopRampRate);
+    rightFrontMotor.setOpenLoopRampRate(Constants.openLoopRampRate);
+    rightBackMotor.setOpenLoopRampRate(Constants.openLoopRampRate);
+
+    // set current limit
+    leftFrontMotor.setSmartCurrentLimit(Constants.currentLimit);
+    leftBackMotor.setSmartCurrentLimit(Constants.currentLimit);
+    rightFrontMotor.setSmartCurrentLimit(Constants.currentLimit);
+    rightBackMotor.setSmartCurrentLimit(Constants.currentLimit);
+
+    // leader/follower config
+    leftFrontMotor.follow(leftBackMotor, false); // false means not inverted, and true means inverted
+    rightFrontMotor.follow(rightBackMotor, false);
+
+    // differential drive setup
+    diffDrive = new DifferentialDrive(leftBackMotor, rightBackMotor);
+    diffDrive.setDeadband(0.05); // minmal signal
+    rightBackMotor.setInverted(true);
+  }
+
+  // motor utils
+  private void setDriveIdleMode(IdleMode mode) {
+    // IdleMode mode = IdleMode.kBrake; // brakes
     leftFrontMotor.setIdleMode(mode);
     leftBackMotor.setIdleMode(mode);
     rightFrontMotor.setIdleMode(mode);
     rightBackMotor.setIdleMode(mode);
+  }
 
-    double openLoopRampRate = 0.6; //0.6 sec to full velocity
-    leftFrontMotor.setOpenLoopRampRate(openLoopRampRate);
-    leftBackMotor.setOpenLoopRampRate(openLoopRampRate);
-    rightFrontMotor.setOpenLoopRampRate(openLoopRampRate);
-    rightBackMotor.setOpenLoopRampRate(openLoopRampRate);
-
-    int currentLimit = 45; //maxmium amps
-    leftFrontMotor.setSmartCurrentLimit(currentLimit);
-    leftBackMotor.setSmartCurrentLimit(currentLimit);
-    rightFrontMotor.setSmartCurrentLimit(currentLimit);
-    rightBackMotor.setSmartCurrentLimit(currentLimit);
-
-    leftFrontMotor.follow(leftBackMotor, false); //false means not inverted, and true means inverted
-    rightFrontMotor.follow(rightBackMotor, false);
-
-    // Encoder creation
+  // sensors
+  private void initSensors() {
+    // Encoders
     leftBackEncoder = leftBackMotor.getEncoder();
     leftFrontEncoder = leftFrontMotor.getEncoder();
     rightBackEncoder = rightBackMotor.getEncoder();
     rightFrontEncoder = rightFrontMotor.getEncoder();
 
-    countsPerMotorRevolution = leftBackEncoder.getCountsPerRevolution(); 
-    //this choice of encoder is arbitrary -- any other encoder would work just as well
+    // is this used for anything? 
+    countsPerMotorRevolution = leftBackEncoder.getCountsPerRevolution();
+    // this choice of encoder is arbitrary -- any other encoder would work just as
+    // well
 
-    var conversionFactor = Constants.gearRatio * Constants.wheelDiameterInInches * Constants.inchesToMetersFactor * Math.PI;
-    leftBackEncoder.setPositionConversionFactor(conversionFactor);
-    leftFrontEncoder.setPositionConversionFactor(conversionFactor);
-    rightFrontEncoder.setPositionConversionFactor(conversionFactor);
-    rightBackEncoder.setPositionConversionFactor(conversionFactor);
+    leftBackEncoder.setPositionConversionFactor(Constants.conversionFactor);
+    leftFrontEncoder.setPositionConversionFactor(Constants.conversionFactor);
+    rightFrontEncoder.setPositionConversionFactor(Constants.conversionFactor);
+    rightBackEncoder.setPositionConversionFactor(Constants.conversionFactor);
 
-    gyro = new AHRS(SerialPort.Port.kUSB);
-
-    diffDrive = new DifferentialDrive(leftBackMotor, rightBackMotor);
-    diffDrive.setDeadband(0.05); //minmal signal
-    rightBackMotor.setInverted(true);
     resetEncoders();
 
-    odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
+    // NavX Mini (Gyro)
+    navx = new AHRS(SerialPort.Port.kUSB);
+
+    // Pathing Odometry
+    odometry = new DifferentialDriveOdometry(navx.getRotation2d());
+
   }
 
+  /* TELEOP CONTROL */
+  // curvature drive
+  public void curvatureInput(double speed, double rotation, boolean isCurvatureDrive) {
+    // TODO: add constants for speed and rotation
+    diffDrive.curvatureDrive(speed, rotation, isCurvatureDrive);
+  }
+
+  /* PATHING UTILS */
   public Pose2d getPose() {
     return odometry.getPoseMeters();
   }
@@ -100,7 +135,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public double getHeading() {
-    return gyro.getRotation2d().getDegrees();
+    return navx.getRotation2d().getDegrees();
   }
 
   /** Resets the drive encoders to currently read a position of 0. */
@@ -113,13 +148,13 @@ public class Drivetrain extends SubsystemBase {
 
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
-    odometry.resetPosition(pose, gyro.getRotation2d());
+    odometry.resetPosition(pose, navx.getRotation2d());
   }
 
   /**
    * Controls the left and right sides of the drive directly with voltages.
    *
-   * @param leftVolts the commanded left output
+   * @param leftVolts  the commanded left output
    * @param rightVolts the commanded right output
    */
   public void tankDriveVolts(double leftVolts, double rightVolts) {
@@ -128,9 +163,10 @@ public class Drivetrain extends SubsystemBase {
     diffDrive.feed();
   }
 
+  // What is this for????
   public CANSparkMax getMotor(int idx) {
-    idx = (idx-1)%4+1;
-    switch(idx) {
+    idx = (idx - 1) % 4 + 1;
+    switch (idx) {
       case 1:
         return leftFrontMotor;
       case 2:
@@ -141,10 +177,7 @@ public class Drivetrain extends SubsystemBase {
     return rightBackMotor;
   }
 
-  public void curvatureInput(double speed, double rotation, boolean isCurvatureDrive) {
-    diffDrive.curvatureDrive(speed, rotation, isCurvatureDrive);
-  }
-
+  // What are all these for ????
   public void leftBackMotorDrive(double x) {
     leftBackMotor.set(x);
   }
@@ -160,10 +193,10 @@ public class Drivetrain extends SubsystemBase {
   public void rightFrontMotorDrive(double x) {
     rightFrontMotor.set(x);
   }
-  
+
   @Override
   public void periodic() {
-    odometry.update(gyro.getRotation2d(), getDistance(leftBackEncoder), getDistance(rightBackEncoder));
+    odometry.update(navx.getRotation2d(), getDistance(leftBackEncoder), getDistance(rightBackEncoder));
   }
 
   protected double getDistance(RelativeEncoder enc) {
