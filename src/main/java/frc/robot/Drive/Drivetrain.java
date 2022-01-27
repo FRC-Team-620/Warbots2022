@@ -145,19 +145,19 @@ public class Drivetrain extends SubsystemBase {
     diffDrive.curvatureDrive(speed, rotation, isCurvatureDrive);
   }
 
-  public void leftBackMotorDrive(double x) {
+  public void rightFrontMotorDrive(double x) {
     rightFrontMotor.set(x);
   }
 
-  public void rightBackMotorDrive(double x) {
+  public void leftFrontMotorDrive(double x) {
     leftFrontMotor.set(x);
   }
 
-  public void leftFrontMotorDrive(double x) {
+  public void rightBackMotorDrive(double x) {
     rightBackMotor.set(x);
   }
 
-  public void rightFrontMotorDrive(double x) {
+  public void leftBackMotorDrive(double x) {
     leftBackMotor.set(x);
   }
   
