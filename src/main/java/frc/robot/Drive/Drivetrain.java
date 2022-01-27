@@ -27,11 +27,9 @@ public class Drivetrain extends SubsystemBase {
   protected final double countsPerMotorRevolution;
   // The gyro sensor
   protected final Gyro gyro;
-  
+
   // Odometry class for tracking robot pose
   protected final DifferentialDriveOdometry odometry;
-
-
 
   /** Creates a new Drivetrain. */
   public Drivetrain() {
@@ -45,25 +43,25 @@ public class Drivetrain extends SubsystemBase {
     leftBackMotor.restoreFactoryDefaults();
     leftFrontMotor.restoreFactoryDefaults();
 
-    IdleMode mode = IdleMode.kBrake; //brakes
+    IdleMode mode = IdleMode.kBrake; // brakes
     rightBackMotor.setIdleMode(mode);
     rightFrontMotor.setIdleMode(mode);
     leftBackMotor.setIdleMode(mode);
     leftFrontMotor.setIdleMode(mode);
 
-    double openLoopRampRate = 0.6; //0.6 sec to full velocity
+    double openLoopRampRate = 0.6; // 0.6 sec to full velocity
     rightBackMotor.setOpenLoopRampRate(openLoopRampRate);
     rightFrontMotor.setOpenLoopRampRate(openLoopRampRate);
     leftBackMotor.setOpenLoopRampRate(openLoopRampRate);
     leftFrontMotor.setOpenLoopRampRate(openLoopRampRate);
 
-    int currentLimit = 45; //maxmium amps
+    int currentLimit = 45; // maxmium amps
     rightBackMotor.setSmartCurrentLimit(currentLimit);
     rightFrontMotor.setSmartCurrentLimit(currentLimit);
     leftBackMotor.setSmartCurrentLimit(currentLimit);
     leftFrontMotor.setSmartCurrentLimit(currentLimit);
 
-    rightBackMotor.follow(rightFrontMotor, false); //false means not inverted, and true means inverted
+    rightBackMotor.follow(rightFrontMotor, false); // false means not inverted, and true means inverted
     leftBackMotor.follow(leftFrontMotor, false);
 
     // Encoder creation
@@ -72,10 +70,12 @@ public class Drivetrain extends SubsystemBase {
     rightBackEncoder = leftFrontMotor.getEncoder();
     rightFrontEncoder = leftBackMotor.getEncoder();
 
-    countsPerMotorRevolution = leftBackEncoder.getCountsPerRevolution(); 
-    //this choice of encoder is arbitrary -- any other encoder would work just as well
+    countsPerMotorRevolution = leftBackEncoder.getCountsPerRevolution();
+    // this choice of encoder is arbitrary -- any other encoder would work just as
+    // well
 
-    var conversionFactor = Constants.gearRatio * Constants.wheelDiameterInInches * Constants.inchesToMetersFactor * Math.PI;
+    var conversionFactor = Constants.gearRatio * Constants.wheelDiameterInInches * Constants.inchesToMetersFactor
+        * Math.PI;
     leftBackEncoder.setPositionConversionFactor(conversionFactor);
     leftFrontEncoder.setPositionConversionFactor(conversionFactor);
     rightFrontEncoder.setPositionConversionFactor(conversionFactor);
@@ -84,7 +84,7 @@ public class Drivetrain extends SubsystemBase {
     gyro = new AHRS(SerialPort.Port.kUSB);
 
     diffDrive = new DifferentialDrive(rightFrontMotor, leftFrontMotor);
-    diffDrive.setDeadband(0.05); //minmal signal
+    diffDrive.setDeadband(0.05); // minmal signal
     leftFrontMotor.setInverted(true);
     resetEncoders();
 
@@ -119,7 +119,7 @@ public class Drivetrain extends SubsystemBase {
   /**
    * Controls the left and right sides of the drive directly with voltages.
    *
-   * @param leftVolts the commanded left output
+   * @param leftVolts  the commanded left output
    * @param rightVolts the commanded right output
    */
   public void tankDriveVolts(double leftVolts, double rightVolts) {
@@ -129,8 +129,8 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public CANSparkMax getMotor(int idx) {
-    idx = (idx-1)%4+1;
-    switch(idx) {
+    idx = (idx - 1) % 4 + 1;
+    switch (idx) {
       case 1:
         return rightBackMotor;
       case 2:
@@ -160,7 +160,25 @@ public class Drivetrain extends SubsystemBase {
   public void rightFrontMotorDrive(double x) {
     leftBackMotor.set(x);
   }
-  
+
+  public double getRPM(int idx) {
+    RelativeEncoder enc;
+    switch ((idx - 1) % 4 + 1) { // This bit of math makes sure idx is between 1 and 4 inclusive
+      case 1:
+        enc = leftFrontEncoder;
+        break;
+      case 2:
+        enc = leftBackEncoder;
+        break;
+      case 3:
+        enc = rightFrontEncoder;
+        break;
+      default:
+        enc = rightBackEncoder;
+    }
+    return enc.getPosition() / enc.getCountsPerRevolution() * Constants.gearRatio;
+  }
+
   @Override
   public void periodic() {
     odometry.update(gyro.getRotation2d(), getDistance(leftBackEncoder), getDistance(rightBackEncoder));
