@@ -129,8 +129,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public CANSparkMax getMotor(int idx) {
-    idx = (idx - 1) % 4 + 1;
-    switch (idx) {
+    switch ((idx - 1) % 4 + 1) {
       case 1:
         return rightBackMotor;
       case 2:
@@ -162,20 +161,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public double getRPM(int idx) {
-    RelativeEncoder enc;
-    switch ((idx - 1) % 4 + 1) { // This bit of math makes sure idx is between 1 and 4 inclusive
-      case 1:
-        enc = leftFrontEncoder;
-        break;
-      case 2:
-        enc = leftBackEncoder;
-        break;
-      case 3:
-        enc = rightFrontEncoder;
-        break;
-      default:
-        enc = rightBackEncoder;
-    }
+    RelativeEncoder enc = getMotor(idx).getEncoder();
     return enc.getPosition() / enc.getCountsPerRevolution() * Constants.gearRatio;
   }
 
