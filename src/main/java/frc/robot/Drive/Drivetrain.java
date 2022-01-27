@@ -51,7 +51,7 @@ public class Drivetrain extends SubsystemBase {
     leftBackMotor.setIdleMode(mode);
     leftFrontMotor.setIdleMode(mode);
 
-    double openLoopRampRate = 0.6; //0.6 sec to full velocity
+    double openLoopRampRate = 0.2; //0.6 sec to full velocity
     rightBackMotor.setOpenLoopRampRate(openLoopRampRate);
     rightFrontMotor.setOpenLoopRampRate(openLoopRampRate);
     leftBackMotor.setOpenLoopRampRate(openLoopRampRate);
@@ -81,7 +81,7 @@ public class Drivetrain extends SubsystemBase {
     rightFrontEncoder.setPositionConversionFactor(conversionFactor);
     rightBackEncoder.setPositionConversionFactor(conversionFactor);
 
-    gyro = new AHRS(SerialPort.Port.kUSB);
+    gyro = new AHRS(SerialPort.Port.kMXP);
 
     diffDrive = new DifferentialDrive(rightFrontMotor, leftFrontMotor);
     diffDrive.setDeadband(0.05); //minmal signal
@@ -123,8 +123,8 @@ public class Drivetrain extends SubsystemBase {
    * @param rightVolts the commanded right output
    */
   public void tankDriveVolts(double leftVolts, double rightVolts) {
-    rightFrontMotor.setVoltage(leftVolts);
-    leftFrontMotor.setVoltage(rightVolts);
+    rightFrontMotor.setVoltage(rightVolts);
+    leftFrontMotor.setVoltage(leftVolts);
     diffDrive.feed();
   }
 

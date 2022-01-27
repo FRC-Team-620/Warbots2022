@@ -43,4 +43,7 @@ public final class Constants {
 
     public static final double kEncoderDistancePerPulse = 0.0359;//0.00136
 
+    public static final double rotation = -1.0;
+    public static final double speed = 0.5;
+
 }

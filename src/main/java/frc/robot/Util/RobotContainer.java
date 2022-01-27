@@ -9,7 +9,6 @@
 package frc.robot.Util;
 
 import frc.robot.Drive.Drivetrain;
-import frc.robot.Drive.RotateMotor;
 
 import java.util.List;
 
@@ -37,21 +36,10 @@ public class RobotContainer {
     
 
     protected DriveWithJoystick driveWithJoystick;
-    protected RotateMotor rotateMotor;
-
-    //public Command getDriveWithJoystick() {
-        //return new DriveWithJoystick(drivetrain, driver);
-    //}
 
     public void init() {
-        //rotateMotor = new RotateMotor(drivetrain, driver);
         driveWithJoystick = new DriveWithJoystick(drivetrain, driver);
         drivetrain.setDefaultCommand(driveWithJoystick);
-        //rotateMotor = new RotateMotor(drivetrain, driver);
-        //JoystickButton leftBumper = new JoystickButton(driver, Button.kLeftBumper.value);
-        //leftBumper.whenPressed(rotateMotor);
-        //drivetrain.setDefaultCommand(rotateMotor);
-        //rotateMotor.schedule(false);
     } 
 
     /**
