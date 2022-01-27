@@ -16,6 +16,12 @@ public class ShooterCommand extends CommandBase {
     @Override
     public void execute() {
         double speed = driverXbox.getRightY();
+        //double speed = 0.5;
         shooterSubsystem.setShooterSpeed(speed);
+    }
+
+    @Override
+    public boolean isFinished() {
+        return false;
     }
 }
