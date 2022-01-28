@@ -33,6 +33,7 @@ public class DriveWithJoystick extends CommandBase {
     } else if (driverXbox.getRightTriggerAxis() < driverXbox.getLeftTriggerAxis()) {
       speed = driverXbox.getLeftTriggerAxis() * -Constants.speed;
     }
+    
     drivetrain.curvatureInput(speed, rotation, !(driverXbox.getBButton()));
   }
 
