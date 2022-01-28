@@ -26,7 +26,7 @@ public class DriveWithJoystick extends CommandBase {
   public void execute() {
 
     // XBox controller input
-    double rotationInput = Math.pow(driverXbox.getLeftX(), 2);
+    double rotationInput = (driverXbox.getLeftX() > 0 ? 1 : -1) * Math.pow(driverXbox.getLeftX(), 2);
     double rightTriggerInput = Math.pow(driverXbox.getRightTriggerAxis(), 2);
     double leftTriggerInput = Math.pow(driverXbox.getLeftTriggerAxis(), 2);
 
@@ -38,7 +38,7 @@ public class DriveWithJoystick extends CommandBase {
     } else if (rightTriggerInput < leftTriggerInput) {
       speed = leftTriggerInput * -Constants.speed;
     }
- 
+
     SmartDashboard.putNumber("Right RPM: ",
         (drivetrain.getRPM(1) + drivetrain.getRPM(2)) / 2);
     SmartDashboard.putNumber("Left RPM: ",
