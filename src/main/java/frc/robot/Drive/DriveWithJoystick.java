@@ -24,15 +24,21 @@ public class DriveWithJoystick extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double rotation = Constants.rotation * driverXbox.getLeftX();
+
+    // XBox controller input
+    double rotationInput = Math.pow(driverXbox.getLeftX(), 2);
+    double rightTriggerInput = Math.pow(driverXbox.getRightTriggerAxis(), 2);
+    double leftTriggerInput = Math.pow(driverXbox.getLeftTriggerAxis(), 2);
+
+    double rotation = Constants.rotation * rotationInput;
     double speed = 0.0;
 
-    if (driverXbox.getRightTriggerAxis() > driverXbox.getLeftTriggerAxis()) {
-      speed = driverXbox.getRightTriggerAxis() * Constants.speed;
-    } else if (driverXbox.getRightTriggerAxis() < driverXbox.getLeftTriggerAxis()) {
-      speed = driverXbox.getLeftTriggerAxis() * -Constants.speed;
+    if (rightTriggerInput > leftTriggerInput) {
+      speed = rightTriggerInput * Constants.speed;
+    } else if (rightTriggerInput < leftTriggerInput) {
+      speed = leftTriggerInput * -Constants.speed;
     }
-
+ 
     SmartDashboard.putNumber("Right RPM: ",
         (drivetrain.getRPM(1) + drivetrain.getRPM(2)) / 2);
     SmartDashboard.putNumber("Left RPM: ",
