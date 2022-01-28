@@ -5,14 +5,13 @@
 package frc.robot.Drive;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
- 
+import frc.robot.Constants;
 
 public class DriveWithJoystick extends CommandBase {
   protected Drivetrain drivetrain;
   protected XboxController driverXbox;
-
 
   /** Creates a new DriveWithJoystick. */
   public DriveWithJoystick(Drivetrain drivetrain, XboxController driverXbox) {
@@ -21,7 +20,7 @@ public class DriveWithJoystick extends CommandBase {
     this.driverXbox = driverXbox;
     // Use addRequirements() here to declare subsystem dependencies.
   }
-  
+
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
@@ -33,6 +32,12 @@ public class DriveWithJoystick extends CommandBase {
     } else if (driverXbox.getRightTriggerAxis() < driverXbox.getLeftTriggerAxis()) {
       speed = driverXbox.getLeftTriggerAxis() * -Constants.speed;
     }
+
+    SmartDashboard.putNumber("Right RPM: ",
+        (drivetrain.getRPM(1) + drivetrain.getRPM(2)) / 2);
+    SmartDashboard.putNumber("Left RPM: ",
+        (drivetrain.getRPM(3) + drivetrain.getRPM(4)) / 2);
+
     drivetrain.curvatureInput(speed, rotation, !(driverXbox.getBButton()));
   }
 
