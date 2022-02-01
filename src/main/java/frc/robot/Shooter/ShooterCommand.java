@@ -13,8 +13,9 @@ public class ShooterCommand extends CommandBase {
     // protected long prevRotations = 0;
     // protected double secondsTimestep = 0.2, prevTime, currentTime, prevRPM = 0;
 
-    protected double bangBangTolerance = 0.05, intermittantSpeed = 0.3, minRPM = 1000, maxRPM = 3000;
-    
+    protected double bangBangTolerance = 0.05, intermittantAcceleration = 0.01, 
+        intermittantDeceleration = 0.03, minRPM = 1000, maxRPM = 5000, currentSpeed = 0;
+
     public ShooterCommand(ShooterSubsystem shooterSubsystem, XboxController driverXbox) {
 
         // timer.start();
@@ -29,11 +30,12 @@ public class ShooterCommand extends CommandBase {
     public void execute() {
         // double speed = driverXbox.getRightTriggerAxis();
         // shooterSubsystem.setShooterSpeed(speed);
-        // // double rpm = driverXbox.getRightY() * (maxRPM - minRPM) + minRPM;
-        // // if (shooterSubsystem.getRPM() < rpm - bangBangTolerance * rpm)
-        // //     shooterSubsystem.setShooterSpeed(intermittantSpeed);
-        // // else
-        // //     shooterSubsystem.setShooterSpeed(0);
+        double rpm = driverXbox.getRightY() * (maxRPM - minRPM) + minRPM;
+        rpm = roundUpToNearestMultiple(rpm, 50);
+        if (shooterSubsystem.getRPM() < rpm - bangBangTolerance * rpm)
+            setShooterSpeedAndUpdate(currentSpeed + intermittantAcceleration);
+        else
+            setShooterSpeedAndUpdate(currentSpeed - intermittantDeceleration);
 
         // // System.out.println(shooterSubsystem.getRPM());
 
@@ -41,22 +43,24 @@ public class ShooterCommand extends CommandBase {
 
         // currentTime = timer.get(); // milliseconds to seconds
 
-        double speed = driverXbox.getRightTriggerAxis();
-        shooterSubsystem.setShooterSpeed(speed);
-        // double rpm = driverXbox.getRightY() * (maxRPM - minRPM) + minRPM;
-        // if (shooterSubsystem.getRPM() < rpm - bangBangTolerance * rpm)
-        //     shooterSubsystem.setShooterSpeed(intermittantSpeed);
-        // else
-        //     shooterSubsystem.setShooterSpeed(0);
-
         // System.out.println(shooterSubsystem.getRPM());
 
         // if(currentTime - prevTime >= secondsTimestep) {
-        //     prevTime = currentTime;
-        //     prevRPM = shooterSubsystem.getRPM(prevRotations, secondsTimestep);
-        //     prevRotations = shooterSubsystem.getTotalWheelRotations();
+        // prevTime = currentTime;
+        // prevRPM = shooterSubsystem.getRPM(prevRotations, secondsTimestep);
+        // prevRotations = shooterSubsystem.getTotalWheelRotations();
         // }
         SmartDashboard.putNumber("Shooter RPM: ", shooterSubsystem.getRPM());
+    }
+
+    static long roundUpToNearestMultiple(double input, long step) {
+        long i = (long) Math.ceil(input);
+        return ((i + step - 1) / step) * step;
+    }
+
+    public void setShooterSpeedAndUpdate(double speed) {
+        shooterSubsystem.setShooterSpeed(speed);
+        currentSpeed = speed;
     }
 
     @Override
