@@ -1,5 +1,7 @@
 package frc.robot.Shooter;
 
+import java.text.DecimalFormat;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -11,6 +13,7 @@ import frc.robot.Constants;
 public class ShooterSubsystem extends SubsystemBase {
     protected final CANSparkMax leftShooterMotor, rightShooterMotor;
     protected final RelativeEncoder encoder;
+    protected final DecimalFormat decFormat = new DecimalFormat("#.#");
 
     public ShooterSubsystem() {
         leftShooterMotor = new CANSparkMax(5, MotorType.kBrushless);
@@ -31,8 +34,14 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public double getRPM() {
-        return encoder.getPosition() / encoder.getCountsPerRevolution() * Constants.shooterGearRatio;
+        return Double.parseDouble(decFormat.format(encoder.getVelocity()));
     }
+    public long getTotalWheelRotations() {
+        return (long)encoder.getPosition(); // The conversion factor was previously set
+    }
+    // public double getRPM(long prevRotations, double secondsTimestep) {
+    //     return (this.getTotalWheelRotations() - prevRotations) / (secondsTimestep/60);
+    // }
 
     public void setShooterSpeed(double speed) {
         rightShooterMotor.set(speed);
