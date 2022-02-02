@@ -35,7 +35,7 @@ public class Drivetrain extends SubsystemBase {
   // Odometry class for tracking robot pose
   protected final DifferentialDriveOdometry odometry;
 
-  //Network Table
+//Network Table
   protected final NetworkTableInstance instance;
   protected final NetworkTable table;
   /** Creates a new Drivetrain. */
@@ -100,7 +100,6 @@ public class Drivetrain extends SubsystemBase {
     table = instance.getTable("/SmartDashboard");
 
     //ShuffleboardTab tab = Shuffleboard.getTab("Smart Dashboard");
-
   }
 
   public Pose2d getPose() {

@@ -9,12 +9,8 @@
 package frc.robot.Util;
 
 import frc.robot.Drive.Drivetrain;
-import frc.robot.Shooter.ShooterCommand;
-import frc.robot.Shooter.ShooterSubsystem;
 
 import java.util.List;
-import java.io.*;
-import java.nio.file.Path;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
@@ -25,10 +21,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants;
 import frc.robot.Drive.DriveWithJoystick;
@@ -40,11 +33,10 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 public class RobotContainer {
     protected Drivetrain drivetrain = new Drivetrain();
     protected XboxController driver = new XboxController(0);
-    protected ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
     
 
     protected DriveWithJoystick driveWithJoystick;
-    protected ShooterCommand shooterCommand;
+    protected RotateMotor rotateMotor;
 
     //public Command getDriveWithJoystick() {
         //return new DriveWithJoystick(drivetrain, driver);
@@ -55,7 +47,6 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(driveWithJoystick);
 		shooterCommand = new ShooterCommand(shooterSubsystem, driver);
         shooterSubsystem.setDefaultCommand(shooterCommand);
-        
     } 
 
     /**
@@ -95,19 +86,10 @@ public class RobotContainer {
             new Pose2d(1, 0, new Rotation2d(0)),
             // Pass config
             config);
-            
-        String trajectoryJSON = "YOUR PATHWEAVER OUTPUT LOCATION";
-        Trajectory jsonTrajectory = new Trajectory();
-        try {
-            Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-            jsonTrajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-            } catch (IOException ex) {
-            DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-            }
 
     RamseteCommand ramseteCommand =
         new RamseteCommand(
-            jsonTrajectory,
+            exampleTrajectory,
             drivetrain::getPose,
             new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta),
             new SimpleMotorFeedforward(
@@ -124,7 +106,6 @@ public class RobotContainer {
 
     // Reset odometry to the starting pose of the trajectory.
     drivetrain.resetOdometry(exampleTrajectory.getInitialPose());
-
 
     // Run path following command, then stop at the end.
     return ramseteCommand.andThen(() -> drivetrain.tankDriveVolts(0, 0));

@@ -39,6 +39,7 @@ public final class Constants {
 
     public static final double wheelDiameterInInches = 4;
     public static final double inchesToMetersFactor = 0.0254;
+    public static final double shooterGearRatio = 1;
     public static final double gearRatio = 0.12;
 
     public static final double kEncoderDistancePerPulse = 0.0359;//0.00136
