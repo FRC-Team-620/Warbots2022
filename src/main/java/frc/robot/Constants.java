@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.SerialPort.Port;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -29,6 +31,10 @@ public final class Constants {
 
     public static int kLeftShooterPort = 5;
     public static int kRightShooterPort = 7;
+
+    //Sensors:
+
+    public static Port kNavxPort = SerialPort.Port.kMXP;
     // These characterization values MUST be determined either experimentally or theoretically
     // for *your* robot's drive.
     // The Robot Characterization Toolsuite provides a convenient tool for obtaining these

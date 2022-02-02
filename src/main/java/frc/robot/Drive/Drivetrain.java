@@ -82,7 +82,7 @@ public class Drivetrain extends SubsystemBase {
     // rightFrontEncoder.setPositionConversionFactor(conversionFactor);
     // rightBackEncoder.setPositionConversionFactor(conversionFactor);
 
-    gyro = new AHRS(SerialPort.Port.kMXP);
+    gyro = new AHRS(Constants.kNavxPort);
 
     diffDrive = new DifferentialDrive(leftBackMotor, rightBackMotor);
     diffDrive.setDeadband(0.05); //minmal signal
