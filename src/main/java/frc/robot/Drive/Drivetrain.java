@@ -29,6 +29,7 @@ public class Drivetrain extends SubsystemBase {
   protected final DifferentialDrive diffDrive;
   protected final RelativeEncoder leftBackEncoder, leftFrontEncoder, rightBackEncoder, rightFrontEncoder;
   protected final double countsPerMotorRevolution;
+  protected double openLoopRampRate = 0.2;
   // The gyro sensor
   protected final Gyro gyro;
   
@@ -100,6 +101,18 @@ public class Drivetrain extends SubsystemBase {
     table = instance.getTable("/SmartDashboard");
 
     //ShuffleboardTab tab = Shuffleboard.getTab("Smart Dashboard");
+  }
+
+  public double getOpenLoopRampRate() {
+    return openLoopRampRate;
+  }
+
+  public void setOpenLoopRampRate(double oLRR) {
+    openLoopRampRate = oLRR; //0.6 sec to full velocity
+    rightBackMotor.setOpenLoopRampRate(openLoopRampRate);
+    rightFrontMotor.setOpenLoopRampRate(openLoopRampRate);
+    leftBackMotor.setOpenLoopRampRate(openLoopRampRate);
+    leftFrontMotor.setOpenLoopRampRate(openLoopRampRate);
   }
 
   public Pose2d getPose() {

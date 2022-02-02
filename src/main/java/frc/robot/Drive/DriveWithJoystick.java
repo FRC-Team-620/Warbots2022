@@ -15,6 +15,7 @@ public class DriveWithJoystick extends CommandBase {
   protected XboxController driverXbox;
   protected double speedConstant;
   protected double rotationConstant;
+  protected double openLoopRampRateConstant;
 
   /** Creates a new DriveWithJoystick. */
   public DriveWithJoystick(Drivetrain drivetrain, XboxController driverXbox) {
@@ -24,6 +25,7 @@ public class DriveWithJoystick extends CommandBase {
 
     SmartDashboard.putNumber("speed", speedConstant);
     SmartDashboard.putNumber("rotation", rotationConstant);
+    SmartDashboard.putNumber("openloopramprate", openLoopRampRateConstant);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -38,6 +40,7 @@ public class DriveWithJoystick extends CommandBase {
 
     double rotation = 0; //Constants.rotation = -0.5
     double speed = 0.0;
+    openLoopRampRateConstant = drivetrain.getOpenLoopRampRate();
     
 
     //TESTING ONLY. SET BACK TO CONSTANTS FOR THE COMPETITION
@@ -46,6 +49,11 @@ public class DriveWithJoystick extends CommandBase {
 
     NetworkTableEntry rotationEntry = drivetrain.table.getEntry("rotation");
     rotationConstant = rotationEntry.getDouble(-0.5); //TESTING ONLY. SET BACK TO CONSTANTS FOR THE COMPETITION
+
+    NetworkTableEntry openLoopRampRateEntry = drivetrain.table.getEntry("openloopramprate");
+    openLoopRampRateConstant = openLoopRampRateEntry.getDouble(0.2);
+
+    drivetrain.setOpenLoopRampRate(openLoopRampRateConstant);
 
     System.out.println(speedConstant + ", " + rotationConstant);
 
