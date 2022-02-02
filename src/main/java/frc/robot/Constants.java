@@ -15,6 +15,17 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+
+    // PINOUT Values:
+
+    // DriveTrain
+    public static int kLeftFrontDrivePort = 1;
+    public static int kRightFrontDrivePort = 3;
+    public static int kLeftBackDrivePort = 2;
+    public static int kRightBackDrivePort = 4;
+
+    
     // These characterization values MUST be determined either experimentally or theoretically
     // for *your* robot's drive.
     // The Robot Characterization Toolsuite provides a convenient tool for obtaining these
