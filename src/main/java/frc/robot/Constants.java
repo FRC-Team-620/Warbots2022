@@ -25,7 +25,10 @@ public final class Constants {
     public static int kLeftBackDrivePort = 2;
     public static int kRightBackDrivePort = 4;
 
-    
+    //Shooter
+
+    public static int kLeftShooterPort = 5;
+    public static int kRightShooterPort = 7;
     // These characterization values MUST be determined either experimentally or theoretically
     // for *your* robot's drive.
     // The Robot Characterization Toolsuite provides a convenient tool for obtaining these

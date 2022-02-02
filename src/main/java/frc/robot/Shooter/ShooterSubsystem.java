@@ -16,8 +16,8 @@ public class ShooterSubsystem extends SubsystemBase {
     protected final DecimalFormat decFormat = new DecimalFormat("#.#");
 
     public ShooterSubsystem() {
-        leftShooterMotor = new CANSparkMax(5, MotorType.kBrushless);
-        rightShooterMotor = new CANSparkMax(7, MotorType.kBrushless);
+        leftShooterMotor = new CANSparkMax(Constants.kLeftShooterPort, MotorType.kBrushless);
+        rightShooterMotor = new CANSparkMax(Constants.kRightShooterPort, MotorType.kBrushless);
         encoder = rightShooterMotor.getEncoder();
 
         leftShooterMotor.restoreFactoryDefaults();
