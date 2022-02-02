@@ -34,27 +34,27 @@ import frc.robot.Constants;
 import frc.robot.Drive.DriveWithJoystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj.XboxController.Button;
 /** Add your docs here. */
 public class RobotContainer {
     protected Drivetrain drivetrain = new Drivetrain();
     protected XboxController driver = new XboxController(0);
-    protected ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+    //protected ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
     
 
     protected DriveWithJoystick driveWithJoystick;
-    protected ShooterCommand shooterCommand;
+    //protected ShooterCommand shooterCommand;
 
     //public Command getDriveWithJoystick() {
         //return new DriveWithJoystick(drivetrain, driver);
     //}
+    String trajectoryJSON = "/src/main/deploy/paths/outputTestPath1.wpilib.json";
+    Trajectory jsonTrajectory = new Trajectory();
 
     public void init() {
         driveWithJoystick = new DriveWithJoystick(drivetrain, driver);
         drivetrain.setDefaultCommand(driveWithJoystick);
-		shooterCommand = new ShooterCommand(shooterSubsystem, driver);
-        shooterSubsystem.setDefaultCommand(shooterCommand);
+		//shooterCommand = new ShooterCommand(shooterSubsystem, driver);
+        //shooterSubsystem.setDefaultCommand(shooterCommand);
         
     } 
 
@@ -85,7 +85,7 @@ public class RobotContainer {
             .addConstraint(autoVoltageConstraint);
 
     // An example trajectory to follow.  All units in meters.
-    Trajectory exampleTrajectory =
+        /*Trajectory exampleTrajectory =
         TrajectoryGenerator.generateTrajectory(
             // Start at the origin facing the +X direction
             new Pose2d(0, 0, new Rotation2d(0)),
@@ -94,10 +94,9 @@ public class RobotContainer {
             // End 3 meters straight ahead of where we started, facing forward
             new Pose2d(1, 0, new Rotation2d(0)),
             // Pass config
-            config);
+            config);*/
             
-        String trajectoryJSON = "YOUR PATHWEAVER OUTPUT LOCATION";
-        Trajectory jsonTrajectory = new Trajectory();
+        
         try {
             Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
             jsonTrajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
@@ -123,7 +122,7 @@ public class RobotContainer {
             drivetrain);
 
     // Reset odometry to the starting pose of the trajectory.
-    drivetrain.resetOdometry(exampleTrajectory.getInitialPose());
+    drivetrain.resetOdometry(jsonTrajectory.getInitialPose());
 
 
     // Run path following command, then stop at the end.
