@@ -14,11 +14,15 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Drivetrain extends SubsystemBase {
   protected final CANSparkMax rightBackMotor, leftBackMotor, rightFrontMotor, leftFrontMotor;
@@ -31,6 +35,9 @@ public class Drivetrain extends SubsystemBase {
   // Odometry class for tracking robot pose
   protected final DifferentialDriveOdometry odometry;
 
+//Network Table
+  protected final NetworkTableInstance instance;
+  protected final NetworkTable table;
   /** Creates a new Drivetrain. */
   public Drivetrain() {
     rightBackMotor = new CANSparkMax(1, MotorType.kBrushless);
@@ -87,6 +94,12 @@ public class Drivetrain extends SubsystemBase {
     resetEncoders();
 
     odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
+
+    //NetworkTable instantiation
+    instance = NetworkTableInstance.getDefault();
+    table = instance.getTable("/SmartDashboard");
+
+    //ShuffleboardTab tab = Shuffleboard.getTab("Smart Dashboard");
   }
 
   public Pose2d getPose() {
