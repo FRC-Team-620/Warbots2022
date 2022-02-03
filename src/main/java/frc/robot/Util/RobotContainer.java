@@ -49,6 +49,8 @@ public class RobotContainer {
     //public Command getDriveWithJoystick() {
         //return new DriveWithJoystick(drivetrain, driver);
     //}
+    String trajectoryJSON = "paths/TestPath1.wpilib.json";///src/main/deploy/paths/
+    Trajectory jsonTrajectory = new Trajectory();
 
     public void init() {
         driveWithJoystick = new DriveWithJoystick(drivetrain, driver);
