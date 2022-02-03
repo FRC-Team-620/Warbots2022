@@ -11,7 +11,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 public class ShooterCommand extends CommandBase {
     protected XboxController driverXbox;
     protected ShooterSubsystem shooterSubsystem;
-    protected double bangBangTolerance = 0.05, intermittantSpeed = 0.3, minRPM = 1000, maxRPM = 3000;
+    //protected double bangBangTolerance = 0.05, intermittantSpeed = 0.3, minRPM = 1000, maxRPM = 3000;
     
     // protected Timer timer = new Timer(); // For dealing with RPM
     // protected long prevRotations = 0;
