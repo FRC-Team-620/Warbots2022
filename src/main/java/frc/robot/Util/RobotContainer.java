@@ -38,12 +38,12 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.XboxController.Button;
 /** Add your docs here. */
 public class RobotContainer {
-    protected Drivetrain drivetrain = new Drivetrain();
+    //protected Drivetrain drivetrain = new Drivetrain();
     protected XboxController driver = new XboxController(0);
     protected ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
     
 
-    protected DriveWithJoystick driveWithJoystick;
+    //protected DriveWithJoystick driveWithJoystick;
     protected ShooterCommand shooterCommand;
 
     //public Command getDriveWithJoystick() {
@@ -53,8 +53,8 @@ public class RobotContainer {
     Trajectory jsonTrajectory = new Trajectory();
 
     public void init() {
-        driveWithJoystick = new DriveWithJoystick(drivetrain, driver);
-        drivetrain.setDefaultCommand(driveWithJoystick);
+        //driveWithJoystick = new DriveWithJoystick(drivetrain, driver);
+        //drivetrain.setDefaultCommand(driveWithJoystick);
         try {
             Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
             jsonTrajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
@@ -70,7 +70,7 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
+  /*public Command getAutonomousCommand() {
     // Create a voltage constraint to ensure we don't accelerate too fast
     var autoVoltageConstraint =
         new DifferentialDriveVoltageConstraint(
@@ -126,7 +126,7 @@ public class RobotContainer {
 
     // Run path following command, then stop at the end.
     return ramseteCommand.andThen(() -> drivetrain.tankDriveVolts(0, 0));
-  }
+  }*/
 
 
 }
