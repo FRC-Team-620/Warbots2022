@@ -6,6 +6,7 @@ package frc.robot.Drive;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import java.text.DecimalFormat;
 import com.kauailabs.navx.frc.AHRS;
 import frc.robot.Constants;
 import com.revrobotics.CANSparkMax;
@@ -153,8 +154,8 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public CANSparkMax getMotor(int idx) {
-    switch ((idx - 1) % 4 + 1) {
-    
+  	idx = (idx-1)%4+1;
+    switch (idx) {      
       case 1:
         return rightBackMotor;
       case 2:
@@ -162,7 +163,19 @@ public class Drivetrain extends SubsystemBase {
       case 3:
         return leftBackMotor;
     }
-    return leftFrontMotor;
+    	return leftFrontMotor;
+  }
+  public RelativeEncoder getEncoder(int idx) {
+    idx = (idx-1)%4+1;
+    switch(idx) {
+      case 1:
+        return leftFrontEncoder;
+      case 2:
+        return leftBackEncoder;
+      case 3:
+        return rightFrontEncoder;
+    }
+    return rightBackEncoder;
   }
 
   public void curvatureInput(double speed, double rotation, boolean isCurvatureDrive) {
@@ -183,13 +196,12 @@ public class Drivetrain extends SubsystemBase {
 
   public void leftBackMotorDrive(double x) {
     leftBackMotor.set(x);
-  }
-  
+  } 
   public double getRPM(int idx) {
-    RelativeEncoder enc = getMotor(idx).getEncoder();
-    return enc.getPosition() / enc.getCountsPerRevolution() * Constants.gearRatio;
+    idx = (idx-1)%4+1;
+    return getEncoder(idx).getVelocity() * Constants.gearRatio;
   }
-  @Override
+    @Override
   public void periodic() {
     odometry.update(gyro.getRotation2d(), getDistance(leftBackEncoder), getDistance(rightBackEncoder));
   }

@@ -34,21 +34,21 @@ import frc.robot.Constants;
 import frc.robot.Drive.DriveWithJoystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj.XboxController.Button;
 /** Add your docs here. */
 public class RobotContainer {
     protected Drivetrain drivetrain = new Drivetrain();
     protected XboxController driver = new XboxController(0);
-    //protected ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+    protected ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
     
 
     protected DriveWithJoystick driveWithJoystick;
-    //protected ShooterCommand shooterCommand;
+    protected ShooterCommand shooterCommand;
 
     //public Command getDriveWithJoystick() {
         //return new DriveWithJoystick(drivetrain, driver);
     //}
-    String trajectoryJSON = "paths/TestPath1.wpilib.json";///src/main/deploy/paths/
-    Trajectory jsonTrajectory = new Trajectory();
 
     public void init() {
         driveWithJoystick = new DriveWithJoystick(drivetrain, driver);
@@ -59,9 +59,8 @@ public class RobotContainer {
         } catch (IOException ex) {
             DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
         }
-		//shooterCommand = new ShooterCommand(shooterSubsystem, driver);
-        //shooterSubsystem.setDefaultCommand(shooterCommand);
-        
+		shooterCommand = new ShooterCommand(shooterSubsystem, driver);
+        shooterSubsystem.setDefaultCommand(shooterCommand);
     } 
 
     /**
