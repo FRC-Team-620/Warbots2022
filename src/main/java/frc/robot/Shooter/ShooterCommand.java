@@ -31,7 +31,8 @@ public class ShooterCommand extends CommandBase {
         // prevTime = timer.get();
 
         SmartDashboard.putNumber("Round to: ", 50);
-        SmartDashboard.putNumber("Set RPM: ", 0);        addRequirements(shooterSubsystem);
+        SmartDashboard.putNumber("Set RPM: ", 0);        
+        addRequirements(shooterSubsystem);
         this.shooterSubsystem = shooterSubsystem;
         this.driverXbox = driverXbox;
     }
