@@ -47,12 +47,18 @@ public class RobotContainer {
     //public Command getDriveWithJoystick() {
         //return new DriveWithJoystick(drivetrain, driver);
     //}
-    String trajectoryJSON = "/src/main/deploy/paths/outputTestPath1.wpilib.json";
+    String trajectoryJSON = "paths/TestPath1.wpilib.json";///src/main/deploy/paths/
     Trajectory jsonTrajectory = new Trajectory();
 
     public void init() {
         driveWithJoystick = new DriveWithJoystick(drivetrain, driver);
         drivetrain.setDefaultCommand(driveWithJoystick);
+        try {
+            Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+            jsonTrajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+        } catch (IOException ex) {
+            DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+        }
 		//shooterCommand = new ShooterCommand(shooterSubsystem, driver);
         //shooterSubsystem.setDefaultCommand(shooterCommand);
         
@@ -85,7 +91,7 @@ public class RobotContainer {
             .addConstraint(autoVoltageConstraint);
 
     // An example trajectory to follow.  All units in meters.
-        /*Trajectory exampleTrajectory =
+        Trajectory exampleTrajectory =
         TrajectoryGenerator.generateTrajectory(
             // Start at the origin facing the +X direction
             new Pose2d(0, 0, new Rotation2d(0)),
@@ -94,19 +100,11 @@ public class RobotContainer {
             // End 3 meters straight ahead of where we started, facing forward
             new Pose2d(1, 0, new Rotation2d(0)),
             // Pass config
-            config);*/
-            
-        
-        try {
-            Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-            jsonTrajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-            } catch (IOException ex) {
-            DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-            }
+            config);
 
     RamseteCommand ramseteCommand =
         new RamseteCommand(
-            jsonTrajectory,
+            exampleTrajectory,
             drivetrain::getPose,
             new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta),
             new SimpleMotorFeedforward(
@@ -122,7 +120,7 @@ public class RobotContainer {
             drivetrain);
 
     // Reset odometry to the starting pose of the trajectory.
-    drivetrain.resetOdometry(jsonTrajectory.getInitialPose());
+    drivetrain.resetOdometry(exampleTrajectory.getInitialPose());
 
 
     // Run path following command, then stop at the end.
