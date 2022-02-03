@@ -40,11 +40,11 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 public class RobotContainer {
     protected Drivetrain drivetrain = new Drivetrain();
     protected XboxController driver = new XboxController(0);
-    protected ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+    //protected ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
     
 
     protected DriveWithJoystick driveWithJoystick;
-    protected ShooterCommand shooterCommand;
+    //protected ShooterCommand shooterCommand;
 
     //public Command getDriveWithJoystick() {
         //return new DriveWithJoystick(drivetrain, driver);
@@ -61,8 +61,8 @@ public class RobotContainer {
         } catch (IOException ex) {
             DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
         }
-		shooterCommand = new ShooterCommand(shooterSubsystem, driver);
-        shooterSubsystem.setDefaultCommand(shooterCommand);
+		//shooterCommand = new ShooterCommand(shooterSubsystem, driver);
+        //shooterSubsystem.setDefaultCommand(shooterCommand);
     } 
 
     /**
