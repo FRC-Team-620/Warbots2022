@@ -4,6 +4,7 @@
 
 package frc.robot.Drive;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -12,12 +13,19 @@ import frc.robot.Constants;
 public class DriveWithJoystick extends CommandBase {
   protected Drivetrain drivetrain;
   protected XboxController driverXbox;
+  protected double speedConstant;
+  protected double rotationConstant;
+  protected double openLoopRampRateConstant;
 
   /** Creates a new DriveWithJoystick. */
   public DriveWithJoystick(Drivetrain drivetrain, XboxController driverXbox) {
     addRequirements(drivetrain);
     this.drivetrain = drivetrain;
     this.driverXbox = driverXbox;
+
+    SmartDashboard.putNumber("speed", speedConstant);
+    SmartDashboard.putNumber("rotation", rotationConstant);
+    SmartDashboard.putNumber("openloopramprate", openLoopRampRateConstant);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -30,19 +38,41 @@ public class DriveWithJoystick extends CommandBase {
     double rightTriggerInput = Math.pow(driverXbox.getRightTriggerAxis(), 2);
     double leftTriggerInput = Math.pow(driverXbox.getLeftTriggerAxis(), 2);
 
-    double rotation = Constants.rotation * rotationInput;
+    double rotation = 0; //Constants.rotation = -0.5
     double speed = 0.0;
+    openLoopRampRateConstant = drivetrain.getOpenLoopRampRate();
+    
+
+    //TESTING ONLY. SET BACK TO CONSTANTS FOR THE COMPETITION
+    NetworkTableEntry speedEntry = drivetrain.table.getEntry("speed");
+    speedConstant = speedEntry.getDouble(0.5);
+
+    NetworkTableEntry rotationEntry = drivetrain.table.getEntry("rotation");
+    rotationConstant = rotationEntry.getDouble(-0.5); //TESTING ONLY. SET BACK TO CONSTANTS FOR THE COMPETITION
+
+    NetworkTableEntry openLoopRampRateEntry = drivetrain.table.getEntry("openloopramprate");
+    openLoopRampRateConstant = openLoopRampRateEntry.getDouble(0.2);
+
+    drivetrain.setOpenLoopRampRate(openLoopRampRateConstant);
+
+    System.out.println(speedConstant + ", " + rotationConstant);
+
+    rotation = rotationConstant * rotationInput;
+
 
     if (rightTriggerInput > leftTriggerInput) {
-      speed = rightTriggerInput * Constants.speed;
+      speed = rightTriggerInput * speedConstant;//Constants.speed
     } else if (rightTriggerInput < leftTriggerInput) {
-      speed = leftTriggerInput * -Constants.speed;
+      speed = leftTriggerInput * -speedConstant;
     }
 
-    SmartDashboard.putNumber("Right RPM: ",
-        (drivetrain.getRPM(1) + drivetrain.getRPM(2)) / 2);
-    SmartDashboard.putNumber("Left RPM: ",
-        (drivetrain.getRPM(3) + drivetrain.getRPM(4)) / 2);
+    // SmartDashboard.putNumber("RightRPM",
+    //     (drivetrain.getRPM(1) + drivetrain.getRPM(2)) / 2);
+    // SmartDashboard.putNumber("LeftRPM",
+    //     (drivetrain.getRPM(3) + drivetrain.getRPM(4)) / 2);
+
+  
+        
 
     drivetrain.curvatureInput(speed, rotation, !(driverXbox.getBButton()));
   }
