@@ -13,15 +13,15 @@ public class ShooterCommand extends CommandBase {
     // protected long prevRotations = 0;
     // protected double secondsTimestep = 0.2, prevTime, currentTime, prevRPM = 0;
 
-    protected double bangBangTolerance = 0.01, intermittantAcceleration = 0.001, 
-        intermittantDeceleration = 0.001, minRPM = 0, maxRPM = 5000, currentSpeed = 0;
+    protected double bangBangTolerance = 0.01, minRPM = 0, maxRPM = 5500, 
+        currentSpeed = 0, diffConst = 0.000006, acceleration;
 
     public ShooterCommand(ShooterSubsystem shooterSubsystem, XboxController driverXbox) {
 
         // timer.start();
         // prevTime = timer.get();
 
-        SmartDashboard.putNumber("Round to: ", 50);
+        SmartDashboard.putNumber("Round to: ", 5);
         SmartDashboard.putNumber("Set RPM: ", 0);
 
         addRequirements(shooterSubsystem);
@@ -33,19 +33,25 @@ public class ShooterCommand extends CommandBase {
     public void execute() {
         // double speed = driverXbox.getRightTriggerAxis();
         // shooterSubsystem.setShooterSpeed(speed);
-        double roundTo = SmartDashboard.getNumber("Round to: ", 50);
+        double roundTo = SmartDashboard.getNumber("Round to: ", 5);
         double input = driverXbox.getRightTriggerAxis(), rpm;
         if(input > 0)
             rpm = input * (maxRPM - minRPM) + minRPM;
-        else
+        else {
             rpm = SmartDashboard.getNumber("Set RPM: ", 0);
+            if(rpm > maxRPM)
+                rpm = maxRPM;
+            else if(rpm < minRPM)
+                rpm = minRPM;
+        }
         double currRPM = shooterSubsystem.getRPM();
+        acceleration = diffConst * (rpm - currRPM);
         SmartDashboard.putNumber("Input RPM: ", rpm);
         rpm = roundUpToNearestMultiple(rpm, 50);
-        if (currRPM < rpm - bangBangTolerance * rpm)
-            setShooterSpeedAndUpdate(currentSpeed + intermittantAcceleration);
-        else if (currRPM > rpm + bangBangTolerance * rpm)
-            setShooterSpeedAndUpdate(currentSpeed - intermittantDeceleration);
+        SmartDashboard.putNumber("Acceleration: ", acceleration);
+
+        // if(Math.abs(rpm-currRPM) > (bangBangTolerance * rpm))
+        setShooterSpeedAndUpdate(currentSpeed + acceleration);
 
         SmartDashboard.putNumber("Shooter RPM: ", 
             roundUpToNearestMultiple(shooterSubsystem.getRPM(), (int)roundTo));
