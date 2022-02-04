@@ -1,6 +1,5 @@
 package frc.robot.Shooter;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -23,14 +22,15 @@ public class ShooterCommand extends CommandBase {
     protected NetworkTableEntry entryY = table.getEntry("ty");
     protected NetworkTableEntry entryArea = table.getEntry("ta");
 
-    protected double bangBangTolerance = 0.01, intermittantAcceleration = 0.001, 
-        intermittantDeceleration = 0.001, minRPM = 0, maxRPM = 5000, currentSpeed = 0;
+    protected double bangBangTolerance = 0.01, minRPM = 0, maxRPM = 5500, 
+        currentSpeed = 0, diffConst = 0.000006, acceleration, rpm, input, 
+        roundTo, currRPM;
 
     public ShooterCommand(ShooterSubsystem shooterSubsystem, XboxController driverXbox) {
 		// timer.start();
         // prevTime = timer.get();
 
-        SmartDashboard.putNumber("Round to: ", 50);
+        SmartDashboard.putNumber("Round to: ", 5);
         SmartDashboard.putNumber("Set RPM: ", 0);        
         addRequirements(shooterSubsystem);
         this.shooterSubsystem = shooterSubsystem;
@@ -44,6 +44,10 @@ public class ShooterCommand extends CommandBase {
         double y = entryY.getDouble(0.0);
         double area = entryArea.getDouble(0.0);
 
+        input = driverXbox.getRightTriggerAxis();
+        roundTo = SmartDashboard.getNumber("Round to: ", 5);
+        currRPM = shooterSubsystem.getRPM();
+        
         // post to smart dashboard periodically
         SmartDashboard.putBoolean("LimelightHasTarget", hasTarget);
         SmartDashboard.putNumber("LimelightX", x);
@@ -56,31 +60,22 @@ public class ShooterCommand extends CommandBase {
         }
 		// double speed = driverXbox.getRightTriggerAxis();
         // shooterSubsystem.setShooterSpeed(speed);
-        double roundTo = SmartDashboard.getNumber("Round to: ", 50);
-        double input = driverXbox.getRightTriggerAxis(), rpm;
         if(input > 0)
             rpm = input * (maxRPM - minRPM) + minRPM;
-        else
+        else {
             rpm = SmartDashboard.getNumber("Set RPM: ", 0);
-        double currRPM = shooterSubsystem.getRPM();
-        SmartDashboard.putNumber("Input RPM: ", rpm);
-        rpm = roundUpToNearestMultiple(rpm, 50);
-        if (currRPM < rpm - bangBangTolerance * rpm)
-            setShooterSpeedAndUpdate(currentSpeed + intermittantAcceleration);
-        else if (currRPM > rpm + bangBangTolerance * rpm)
-            setShooterSpeedAndUpdate(currentSpeed - intermittantDeceleration);
+            if(rpm > maxRPM)
+                rpm = maxRPM;
+            else if(rpm < minRPM)
+                rpm = minRPM;
+        }
+        acceleration = diffConst * (rpm - currRPM);
+        SmartDashboard.putNumber("Acceleration: ", acceleration);
+        // if(Math.abs(rpm-currRPM) > (bangBangTolerance * rpm))
+        setShooterSpeedAndUpdate(currentSpeed + acceleration);
 
         SmartDashboard.putNumber("Shooter RPM: ", 
-            roundUpToNearestMultiple(shooterSubsystem.getRPM(), (int)roundTo));
-        // double rpm = driverXbox.getRightY() * (maxRPM - minRPM) + minRPM;
-        // if (shooterSubsystem.getRPM() < rpm - bangBangTolerance * rpm)
-        //     shooterSubsystem.setShooterSpeed(intermittantSpeed);
-        // else
-       	//     shooterSubsystem.setShooterSpeed(0);
-
-        // System.out.println(shooterSubsystem.getRPM());
-
-        SmartDashboard.putNumber("Shooter RPM: ", shooterSubsystem.getRPM());
+            roundUpToNearestMultiple(currRPM, (int)roundTo));
     }
     static long roundUpToNearestMultiple(double input, int step) {
         int i = (int) Math.ceil(input);
