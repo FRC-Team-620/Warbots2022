@@ -105,7 +105,7 @@ public class RobotContainer {
 
     RamseteCommand ramseteCommand =
         new RamseteCommand(
-            exampleTrajectory,
+            jsonTrajectory,
             drivetrain::getPose,
             new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta),
             new SimpleMotorFeedforward(
@@ -121,7 +121,7 @@ public class RobotContainer {
             drivetrain);
 
     // Reset odometry to the starting pose of the trajectory.
-    drivetrain.resetOdometry(exampleTrajectory.getInitialPose());
+    drivetrain.resetOdometry(jsonTrajectory.getInitialPose());
 
 
     // Run path following command, then stop at the end.
