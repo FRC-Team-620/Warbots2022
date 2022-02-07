@@ -17,7 +17,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public ShooterSubsystem() {
         leftShooterMotor = new CANSparkMax(5, MotorType.kBrushless);
-        rightShooterMotor = new CANSparkMax(7, MotorType.kBrushless);
+        rightShooterMotor = new CANSparkMax(6, MotorType.kBrushless);
         encoder = rightShooterMotor.getEncoder();
 
         leftShooterMotor.restoreFactoryDefaults();
