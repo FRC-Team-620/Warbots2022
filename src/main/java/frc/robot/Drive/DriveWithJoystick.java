@@ -55,8 +55,6 @@ public class DriveWithJoystick extends CommandBase {
 
     drivetrain.setOpenLoopRampRate(openLoopRampRateConstant);
 
-    System.out.println(speedConstant + ", " + rotationConstant);
-
     rotation = rotationConstant * rotationInput;
 
 

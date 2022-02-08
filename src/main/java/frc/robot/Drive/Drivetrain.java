@@ -41,7 +41,7 @@ public class Drivetrain extends SubsystemBase {
   protected final NetworkTableInstance instance;
   protected final NetworkTable table;
   /** Creates a new Drivetrain. */
-  public Drivetrain() {
+  public Drivetrain() throws Exception {
     rightBackMotor = new CANSparkMax(1, MotorType.kBrushless);
     leftBackMotor = new CANSparkMax(3, MotorType.kBrushless);
     rightFrontMotor = new CANSparkMax(2, MotorType.kBrushless);
