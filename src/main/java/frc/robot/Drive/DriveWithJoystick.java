@@ -13,9 +13,9 @@ import frc.robot.Constants;
 public class DriveWithJoystick extends CommandBase {
   protected Drivetrain drivetrain;
   protected XboxController driverXbox;
-  protected double speedConstant;
-  protected double rotationConstant;
-  protected double openLoopRampRateConstant;
+  protected double speedConstant = Constants.speed;
+  protected double rotationConstant = Constants.rotation;
+  protected double openLoopRampRateConstant = 0;
 
   /** Creates a new DriveWithJoystick. */
   public DriveWithJoystick(Drivetrain drivetrain, XboxController driverXbox) {
@@ -54,8 +54,6 @@ public class DriveWithJoystick extends CommandBase {
     openLoopRampRateConstant = openLoopRampRateEntry.getDouble(0.2);
 
     drivetrain.setOpenLoopRampRate(openLoopRampRateConstant);
-
-    System.out.println(speedConstant + ", " + rotationConstant);
 
     rotation = rotationConstant * rotationInput;
 
