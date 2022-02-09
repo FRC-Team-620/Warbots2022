@@ -22,7 +22,7 @@ public class LoaderCommand extends CommandBase {
             if (temp.getEncoder().getVelocity() > 0) {
                 temp.set(0);
             } else {
-                temp.set(0.5);
+                temp.set(1);
             }
         }
     }
