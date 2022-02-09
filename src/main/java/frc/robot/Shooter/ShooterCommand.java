@@ -3,6 +3,11 @@ package frc.robot.Shooter;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
+
+import javax.lang.model.util.ElementScanner6;
+
+import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -23,6 +28,7 @@ public class ShooterCommand extends CommandBase {
     protected NetworkTableEntry entryX = table.getEntry("tx");
     protected NetworkTableEntry entryY = table.getEntry("ty");
     protected NetworkTableEntry entryArea = table.getEntry("ta");
+    protected double turretControlConstant= 0.01;
 
     protected double bangBangTolerance = 0.01, minRPM = 0, maxRPM = 5500,
             currentSpeed = 0, diffConst = 6 * Math.pow(10, -6), acceleration, 
@@ -56,10 +62,25 @@ public class ShooterCommand extends CommandBase {
         SmartDashboard.putNumber("LimelightY", y);
         SmartDashboard.putNumber("LimelightArea", area);
 
-        // testing is needed to determine the area percentage at the correct distance
-        if (hasTarget && area > 0.05) {
-            // call motor to rotate shooter to optimal position
+        double distance = Constants.hubHeight - Constants.limelightHeight;
+        //double turretControl = turretControlConstant*x;
+        distance /= Math.tan(Constants.azimuthAngle1 + y); // canculate the current distance from the hub
+
+        double shootingAngle = (90-(Math.tan(distance/0.61)))*2; // variance allowed for x
+        SmartDashboard.putNumber("Current Distance", distance);
+        SmartDashboard.putNumber("ShootingAngle horizontal variance", shootingAngle);
+/* // test to see if a shot can be taken
+        if (shooterSubsystem.getRPM() == distance) {} // current RPM is correct for current distance
+            if (Math.abs(x) <= shootingAngle) // To see if x variance will still allow for the ball to score
+                SmartDashboard.putBoolean("Ready to fire", true);
+            else {
+                SmartDashboard.putBoolean("Ready to fire", false);
+                if (x > 0)
+                    //turretMotor.setSpeed(turretMotor.get()-turretControl) // when we eventually add a turret motor
+                else if (x < 0)
+                    //turretMotor.setSpeed(turretMotor.get()+turretControl)
         }
+*/
         // double speed = driverXbox.getRightTriggerAxis();
         // shooterSubsystem.setShooterSpeed(speed);
         if (input > 0)

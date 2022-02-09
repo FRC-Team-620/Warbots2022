@@ -47,4 +47,7 @@ public final class Constants {
     public static final double rotation = -0.5;
     public static final double speed = 1.0;
 
+    public static final double limelightHeight = 0.5588; //based on last year's robot
+    public static final double hubHeight = 2.7178;
+    public static final double azimuthAngle1 = 37.8473967029; // mount angle of the limelight
 }
