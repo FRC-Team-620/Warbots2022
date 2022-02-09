@@ -9,6 +9,8 @@
 package frc.robot.Util;
 
 import frc.robot.Drive.Drivetrain;
+import frc.robot.Loader.LoaderCommand;
+import frc.robot.Loader.LoaderSubsystem;
 import frc.robot.Shooter.ShooterCommand;
 import frc.robot.Shooter.ShooterSubsystem;
 
@@ -40,11 +42,13 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 public class RobotContainer {
     protected Drivetrain drivetrain = new Drivetrain();
     protected XboxController driver = new XboxController(0);
-    protected ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+    protected LoaderSubsystem loaderSubsystem = new LoaderSubsystem();
+    //protected ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
     
 
     protected DriveWithJoystick driveWithJoystick;
-    protected ShooterCommand shooterCommand;
+    protected LoaderCommand loaderCommand;
+    //protected ShooterCommand shooterCommand;
 
     //public Command getDriveWithJoystick() {
         //return new DriveWithJoystick(drivetrain, driver);
@@ -55,14 +59,19 @@ public class RobotContainer {
     public void init() {
         driveWithJoystick = new DriveWithJoystick(drivetrain, driver);
         drivetrain.setDefaultCommand(driveWithJoystick);
+
+        loaderCommand = new LoaderCommand(loaderSubsystem, driver);
+        loaderSubsystem.setDefaultCommand(loaderCommand);
         try {
             Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
             jsonTrajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
         } catch (IOException ex) {
             DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
         }
-		shooterCommand = new ShooterCommand(shooterSubsystem, driver);
-        shooterSubsystem.setDefaultCommand(shooterCommand);
+		//shooterCommand = new ShooterCommand(shooterSubsystem, driver);
+        //shooterSubsystem.setDefaultCommand(shooterCommand);
+
+
     } 
 
     /**

@@ -18,11 +18,12 @@ public class LoaderCommand extends CommandBase {
     @Override
     public void execute() {
         CANSparkMax temp = loaderSubsystem.getLoaderMotor();
-        if (temp.getEncoder().getVelocity() > 0) {
-            temp.set(0);
-        } else {
-            temp.set(0.5);
+        if (driverXbox.getLeftBumperPressed()) {
+            if (temp.getEncoder().getVelocity() > 0) {
+                temp.set(0);
+            } else {
+                temp.set(0.5);
+            }
         }
-        
     }
 }
