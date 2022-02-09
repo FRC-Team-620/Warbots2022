@@ -9,6 +9,8 @@
 package frc.robot.Util;
 
 import frc.robot.Drive.Drivetrain;
+import frc.robot.Loader.LoaderCommand;
+import frc.robot.Loader.LoaderSubsystem;
 import frc.robot.Shooter.ShooterCommand;
 import frc.robot.Shooter.ShooterSubsystem;
 
@@ -40,10 +42,12 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 public class RobotContainer {
     protected Drivetrain drivetrain = new Drivetrain();
     protected XboxController driver = new XboxController(0);
+    protected LoaderSubsystem loaderSubsystem = new LoaderSubsystem();
     protected ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
     
 
     protected DriveWithJoystick driveWithJoystick;
+    protected LoaderCommand loaderCommand;
     protected ShooterCommand shooterCommand;
 
     //public Command getDriveWithJoystick() {
@@ -121,7 +125,7 @@ public class RobotContainer {
             drivetrain);
 
     // Reset odometry to the starting pose of the trajectory.
-    drivetrain.resetOdometry(exampleTrajectory.getInitialPose());
+    drivetrain.resetOdometry(jsonTrajectory.getInitialPose());
 
 
     // Run path following command, then stop at the end.
