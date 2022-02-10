@@ -31,16 +31,17 @@ public class ShooterCommand extends CommandBase {
     protected NetworkTableEntry entryArea = table.getEntry("ta");
     protected double turretControlConstant= 0.01;
 
+    protected double rpm; // important
     protected double bangBangTolerance = 0.01, minRPM = 0, maxRPM = 5500,
             currentSpeed = 0, diffConst = 6 * Math.pow(10, -6), acceleration, 
-            rpm, input, roundTo, currRPM;
+            input, roundTo, currRPM;
 
     public ShooterCommand(ShooterSubsystem shooterSubsystem, LazySusanSubsystem lazySusanSubsystem, XboxController driverXbox) {
         // timer.start();
         // prevTime = timer.get();
 
         SmartDashboard.putNumber("Round to: ", 5);
-        SmartDashboard.putNumber("Set RPM: ", 0);
+        SmartDashboard.putNumber("Set default RPM: ", 0);
         addRequirements(shooterSubsystem);
         this.shooterSubsystem = shooterSubsystem;
         this.driverXbox = driverXbox;
@@ -64,13 +65,20 @@ public class ShooterCommand extends CommandBase {
         SmartDashboard.putNumber("LimelightY", y);
         SmartDashboard.putNumber("LimelightArea", area);
 
-        double distance = Constants.hubHeight - Constants.limelightHeight;
-        //double turretControl = turretControlConstant*x;
-        distance /= Math.tan(Constants.azimuthAngle1 + y); // canculate the current distance from the hub
+        // new math for static limelight shooting
+        double tempDist = getDistanceInMeters(Constants.azimuthAngle1, y, Constants.limelightHeight, Constants.hubHeight);
+        double tempRPM = metersToRPM(tempDist * Constants.metersToFeet);
 
-        double shootingAngle = (90-(Math.tan(distance/0.61)))*2; // variance allowed for x
-        SmartDashboard.putNumber("Current Distance", distance);
-        SmartDashboard.putNumber("ShootingAngle horizontal variance", shootingAngle);
+
+        //old math
+        //double distance = Constants.hubHeight - Constants.limelightHeight;
+        //double turretControl = turretControlConstant*x;
+        //distance /= Math.tan(Constants.azimuthAngle1 + y); // canculate the current distance from the hub
+
+        //double shootingAngle = (90-(Math.tan(distance/0.61)))*2; // variance allowed for x
+        //SmartDashboard.putNumber("Current Distance", distance);
+        //SmartDashboard.putNumber("ShootingAngle horizontal variance", shootingAngle);
+
 /* // test to see if a shot can be taken
         if (shooterSubsystem.getRPM() == distance) {} // current RPM is correct for current distance
             if (Math.abs(x) <= shootingAngle) // To see if x variance will still allow for the ball to score
@@ -102,16 +110,20 @@ public class ShooterCommand extends CommandBase {
             }
         }
 
-        if (input > 0)
-            rpm = input * (maxRPM - minRPM) + minRPM;
-        else {
-            rpm = SmartDashboard.getNumber("Set RPM: ", 0);
-            if (rpm > maxRPM)
-                rpm = maxRPM;
-            else if (rpm < minRPM)
-                rpm = minRPM;
+        if (input > 0) {
+            setRPM(input * (maxRPM - minRPM) + minRPM);
+        } else if(hasTarget) {
+            if (driverXbox.getYButtonPressed()) {
+                setRPM(tempRPM);
+            }
+        } else {
+            setRPM(SmartDashboard.getNumber("Set RPM: ", 0));
+            if (getRPM() > maxRPM)
+                setRPM(maxRPM);
+            else if (getRPM() < minRPM)
+                setRPM(minRPM);
         }
-        acceleration = diffConst * (rpm - currRPM);
+        acceleration = diffConst * (getRPM() - currRPM);
         SmartDashboard.putNumber("Acceleration: ", acceleration);
         // if(Math.abs(rpm-currRPM) > (bangBangTolerance * rpm))
         setShooterSpeedAndUpdate(currentSpeed + acceleration);
@@ -124,7 +136,7 @@ public class ShooterCommand extends CommandBase {
         return (h2 - h1) / Math.tan(a1 + a2);
     }
 
-    public double getRPM(double meters) {
+    public double metersToRPM(double meters) {
         double distanceInFeet = 3.28084 * meters;
         return 11.73708 * distanceInFeet + 1632.61502;
     }
@@ -137,6 +149,13 @@ public class ShooterCommand extends CommandBase {
     public void setShooterSpeedAndUpdate(double speed) {
         shooterSubsystem.setShooterSpeed(speed);
         currentSpeed = speed;
+    }
+
+    public void setRPM(double rpm) {
+        this.rpm = rpm;
+    }
+    public double getRPM() {
+        return this.rpm;
     }
 
     @Override
