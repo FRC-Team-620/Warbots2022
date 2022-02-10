@@ -120,6 +120,15 @@ public class ShooterCommand extends CommandBase {
                 roundUpToNearestMultiple(currRPM, (int) roundTo));
     }
 
+    public double getDistanceInMeters(double a1, double a2, double h1, double h2) {
+        return (h2 - h1) / Math.tan(a1 + a2);
+    }
+
+    public double getRPM(double meters) {
+        double distanceInFeet = 3.28084 * meters;
+        return 11.73708 * distanceInFeet + 1632.61502;
+    }
+
     static long roundUpToNearestMultiple(double input, int step) {
         int i = (int) Math.ceil(input);
         return ((i + step - 1) / step) * step;
