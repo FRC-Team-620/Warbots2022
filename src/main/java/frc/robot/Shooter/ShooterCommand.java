@@ -16,6 +16,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 public class ShooterCommand extends CommandBase {
     protected XboxController driverXbox;
     protected ShooterSubsystem shooterSubsystem;
+    protected LazySusanSubsystem lazySusanSubsystem;
     // protected double bangBangTolerance = 0.05, intermittantSpeed = 0.3, minRPM =
     // 1000, maxRPM = 3000;
 
@@ -34,7 +35,7 @@ public class ShooterCommand extends CommandBase {
             currentSpeed = 0, diffConst = 6 * Math.pow(10, -6), acceleration, 
             rpm, input, roundTo, currRPM;
 
-    public ShooterCommand(ShooterSubsystem shooterSubsystem, XboxController driverXbox) {
+    public ShooterCommand(ShooterSubsystem shooterSubsystem, LazySusanSubsystem lazySusanSubsystem, XboxController driverXbox) {
         // timer.start();
         // prevTime = timer.get();
 
@@ -43,6 +44,7 @@ public class ShooterCommand extends CommandBase {
         addRequirements(shooterSubsystem);
         this.shooterSubsystem = shooterSubsystem;
         this.driverXbox = driverXbox;
+        this.lazySusanSubsystem = lazySusanSubsystem;
     }
 
     @Override
@@ -83,6 +85,23 @@ public class ShooterCommand extends CommandBase {
 */
         // double speed = driverXbox.getRightTriggerAxis();
         // shooterSubsystem.setShooterSpeed(speed);
+        CANSparkMax temp = lazySusanSubsystem.getLazySusanMotor();
+        temp.setOpenLoopRampRate(0.5);
+        if (driverXbox.getXButtonPressed()) {
+            if (temp.getEncoder().getVelocity() > 0) {
+                temp.set(0);
+            } else {
+                temp.set(0.2);
+            }
+        }
+        if (driverXbox.getBButtonPressed()) {
+            if (temp.getEncoder().getVelocity() > 0) {
+                temp.set(0);
+            } else {
+                temp.set(-0.2);
+            }
+        }
+
         if (input > 0)
             rpm = input * (maxRPM - minRPM) + minRPM;
         else {
