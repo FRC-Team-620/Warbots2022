@@ -4,6 +4,9 @@
 
 package frc.robot.Drive;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,6 +19,7 @@ public class DriveWithJoystick extends CommandBase {
   protected double speedConstant = Constants.speed;
   protected double rotationConstant = Constants.rotation;
   protected double openLoopRampRateConstant = 0;
+  protected String currentDriver = "default"; 
 
   /** Creates a new DriveWithJoystick. */
   public DriveWithJoystick(Drivetrain drivetrain, XboxController driverXbox) {
@@ -26,6 +30,7 @@ public class DriveWithJoystick extends CommandBase {
     SmartDashboard.putNumber("speed", speedConstant);
     SmartDashboard.putNumber("rotation", rotationConstant);
     SmartDashboard.putNumber("openloopramprate", openLoopRampRateConstant);
+    SmartDashboard.putString("driver", currentDriver);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -52,6 +57,11 @@ public class DriveWithJoystick extends CommandBase {
 
     NetworkTableEntry openLoopRampRateEntry = drivetrain.table.getEntry("openloopramprate");
     openLoopRampRateConstant = openLoopRampRateEntry.getDouble(0.2);
+
+    NetworkTableEntry driverEntry = drivetrain.table.getEntry("driver");
+    currentDriver = driverEntry.getString("default");
+    ArrayList<Double> currentDriverOptions = Constants.driverSpecificOptions.get(currentDriver);
+    openLoopRampRateConstant = currentDriverOptions.get(2);
 
     drivetrain.setOpenLoopRampRate(openLoopRampRateConstant);
 

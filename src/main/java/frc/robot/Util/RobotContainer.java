@@ -11,10 +11,12 @@ package frc.robot.Util;
 import frc.robot.Drive.Drivetrain;
 import frc.robot.Loader.LoaderCommand;
 import frc.robot.Loader.LoaderSubsystem;
+import frc.robot.Shooter.LazySusanSubsystem;
 import frc.robot.Shooter.ShooterCommand;
 import frc.robot.Shooter.ShooterSubsystem;
 
 import java.util.List;
+//import javax.xml.catalog.GroupEntry.PreferType;
 import java.io.*;
 import java.nio.file.Path;
 
@@ -42,13 +44,14 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 public class RobotContainer {
     protected Drivetrain drivetrain = new Drivetrain();
     protected XboxController driver = new XboxController(0);
-    //protected LoaderSubsystem loaderSubsystem = new LoaderSubsystem();
-    //protected ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+    protected LoaderSubsystem loaderSubsystem = new LoaderSubsystem();
+    protected ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+	protected LazySusanSubsystem lazySusanSubsystem = new LazySusanSubsystem();
     
 
     protected DriveWithJoystick driveWithJoystick;
-    //protected LoaderCommand loaderCommand;
-    //protected ShooterCommand shooterCommand;
+    protected LoaderCommand loaderCommand;
+    protected ShooterCommand shooterCommand;
 
     //public Command getDriveWithJoystick() {
         //return new DriveWithJoystick(drivetrain, driver);
@@ -60,16 +63,16 @@ public class RobotContainer {
         driveWithJoystick = new DriveWithJoystick(drivetrain, driver);
         drivetrain.setDefaultCommand(driveWithJoystick);
 
-        //loaderCommand = new LoaderCommand(loaderSubsystem, driver);
-        //loaderSubsystem.setDefaultCommand(loaderCommand);
+        loaderCommand = new LoaderCommand(loaderSubsystem, driver);
+        loaderSubsystem.setDefaultCommand(loaderCommand);        
         try {
             Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
             jsonTrajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
         } catch (IOException ex) {
             DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
         }
-		//shooterCommand = new ShooterCommand(shooterSubsystem, driver);
-        //shooterSubsystem.setDefaultCommand(shooterCommand);
+		shooterCommand = new ShooterCommand(shooterSubsystem, lazySusanSubsystem, driver);
+        shooterSubsystem.setDefaultCommand(shooterCommand);
     } 
 
     /**
@@ -77,6 +80,9 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
+	public Drivetrain getDriveTrain() {
+      	return drivetrain;
+  	}
   public Command getAutonomousCommand() {
     // Create a voltage constraint to ensure we don't accelerate too fast
     var autoVoltageConstraint =

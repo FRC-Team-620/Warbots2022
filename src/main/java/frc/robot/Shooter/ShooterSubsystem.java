@@ -33,6 +33,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
     }
 
+    public double getTicksPerMotorRotation() {
+        return encoder.getCountsPerRevolution();
+    }
     public double getRPM() {
         return Double.parseDouble(decFormat.format(encoder.getVelocity()));
     }

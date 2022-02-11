@@ -6,8 +6,7 @@ package frc.robot;
 
 import frc.robot.Util.RobotContainer;
 
-
-
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -62,5 +61,11 @@ public class Robot extends TimedRobot {
     }
   }
 
+
+  @Override
+  public void disabledInit() {
+    IdleMode mode = IdleMode.kBrake;
+    robotContainer.getDriveTrain().setMotorMode(mode);
+  }
   
 }

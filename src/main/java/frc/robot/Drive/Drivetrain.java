@@ -115,6 +115,13 @@ public class Drivetrain extends SubsystemBase {
     leftBackMotor.setOpenLoopRampRate(openLoopRampRate);
     leftFrontMotor.setOpenLoopRampRate(openLoopRampRate);
   }
+  
+  public void setMotorMode(IdleMode mode) {
+    rightBackMotor.setIdleMode(mode);
+    rightFrontMotor.setIdleMode(mode);
+    leftBackMotor.setIdleMode(mode);
+    leftFrontMotor.setIdleMode(mode);
+  }
 
   public Pose2d getPose() {
     return odometry.getPoseMeters();
