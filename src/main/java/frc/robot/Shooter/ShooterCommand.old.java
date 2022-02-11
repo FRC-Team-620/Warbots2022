@@ -46,7 +46,7 @@ public class ShooterCommand extends CommandBase {
 
         SmartDashboard.putNumber("Round to: ", 5);
         SmartDashboard.putNumber("Set default RPM: ", 0);
-        // SmartDashboard.putNumber("Change angle: ", 0);
+        SmartDashboard.putNumber("Change angle: ", 0);
         addRequirements(shooterSubsystem);
         this.shooterSubsystem = shooterSubsystem;
         this.driverXbox = driverXbox;
@@ -124,16 +124,14 @@ public class ShooterCommand extends CommandBase {
             }
             buttonPressed = true;
         }
-        if(!buttonPressed)
-            temp.set(diffConstLS*x);
-        // double currLSPos = lazySusanSubsystem.getLazySusanEncoder().getPosition();
-        // if((currTicksGoal < 0 && currLSPos <= currTicksGoal) || 
-        //     (currTicksGoal > 0 && currLSPos >= currTicksGoal)) {
-        //     currTicksGoal = 0;
-        //     lazySusanSubsystem.getLazySusanEncoder().setPosition(0);
-        // } else {
-        //     temp.set(diffConstLS * (currTicksGoal - currLSPos));
-        // }
+        double currLSPos = lazySusanSubsystem.getLazySusanEncoder().getPosition();
+        if((currTicksGoal < 0 && currLSPos <= currTicksGoal) || 
+            (currTicksGoal > 0 && currLSPos >= currTicksGoal)) {
+            currTicksGoal = 0;
+            lazySusanSubsystem.getLazySusanEncoder().setPosition(0);
+        } else {
+            temp.set(diffConstLS * (currTicksGoal - currLSPos));
+        }
 
         if (input > 0) {
             setRPM(input * (maxRPM - minRPM) + minRPM);
