@@ -42,6 +42,8 @@ public final class Constants {
     public static final double shooterGearRatio = 1;
     public static final double gearRatio = 0.12;
 
+    public static final double motorRotationsPerTurntableRotation = 104.0;
+
     public static final double kEncoderDistancePerPulse = 0.0359;//0.00136 
 
     public static final double rotation = -0.5;
