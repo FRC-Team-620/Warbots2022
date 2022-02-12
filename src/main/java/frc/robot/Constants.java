@@ -4,11 +4,6 @@
 
 package frc.robot;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 
 /**
@@ -59,9 +54,4 @@ public final class Constants {
     public static final double hubHeight = 2.7178;
     public static final double azimuthAngle1 = 37.8473967029; // mount angle of the limelight
     public static final double metersToFeet = 3.28084;
-
-    public static final Map<String, List<Double>> driverSpecificOptions = new HashMap() {{
-        //List(double speed, double rotation, double rampRate)
-        put("default", Arrays.asList(speed, rotation, rampRate));
-    }};
 }
