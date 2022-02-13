@@ -4,6 +4,8 @@ import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Timer;
 
 public class LoaderCommand extends CommandBase {
     protected LoaderSubsystem loaderSubsystem;
@@ -24,6 +26,11 @@ public class LoaderCommand extends CommandBase {
             } else {
                 temp.set(1);
             }
+        }
+        if (driverXbox.getAButtonPressed()) {
+            loaderSubsystem.getSolenoid().set(true);
+        } else if (driverXbox.getAButtonReleased()) {
+            loaderSubsystem.getSolenoid().set(false);
         }
     }
 }

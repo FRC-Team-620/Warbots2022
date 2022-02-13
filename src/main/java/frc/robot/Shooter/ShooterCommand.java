@@ -43,8 +43,7 @@ public class ShooterCommand extends CommandBase {
         // timer.start();
         // prevTime = timer.get();
         this.ticksPerTurntableRotation = lazySusanSubsystem.getTicksPerMotorRotation()*Constants.motorRotationsPerTurntableRotation;
-        this.angleChangePerTick = 2*Math.PI/this.ticksPerTurntableRotation;
-        SmartDashboard.putNumber("Round to: ", 5);
+        this.angleChangePerTick = 2*Math.PI/this.ticksPerTurntableRotation;        SmartDashboard.putNumber("Round to: ", 5);
         SmartDashboard.putNumber("Set default RPM: ", 0);
         // SmartDashboard.putNumber("Change angle: ", 0);
         addRequirements(shooterSubsystem);
@@ -60,7 +59,7 @@ public class ShooterCommand extends CommandBase {
         double y = entryY.getDouble(0.0);
         double area = entryArea.getDouble(0.0);
 
-        input = driverXbox.getRightTriggerAxis();
+        input = driverXbox.getRightY();
         roundTo = SmartDashboard.getNumber("Round to: ", 5);
         currRPM = shooterSubsystem.getRPM();
         // deltaTheta = SmartDashboard.getNumber("Change angle: ", 0);
@@ -124,8 +123,8 @@ public class ShooterCommand extends CommandBase {
             }
             buttonPressed = true;
         }
-        if(!buttonPressed)
-            temp.set(diffConstLS*x);
+        //if(!buttonPressed)
+            //temp.set(diffConstLS*x);
         // double currLSPos = lazySusanSubsystem.getLazySusanEncoder().getPosition();
         // if((currTicksGoal < 0 && currLSPos <= currTicksGoal) || 
         //     (currTicksGoal > 0 && currLSPos >= currTicksGoal)) {
@@ -134,13 +133,12 @@ public class ShooterCommand extends CommandBase {
         // } else {
         //     temp.set(diffConstLS * (currTicksGoal - currLSPos));
         // }
-
+// //else if(hasTarget) {
+//     if (driverXbox.getYButtonPressed()) {
+//         setRPM(tempRPM);
+//     }
         if (input > 0) {
-            setRPM(input * (maxRPM - minRPM) + minRPM);
-        } else if(hasTarget) {
-            if (driverXbox.getYButtonPressed()) {
-                setRPM(tempRPM);
-            }
+            setRPM(input * (maxRPM - minRPM) + minRPM); 
         } else {
             setRPM(SmartDashboard.getNumber("Set RPM: ", 0));
             if (getRPM() > maxRPM)

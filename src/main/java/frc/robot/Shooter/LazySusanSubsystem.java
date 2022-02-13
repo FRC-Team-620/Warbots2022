@@ -9,21 +9,21 @@ public class LazySusanSubsystem extends SubsystemBase {
     protected CANSparkMax lazySusan;
     protected RelativeEncoder encoder;
     public LazySusanSubsystem() {
-        this.lazySusan = new CANSparkMax(9, MotorType.kBrushless);
+        lazySusan = new CANSparkMax(9, MotorType.kBrushless);
 
-        this.lazySusan.restoreFactoryDefaults();
-        this.encoder = this.lazySusan.getEncoder();
-
-        this.lazySusan.setIdleMode(IdleMode.kBrake);
+        lazySusan.restoreFactoryDefaults();
+        encoder = lazySusan.getEncoder();
+        IdleMode mode = IdleMode.kBrake; //brakes
+        lazySusan.setIdleMode(mode);
     }
     
     public CANSparkMax getLazySusanMotor() {
-        return this.lazySusan;
+        return lazySusan;
     }
     public RelativeEncoder getLazySusanEncoder() {
-        return this.encoder;
+        return encoder;
     }
     public double getTicksPerMotorRotation() {
-        return this.encoder.getCountsPerRevolution();
+        return encoder.getCountsPerRevolution();
     }
 }
