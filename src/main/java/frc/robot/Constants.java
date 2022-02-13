@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -60,7 +61,7 @@ public final class Constants {
     public static final double azimuthAngle1 = 37.8473967029; // mount angle of the limelight
     public static final double metersToFeet = 3.28084;
 
-    public static final Map<String, List<Double>> driverSpecificOptions = new HashMap() {{
+    public static final HashMap<String, List<Double>> driverSpecificOptions = new HashMap() {{
         //List(double speed, double rotation, double rampRate)
         put("default", Arrays.asList(speed, rotation, rampRate));
     }};
