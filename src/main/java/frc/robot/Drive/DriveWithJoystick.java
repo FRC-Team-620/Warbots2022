@@ -9,29 +9,40 @@ import java.util.List;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.Presets;
 
 public class DriveWithJoystick extends CommandBase {
   protected Drivetrain drivetrain;
   protected XboxController driverXbox;
   protected double speedConstant = Constants.speed;
   protected double rotationConstant = Constants.rotation;
-  protected double openLoopRampRateConstant = 0;
-  protected String currentDriver = "default"; 
-
+  protected double openLoopRampRateConstant = Constants.rampRate;
+  protected SendableChooser<String> presetChooser = new SendableChooser<>();
+  protected String currentDriver = "Default";
+  protected List<Double> currentDriverPreset = Presets.presets.get(currentDriver);
+  
   /** Creates a new DriveWithJoystick. */
   public DriveWithJoystick(Drivetrain drivetrain, XboxController driverXbox) {
     addRequirements(drivetrain);
     this.drivetrain = drivetrain;
     this.driverXbox = driverXbox;
 
-    SmartDashboard.putNumber("speed", speedConstant);
-    SmartDashboard.putNumber("rotation", rotationConstant);
-    SmartDashboard.putNumber("openloopramprate", openLoopRampRateConstant);
-    SmartDashboard.putString("driver", currentDriver);
-    // Use addRequirements() here to declare subsystem dependencies.
+    SmartDashboard.putNumber("speed", currentDriverPreset.get(0));
+    SmartDashboard.putNumber("rotation", currentDriverPreset.get(1));
+    SmartDashboard.putNumber("openloopramprate", currentDriverPreset.get(2));
+    presetChooser.setDefaultOption("Default", "Default");
+
+    for (String preset : Presets.presets.keySet()) {
+      if (!preset.toLowerCase().equals("default")) {
+        presetChooser.addOption(preset, preset);
+      }
+    }
+
+    SmartDashboard.putData("driver", presetChooser);    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -47,22 +58,31 @@ public class DriveWithJoystick extends CommandBase {
     double speed = 0.0;
     openLoopRampRateConstant = drivetrain.getOpenLoopRampRate();
     
-
-    //TESTING ONLY. SET BACK TO CONSTANTS FOR THE COMPETITION
     NetworkTableEntry speedEntry = drivetrain.table.getEntry("speed");
-    speedConstant = speedEntry.getDouble(0.5);
-
     NetworkTableEntry rotationEntry = drivetrain.table.getEntry("rotation");
-    rotationConstant = rotationEntry.getDouble(-0.5); //TESTING ONLY. SET BACK TO CONSTANTS FOR THE COMPETITION
-
     NetworkTableEntry openLoopRampRateEntry = drivetrain.table.getEntry("openloopramprate");
-    openLoopRampRateConstant = openLoopRampRateEntry.getDouble(0.2);
 
-    NetworkTableEntry driverEntry = drivetrain.table.getEntry("driver");
-    currentDriver = driverEntry.getString("default");
-    //ArrayList<Double> currentDriverOptions = Constants.driverSpecificOptions.get(currentDriver);
-    //openLoopRampRateConstant = currentDriverOptions.get(2);
 
+    currentDriver = presetChooser.getSelected();
+    currentDriverPreset = Presets.presets.get(currentDriver);
+    
+    // When the default drive mode is selected, then allow customizable values.
+    if (currentDriver.toLowerCase().equals("default")) {
+      //TESTING ONLY. SET BACK TO CONSTANTS FOR THE COMPETITION
+      speedConstant = speedEntry.getDouble(0.5);
+      rotationConstant = rotationEntry.getDouble(-0.5);
+      openLoopRampRateConstant = openLoopRampRateEntry.getDouble(0.2);
+
+    // Otherwise, use the driver-specific custom presets.
+    } else {
+      speedConstant = currentDriverPreset.get(0);
+      speedEntry.setDouble(speedConstant);
+      rotationConstant = currentDriverPreset.get(1);
+      rotationEntry.setDouble(rotationConstant);
+      openLoopRampRateConstant = currentDriverPreset.get(2);
+      openLoopRampRateEntry.setDouble(openLoopRampRateConstant);
+    }    
+    
     drivetrain.setOpenLoopRampRate(openLoopRampRateConstant);
 
     rotation = rotationConstant * rotationInput;
