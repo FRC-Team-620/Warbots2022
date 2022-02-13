@@ -140,7 +140,7 @@ public class ShooterCommand extends CommandBase {
         if (input > 0) {
             setRPM(input * (maxRPM - minRPM) + minRPM); 
         } else {
-            setRPM(SmartDashboard.getNumber("Set RPM: ", 0));
+            setRPM(SmartDashboard.getNumber("Set default RPM: ", 0));
             if (getRPM() > maxRPM)
                 setRPM(maxRPM);
             else if (getRPM() < minRPM)
