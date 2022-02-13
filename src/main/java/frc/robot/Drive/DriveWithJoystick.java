@@ -60,8 +60,8 @@ public class DriveWithJoystick extends CommandBase {
 
     NetworkTableEntry driverEntry = drivetrain.table.getEntry("driver");
     currentDriver = driverEntry.getString("default");
-    ArrayList<Double> currentDriverOptions = Constants.driverSpecificOptions.get(currentDriver);
-    openLoopRampRateConstant = currentDriverOptions.get(2);
+    //ArrayList<Double> currentDriverOptions = Constants.driverSpecificOptions.get(currentDriver);
+    //openLoopRampRateConstant = currentDriverOptions.get(2);
 
     drivetrain.setOpenLoopRampRate(openLoopRampRateConstant);
 

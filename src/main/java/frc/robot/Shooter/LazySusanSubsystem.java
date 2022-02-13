@@ -7,12 +7,12 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class LazySusanSubsystem extends SubsystemBase {
     protected CANSparkMax lazySusan;
-    protected RelativeEncoder encoder = lazySusan.getEncoder();
+    protected RelativeEncoder encoder;
     public LazySusanSubsystem() {
         lazySusan = new CANSparkMax(9, MotorType.kBrushless);
 
         lazySusan.restoreFactoryDefaults();
-
+        encoder = lazySusan.getEncoder();
         IdleMode mode = IdleMode.kBrake; //brakes
         lazySusan.setIdleMode(mode);
     }
