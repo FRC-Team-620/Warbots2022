@@ -7,23 +7,23 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class LazySusanSubsystem extends SubsystemBase {
     protected CANSparkMax lazySusan;
-    protected RelativeEncoder encoder = lazySusan.getEncoder();
+    protected RelativeEncoder encoder;
     public LazySusanSubsystem() {
-        lazySusan = new CANSparkMax(9, MotorType.kBrushless);
+        this.lazySusan = new CANSparkMax(9, MotorType.kBrushless);
 
-        lazySusan.restoreFactoryDefaults();
+        this.lazySusan.restoreFactoryDefaults();
+        this.encoder = this.lazySusan.getEncoder();
 
-        IdleMode mode = IdleMode.kBrake; //brakes
-        lazySusan.setIdleMode(mode);
+        this.lazySusan.setIdleMode(IdleMode.kBrake);
     }
     
     public CANSparkMax getLazySusanMotor() {
-        return lazySusan;
+        return this.lazySusan;
     }
     public RelativeEncoder getLazySusanEncoder() {
-        return encoder;
+        return this.encoder;
     }
     public double getTicksPerMotorRotation() {
-        return encoder.getCountsPerRevolution();
+        return this.encoder.getCountsPerRevolution();
     }
 }

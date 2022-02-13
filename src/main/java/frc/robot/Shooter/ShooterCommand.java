@@ -32,9 +32,8 @@ public class ShooterCommand extends CommandBase {
     protected double turretControlConstant= 0.01;
 
     // turntable
-    protected double ticksPerTurntableRotation = lazySusanSubsystem.getTicksPerMotorRotation()*Constants.motorRotationsPerTurntableRotation,
-        angleChangePerTick = 2*Math.PI/ticksPerTurntableRotation,
-        currTicksGoal = 0, diffConstLS = 0.0002;
+    protected double ticksPerTurntableRotation,angleChangePerTick;
+    protected double  currTicksGoal = 0, diffConstLS = 0.0002;
     // shooter
     protected double rpm, bangBangTolerance = 0.01, minRPM = 0, maxRPM = 5500,
             currentSpeed = 0, diffConst = 6 * Math.pow(10, -6), acceleration, 
@@ -43,7 +42,8 @@ public class ShooterCommand extends CommandBase {
     public ShooterCommand(ShooterSubsystem shooterSubsystem, LazySusanSubsystem lazySusanSubsystem, XboxController driverXbox) {
         // timer.start();
         // prevTime = timer.get();
-
+        this.ticksPerTurntableRotation = lazySusanSubsystem.getTicksPerMotorRotation()*Constants.motorRotationsPerTurntableRotation;
+        this.angleChangePerTick = 2*Math.PI/this.ticksPerTurntableRotation;
         SmartDashboard.putNumber("Round to: ", 5);
         SmartDashboard.putNumber("Set default RPM: ", 0);
         // SmartDashboard.putNumber("Change angle: ", 0);
