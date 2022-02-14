@@ -139,6 +139,10 @@ public class ShooterCommand extends CommandBase {
 //     }
         if (input > 0) {
             setRPM(input * (maxRPM - minRPM) + minRPM); 
+        } else if(hasTarget) {
+            if (driverXbox.getYButtonPressed()) {
+                 setRPM(tempRPM);
+            } 
         } else {
             setRPM(SmartDashboard.getNumber("Set default RPM: ", 0));
             if (getRPM() > maxRPM)
