@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class ClimberCommand extends CommandBase {
     protected XboxController driverXbox;
     protected ClimberSubsystem climberSubsystem;
-    protected Solenoid[] solenoids;
+    protected Solenoid climberSolenoid;
 
     protected int prevTime = -1;
 
@@ -19,29 +19,18 @@ public class ClimberCommand extends CommandBase {
         addRequirements(climberSubsystem);
         this.climberSubsystem = climberSubsystem;
         this.driverXbox = driverXbox;
-        this.solenoids = new Solenoid[] {
-            new Solenoid(PneumaticsModuleType.CTREPCM, 0),
-            new Solenoid(PneumaticsModuleType.CTREPCM, 1),
-            new Solenoid(PneumaticsModuleType.CTREPCM, 2),
-            new Solenoid(PneumaticsModuleType.CTREPCM, 3)
-        };
+        this.climberSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
+
     }
 
     @Override
     public void execute() {
         // Testing if it's working
-        solenoids[0].set(driverXbox.getAButton());
-        solenoids[1].set(driverXbox.getYButton());
-        solenoids[2].set(driverXbox.getBButton());
-        solenoids[3].set(driverXbox.getXButton());
+        climberSolenoid.set(driverXbox.getYButton());
     }
 
     @Override
     public boolean isFinished() {
         return false;
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> f7a4150bfcd208a828d2f4146fcf9310cfefe0c0

@@ -124,7 +124,7 @@ public class ShooterCommand extends CommandBase {
             buttonPressed = true;
         }
         if(!buttonPressed)
-            temp.set(temp.getEncoder().getVelocity() + diffConstLS*x);
+            lazySusanMotor.set(lazySusanMotor.getEncoder().getVelocity() + diffConstLS*x);
         // double currLSPos = lazySusanSubsystem.getLazySusanEncoder().getPosition();
         // if((currTicksGoal < 0 && currLSPos <= currTicksGoal) || 
         //     (currTicksGoal > 0 && currLSPos >= currTicksGoal)) {
