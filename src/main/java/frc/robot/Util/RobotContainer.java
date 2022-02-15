@@ -40,39 +40,45 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /** Add your docs here. */
 public class RobotContainer {
     protected Drivetrain drivetrain = new Drivetrain();
     protected XboxController driver = new XboxController(0);
-    protected LoaderSubsystem loaderSubsystem = new LoaderSubsystem();
-    protected ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
-	protected LazySusanSubsystem lazySusanSubsystem = new LazySusanSubsystem();
+    //protected LoaderSubsystem loaderSubsystem = new LoaderSubsystem();
+    //protected ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+	//protected LazySusanSubsystem lazySusanSubsystem = new LazySusanSubsystem();
     
 
     protected DriveWithJoystick driveWithJoystick;
-    protected LoaderCommand loaderCommand;
-    protected ShooterCommand shooterCommand;
+    //protected LoaderCommand loaderCommand;
+    //protected ShooterCommand shooterCommand;
 
     //public Command getDriveWithJoystick() {
         //return new DriveWithJoystick(drivetrain, driver);
     //}
-    String trajectoryJSON = "paths/TestPath1.wpilib.json";///src/main/deploy/paths/
-    Trajectory jsonTrajectory = new Trajectory();
-
+    
+    TrajectorySelector trajectorySelector = new TrajectorySelector(Filesystem.getDeployDirectory().toPath().resolve("paths/"), true);
+    public Field2d  robotFieldWidget = new Field2d(); //TODO: include Robot odometry 
     public void init() {
         driveWithJoystick = new DriveWithJoystick(drivetrain, driver);
         drivetrain.setDefaultCommand(driveWithJoystick);
 
-        loaderCommand = new LoaderCommand(loaderSubsystem, driver);
-        loaderSubsystem.setDefaultCommand(loaderCommand);        
-        try {
-            Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-            jsonTrajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-        } catch (IOException ex) {
-            DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-        }
-		shooterCommand = new ShooterCommand(shooterSubsystem, lazySusanSubsystem, driver);
-        shooterSubsystem.setDefaultCommand(shooterCommand);
+        //loaderCommand = new LoaderCommand(loaderSubsystem, driver);
+        //loaderSubsystem.setDefaultCommand(loaderCommand);        
+        
+		//shooterCommand = new ShooterCommand(shooterSubsystem, lazySusanSubsystem, driver);
+        //shooterSubsystem.setDefaultCommand(shooterCommand);
+
+
+       
+        SmartDashboard.putData(robotFieldWidget);
+        SmartDashboard.putData(trajectorySelector);
+        trajectorySelector.linkField(robotFieldWidget);
+
+        // trajectorySelector.setDefaultOption("No Trajectory", new Trajectory());  //Uncomment this to default to no trajectory vs the first file found or null.
+
     } 
 
     /**
@@ -92,7 +98,7 @@ public class RobotContainer {
                 Constants.kvVoltSecondsPerMeter,
                 Constants.kaVoltSecondsSquaredPerMeter),
             Constants.kDriveKinematics,
-            10);
+            5.02);
 
     // Create config for trajectory
     TrajectoryConfig config =
@@ -115,6 +121,7 @@ public class RobotContainer {
             new Pose2d(1, 0, new Rotation2d(0)),
             // Pass config
             config);
+    Trajectory jsonTrajectory = trajectorySelector.getSelected();
 
     RamseteCommand ramseteCommand =
         new RamseteCommand(

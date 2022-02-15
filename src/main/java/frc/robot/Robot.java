@@ -27,6 +27,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+
+    robotContainer.robotFieldWidget.setRobotPose(robotContainer.getDriveTrain().getPose()); //Example on how to update Field2d with robot position.
     //robotContainer.drivetrain.leftFrontMotorDrive(0.3);
   } 
 
@@ -44,7 +46,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     if (autonomousCommand != null) {
-      autonomousCommand.cancel();
+       autonomousCommand.cancel();
     }
   }
 
@@ -57,7 +59,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     autonomousCommand = robotContainer.getAutonomousCommand();
     if (autonomousCommand != null) {
-     autonomousCommand.schedule();
+      autonomousCommand.schedule();
     }
   }
 

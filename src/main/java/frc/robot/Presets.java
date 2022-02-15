@@ -8,5 +8,7 @@ public class Presets {
     public static final Map<String, List<Double>> presets = new HashMap<>() {{
         //List(double speed, double rotation, double rampRate)
         put("Default", List.of(Constants.speed, Constants.rotation, Constants.rampRate));
+        put("Corbin", List.of(1.0, -0.75, 0.0));
+        put("AJ", List.of(1.0, -0.75, 0.0));
     }};
 }
