@@ -40,4 +40,8 @@ public class ClimberCommand extends CommandBase {
     public boolean isFinished() {
         return false;
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> f7a4150bfcd208a828d2f4146fcf9310cfefe0c0

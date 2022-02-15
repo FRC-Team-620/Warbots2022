@@ -8,7 +8,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 
 public class ShooterSubsystem extends SubsystemBase {
     protected final CANSparkMax leftShooterMotor, rightShooterMotor;
@@ -33,6 +32,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
     }
 
+    public double getTicksPerMotorRotation() {
+        return encoder.getCountsPerRevolution();
+    }
     public double getRPM() {
         return Double.parseDouble(decFormat.format(encoder.getVelocity()));
     }

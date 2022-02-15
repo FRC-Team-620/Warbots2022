@@ -9,10 +9,14 @@
 package frc.robot.Util;
 
 import frc.robot.Drive.Drivetrain;
+import frc.robot.Loader.LoaderCommand;
+import frc.robot.Loader.LoaderSubsystem;
+import frc.robot.Shooter.LazySusanSubsystem;
 import frc.robot.Shooter.ShooterCommand;
 import frc.robot.Shooter.ShooterSubsystem;
 
 import java.util.List;
+//import javax.xml.catalog.GroupEntry.PreferType;
 import java.io.*;
 import java.nio.file.Path;
 
@@ -36,33 +40,45 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /** Add your docs here. */
 public class RobotContainer {
-    //protected Drivetrain drivetrain = new Drivetrain();
+    protected Drivetrain drivetrain = new Drivetrain();
     protected XboxController driver = new XboxController(0);
-    protected ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+    //protected LoaderSubsystem loaderSubsystem = new LoaderSubsystem();
+    //protected ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+	//protected LazySusanSubsystem lazySusanSubsystem = new LazySusanSubsystem();
     
 
-    //protected DriveWithJoystick driveWithJoystick;
-    protected ShooterCommand shooterCommand;
+    protected DriveWithJoystick driveWithJoystick;
+    //protected LoaderCommand loaderCommand;
+    //protected ShooterCommand shooterCommand;
 
     //public Command getDriveWithJoystick() {
         //return new DriveWithJoystick(drivetrain, driver);
     //}
-    String trajectoryJSON = "paths/TestPath1.wpilib.json";///src/main/deploy/paths/
-    Trajectory jsonTrajectory = new Trajectory();
-
+    
+    TrajectorySelector trajectorySelector = new TrajectorySelector(Filesystem.getDeployDirectory().toPath().resolve("paths/"), true);
+    public Field2d  robotFieldWidget = new Field2d(); //TODO: include Robot odometry 
     public void init() {
-        //driveWithJoystick = new DriveWithJoystick(drivetrain, driver);
-        //drivetrain.setDefaultCommand(driveWithJoystick);
-        try {
-            Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-            jsonTrajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-        } catch (IOException ex) {
-            DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-        }
-		shooterCommand = new ShooterCommand(shooterSubsystem, driver);
-        shooterSubsystem.setDefaultCommand(shooterCommand);
+        driveWithJoystick = new DriveWithJoystick(drivetrain, driver);
+        drivetrain.setDefaultCommand(driveWithJoystick);
+
+        //loaderCommand = new LoaderCommand(loaderSubsystem, driver);
+        //loaderSubsystem.setDefaultCommand(loaderCommand);        
+        
+		//shooterCommand = new ShooterCommand(shooterSubsystem, lazySusanSubsystem, driver);
+        //shooterSubsystem.setDefaultCommand(shooterCommand);
+
+
+       
+        SmartDashboard.putData(robotFieldWidget);
+        SmartDashboard.putData(trajectorySelector);
+        trajectorySelector.linkField(robotFieldWidget);
+
+        // trajectorySelector.setDefaultOption("No Trajectory", new Trajectory());  //Uncomment this to default to no trajectory vs the first file found or null.
+
     } 
 
     /**
@@ -70,7 +86,10 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  /*public Command getAutonomousCommand() {
+	public Drivetrain getDriveTrain() {
+      	return drivetrain;
+  	}
+  public Command getAutonomousCommand() {
     // Create a voltage constraint to ensure we don't accelerate too fast
     var autoVoltageConstraint =
         new DifferentialDriveVoltageConstraint(
@@ -79,7 +98,7 @@ public class RobotContainer {
                 Constants.kvVoltSecondsPerMeter,
                 Constants.kaVoltSecondsSquaredPerMeter),
             Constants.kDriveKinematics,
-            10);
+            5.02);
 
     // Create config for trajectory
     TrajectoryConfig config =
@@ -102,10 +121,11 @@ public class RobotContainer {
             new Pose2d(1, 0, new Rotation2d(0)),
             // Pass config
             config);
+    Trajectory jsonTrajectory = trajectorySelector.getSelected();
 
     RamseteCommand ramseteCommand =
         new RamseteCommand(
-            exampleTrajectory,
+            jsonTrajectory,
             drivetrain::getPose,
             new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta),
             new SimpleMotorFeedforward(
@@ -121,12 +141,12 @@ public class RobotContainer {
             drivetrain);
 
     // Reset odometry to the starting pose of the trajectory.
-    drivetrain.resetOdometry(exampleTrajectory.getInitialPose());
+    drivetrain.resetOdometry(jsonTrajectory.getInitialPose());
 
 
     // Run path following command, then stop at the end.
     return ramseteCommand.andThen(() -> drivetrain.tankDriveVolts(0, 0));
-  }*/
+  }
 
 
 }

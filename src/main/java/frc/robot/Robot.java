@@ -6,8 +6,7 @@ package frc.robot;
 
 import frc.robot.Util.RobotContainer;
 
-
-
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,6 +27,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+
+    robotContainer.robotFieldWidget.setRobotPose(robotContainer.getDriveTrain().getPose()); //Example on how to update Field2d with robot position.
     //robotContainer.drivetrain.leftFrontMotorDrive(0.3);
   } 
 
@@ -44,9 +45,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    //if (autonomousCommand != null) {
-     // autonomousCommand.cancel();
-    //}
+    if (autonomousCommand != null) {
+       autonomousCommand.cancel();
+    }
   }
 
   @Override
@@ -56,11 +57,17 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    //autonomousCommand = robotContainer.getAutonomousCommand();
-    //if (autonomousCommand != null) {
-     //autonomousCommand.schedule();
-    //}
+    autonomousCommand = robotContainer.getAutonomousCommand();
+    if (autonomousCommand != null) {
+      autonomousCommand.schedule();
+    }
   }
 
+
+  @Override
+  public void disabledInit() {
+    IdleMode mode = IdleMode.kBrake;
+    robotContainer.getDriveTrain().setMotorMode(mode);
+  }
   
 }
