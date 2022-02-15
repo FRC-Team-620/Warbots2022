@@ -98,7 +98,7 @@ public class RobotContainer {
                 Constants.kvVoltSecondsPerMeter,
                 Constants.kaVoltSecondsSquaredPerMeter),
             Constants.kDriveKinematics,
-            10);
+            5.02);
 
     // Create config for trajectory
     TrajectoryConfig config =

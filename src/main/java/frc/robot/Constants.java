@@ -19,21 +19,25 @@ public final class Constants {
     // for *your* robot's drive.
     // The Robot Characterization Toolsuite provides a convenient tool for obtaining these
     // values for your robot.
-    public static final double ksVolts = 0.15405;//0.16249
-    public static final double kvVoltSecondsPerMeter = 3.3214;//3.2952
-    public static final double kaVoltSecondsSquaredPerMeter = 0.33697;//0.30496
+    //Main Bot Character
+    //
+    //
+    //
+    public static final double ksVolts = 0.11848;//0.16249
+    public static final double kvVoltSecondsPerMeter = 6.9735;//3.2952
+    public static final double kaVoltSecondsSquaredPerMeter = 1.2862;//0.30496
 
-    public static final double kPDriveVel = 3.9997;//3.869//2.0146
+    public static final double kPDriveVel = 1.3256;//3.869//2.0146
 
-    public static final double kTrackwidthMeters = 0.505;//0.5207
+    public static final double kTrackwidthMeters = 0.64;//0.5207
     public static final DifferentialDriveKinematics kDriveKinematics =
         new DifferentialDriveKinematics(kTrackwidthMeters);
 
-    public static final double kMaxSpeedMetersPerSecond = 0.5;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 0.2;
+    public static final double kMaxSpeedMetersPerSecond = 0.3;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 0.05;
 
-    // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
-    public static final double kRamseteB = 2;//0.5832 2
+    // Reasonable baseline values for a RAMETE follower in units of meters and seconds
+    public static final double kRamseteB = 0.5832;//0.5832 2
     public static final double kRamseteZeta = 0.0125;//0.7
     // It seems that the meter value is three times what it should be.
 
