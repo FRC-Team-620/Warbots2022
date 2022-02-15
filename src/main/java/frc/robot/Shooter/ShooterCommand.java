@@ -104,22 +104,22 @@ public class ShooterCommand extends CommandBase {
 */
         // double speed = driverXbox.getRightTriggerAxis();
         // shooterSubsystem.setShooterSpeed(speed);
-        CANSparkMax temp = lazySusanSubsystem.getLazySusanMotor();
+        CANSparkMax lazySusanMotor = lazySusanSubsystem.getLazySusanMotor();
         boolean buttonPressed = false;
-        temp.setOpenLoopRampRate(0.5);
+        lazySusanMotor.setOpenLoopRampRate(0.5);
         if (driverXbox.getXButtonPressed()) {
-            if (temp.getEncoder().getVelocity() > 0) {
-                temp.set(0);
+            if (lazySusanMotor.getEncoder().getVelocity() > 0) {
+                lazySusanMotor.set(0);
             } else {
-                temp.set(0.2);
+                lazySusanMotor.set(0.2);
             }
             buttonPressed = true;
         }
         if (driverXbox.getBButtonPressed()) {
-            if (temp.getEncoder().getVelocity() > 0) {
-                temp.set(0);
+            if (lazySusanMotor.getEncoder().getVelocity() > 0) {
+                lazySusanMotor.set(0);
             } else {
-                temp.set(-0.2);
+                lazySusanMotor.set(-0.2);
             }
             buttonPressed = true;
         }
@@ -131,7 +131,7 @@ public class ShooterCommand extends CommandBase {
         //     currTicksGoal = 0;
         //     lazySusanSubsystem.getLazySusanEncoder().setPosition(0);
         // } else {
-        //     temp.set(diffConstLS * (currTicksGoal - currLSPos));
+        //     lazySusanMotor.set(diffConstLS * (currTicksGoal - currLSPos));
         // }
 // //else if(hasTarget) {
 //     if (driverXbox.getYButtonPressed()) {
