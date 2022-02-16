@@ -20,7 +20,6 @@ public class ClimberCommand extends CommandBase {
         this.climberSubsystem = climberSubsystem;
         this.driverXbox = driverXbox;
         this.climberSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
-
     }
 
     @Override
