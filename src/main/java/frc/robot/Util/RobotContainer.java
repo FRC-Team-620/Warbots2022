@@ -86,6 +86,10 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
+    public LazySusanSubsystem getLazySusanSubsystem() {
+        return lazySusanSubsystem;
+    }
+
 	public Drivetrain getDriveTrain() {
       	return drivetrain;
   	}

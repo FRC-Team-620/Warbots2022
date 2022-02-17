@@ -8,8 +8,8 @@ import frc.robot.Constants;
 import javax.lang.model.util.ElementScanner6;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -34,7 +34,7 @@ public class ShooterCommand extends CommandBase {
 
     // turntable
     protected double ticksPerTurntableRotation,angleChangePerTick;
-    protected double  currTicksGoal = 0, diffConstLS = 0.00003;
+    protected double  currTicksGoal = 0, diffConstLS = 0.012, turntableThresh = 25;
     // shooter
     protected double rpm, bangBangTolerance = 0.01, minRPM = 0, maxRPM = 5500,
             currentSpeed = 0, diffConst = 6 * Math.pow(10, -6), acceleration, 
@@ -107,30 +107,33 @@ public class ShooterCommand extends CommandBase {
         // shooterSubsystem.setShooterSpeed(speed);
         CANSparkMax lazySusanMotor = lazySusanSubsystem.getLazySusanMotor();
         boolean buttonPressed = false;
-        lazySusanMotor.setOpenLoopRampRate(0.5);
-        // if (driverXbox.getXButtonPressed()) {
-        //     if (lazySusanMotor.getEncoder().getVelocity() > 0) {
-        //         lazySusanMotor.set(0);
-        //     } else {
-        //         lazySusanMotor.set(0.2);
-        //     }
-        //     buttonPressed = true;
-        // }
-        // if (driverXbox.getBButtonPressed()) {
-        //     if (lazySusanMotor.getEncoder().getVelocity() > 0) {
-        //         lazySusanMotor.set(0);
-        //     } else {
-        //         lazySusanMotor.set(-0.2);
-        //     }
-        //     buttonPressed = true;
-        // }
-        if(!buttonPressed) {
-            System.out.println(diffConstLS*x);
-            System.out.println(lazySusanMotor.getEncoder().getPosition());
-            //lazySusanMotor.set(diffConstLS*x);
-            
+        if (driverXbox.getXButtonPressed()) {
+            if (lazySusanMotor.getEncoder().getVelocity() > 0) {
+                lazySusanMotor.set(0);
+            } else {
+                lazySusanMotor.set(0.2);
+            }
+            buttonPressed = true;
         }
-            // lazySusanMotor.set(lazySusanMotor.getEncoder().getVelocity() + diffConstLS*x);
+        if (driverXbox.getBButtonPressed()) {
+            if (lazySusanMotor.getEncoder().getVelocity() > 0) {
+                lazySusanMotor.set(0);
+            } else {
+                lazySusanMotor.set(-0.2);
+            }
+            buttonPressed = true;
+        }
+        if(!buttonPressed) {
+            RelativeEncoder lazySusanEnc = lazySusanMotor.getEncoder();
+            double speeeeed = -x*diffConstLS; // this is speed
+            // Making sure it's within the provided threshholds
+            System.out.println(lazySusanEnc.getPosition());
+            if ((lazySusanEnc.getPosition() <= -turntableThresh && speeeeed < 0)
+                || (lazySusanEnc.getPosition() >= turntableThresh && speeeeed > 0)) {
+                speeeeed = 0;
+            }
+            lazySusanMotor.set(speeeeed);
+        }
         // double currLSPos = lazySusanSubsystem.getLazySusanEncoder().getPosition();
         // if((currTicksGoal < 0 && currLSPos <= currTicksGoal) || 
         //     (currTicksGoal > 0 && currLSPos >= currTicksGoal)) {
