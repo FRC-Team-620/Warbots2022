@@ -66,7 +66,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-    IdleMode mode = IdleMode.kBrake;
+    IdleMode mode = IdleMode.kCoast;
     robotContainer.getDriveTrain().setMotorMode(mode);
   }
   
