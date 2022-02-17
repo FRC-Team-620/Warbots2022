@@ -123,7 +123,7 @@ public class ShooterCommand extends CommandBase {
             }
             buttonPressed = true;
         }
-        if(!buttonPressed) {
+        if(!buttonPressed && driverXbox.getRightBumperPressed()) {
             RelativeEncoder lazySusanEnc = lazySusanMotor.getEncoder();
             double speeeeed = -x*diffConstLS; // this is speed
             // Making sure it's within the provided threshholds
