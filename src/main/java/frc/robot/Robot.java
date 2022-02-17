@@ -48,6 +48,7 @@ public class Robot extends TimedRobot {
     if (autonomousCommand != null) {
        autonomousCommand.cancel();
     }
+    robotContainer.getLazySusanSubsystem().getLazySusanEncoder().setPosition(0);
   }
 
   @Override

@@ -46,14 +46,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class RobotContainer {
     protected Drivetrain drivetrain = new Drivetrain();
     protected XboxController driver = new XboxController(0);
-    //protected LoaderSubsystem loaderSubsystem = new LoaderSubsystem();
-    //protected ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
-	//protected LazySusanSubsystem lazySusanSubsystem = new LazySusanSubsystem();
+    protected LoaderSubsystem loaderSubsystem = new LoaderSubsystem();
+    protected ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+	protected LazySusanSubsystem lazySusanSubsystem = new LazySusanSubsystem();
     
 
     protected DriveWithJoystick driveWithJoystick;
-    //protected LoaderCommand loaderCommand;
-    //protected ShooterCommand shooterCommand;
+    protected LoaderCommand loaderCommand;
+    protected ShooterCommand shooterCommand;
 
     //public Command getDriveWithJoystick() {
         //return new DriveWithJoystick(drivetrain, driver);
@@ -65,11 +65,11 @@ public class RobotContainer {
         driveWithJoystick = new DriveWithJoystick(drivetrain, driver);
         drivetrain.setDefaultCommand(driveWithJoystick);
 
-        //loaderCommand = new LoaderCommand(loaderSubsystem, driver);
-        //loaderSubsystem.setDefaultCommand(loaderCommand);        
+        loaderCommand = new LoaderCommand(loaderSubsystem, driver);
+        loaderSubsystem.setDefaultCommand(loaderCommand);        
         
-		//shooterCommand = new ShooterCommand(shooterSubsystem, lazySusanSubsystem, driver);
-        //shooterSubsystem.setDefaultCommand(shooterCommand);
+		shooterCommand = new ShooterCommand(shooterSubsystem, lazySusanSubsystem, driver);
+        shooterSubsystem.setDefaultCommand(shooterCommand);
 
 
        
@@ -86,6 +86,10 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
+    public LazySusanSubsystem getLazySusanSubsystem() {
+        return lazySusanSubsystem;
+    }
+
 	public Drivetrain getDriveTrain() {
       	return drivetrain;
   	}
