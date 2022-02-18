@@ -42,10 +42,10 @@ public class Drivetrain extends SubsystemBase {
   protected final NetworkTable table;
   /** Creates a new Drivetrain. */
   public Drivetrain() {
-    rightBackMotor = new CANSparkMax(1, MotorType.kBrushless);
-    leftBackMotor = new CANSparkMax(3, MotorType.kBrushless);
-    rightFrontMotor = new CANSparkMax(2, MotorType.kBrushless);
-    leftFrontMotor = new CANSparkMax(4, MotorType.kBrushless);
+    rightBackMotor = new CANSparkMax(Constants.rightBackMotorID, MotorType.kBrushless);
+    leftBackMotor = new CANSparkMax(Constants.leftBackMotorID, MotorType.kBrushless);
+    rightFrontMotor = new CANSparkMax(Constants.rightFrontMotorID, MotorType.kBrushless);
+    leftFrontMotor = new CANSparkMax(Constants.leftFrontMotorID, MotorType.kBrushless);
 
     rightBackMotor.restoreFactoryDefaults();
     rightFrontMotor.restoreFactoryDefaults();

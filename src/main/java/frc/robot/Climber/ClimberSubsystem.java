@@ -9,22 +9,22 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ClimberSubsystem extends SubsystemBase {
-    protected final CANSparkMax leftShooterMotor, rightShooterMotor;
+    protected final CANSparkMax leftClimberMotor, rightClimberMotor;
     protected final RelativeEncoder encoder;
 
     public ClimberSubsystem() {
-        leftShooterMotor = new CANSparkMax(5, MotorType.kBrushless);
-        rightShooterMotor = new CANSparkMax(6, MotorType.kBrushless);
-        encoder = rightShooterMotor.getEncoder();
+        leftClimberMotor = new CANSparkMax(Constants.leftClimberMotorID, MotorType.kBrushless);
+        rightClimberMotor = new CANSparkMax(Constants.rightClimberMotorID, MotorType.kBrushless);
+        encoder = rightClimberMotor.getEncoder();
 
-        leftShooterMotor.restoreFactoryDefaults();
-        rightShooterMotor.restoreFactoryDefaults();
+        leftClimberMotor.restoreFactoryDefaults();
+        rightClimberMotor.restoreFactoryDefaults();
 
         IdleMode mode = IdleMode.kCoast; // brakes
-        leftShooterMotor.setIdleMode(mode);
-        rightShooterMotor.setIdleMode(mode);
+        leftClimberMotor.setIdleMode(mode);
+        rightClimberMotor.setIdleMode(mode);
 
-        leftShooterMotor.follow(rightShooterMotor, true);
+        leftClimberMotor.follow(rightClimberMotor, true);
         // leftShooterMotor.setInverted(false);
         // rightShooterMotor.setInverted(false);
 

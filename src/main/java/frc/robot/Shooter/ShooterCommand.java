@@ -31,6 +31,8 @@ public class ShooterCommand extends CommandBase {
     protected NetworkTableEntry entryY = table.getEntry("ty");
     protected NetworkTableEntry entryArea = table.getEntry("ta");
     protected double turretControlConstant= 0.01;
+    protected RelativeEncoder lazySusanEnc;
+    CANSparkMax lazySusanMotor;
 
     // turntable
     protected double ticksPerTurntableRotation,angleChangePerTick;
@@ -51,6 +53,9 @@ public class ShooterCommand extends CommandBase {
         this.shooterSubsystem = shooterSubsystem;
         this.driverXbox = driverXbox;
         this.lazySusanSubsystem = lazySusanSubsystem;
+        lazySusanMotor = lazySusanSubsystem.getLazySusanMotor();
+        lazySusanEnc = lazySusanSubsystem.getLazySusanEncoder();
+        
     }
 
     @Override
@@ -60,7 +65,11 @@ public class ShooterCommand extends CommandBase {
         double y = entryY.getDouble(0.0);
         double area = entryArea.getDouble(0.0);
 
+        double borkedJoystickDeadband = 0.05;
         input = driverXbox.getRightY();
+        if (Math.abs(input) <borkedJoystickDeadband) {
+            input = 0;
+        }
         roundTo = SmartDashboard.getNumber("Round to: ", 5);
         currRPM = shooterSubsystem.getRPM();
         // deltaTheta = SmartDashboard.getNumber("Change angle: ", 0);
@@ -105,26 +114,25 @@ public class ShooterCommand extends CommandBase {
 */
         // double speed = driverXbox.getRightTriggerAxis();
         // shooterSubsystem.setShooterSpeed(speed);
-        CANSparkMax lazySusanMotor = lazySusanSubsystem.getLazySusanMotor();
-        boolean buttonPressed = false;
-        if (driverXbox.getXButtonPressed()) {
-            if (lazySusanMotor.getEncoder().getVelocity() > 0) {
-                lazySusanMotor.set(0);
-            } else {
-                lazySusanMotor.set(0.2);
-            }
-            buttonPressed = true;
-        }
-        if (driverXbox.getBButtonPressed()) {
-            if (lazySusanMotor.getEncoder().getVelocity() > 0) {
-                lazySusanMotor.set(0);
-            } else {
-                lazySusanMotor.set(-0.2);
-            }
-            buttonPressed = true;
-        }
-        if(!buttonPressed && driverXbox.getRightBumperPressed()) {
-            RelativeEncoder lazySusanEnc = lazySusanMotor.getEncoder();
+        //boolean buttonPressed = false;
+        // if (driverXbox.getXButtonPressed()) {
+        //     if (lazySusanMotor.getEncoder().getVelocity() > 0) {
+        //         lazySusanMotor.set(0);
+        //     } else {
+        //         lazySusanMotor.set(0.2);
+        //     }
+        //     buttonPressed = true;
+        // }
+        // if (driverXbox.getBButtonPressed()) {
+        //     if (lazySusanMotor.getEncoder().getVelocity() > 0) {
+        //         lazySusanMotor.set(0);
+        //     } else {
+        //         lazySusanMotor.set(-0.2);
+        //     }
+        //     buttonPressed = true;
+        // }
+        if(driverXbox.getRightBumper()) {
+            
             double speeeeed = -x*diffConstLS; // this is speed
             // Making sure it's within the provided threshholds
             System.out.println(lazySusanEnc.getPosition());
@@ -132,7 +140,10 @@ public class ShooterCommand extends CommandBase {
                 || (lazySusanEnc.getPosition() >= turntableThresh && speeeeed > 0)) {
                 speeeeed = 0;
             }
+            System.out.println(speeeeed);
             lazySusanMotor.set(speeeeed);
+        } else {
+            lazySusanMotor.set(0);
         }
         // double currLSPos = lazySusanSubsystem.getLazySusanEncoder().getPosition();
         // if((currTicksGoal < 0 && currLSPos <= currTicksGoal) || 
@@ -148,10 +159,8 @@ public class ShooterCommand extends CommandBase {
 //     }
         if (input > 0) {
             setRPM(input * (maxRPM - minRPM) + minRPM); 
-        } else if(hasTarget) {
-            if (driverXbox.getYButtonPressed()) {
-                 setRPM(tempRPM);
-            } 
+        } else if(hasTarget && driverXbox.getYButtonPressed()) {
+            setRPM(tempRPM);
         } else {
             setRPM(SmartDashboard.getNumber("Set default RPM: ", 0));
             if (getRPM() > maxRPM)
@@ -159,6 +168,7 @@ public class ShooterCommand extends CommandBase {
             else if (getRPM() < minRPM)
                 setRPM(minRPM);
         }
+        System.out.println(input);
         acceleration = diffConst * (getRPM() - currRPM);
         SmartDashboard.putNumber("Acceleration: ", acceleration);
         // if(Math.abs(rpm-currRPM) > (bangBangTolerance * rpm))

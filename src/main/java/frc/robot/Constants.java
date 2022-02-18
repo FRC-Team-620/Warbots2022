@@ -58,4 +58,29 @@ public final class Constants {
     public static final double hubHeight = 2.7178;
     public static final double azimuthAngle1 = 37.8473967029; // mount angle of the limelight
     public static final double metersToFeet = 3.28084;
+
+    //Drivetrain
+    public static final int rightBackMotorID = 1;
+    public static final int leftBackMotorID = 3;
+    public static final int rightFrontMotorID = 2;
+    public static final int leftFrontMotorID = 4;
+
+    //shooter
+    public static final int leftShooterMotorID = 5;
+    public static final int rightShooterMotorID = 6;
+
+    //climber
+    public static final int leftClimberMotorID = 7;
+    public static final int rightClimberMotorID = 8;
+
+    //lazysusan
+    public static final int lazySusanID = 9;
+
+    //loader
+    public static final int intakeMotorID = 10;
+    
+    
+
+    
+
 }

@@ -5,11 +5,12 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 public class LazySusanSubsystem extends SubsystemBase {
     protected CANSparkMax lazySusan;
     protected RelativeEncoder encoder;
     public LazySusanSubsystem() {
-        lazySusan = new CANSparkMax(9, MotorType.kBrushless);
+        lazySusan = new CANSparkMax(Constants.lazySusanID, MotorType.kBrushless);
 
         lazySusan.restoreFactoryDefaults();
         encoder = lazySusan.getEncoder();
