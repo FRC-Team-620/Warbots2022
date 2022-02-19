@@ -36,7 +36,7 @@ public class ShooterCommand extends CommandBase {
 
     // turntable
     protected double ticksPerTurntableRotation,angleChangePerTick;
-    protected double  currTicksGoal = 0, diffConstLS = 0.012, turntableThresh = 25;
+    protected double  currTicksGoal = 0, diffConstLS = 0.012, turntableThresh = 35;
     // shooter
     protected double rpm, bangBangTolerance = 0.01, minRPM = 0, maxRPM = 5500,
             currentSpeed = 0, diffConst = 6 * Math.pow(10, -6), acceleration, 
@@ -67,7 +67,7 @@ public class ShooterCommand extends CommandBase {
 
         double borkedJoystickDeadband = 0.05;
         input = driverXbox.getRightY();
-        if (Math.abs(input) <borkedJoystickDeadband) {
+        if (Math.abs(input) < borkedJoystickDeadband) {
             input = 0;
         }
         roundTo = SmartDashboard.getNumber("Round to: ", 5);
@@ -89,7 +89,7 @@ public class ShooterCommand extends CommandBase {
         // new math for static limelight shooting
         double tempDist = getDistanceInMeters(Constants.azimuthAngle1, y, Constants.limelightHeight, Constants.hubHeight);
         double tempRPM = metersToRPM(tempDist * Constants.metersToFeet);
-
+        System.out.println("Dist: " + tempDist);
 
         //old math
         //double distance = Constants.hubHeight - Constants.limelightHeight;
@@ -131,19 +131,20 @@ public class ShooterCommand extends CommandBase {
         //     }
         //     buttonPressed = true;
         // }
+        System.out.println(lazySusanEnc.getPosition());
         if(driverXbox.getRightBumper()) {
-            
+            table.getEntry("ledMode").setNumber(3);
             double speeeeed = -x*diffConstLS; // this is speed
             // Making sure it's within the provided threshholds
-            System.out.println(lazySusanEnc.getPosition());
             if ((lazySusanEnc.getPosition() <= -turntableThresh && speeeeed < 0)
                 || (lazySusanEnc.getPosition() >= turntableThresh && speeeeed > 0)) {
                 speeeeed = 0;
             }
-            System.out.println(speeeeed);
             lazySusanMotor.set(speeeeed);
         } else {
+            table.getEntry("ledMode").setNumber(1);
             lazySusanMotor.set(0);
+
         }
         // double currLSPos = lazySusanSubsystem.getLazySusanEncoder().getPosition();
         // if((currTicksGoal < 0 && currLSPos <= currTicksGoal) || 
@@ -159,8 +160,8 @@ public class ShooterCommand extends CommandBase {
 //     }
         if (input > 0) {
             setRPM(input * (maxRPM - minRPM) + minRPM); 
-        } else if(hasTarget && driverXbox.getYButtonPressed()) {
-            setRPM(tempRPM);
+        // } else if(hasTarget && driverXbox.getRightBumper()) {
+        //     setRPM(tempRPM);
         } else {
             setRPM(SmartDashboard.getNumber("Set default RPM: ", 0));
             if (getRPM() > maxRPM)
@@ -168,7 +169,6 @@ public class ShooterCommand extends CommandBase {
             else if (getRPM() < minRPM)
                 setRPM(minRPM);
         }
-        System.out.println(input);
         acceleration = diffConst * (getRPM() - currRPM);
         SmartDashboard.putNumber("Acceleration: ", acceleration);
         // if(Math.abs(rpm-currRPM) > (bangBangTolerance * rpm))

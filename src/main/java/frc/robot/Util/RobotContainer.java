@@ -93,6 +93,10 @@ public class RobotContainer {
 	public Drivetrain getDriveTrain() {
       	return drivetrain;
   	}
+    
+    public ShooterSubsystem getShooterSubsystem() {
+        return shooterSubsystem;
+    }
   public Command getAutonomousCommand() {
     // Create a voltage constraint to ensure we don't accelerate too fast
     var autoVoltageConstraint =

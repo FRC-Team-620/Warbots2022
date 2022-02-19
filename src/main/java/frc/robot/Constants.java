@@ -37,8 +37,8 @@ public final class Constants {
     public static final double kMaxAccelerationMetersPerSecondSquared = 0.05;
 
     // Reasonable baseline values for a RAMETE follower in units of meters and seconds
-    public static final double kRamseteB = 0.5832;//0.5832 2
-    public static final double kRamseteZeta = 0.0125;//0.7
+    public static final double kRamseteB = 2;//0.5832 2
+    public static final double kRamseteZeta = 0.7;//0.7
     // It seems that the meter value is three times what it should be.
 
     public static final double wheelDiameterInInches = 4;
@@ -54,9 +54,9 @@ public final class Constants {
     public static final double rotation = -0.75;
     public static final double rampRate = 0.0;
 
-    public static final double limelightHeight = 0.5588; //based on last year's robot
+    public static final double limelightHeight = 0.70104; //based on last year's robot
     public static final double hubHeight = 2.7178;
-    public static final double azimuthAngle1 = 37.8473967029; // mount angle of the limelight
+    public static final double azimuthAngle1 = 40; // mount angle of the limelight
     public static final double metersToFeet = 3.28084;
 
     //Drivetrain

@@ -69,6 +69,6 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     IdleMode mode = IdleMode.kCoast;
     robotContainer.getDriveTrain().setMotorMode(mode);
+    robotContainer.getShooterSubsystem().setShooterSpeed(0);
   }
-  
 }
