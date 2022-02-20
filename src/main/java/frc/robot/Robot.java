@@ -49,6 +49,7 @@ public class Robot extends TimedRobot {
        autonomousCommand.cancel();
     }
     robotContainer.getLazySusanSubsystem().getLazySusanEncoder().setPosition(0);
+    robotContainer.getDriveTrain().setMotorMode(IdleMode.kBrake);
   }
 
   @Override
