@@ -59,6 +59,8 @@ public final class Constants {
     public static final double azimuthAngle1 = 40; // mount angle of the limelight
     public static final double metersToFeet = 3.28084;
 
+    public static final double lowPoweredShotRPM = 2000;
+
     //Drivetrain
     public static final int rightBackMotorID = 1;
     public static final int leftBackMotorID = 3;

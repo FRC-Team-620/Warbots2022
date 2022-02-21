@@ -34,6 +34,7 @@ public class ShooterCommand extends CommandBase {
     protected double turretControlConstant= 0.01;
     protected RelativeEncoder lazySusanEnc;
     protected boolean autoOn;
+    protected boolean lowPoweredShot = false;
     
     CANSparkMax lazySusanMotor;
 
@@ -77,13 +78,6 @@ public class ShooterCommand extends CommandBase {
         }
         roundTo = SmartDashboard.getNumber("Round to: ", 5);
         currRPM = shooterSubsystem.getRPM();
-        // deltaTheta = SmartDashboard.getNumber("Change angle: ", 0);
-        // if(deltaTheta != 0) {
-        //     // negative -> counterclockwise; positive -> clockwise
-        //     currTicksGoal = (int)(deltaTheta/angleChangePerTick); 
-        //     lazySusanSubsystem.getLazySusanEncoder().setPosition(0);
-        // }
-        // SmartDashboard.putNumber("Change angle: ", 0);
 
         // post to smart dashboard periodically
         SmartDashboard.putBoolean("LimelightHasTarget", hasTarget);
@@ -120,12 +114,22 @@ public class ShooterCommand extends CommandBase {
             lazySusanMotor.set(0);
 
         }
+        if (operatorXbox.getLeftBumper()) {
+            lowPoweredShot = true;
+        } else {
+            lowPoweredShot = false;
+        }
         if (input > 0) {
             setRPM(input * (maxRPM - minRPM) + minRPM); 
         // } else if(hasTarget && operatorXbox.getRightBumper()) {
         //     setRPM(tempRPM);
         } else {
-            setRPM(SmartDashboard.getNumber("Set default RPM: ", 0));
+            if (lowPoweredShot) {
+                setRPM(Constants.lowPoweredShotRPM);
+            } else {
+                setRPM(SmartDashboard.getNumber("Set default RPM: ", 0));
+            }
+            
             if (getRPM() > maxRPM)
                 setRPM(maxRPM);
             else if (getRPM() < minRPM)
