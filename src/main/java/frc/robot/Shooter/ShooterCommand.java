@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 
+import javax.crypto.interfaces.PBEKey;
 import javax.lang.model.util.ElementScanner6;
 
 import com.revrobotics.CANSparkMax;
@@ -15,7 +16,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class ShooterCommand extends CommandBase {
-    protected XboxController driverXbox;
+    protected XboxController operatorXbox;
     protected ShooterSubsystem shooterSubsystem;
     protected LazySusanSubsystem lazySusanSubsystem;
     // protected double bangBangTolerance = 0.05, intermittantSpeed = 0.3, minRPM =
@@ -32,6 +33,8 @@ public class ShooterCommand extends CommandBase {
     protected NetworkTableEntry entryArea = table.getEntry("ta");
     protected double turretControlConstant= 0.01;
     protected RelativeEncoder lazySusanEnc;
+    protected boolean autoOn;
+    
     CANSparkMax lazySusanMotor;
 
     // turntable
@@ -42,7 +45,7 @@ public class ShooterCommand extends CommandBase {
             currentSpeed = 0, diffConst = 6 * Math.pow(10, -6), acceleration, 
             input, roundTo, currRPM, deltaTheta;
 
-    public ShooterCommand(ShooterSubsystem shooterSubsystem, LazySusanSubsystem lazySusanSubsystem, XboxController driverXbox) {
+    public ShooterCommand(ShooterSubsystem shooterSubsystem, LazySusanSubsystem lazySusanSubsystem, XboxController operatorXbox) {
         // timer.start();
         // prevTime = timer.get();
         this.ticksPerTurntableRotation = lazySusanSubsystem.getTicksPerMotorRotation()*Constants.motorRotationsPerTurntableRotation;
@@ -51,10 +54,12 @@ public class ShooterCommand extends CommandBase {
         // SmartDashboard.putNumber("Change angle: ", 0);
         addRequirements(shooterSubsystem);
         this.shooterSubsystem = shooterSubsystem;
-        this.driverXbox = driverXbox;
+        this.operatorXbox = operatorXbox;
         this.lazySusanSubsystem = lazySusanSubsystem;
         lazySusanMotor = lazySusanSubsystem.getLazySusanMotor();
         lazySusanEnc = lazySusanSubsystem.getLazySusanEncoder();
+        autoOn = false;
+        
         
     }
 
@@ -66,7 +71,7 @@ public class ShooterCommand extends CommandBase {
         double area = entryArea.getDouble(0.0);
 
         double borkedJoystickDeadband = 0.05;
-        input = driverXbox.getRightY();
+        input = operatorXbox.getRightY();
         if (Math.abs(input) < borkedJoystickDeadband) {
             input = 0;
         }
@@ -91,48 +96,9 @@ public class ShooterCommand extends CommandBase {
         double tempRPM = metersToRPM(tempDist * Constants.metersToFeet);
         System.out.println("Dist: " + tempDist);
 
-        //old math
-        //double distance = Constants.hubHeight - Constants.limelightHeight;
-        //double turretControl = turretControlConstant*x;
-        //distance /= Math.tan(Constants.azimuthAngle1 + y); // canculate the current distance from the hub
-
-        //double shootingAngle = (90-(Math.tan(distance/0.61)))*2; // variance allowed for x
-        //SmartDashboard.putNumber("Current Distance", distance);
-        //SmartDashboard.putNumber("ShootingAngle horizontal variance", shootingAngle);
-
-/* // test to see if a shot can be taken
-        if (shooterSubsystem.getRPM() == distance) {} // current RPM is correct for current distance
-            if (Math.abs(x) <= shootingAngle) // To see if x variance will still allow for the ball to score
-                SmartDashboard.putBoolean("Ready to fire", true);
-            else {
-                SmartDashboard.putBoolean("Ready to fire", false);
-                if (x > 0)
-                    //turretMotor.setSpeed(turretMotor.get()-turretControl) // when we eventually add a turret motor
-                else if (x < 0)
-                    //turretMotor.setSpeed(turretMotor.get()+turretControl)
-        }
-*/
-        // double speed = driverXbox.getRightTriggerAxis();
-        // shooterSubsystem.setShooterSpeed(speed);
-        //boolean buttonPressed = false;
-        // if (driverXbox.getXButtonPressed()) {
-        //     if (lazySusanMotor.getEncoder().getVelocity() > 0) {
-        //         lazySusanMotor.set(0);
-        //     } else {
-        //         lazySusanMotor.set(0.2);
-        //     }
-        //     buttonPressed = true;
-        // }
-        // if (driverXbox.getBButtonPressed()) {
-        //     if (lazySusanMotor.getEncoder().getVelocity() > 0) {
-        //         lazySusanMotor.set(0);
-        //     } else {
-        //         lazySusanMotor.set(-0.2);
-        //     }
-        //     buttonPressed = true;
-        // }
+        
         System.out.println(lazySusanEnc.getPosition());
-        if(driverXbox.getRightBumper()) {
+        if(operatorXbox.getRightBumper() || autoOn) {
             table.getEntry("ledMode").setNumber(3);
             double speeeeed = -x*diffConstLS; // this is speed
             // Making sure it's within the provided threshholds
@@ -141,26 +107,22 @@ public class ShooterCommand extends CommandBase {
                 speeeeed = 0;
             }
             lazySusanMotor.set(speeeeed);
+        } else if (Math.abs(operatorXbox.getLeftX()) > 0) {
+            double speed = operatorXbox.getLeftX()/2.5;
+            if ((lazySusanEnc.getPosition() <= -turntableThresh && speed < 0)
+                || (lazySusanEnc.getPosition() >= turntableThresh && speed > 0)) {
+                speed = 0;
+            }
+            lazySusanMotor.set(speed);
+
         } else {
             table.getEntry("ledMode").setNumber(1);
             lazySusanMotor.set(0);
 
         }
-        // double currLSPos = lazySusanSubsystem.getLazySusanEncoder().getPosition();
-        // if((currTicksGoal < 0 && currLSPos <= currTicksGoal) || 
-        //     (currTicksGoal > 0 && currLSPos >= currTicksGoal)) {
-        //     currTicksGoal = 0;
-        //     lazySusanSubsystem.getLazySusanEncoder().setPosition(0);
-        // } else {
-        //     lazySusanMotor.set(diffConstLS * (currTicksGoal - currLSPos));
-        // }
-// //else if(hasTarget) {
-//     if (driverXbox.getYButtonPressed()) {
-//         setRPM(tempRPM);
-//     }
         if (input > 0) {
             setRPM(input * (maxRPM - minRPM) + minRPM); 
-        // } else if(hasTarget && driverXbox.getRightBumper()) {
+        // } else if(hasTarget && operatorXbox.getRightBumper()) {
         //     setRPM(tempRPM);
         } else {
             setRPM(SmartDashboard.getNumber("Set default RPM: ", 0));
@@ -203,6 +165,11 @@ public class ShooterCommand extends CommandBase {
     public double getRPM() {
         return this.rpm;
     }
+
+    public void setAutoOn(boolean x) {
+        autoOn = x;
+    }
+    
 
     @Override
     public boolean isFinished() {

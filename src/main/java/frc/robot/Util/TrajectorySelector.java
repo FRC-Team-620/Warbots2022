@@ -23,6 +23,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TrajectorySelector extends SendableChooser<Trajectory> {
     private Field2d field;
+    private Trajectory part1;
+    private Trajectory part2;
+    private Trajectory part3;
+    private Trajectory part4;
+
 
     /**
      * Class to automatically load and display Trajectory information. This class
@@ -70,7 +75,15 @@ public class TrajectorySelector extends SendableChooser<Trajectory> {
                 } else {
                     this.addOption("* " + name, traj);// Add star to paths imported from disk scan
                 }
-
+                if (name == "Part1") {
+                    part1 = traj;
+                } else if (name == "Part2") {
+                    part2 = traj;
+                } else if (name == "Part3") {
+                    part3 = traj;
+                } else if (name == "Part4") {
+                    part4 = traj;
+                }
             } catch (IOException e) {
                 e.printStackTrace();
                 DriverStation.reportError("Unable to open trajectory: " + file.getPath(), e.getStackTrace());
@@ -78,6 +91,19 @@ public class TrajectorySelector extends SendableChooser<Trajectory> {
 
         }
 
+    }
+
+    public Trajectory getPart1() {
+        return part1;
+    }
+    public Trajectory getPart2() {
+        return part2;
+    }
+    public Trajectory getPart3() {
+        return part3;
+    }
+    public Trajectory getPart4() {
+        return part4;
     }
 
     /**

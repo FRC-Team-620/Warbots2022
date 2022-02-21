@@ -46,6 +46,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class RobotContainer {
     protected Drivetrain drivetrain = new Drivetrain();
     protected XboxController driver = new XboxController(0);
+    protected XboxController operator = new XboxController(1);
     protected LoaderSubsystem loaderSubsystem = new LoaderSubsystem();
     protected ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
 	protected LazySusanSubsystem lazySusanSubsystem = new LazySusanSubsystem();
@@ -68,7 +69,7 @@ public class RobotContainer {
         loaderCommand = new LoaderCommand(loaderSubsystem, driver);
         loaderSubsystem.setDefaultCommand(loaderCommand);        
         
-		shooterCommand = new ShooterCommand(shooterSubsystem, lazySusanSubsystem, driver);
+		shooterCommand = new ShooterCommand(shooterSubsystem, lazySusanSubsystem, operator);
         shooterSubsystem.setDefaultCommand(shooterCommand);
 
 
@@ -97,7 +98,19 @@ public class RobotContainer {
     public ShooterSubsystem getShooterSubsystem() {
         return shooterSubsystem;
     }
-  public Command getAutonomousCommand() {
+
+    public TrajectorySelector getTrajectorySelector() {
+        return trajectorySelector;
+    }
+
+    public LoaderCommand getLoaderCommand() {
+        return loaderCommand;
+    }
+    
+    public ShooterCommand getShooterCommand() {
+        return shooterCommand;
+    }
+  public Command getAutonomousCommand(Trajectory traj) {
     // Create a voltage constraint to ensure we don't accelerate too fast
     var autoVoltageConstraint =
         new DifferentialDriveVoltageConstraint(
@@ -118,18 +131,20 @@ public class RobotContainer {
             // Apply the voltage constraint
             .addConstraint(autoVoltageConstraint);
 
-    // An example trajectory to follow.  All units in meters.
-        Trajectory exampleTrajectory =
-        TrajectoryGenerator.generateTrajectory(
-            // Start at the origin facing the +X direction
-            new Pose2d(0, 0, new Rotation2d(0)),
-            // Pass through these two interior waypoints, making an 's' curve path
-            List.of(new Translation2d(0.5, 0)),//, new Translation2d(2, -1)//1
-            // End 3 meters straight ahead of where we started, facing forward
-            new Pose2d(1, 0, new Rotation2d(0)),
-            // Pass config
-            config);
-    Trajectory jsonTrajectory = trajectorySelector.getSelected();
+    // // An example trajectory to follow.  All units in meters.
+    //     Trajectory exampleTrajectory =
+    //     TrajectoryGenerator.generateTrajectory(
+    //         // Start at the origin facing the +X direction
+    //         new Pose2d(0, 0, new Rotation2d(0)),
+    //         // Pass through these two interior waypoints, making an 's' curve path
+    //         List.of(new Translation2d(0.5, 0)),//, new Translation2d(2, -1)//1
+    //         // End 3 meters straight ahead of where we started, facing forward
+    //         new Pose2d(1, 0, new Rotation2d(0)),
+    //         // Pass config
+    //         config);
+    //Trajectory jsonTrajectory = trajectorySelector.getSelected();
+    Trajectory jsonTrajectory = traj;
+
 
     RamseteCommand ramseteCommand =
         new RamseteCommand(
