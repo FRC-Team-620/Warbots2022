@@ -47,36 +47,36 @@ public class RobotContainer {
     protected Drivetrain drivetrain = new Drivetrain();
     protected XboxController driver = new XboxController(0);
     protected XboxController operator = new XboxController(1);
-    protected LoaderSubsystem loaderSubsystem = new LoaderSubsystem();
-    protected ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
-	protected LazySusanSubsystem lazySusanSubsystem = new LazySusanSubsystem();
+    //protected LoaderSubsystem loaderSubsystem = new LoaderSubsystem();
+    // protected ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+	//protected LazySusanSubsystem lazySusanSubsystem = new LazySusanSubsystem();
     
 
     protected DriveWithJoystick driveWithJoystick;
-    protected LoaderCommand loaderCommand;
-    protected ShooterCommand shooterCommand;
+    //protected LoaderCommand loaderCommand;
+    // protected ShooterCommand shooterCommand;
 
     //public Command getDriveWithJoystick() {
         //return new DriveWithJoystick(drivetrain, driver);
     //}
     
-    TrajectorySelector trajectorySelector = new TrajectorySelector(Filesystem.getDeployDirectory().toPath().resolve("paths/"), true);
-    public Field2d  robotFieldWidget = new Field2d(); //TODO: include Robot odometry 
+    // TrajectorySelector trajectorySelector = new TrajectorySelector(Filesystem.getDeployDirectory().toPath().resolve("paths/"), true);
+    // public Field2d  robotFieldWidget = new Field2d(); //TODO: include Robot odometry 
     public void init() {
         driveWithJoystick = new DriveWithJoystick(drivetrain, driver);
         drivetrain.setDefaultCommand(driveWithJoystick);
 
-        loaderCommand = new LoaderCommand(loaderSubsystem, driver);
-        loaderSubsystem.setDefaultCommand(loaderCommand);        
+        //loaderCommand = new LoaderCommand(loaderSubsystem, driver);
+        //loaderSubsystem.setDefaultCommand(loaderCommand);        
         
-		shooterCommand = new ShooterCommand(shooterSubsystem, lazySusanSubsystem, operator);
-        shooterSubsystem.setDefaultCommand(shooterCommand);
+		//shooterCommand = new ShooterCommand(shooterSubsystem, lazySusanSubsystem, operator);
+        //shooterSubsystem.setDefaultCommand(shooterCommand);
 
 
        
-        SmartDashboard.putData(robotFieldWidget);
-        SmartDashboard.putData(trajectorySelector);
-        trajectorySelector.linkField(robotFieldWidget);
+        // SmartDashboard.putData(robotFieldWidget);
+        // SmartDashboard.putData(trajectorySelector);
+        // trajectorySelector.linkField(robotFieldWidget);
 
         // trajectorySelector.setDefaultOption("No Trajectory", new Trajectory());  //Uncomment this to default to no trajectory vs the first file found or null.
 
@@ -87,89 +87,89 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-    public LazySusanSubsystem getLazySusanSubsystem() {
-        return lazySusanSubsystem;
-    }
+    // public LazySusanSubsystem getLazySusanSubsystem() {
+    //     return lazySusanSubsystem;
+    // }
 
 	public Drivetrain getDriveTrain() {
       	return drivetrain;
   	}
     
-    public ShooterSubsystem getShooterSubsystem() {
-        return shooterSubsystem;
-    }
+    // public ShooterSubsystem getShooterSubsystem() {
+    //     return shooterSubsystem;
+    // }
 
-    public TrajectorySelector getTrajectorySelector() {
-        return trajectorySelector;
-    }
+    // public TrajectorySelector getTrajectorySelector() {
+    //     return trajectorySelector;
+    // }
 
-    public LoaderCommand getLoaderCommand() {
-        return loaderCommand;
-    }
+    // public LoaderCommand getLoaderCommand() {
+    //     return loaderCommand;
+    // }
     
-    public ShooterCommand getShooterCommand() {
-        return shooterCommand;
-    }
-  public Command getAutonomousCommand(Trajectory traj) {
-    // Create a voltage constraint to ensure we don't accelerate too fast
-    var autoVoltageConstraint =
-        new DifferentialDriveVoltageConstraint(
-            new SimpleMotorFeedforward(
-                Constants.ksVolts,
-                Constants.kvVoltSecondsPerMeter,
-                Constants.kaVoltSecondsSquaredPerMeter),
-            Constants.kDriveKinematics,
-            5.02);
+    // public ShooterCommand getShooterCommand() {
+    //     return shooterCommand;
+    // }
+//    public Command getAutonomousCommand(Trajectory traj) {
+// //     // Create a voltage constraint to ensure we don't accelerate too fast
+// //     var autoVoltageConstraint =
+// //         new DifferentialDriveVoltageConstraint(
+// //             new SimpleMotorFeedforward(
+// //                 Constants.ksVolts,
+// //                 Constants.kvVoltSecondsPerMeter,
+// //                 Constants.kaVoltSecondsSquaredPerMeter),
+// //             Constants.kDriveKinematics,
+// //             5.02);
 
-    // Create config for trajectory
-    TrajectoryConfig config =
-        new TrajectoryConfig(
-                Constants.kMaxSpeedMetersPerSecond,
-                Constants.kMaxAccelerationMetersPerSecondSquared)
-            // Add kinematics to ensure max speed is actually obeyed
-            .setKinematics(Constants.kDriveKinematics)
-            // Apply the voltage constraint
-            .addConstraint(autoVoltageConstraint);
+// //     // Create config for trajectory
+// //     TrajectoryConfig config =
+// //         new TrajectoryConfig(
+// //                 Constants.kMaxSpeedMetersPerSecond,
+// //                 Constants.kMaxAccelerationMetersPerSecondSquared)
+// //             // Add kinematics to ensure max speed is actually obeyed
+// //             .setKinematics(Constants.kDriveKinematics)
+// //             // Apply the voltage constraint
+// //             .addConstraint(autoVoltageConstraint);
 
-    // // An example trajectory to follow.  All units in meters.
-    //     Trajectory exampleTrajectory =
-    //     TrajectoryGenerator.generateTrajectory(
-    //         // Start at the origin facing the +X direction
-    //         new Pose2d(0, 0, new Rotation2d(0)),
-    //         // Pass through these two interior waypoints, making an 's' curve path
-    //         List.of(new Translation2d(0.5, 0)),//, new Translation2d(2, -1)//1
-    //         // End 3 meters straight ahead of where we started, facing forward
-    //         new Pose2d(1, 0, new Rotation2d(0)),
-    //         // Pass config
-    //         config);
-    //Trajectory jsonTrajectory = trajectorySelector.getSelected();
-    Trajectory jsonTrajectory = traj;
-
-
-    RamseteCommand ramseteCommand =
-        new RamseteCommand(
-            jsonTrajectory,
-            drivetrain::getPose,
-            new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta),
-            new SimpleMotorFeedforward(
-                Constants.ksVolts,
-                Constants.kvVoltSecondsPerMeter,
-                Constants.kaVoltSecondsSquaredPerMeter),
-            Constants.kDriveKinematics,
-            drivetrain::getWheelSpeeds,
-            new PIDController(Constants.kPDriveVel, 0, 0),
-            new PIDController(Constants.kPDriveVel, 0, 0),
-            // RamseteCommand passes volts to the callback
-            drivetrain::tankDriveVolts,
-            drivetrain);
-
-    // Reset odometry to the starting pose of the trajectory.
-    drivetrain.resetOdometry(jsonTrajectory.getInitialPose());
+// //     // // An example trajectory to follow.  All units in meters.
+// //     //     Trajectory exampleTrajectory =
+// //     //     TrajectoryGenerator.generateTrajectory(
+// //     //         // Start at the origin facing the +X direction
+// //     //         new Pose2d(0, 0, new Rotation2d(0)),
+// //     //         // Pass through these two interior waypoints, making an 's' curve path
+// //     //         List.of(new Translation2d(0.5, 0)),//, new Translation2d(2, -1)//1
+// //     //         // End 3 meters straight ahead of where we started, facing forward
+// //     //         new Pose2d(1, 0, new Rotation2d(0)),
+// //     //         // Pass config
+// //     //         config);
+// //     //Trajectory jsonTrajectory = trajectorySelector.getSelected();
+// //     Trajectory jsonTrajectory = traj;
 
 
-    // Run path following command, then stop at the end.
-    return ramseteCommand.andThen(() -> drivetrain.tankDriveVolts(0, 0));
-  }
+//     RamseteCommand ramseteCommand =
+//         new RamseteCommand(
+//             jsonTrajectory,
+//             drivetrain::getPose,
+//             new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta),
+//             new SimpleMotorFeedforward(
+//                 Constants.ksVolts,
+//                 Constants.kvVoltSecondsPerMeter,
+//                 Constants.kaVoltSecondsSquaredPerMeter),
+//             Constants.kDriveKinematics,
+//             drivetrain::getWheelSpeeds,
+//             new PIDController(Constants.kPDriveVel, 0, 0),
+//             new PIDController(Constants.kPDriveVel, 0, 0),
+//             // RamseteCommand passes volts to the callback
+//             drivetrain::tankDriveVolts,
+//             drivetrain);
+
+//     // Reset odometry to the starting pose of the trajectory.
+//     drivetrain.resetOdometry(jsonTrajectory.getInitialPose());
+
+
+//     // Run path following command, then stop at the end.
+//     return ramseteCommand.andThen(() -> drivetrain.tankDriveVolts(0, 0));
+//   }
 
 
 }

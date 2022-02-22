@@ -28,7 +28,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
 
-    robotContainer.robotFieldWidget.setRobotPose(robotContainer.getDriveTrain().getPose()); //Example on how to update Field2d with robot position.
+    // robotContainer.robotFieldWidget.setRobotPose(robotContainer.getDriveTrain().getPose()); //Example on how to update Field2d with robot position.
     //robotContainer.drivetrain.leftFrontMotorDrive(0.3);
   } 
 
@@ -45,10 +45,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    if (autonomousCommand != null) {
-       autonomousCommand.cancel();
-    }
-    robotContainer.getLazySusanSubsystem().getLazySusanEncoder().setPosition(0);
+    // if (autonomousCommand != null) {
+    //    autonomousCommand.cancel();
+    // }
+    // robotContainer.getLazySusanSubsystem().getLazySusanEncoder().setPosition(0);
     robotContainer.getDriveTrain().setMotorMode(IdleMode.kBrake);
   }
 
@@ -59,86 +59,86 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    robotContainer.getLoaderCommand().setAutoOn(true);
-    autonomousCommand = robotContainer.getAutonomousCommand(robotContainer.getTrajectorySelector().getPart1());
-    if (autonomousCommand != null) {
-      autonomousCommand.schedule();
-    }
-    robotContainer.getShooterCommand().setAutoOn(true);
-    try {
-      wait(2000);
-    } catch (InterruptedException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    robotContainer.getLoaderCommand().setAutoFire(true);
-    try {
-      wait(1000);
-    } catch (InterruptedException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    robotContainer.getShooterCommand().setAutoOn(false);
+    // robotContainer.getLoaderCommand().setAutoOn(true);
+    // autonomousCommand = robotContainer.getAutonomousCommand(robotContainer.getTrajectorySelector().getPart1());
+    // if (autonomousCommand != null) {
+    //   autonomousCommand.schedule();
+    // }
+    // robotContainer.getShooterCommand().setAutoOn(true);
+    // try {
+    //   wait(2000);
+    // } catch (InterruptedException e) {
+    //   // TODO Auto-generated catch block
+    //   e.printStackTrace();
+    // }
+    // robotContainer.getLoaderCommand().setAutoFire(true);
+    // try {
+    //   wait(1000);
+    // } catch (InterruptedException e) {
+    //   // TODO Auto-generated catch block
+    //   e.printStackTrace();
+    // }
+    // robotContainer.getShooterCommand().setAutoOn(false);
 
-    autonomousCommand = robotContainer.getAutonomousCommand(robotContainer.getTrajectorySelector().getPart2());
-    if (autonomousCommand != null) {
-      autonomousCommand.schedule();
-    }
-    robotContainer.getShooterCommand().setAutoOn(true);
-    try {
-      wait(2000);
-    } catch (InterruptedException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    robotContainer.getLoaderCommand().setAutoFire(true);
-    try {
-      wait(1000);
-    } catch (InterruptedException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    robotContainer.getShooterCommand().setAutoOn(false);
+    // autonomousCommand = robotContainer.getAutonomousCommand(robotContainer.getTrajectorySelector().getPart2());
+    // if (autonomousCommand != null) {
+    //   autonomousCommand.schedule();
+    // }
+    // robotContainer.getShooterCommand().setAutoOn(true);
+    // try {
+    //   wait(2000);
+    // } catch (InterruptedException e) {
+    //   // TODO Auto-generated catch block
+    //   e.printStackTrace();
+    // }
+    // robotContainer.getLoaderCommand().setAutoFire(true);
+    // try {
+    //   wait(1000);
+    // } catch (InterruptedException e) {
+    //   // TODO Auto-generated catch block
+    //   e.printStackTrace();
+    // }
+    // robotContainer.getShooterCommand().setAutoOn(false);
 
-    autonomousCommand = robotContainer.getAutonomousCommand(robotContainer.getTrajectorySelector().getPart3());
-    if (autonomousCommand != null) {
-      autonomousCommand.schedule();
-    }
-    robotContainer.getShooterCommand().setAutoOn(true);
-    try {
-      wait(2000);
-    } catch (InterruptedException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    robotContainer.getLoaderCommand().setAutoFire(true);
-    try {
-      wait(1000);
-    } catch (InterruptedException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    robotContainer.getShooterCommand().setAutoOn(false);
+    // autonomousCommand = robotContainer.getAutonomousCommand(robotContainer.getTrajectorySelector().getPart3());
+    // if (autonomousCommand != null) {
+    //   autonomousCommand.schedule();
+    // }
+    // robotContainer.getShooterCommand().setAutoOn(true);
+    // try {
+    //   wait(2000);
+    // } catch (InterruptedException e) {
+    //   // TODO Auto-generated catch block
+    //   e.printStackTrace();
+    // }
+    // robotContainer.getLoaderCommand().setAutoFire(true);
+    // try {
+    //   wait(1000);
+    // } catch (InterruptedException e) {
+    //   // TODO Auto-generated catch block
+    //   e.printStackTrace();
+    // }
+    // robotContainer.getShooterCommand().setAutoOn(false);
 
-    autonomousCommand = robotContainer.getAutonomousCommand(robotContainer.getTrajectorySelector().getPart4());
-    if (autonomousCommand != null) {
-      autonomousCommand.schedule();
-    }
-    robotContainer.getShooterCommand().setAutoOn(true);
-    try {
-      wait(2000);
-    } catch (InterruptedException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    robotContainer.getLoaderCommand().setAutoFire(true);
-    try {
-      wait(1000);
-    } catch (InterruptedException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    robotContainer.getShooterCommand().setAutoOn(false);
+    // autonomousCommand = robotContainer.getAutonomousCommand(robotContainer.getTrajectorySelector().getPart4());
+    // if (autonomousCommand != null) {
+    //   autonomousCommand.schedule();
+    // }
+    // robotContainer.getShooterCommand().setAutoOn(true);
+    // try {
+    //   wait(2000);
+    // } catch (InterruptedException e) {
+    //   // TODO Auto-generated catch block
+    //   e.printStackTrace();
+    // }
+    // robotContainer.getLoaderCommand().setAutoFire(true);
+    // try {
+    //   wait(1000);
+    // } catch (InterruptedException e) {
+    //   // TODO Auto-generated catch block
+    //   e.printStackTrace();
+    // }
+    // robotContainer.getShooterCommand().setAutoOn(false);
     
 
   }
@@ -148,6 +148,6 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     IdleMode mode = IdleMode.kCoast;
     robotContainer.getDriveTrain().setMotorMode(mode);
-    robotContainer.getShooterSubsystem().setShooterSpeed(0);
+    // robotContainer.getShooterSubsystem().setShooterSpeed(0);
   }
 }
