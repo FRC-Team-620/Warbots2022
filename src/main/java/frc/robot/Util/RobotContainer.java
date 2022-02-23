@@ -27,6 +27,7 @@ import frc.robot.Drive.Drivetrain;
 import frc.robot.Loader.LoaderCommand;
 import frc.robot.Loader.LoaderSubsystem;
 import frc.robot.Shooter.LazySusanSubsystem;
+import frc.robot.Shooter.PIDShooterCommand;
 import frc.robot.Shooter.ShooterCommand;
 import frc.robot.Shooter.ShooterSubsystem;
 /** Add your docs here. */
@@ -57,7 +58,9 @@ public class RobotContainer {
         loaderSubsystem.setDefaultCommand(loaderCommand);        
         
 		shooterCommand = new ShooterCommand(shooterSubsystem, lazySusanSubsystem, operator);
+        
         shooterSubsystem.setDefaultCommand(shooterCommand);
+        // shooterSubsystem.setDefaultCommand( new PIDShooterCommand(shooterSubsystem));//Show off pid shooter cmd Only works in sim rn
 
 
        
