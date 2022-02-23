@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.util.Units;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -98,5 +99,6 @@ public final class Constants {
     public static final double ksimDrivekALinear = 0.2;
     public static final double ksimDrivekVAngular = 1.5;
     public static final double kSimDrivekAAngular = 0.3;
-
+    public static final double kSimShooterInertia = 0.5*Units.lbsToKilograms(1)*Math.pow(Units.inchesToMeters(4),2); //1/2*M*R^2 
+    public static final double kSimUpdateTime = 0.02;
 }

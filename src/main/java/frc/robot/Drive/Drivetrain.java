@@ -22,6 +22,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
@@ -264,9 +265,9 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void simulationPeriodic() {
     m_drivetrainSimulator.setInputs(
-        this.leftFrontMotor.get(), // TODO Voltage Compensation
-        this.rightFrontMotor.get());
-    m_drivetrainSimulator.update(0.02);
+        this.leftFrontMotor.get()*RobotController.getInputVoltage(),
+        this.rightFrontMotor.get()*RobotController.getInputVoltage());
+    m_drivetrainSimulator.update(Constants.kSimUpdateTime);
     this.leftencsim.setDistance(m_drivetrainSimulator.getLeftPositionMeters());
     this.leftencsim.setVelocity(m_drivetrainSimulator.getLeftVelocityMetersPerSecond());
 
