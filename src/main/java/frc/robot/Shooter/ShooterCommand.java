@@ -89,7 +89,6 @@ public class ShooterCommand extends CommandBase {
         double tempDist = getDistanceInMeters(Constants.azimuthAngle1, y, Constants.limelightHeight, Constants.hubHeight);
         double tempRPM = metersToRPM(tempDist * Constants.metersToFeet);
         System.out.println("Dist: " + tempDist);
-
         
         System.out.println(lazySusanEnc.getPosition());
         if(operatorXbox.getRightBumper() || autoOn) {
@@ -145,7 +144,7 @@ public class ShooterCommand extends CommandBase {
     }
 
     public double getDistanceInMeters(double a1, double a2, double h1, double h2) {
-        return (h2 - h1) / Math.tan(a1 + a2);
+        return (h2 - h1) / Math.tan((a1 + a2)/180.0 * Math.PI);
     }
 
     public double metersToRPM(double meters) {
