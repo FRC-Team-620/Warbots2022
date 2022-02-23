@@ -4,73 +4,95 @@
 
 package frc.robot.Drive;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import java.text.DecimalFormat;
+import com.kauailabs.navx.AHRSProtocol.MagCalData;
 import com.kauailabs.navx.frc.AHRS;
-import frc.robot.Constants;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.*;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SimableCANSparkMax;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.math.system.LinearSystem;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
+import edu.wpi.first.wpilibj.simulation.EncoderSim;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.Util.sim.RevEncoderSimWrapper;
+import frc.robot.Util.sim.SimSparkMax;
 
 public class Drivetrain extends SubsystemBase {
-  protected final CANSparkMax rightBackMotor, leftBackMotor, rightFrontMotor, leftFrontMotor;
+  protected final SimableCANSparkMax rightBackMotor, leftBackMotor, rightFrontMotor, leftFrontMotor;
   protected final DifferentialDrive diffDrive;
+
+  double kTrackWidth = 0.762;
+  double kWheelRadius = 0.0508;
+  private final LinearSystem<N2, N2, N2> m_drivetrainSystem = LinearSystemId.identifyDrivetrainSystem(1.98, 0.2, 1.5,
+      0.3);
+  private final DifferentialDrivetrainSim m_drivetrainSimulator = new DifferentialDrivetrainSim(
+      m_drivetrainSystem, DCMotor.getCIM(2), 8, kTrackWidth, kWheelRadius, null);
+  // private final EncoderSim m_leftEncoderSim;
+  // private final EncoderSim m_rightEncoderSim;
+  RevEncoderSimWrapper leftencsim;
+  RevEncoderSimWrapper rightencsim;
   protected final RelativeEncoder leftBackEncoder, leftFrontEncoder, rightBackEncoder, rightFrontEncoder;
   protected final double countsPerMotorRevolution;
   protected double openLoopRampRate = 0.2;
   // The gyro sensor
   protected final Gyro gyro;
-  
+
   // Odometry class for tracking robot pose
   protected final DifferentialDriveOdometry odometry;
 
-//Network Table
+  // Network Table
   protected final NetworkTableInstance instance;
   protected final NetworkTable table;
+
   /** Creates a new Drivetrain. */
   public Drivetrain() {
-    rightBackMotor = new CANSparkMax(Constants.rightBackMotorID, MotorType.kBrushless);
-    leftBackMotor = new CANSparkMax(Constants.leftBackMotorID, MotorType.kBrushless);
-    rightFrontMotor = new CANSparkMax(Constants.rightFrontMotorID, MotorType.kBrushless);
-    leftFrontMotor = new CANSparkMax(Constants.leftFrontMotorID, MotorType.kBrushless);
-
+    rightBackMotor = new SimableCANSparkMax(Constants.rightBackMotorID, MotorType.kBrushless);
+    leftBackMotor = new SimableCANSparkMax(Constants.leftBackMotorID, MotorType.kBrushless);
+    rightFrontMotor = new SimableCANSparkMax(Constants.rightFrontMotorID, MotorType.kBrushless);
+    leftFrontMotor = new SimableCANSparkMax(Constants.leftFrontMotorID, MotorType.kBrushless);
+    // m_leftEncoderSim = new EncoderSim(leftFrontMotor.getEncoder());
+    leftencsim = RevEncoderSimWrapper.create(this.leftFrontMotor);
+    rightencsim = RevEncoderSimWrapper.create(this.rightFrontMotor);
+    // SimableCANSparkMax t;
     rightBackMotor.restoreFactoryDefaults();
     rightFrontMotor.restoreFactoryDefaults();
     leftBackMotor.restoreFactoryDefaults();
     leftFrontMotor.restoreFactoryDefaults();
 
- 	IdleMode mode = IdleMode.kBrake; //brakes
+    IdleMode mode = IdleMode.kBrake; // brakes
     rightBackMotor.setIdleMode(mode);
     rightFrontMotor.setIdleMode(mode);
     leftBackMotor.setIdleMode(mode);
     leftFrontMotor.setIdleMode(mode);
 
-    double openLoopRampRate = 0.2; //0.6 sec to full velocity
+    double openLoopRampRate = 0.2; // 0.6 sec to full velocity
     rightBackMotor.setOpenLoopRampRate(openLoopRampRate);
     rightFrontMotor.setOpenLoopRampRate(openLoopRampRate);
     leftBackMotor.setOpenLoopRampRate(openLoopRampRate);
     leftFrontMotor.setOpenLoopRampRate(openLoopRampRate);
 
-    int currentLimit = 45; //maxmium amps
+    int currentLimit = 45; // maxmium amps
     rightBackMotor.setSmartCurrentLimit(currentLimit);
     rightFrontMotor.setSmartCurrentLimit(currentLimit);
     leftBackMotor.setSmartCurrentLimit(currentLimit);
     leftFrontMotor.setSmartCurrentLimit(currentLimit);
 
-    rightBackMotor.follow(rightFrontMotor, false); //false means not inverted, and true means inverted
+    rightBackMotor.follow(rightFrontMotor, false); // false means not inverted, and true means inverted
     leftBackMotor.follow(leftFrontMotor, false);
 
     // Encoder creation
@@ -79,10 +101,12 @@ public class Drivetrain extends SubsystemBase {
     rightBackEncoder = leftFrontMotor.getEncoder();
     rightFrontEncoder = leftBackMotor.getEncoder();
 
-    countsPerMotorRevolution = leftBackEncoder.getCountsPerRevolution(); 
-    //this choice of encoder is arbitrary -- any other encoder would work just as well
+    countsPerMotorRevolution = leftBackEncoder.getCountsPerRevolution();
+    // this choice of encoder is arbitrary -- any other encoder would work just as
+    // well
 
-    var conversionFactor = Constants.gearRatio * Constants.wheelDiameterInInches * Constants.inchesToMetersFactor * Math.PI;
+    var conversionFactor = Constants.gearRatio * Constants.wheelDiameterInInches * Constants.inchesToMetersFactor
+        * Math.PI;
     leftBackEncoder.setPositionConversionFactor(conversionFactor);
     leftFrontEncoder.setPositionConversionFactor(conversionFactor);
     rightFrontEncoder.setPositionConversionFactor(conversionFactor);
@@ -91,17 +115,17 @@ public class Drivetrain extends SubsystemBase {
     gyro = new AHRS(SerialPort.Port.kMXP);
 
     diffDrive = new DifferentialDrive(rightFrontMotor, leftFrontMotor);
-    diffDrive.setDeadband(0.05); //minmal signal
+    diffDrive.setDeadband(0.05); // minmal signal
     leftFrontMotor.setInverted(true);
     resetEncoders();
 
     odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
 
-    //NetworkTable instantiation
+    // NetworkTable instantiation
     instance = NetworkTableInstance.getDefault();
     table = instance.getTable("/SmartDashboard");
 
-    //ShuffleboardTab tab = Shuffleboard.getTab("Smart Dashboard");
+    // ShuffleboardTab tab = Shuffleboard.getTab("Smart Dashboard");
   }
 
   public double getOpenLoopRampRate() {
@@ -109,13 +133,13 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void setOpenLoopRampRate(double oLRR) {
-    openLoopRampRate = oLRR; //0.6 sec to full velocity
+    openLoopRampRate = oLRR; // 0.6 sec to full velocity
     rightBackMotor.setOpenLoopRampRate(openLoopRampRate);
     rightFrontMotor.setOpenLoopRampRate(openLoopRampRate);
     leftBackMotor.setOpenLoopRampRate(openLoopRampRate);
     leftFrontMotor.setOpenLoopRampRate(openLoopRampRate);
   }
-  
+
   public void setMotorMode(IdleMode mode) {
     rightBackMotor.setIdleMode(mode);
     rightFrontMotor.setIdleMode(mode);
@@ -124,7 +148,12 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public Pose2d getPose() {
-    return odometry.getPoseMeters();
+    if(RobotBase.isSimulation()){
+      return m_drivetrainSimulator.getPose();
+    }else{
+      return odometry.getPoseMeters();
+    }
+   
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
@@ -151,7 +180,7 @@ public class Drivetrain extends SubsystemBase {
   /**
    * Controls the left and right sides of the drive directly with voltages.
    *
-   * @param leftVolts the commanded left output
+   * @param leftVolts  the commanded left output
    * @param rightVolts the commanded right output
    */
   public void tankDriveVolts(double rightVolts, double leftVolts) {
@@ -161,8 +190,8 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public CANSparkMax getMotor(int idx) {
-  	idx = (idx-1)%4+1;
-    switch (idx) {      
+    idx = (idx - 1) % 4 + 1;
+    switch (idx) {
       case 1:
         return rightBackMotor;
       case 2:
@@ -170,11 +199,12 @@ public class Drivetrain extends SubsystemBase {
       case 3:
         return leftBackMotor;
     }
-    	return leftFrontMotor;
+    return leftFrontMotor;
   }
+
   public RelativeEncoder getEncoder(int idx) {
-    idx = (idx-1)%4+1;
-    switch(idx) {
+    idx = (idx - 1) % 4 + 1;
+    switch (idx) {
       case 1:
         return leftFrontEncoder;
       case 2:
@@ -203,17 +233,45 @@ public class Drivetrain extends SubsystemBase {
 
   public void leftBackMotorDrive(double x) {
     leftBackMotor.set(x);
-  } 
+  }
+
   public double getRPM(int idx) {
-    idx = (idx-1)%4+1;
+    idx = (idx - 1) % 4 + 1;
     return getEncoder(idx).getVelocity() * Constants.gearRatio;
   }
-    @Override
+
+  @Override
   public void periodic() {
     odometry.update(gyro.getRotation2d(), getDistance(leftBackEncoder), getDistance(rightBackEncoder));
   }
 
   protected double getDistance(RelativeEncoder enc) {
     return enc.getPosition() * enc.getPositionConversionFactor();
+  }
+
+  @Override
+  public void simulationPeriodic() {
+    SmartDashboard.putNumber("Motor out 1", this.leftFrontMotor.get());
+    SmartDashboard.putNumber("Motor out 2", this.rightFrontMotor.get());
+    // this.rightFrontMotor.();
+    ;
+    m_drivetrainSimulator.setInputs(
+        this.leftFrontMotor.get(), // TODO Voltage Compensation
+        this.rightFrontMotor.get());
+    m_drivetrainSimulator.update(0.02);
+    var leftencsim = RevEncoderSimWrapper.create(this.leftFrontMotor);
+    var rightencsim = RevEncoderSimWrapper.create(this.rightFrontMotor);
+    leftencsim.setDistance(m_drivetrainSimulator.getLeftPositionMeters());
+    leftencsim.setVelocity(m_drivetrainSimulator.getLeftVelocityMetersPerSecond());
+
+    rightencsim.setDistance(m_drivetrainSimulator.getRightPositionMeters());
+    rightencsim.setVelocity(m_drivetrainSimulator.getRightVelocityMetersPerSecond());
+
+    // gyro.
+    // m_leftEncoderSim.setRate(m_drivetrainSimulator.getLeftVelocityMetersPerSecond());
+    // m_rightEncoderSim.setDistance(m_drivetrainSimulator.getRightPositionMeters());
+    // m_rightEncoderSim.setRate(m_drivetrainSimulator.getRightVelocityMetersPerSecond());
+    // m_gyroSim.setAngle(-m_drivetrainSimulator.getHeading().getDegrees());
+    super.simulationPeriodic();
   }
 }
