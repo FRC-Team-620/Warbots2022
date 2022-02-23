@@ -144,7 +144,7 @@ public class ShooterCommand extends CommandBase {
     }
 
     public double getDistanceInMeters(double a1, double a2, double h1, double h2) {
-        return (h2 - h1) / Math.tan((a1 + a2)/180.0 * Math.PI);
+        return (h2 - h1) / Math.tan((a1 + a2) * (Math.PI/180));
     }
 
     public double metersToRPM(double meters) {
