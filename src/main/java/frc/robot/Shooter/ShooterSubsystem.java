@@ -84,4 +84,11 @@ public class ShooterSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Right Flywheel motor", getRPM());
         // simFlywheel.set
     }
+
+    public double getDrawnCurrentAmps(){
+        if(RobotBase.isSimulation()){
+            return this.simFlywheel.getCurrentDrawAmps()*2;
+        }
+        return this.rightShooterMotor.getOutputCurrent() + this.leftShooterMotor.getOutputCurrent();
+    }
 }

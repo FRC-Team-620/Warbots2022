@@ -261,6 +261,12 @@ public class Drivetrain extends SubsystemBase {
   protected double getDistance(RelativeEncoder enc) {
     return enc.getPosition() * enc.getPositionConversionFactor();
   }
+  public double getDrawnCurrentAmps(){
+    if(RobotBase.isSimulation()){
+      return this.m_drivetrainSimulator.getCurrentDrawAmps();
+    }
+    return this.leftFrontMotor.getOutputCurrent() + this.leftBackMotor.getOutputCurrent() + this.rightFrontMotor.getOutputCurrent() + this.rightBackMotor.getOutputCurrent();
+  }
 
   @Override
   public void simulationPeriodic() {

@@ -157,8 +157,7 @@
           "open": true
         },
         "open": true
-      },
-      "open": true
+      }
     },
     "SmartDashboard": {
       "PIDController[1]": {
@@ -209,6 +208,38 @@
                 1.0
               ],
               "id": "NT:/SmartDashboard/shooter setpoint speed"
+            }
+          ]
+        }
+      ]
+    },
+    "Plot <1>": {
+      "plots": [
+        {
+          "height": 155,
+          "series": [
+            {
+              "color": [
+                0.2980392277240753,
+                0.44705885648727417,
+                0.6901960968971252,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/Drive Current"
+            }
+          ]
+        },
+        {
+          "height": 155,
+          "series": [
+            {
+              "color": [
+                0.2980392277240753,
+                0.44705885648727417,
+                0.6901960968971252,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/Robot Volts"
             }
           ]
         }

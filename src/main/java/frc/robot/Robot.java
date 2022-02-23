@@ -4,13 +4,15 @@
 
 package frc.robot;
 
-import frc.robot.Util.RobotContainer;
-
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.simulation.BatterySim;
+import edu.wpi.first.wpilibj.simulation.RoboRioSim;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Util.RobotContainer;
 
 
 public class Robot extends TimedRobot {
@@ -141,6 +143,21 @@ public class Robot extends TimedRobot {
     robotContainer.getShooterCommand().setAutoOn(false);
     
 
+  }
+
+  @Override
+  public void simulationPeriodic() {
+    // Here we calculate the battery voltage based on drawn current.
+    // As our robot draws more power from the battery its voltage drops.
+    // The estimated voltage is highly dependent on the battery's internal
+    // resistance.
+    double drawCurrent = robotContainer.getDriveTrain().getDrawnCurrentAmps(); //Current Seems to be too high look into later
+    drawCurrent += robotContainer.getShooterSubsystem().getDrawnCurrentAmps();
+    SmartDashboard.putNumber("Total Current", drawCurrent);
+    // BatterySim.calculateDefaultBatteryLoadedVoltage(currents)
+    double loadedVoltage = BatterySim.calculateDefaultBatteryLoadedVoltage(13,0.02, drawCurrent);
+    SmartDashboard.putNumber("Robot Volts", loadedVoltage);
+    RoboRioSim.setVInVoltage(loadedVoltage);
   }
 
 
