@@ -1,12 +1,9 @@
 package frc.robot.Loader;
 
-import com.fasterxml.jackson.databind.node.BooleanNode;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.Timer;
 
 public class LoaderCommand extends CommandBase {
     protected LoaderSubsystem loaderSubsystem;

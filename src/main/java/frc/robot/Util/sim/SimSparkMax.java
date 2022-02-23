@@ -3,7 +3,6 @@ package frc.robot.Util.sim;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class SimSparkMax extends CANSparkMax {
     private double lastSet = 0;
