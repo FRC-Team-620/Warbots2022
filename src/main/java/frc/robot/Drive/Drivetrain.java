@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Util.sim.NavxWrapper;
 import frc.robot.Util.sim.RevEncoderSimWrapper;
 import frc.robot.Util.sim.SimSparkMax;
 
@@ -41,7 +42,7 @@ public class Drivetrain extends SubsystemBase {
   private final LinearSystem<N2, N2, N2> m_drivetrainSystem = LinearSystemId.identifyDrivetrainSystem(1.98, 0.2, 1.5,
       0.3);
   private final DifferentialDrivetrainSim m_drivetrainSimulator = new DifferentialDrivetrainSim(
-      m_drivetrainSystem, DCMotor.getCIM(2), 8, kTrackWidth, kWheelRadius, null);
+      m_drivetrainSystem, DCMotor.getNEO(2), 8, kTrackWidth, kWheelRadius, null);
   // private final EncoderSim m_leftEncoderSim;
   // private final EncoderSim m_rightEncoderSim;
   RevEncoderSimWrapper leftencsim;
@@ -50,7 +51,8 @@ public class Drivetrain extends SubsystemBase {
   protected final double countsPerMotorRevolution;
   protected double openLoopRampRate = 0.2;
   // The gyro sensor
-  protected final Gyro gyro;
+  protected final AHRS gyro;
+  private NavxWrapper simGryo;
 
   // Odometry class for tracking robot pose
   protected final DifferentialDriveOdometry odometry;
@@ -113,6 +115,7 @@ public class Drivetrain extends SubsystemBase {
     rightBackEncoder.setPositionConversionFactor(conversionFactor);
 
     gyro = new AHRS(SerialPort.Port.kMXP);
+    simGryo = new NavxWrapper();
 
     diffDrive = new DifferentialDrive(rightFrontMotor, leftFrontMotor);
     diffDrive.setDeadband(0.05); // minmal signal
@@ -267,6 +270,10 @@ public class Drivetrain extends SubsystemBase {
     rightencsim.setDistance(m_drivetrainSimulator.getRightPositionMeters());
     rightencsim.setVelocity(m_drivetrainSimulator.getRightVelocityMetersPerSecond());
 
+    simGryo.getYawGyro().setAngle(-m_drivetrainSimulator.getHeading().getDegrees()); //TODO add Gyo Vel support
+    // SmartDashboard.putNumber("Navx yaw", gyro.getYaw());
+    // SmartDashboard.putNumber("Navx yaw V", gyro.getVelocityY());
+    //TODO Current Simulation
     // gyro.
     // m_leftEncoderSim.setRate(m_drivetrainSimulator.getLeftVelocityMetersPerSecond());
     // m_rightEncoderSim.setDistance(m_drivetrainSimulator.getRightPositionMeters());
