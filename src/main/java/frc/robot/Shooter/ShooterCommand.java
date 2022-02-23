@@ -13,6 +13,7 @@ import frc.robot.Constants;
 
 public class ShooterCommand extends CommandBase {
     protected XboxController operatorXbox;
+    protected XboxController driverXbox;
     protected ShooterSubsystem shooterSubsystem;
     protected LazySusanSubsystem lazySusanSubsystem;
     // protected double bangBangTolerance = 0.05, intermittantSpeed = 0.3, minRPM =
@@ -42,7 +43,7 @@ public class ShooterCommand extends CommandBase {
             currentSpeed = 0, diffConst = 6 * Math.pow(10, -6), acceleration, 
             input, roundTo, currRPM, deltaTheta;
 
-    public ShooterCommand(ShooterSubsystem shooterSubsystem, LazySusanSubsystem lazySusanSubsystem, XboxController operatorXbox) {
+    public ShooterCommand(ShooterSubsystem shooterSubsystem, LazySusanSubsystem lazySusanSubsystem, XboxController operatorXbox, XboxController driverXbox) {
         // timer.start();
         // prevTime = timer.get();
         this.ticksPerTurntableRotation = lazySusanSubsystem.getTicksPerMotorRotation()*Constants.motorRotationsPerTurntableRotation;
@@ -52,6 +53,7 @@ public class ShooterCommand extends CommandBase {
         addRequirements(shooterSubsystem);
         this.shooterSubsystem = shooterSubsystem;
         this.operatorXbox = operatorXbox;
+        this.driverXbox = driverXbox;
         this.lazySusanSubsystem = lazySusanSubsystem;
         lazySusanMotor = lazySusanSubsystem.getLazySusanMotor();
         lazySusanEnc = lazySusanSubsystem.getLazySusanEncoder();
@@ -109,7 +111,7 @@ public class ShooterCommand extends CommandBase {
             lazySusanMotor.set(0);
 
         }
-        if (operatorXbox.getLeftBumper()) {
+        if (driverXbox.getBButton()) {
             lowPoweredShot = true;
         } else {
             lowPoweredShot = false;

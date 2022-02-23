@@ -57,7 +57,7 @@ public class RobotContainer {
         loaderCommand = new LoaderCommand(loaderSubsystem, driver);
         loaderSubsystem.setDefaultCommand(loaderCommand);        
         
-		shooterCommand = new ShooterCommand(shooterSubsystem, lazySusanSubsystem, operator);
+		shooterCommand = new ShooterCommand(shooterSubsystem, lazySusanSubsystem, operator, driver);
         
         shooterSubsystem.setDefaultCommand(shooterCommand);
         // shooterSubsystem.setDefaultCommand( new PIDShooterCommand(shooterSubsystem));//Show off pid shooter cmd Only works in sim rn
