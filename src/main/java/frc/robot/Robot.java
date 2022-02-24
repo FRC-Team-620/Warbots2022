@@ -24,6 +24,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
     robotContainer = new RobotContainer();
     robotContainer.init();
+    robotContainer.getShooterCommand().getTable().getEntry("ledMode").setNumber(1);
   }
 
   @Override

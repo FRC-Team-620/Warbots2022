@@ -37,7 +37,7 @@ public class ShooterCommand extends CommandBase {
 
     // turntable
     protected double ticksPerTurntableRotation,angleChangePerTick;
-    protected double  currTicksGoal = 0, diffConstLS = 0.012, turntableThresh = 35;
+    protected double  currTicksGoal = 0, diffConstLS = 0.023, turntableThresh = 35;
     // shooter
     protected double rpm, bangBangTolerance = 0.01, minRPM = 0, maxRPM = 5500,
             currentSpeed = 0, diffConst = 6 * Math.pow(10, -6), acceleration, 
@@ -99,7 +99,7 @@ public class ShooterCommand extends CommandBase {
             }
             lazySusanMotor.set(speeeeed);
         } else if (Math.abs(operatorXbox.getLeftX()) > 0) {
-            double speed = operatorXbox.getLeftX()/2.5;
+            double speed = -operatorXbox.getLeftX()/2.5;
             if ((lazySusanEnc.getPosition() <= -turntableThresh && speed < 0)
                 || (lazySusanEnc.getPosition() >= turntableThresh && speed > 0)) {
                 speed = 0;
@@ -169,6 +169,9 @@ public class ShooterCommand extends CommandBase {
 
     public void setAutoOn(boolean x) {
         autoOn = x;
+    }
+    public NetworkTable getTable() {
+        return table;
     }
     
 

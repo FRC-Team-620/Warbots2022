@@ -7,15 +7,15 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class LoaderCommand extends CommandBase {
     protected LoaderSubsystem loaderSubsystem;
-    protected XboxController driverXbox;
+    protected XboxController operatorXbox;
     protected boolean autoOn;
     protected boolean autoFire;
     
 
-    public LoaderCommand(LoaderSubsystem loaderSubsystem, XboxController driverXbox) {
+    public LoaderCommand(LoaderSubsystem loaderSubsystem, XboxController operatorXbox) {
         addRequirements(loaderSubsystem);
         this.loaderSubsystem = loaderSubsystem;
-        this.driverXbox = driverXbox;
+        this.operatorXbox = operatorXbox;
         autoOn = false;
         autoFire = false;
         // Use addRequirements() here to declare subsystem dependencies.
@@ -23,7 +23,7 @@ public class LoaderCommand extends CommandBase {
     @Override
     public void execute() {
         CANSparkMax temp = loaderSubsystem.getLoaderMotor();
-        if (driverXbox.getLeftBumperPressed()) {
+        if (operatorXbox.getLeftBumperPressed()) {
             if (temp.getEncoder().getVelocity() > 0) {
                 temp.set(0);
             } else {
@@ -38,10 +38,10 @@ public class LoaderCommand extends CommandBase {
                 autoOn = false;
             }
         }
-        if (driverXbox.getAButtonPressed() || autoFire) {
+        if (operatorXbox.getAButtonPressed() || autoFire) {
             loaderSubsystem.getSolenoid().set(true);
             autoFire = false;
-        } else if (driverXbox.getAButtonReleased() || autoFire == false) {
+        } else if (operatorXbox.getAButtonReleased() || autoFire == false) {
             loaderSubsystem.getSolenoid().set(false);
         }
     }

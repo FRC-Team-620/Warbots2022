@@ -54,7 +54,7 @@ public class RobotContainer {
         driveWithJoystick = new DriveWithJoystick(drivetrain, driver);
         drivetrain.setDefaultCommand(driveWithJoystick);
 
-        loaderCommand = new LoaderCommand(loaderSubsystem, driver);
+        loaderCommand = new LoaderCommand(loaderSubsystem, operator);
         loaderSubsystem.setDefaultCommand(loaderCommand);        
         
 		shooterCommand = new ShooterCommand(shooterSubsystem, lazySusanSubsystem, operator, driver);
