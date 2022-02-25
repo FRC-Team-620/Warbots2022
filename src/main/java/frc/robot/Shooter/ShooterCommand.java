@@ -118,8 +118,8 @@ public class ShooterCommand extends CommandBase {
         }
         if (input > 0) {
             setRPM(input * (maxRPM - minRPM) + minRPM); 
-        // } else if(hasTarget && operatorXbox.getRightBumper()) {
-        //     setRPM(tempRPM);
+        } else if(hasTarget && operatorXbox.getRightBumper()) {
+             setRPM(tempRPM);
         } else {
             if (lowPoweredShot) {
                 setRPM(Constants.lowPoweredShotRPM);

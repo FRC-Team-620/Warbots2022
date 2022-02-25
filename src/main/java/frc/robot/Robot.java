@@ -6,6 +6,10 @@ package frc.robot;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
@@ -19,12 +23,19 @@ public class Robot extends TimedRobot {
   protected RobotContainer robotContainer;
   protected Command autonomousCommand;
   
+  // UsbCamera camera;
+  // NetworkTableEntry cameraSelection; 
+
   @Override
   public void robotInit() {
     CommandScheduler.getInstance().cancelAll();
     robotContainer = new RobotContainer();
     robotContainer.init();
     robotContainer.getShooterCommand().getTable().getEntry("ledMode").setNumber(1);
+
+    // camera = CameraServer.startAutomaticCapture(0);
+    // cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection");
+    // cameraSelection.setString(camera.getName());
   }
 
   @Override
@@ -57,7 +68,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    
+
   }
 
   @Override
