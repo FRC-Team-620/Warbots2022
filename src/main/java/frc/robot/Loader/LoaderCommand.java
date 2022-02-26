@@ -38,10 +38,12 @@ public class LoaderCommand extends CommandBase {
                 autoOn = false;
             }
         }
-        if (operatorXbox.getAButtonPressed() || autoFire) {
+        if (operatorXbox.getAButtonPressed()) {
             loaderSubsystem.getSolenoid().set(true);
-            autoFire = false;
-        } else if (operatorXbox.getAButtonReleased() || autoFire == false) {
+            // autoFire = false;
+            //  || autoFire == false
+            //  || autoFire
+        } else if (operatorXbox.getAButtonReleased()) {
             loaderSubsystem.getSolenoid().set(false);
         }
     }

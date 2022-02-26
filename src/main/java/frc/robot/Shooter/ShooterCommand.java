@@ -37,7 +37,8 @@ public class ShooterCommand extends CommandBase {
 
     // turntable
     protected double ticksPerTurntableRotation,angleChangePerTick;
-    protected double  currTicksGoal = 0, diffConstLS = 0.023, turntableThresh = 35;
+    protected double  currTicksGoal = 0, diffConstLS = 0.015, turntableThresh = 35;
+    protected double inputOpRight = 0;
     // shooter
     protected double rpm, bangBangTolerance = 0.01, minRPM = 0, maxRPM = 5500,
             currentSpeed = 0, diffConst = 6 * Math.pow(10, -6), acceleration, 
@@ -71,8 +72,12 @@ public class ShooterCommand extends CommandBase {
 
         double borkedJoystickDeadband = 0.05;
         input = operatorXbox.getRightY();
+        inputOpRight = operatorXbox.getLeftX();
         if (Math.abs(input) < borkedJoystickDeadband) {
             input = 0;
+        }
+        if (Math.abs(inputOpRight) < borkedJoystickDeadband) {
+            inputOpRight = 0;
         }
         roundTo = SmartDashboard.getNumber("Round to: ", 5);
         currRPM = shooterSubsystem.getRPM();
@@ -85,9 +90,11 @@ public class ShooterCommand extends CommandBase {
 
         // new math for static limelight shooting
         double tempDist = getDistanceInMeters(Constants.azimuthAngle1, y, Constants.limelightHeight, Constants.hubHeight);
-        double tempRPM = metersToRPM(tempDist * Constants.metersToFeet);
-        System.out.println("Dist: " + tempDist);
-        
+        double tempRPM = metersToRPM(tempDist);
+        System.out.println("tempDist: " + tempDist);
+        System.out.println("tempDist * metersToFeet: " + tempDist * Constants.metersToFeet);
+        System.out.println("tempRPM: " + tempRPM);
+
         System.out.println(lazySusanEnc.getPosition());
         if(operatorXbox.getRightBumper() || autoOn) {
             table.getEntry("ledMode").setNumber(3);
@@ -98,13 +105,15 @@ public class ShooterCommand extends CommandBase {
                 speeeeed = 0;
             }
             lazySusanMotor.set(speeeeed);
-        } else if (Math.abs(operatorXbox.getLeftX()) > 0) {
-            double speed = -operatorXbox.getLeftX()/2.5;
+        } else if (Math.abs(inputOpRight) > 0) {
+            table.getEntry("ledMode").setNumber(1);
+            double speed = -inputOpRight/2.5;
             if ((lazySusanEnc.getPosition() <= -turntableThresh && speed < 0)
                 || (lazySusanEnc.getPosition() >= turntableThresh && speed > 0)) {
                 speed = 0;
             }
             lazySusanMotor.set(speed);
+            
 
         } else {
             table.getEntry("ledMode").setNumber(1);
@@ -120,6 +129,7 @@ public class ShooterCommand extends CommandBase {
             setRPM(input * (maxRPM - minRPM) + minRPM); 
         } else if(hasTarget && operatorXbox.getRightBumper()) {
              setRPM(tempRPM);
+             System.out.println("Target + RightBumper: Triggered");
         } else {
             if (lowPoweredShot) {
                 setRPM(Constants.lowPoweredShotRPM);
@@ -146,8 +156,9 @@ public class ShooterCommand extends CommandBase {
     }
 
     public double metersToRPM(double meters) {
-        double distanceInFeet = 3.28084 * meters;
-        return 11.73708 * distanceInFeet + 1632.61502;
+        double distanceInFeet = Constants.metersToFeet * meters;
+        System.out.println("Distance In Meters " + meters);
+        return 117.3708 * distanceInFeet + 1632.61502;
     }
 
     static long roundUpToNearestMultiple(double input, int step) {
