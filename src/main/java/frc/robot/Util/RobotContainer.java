@@ -27,7 +27,6 @@ import frc.robot.Drive.Drivetrain;
 import frc.robot.Loader.LoaderCommand;
 import frc.robot.Loader.LoaderSubsystem;
 import frc.robot.Shooter.LazySusanSubsystem;
-import frc.robot.Shooter.PIDShooterCommand;
 import frc.robot.Shooter.ShooterCommand;
 import frc.robot.Shooter.ShooterSubsystem;
 /** Add your docs here. */

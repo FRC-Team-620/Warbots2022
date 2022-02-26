@@ -14,16 +14,21 @@ import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Util.LimeLight;
+import frc.robot.Util.sim.LimeLightSim;
 import frc.robot.Util.sim.RevEncoderSimWrapper;
 
 public class ShooterSubsystem extends SubsystemBase {
     protected final SimableCANSparkMax leftShooterMotor, rightShooterMotor;
     protected final RelativeEncoder encoder;
     protected final DecimalFormat decFormat = new DecimalFormat("#.#");
+    public LimeLight limeLight;
+
 
     //Sim
     FlywheelSim simFlywheel;
     RevEncoderSimWrapper leftencsim,rightencsim;
+    LimeLightSim simLimeLight;
 
     public ShooterSubsystem() {
         leftShooterMotor = new SimableCANSparkMax(Constants.leftShooterMotorID, MotorType.kBrushless);//TODO: Refactor name to follower
@@ -40,6 +45,7 @@ public class ShooterSubsystem extends SubsystemBase {
         leftShooterMotor.follow(rightShooterMotor, true);
         // leftShooterMotor.setInverted(false);
         // rightShooterMotor.setInverted(false);
+        limeLight = new LimeLight();
         if(RobotBase.isSimulation()){
             initSim();
         }
@@ -50,6 +56,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
         this.leftencsim = RevEncoderSimWrapper.create(this.leftShooterMotor);
         this.rightencsim = RevEncoderSimWrapper.create(this.rightShooterMotor);
+        this.simLimeLight = new LimeLightSim(this.limeLight);
     }
 
     public double getTicksPerMotorRotation() {

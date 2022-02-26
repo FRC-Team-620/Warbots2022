@@ -1,20 +1,17 @@
 package frc.robot.Util;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import edu.wpi.first.hal.SimBoolean;
 import edu.wpi.first.hal.SimDevice;
-import edu.wpi.first.hal.SimDouble;
-import edu.wpi.first.hal.SimValue;
 import edu.wpi.first.hal.SimDevice.Direction;
+import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import frc.robot.Robot;
 
 public class LimeLight {
     private NetworkTable ntable;

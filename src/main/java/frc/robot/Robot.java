@@ -6,16 +6,13 @@ package frc.robot;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.UsbCamera;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Util.LimeLight.LedMode;
 import frc.robot.Util.RobotContainer;
 
 
@@ -31,7 +28,8 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
     robotContainer = new RobotContainer();
     robotContainer.init();
-    robotContainer.getShooterCommand().getTable().getEntry("ledMode").setNumber(1);
+    robotContainer.getShooterSubsystem().limeLight.setLEDMode(LedMode.OFF);
+    // robotContainer.getShooterCommand().getTable().getEntry("ledMode").setNumber(1);
 
     // camera = CameraServer.startAutomaticCapture(0);
     // cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection");
