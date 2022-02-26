@@ -16,12 +16,16 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.Climber.ClimberCommand;
+import frc.robot.Climber.ClimberSubsystem;
 import frc.robot.Drive.DriveWithJoystick;
 import frc.robot.Drive.Drivetrain;
 import frc.robot.Loader.LoaderCommand;
@@ -38,15 +42,21 @@ public class RobotContainer {
     protected LoaderSubsystem loaderSubsystem = new LoaderSubsystem();
     protected ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
 	protected LazySusanSubsystem lazySusanSubsystem = new LazySusanSubsystem();
+    protected ClimberSubsystem climberSubsystem = new ClimberSubsystem();
     
 
     protected DriveWithJoystick driveWithJoystick;
     protected LoaderCommand loaderCommand;
     protected ShooterCommand shooterCommand;
+    //protected ClimberCommand climberCommand;
 
     //public Command getDriveWithJoystick() {
         //return new DriveWithJoystick(drivetrain, driver);
-    //}
+    //}\
+    public RobotContainer() {
+        JoystickButton operatorYButton = new JoystickButton(operator, Button.kY.value);
+        //operatorYButton.whenPressed(climberCommand);
+    }
     
     TrajectorySelector trajectorySelector = new TrajectorySelector(Filesystem.getDeployDirectory().toPath().resolve("paths/"), true);
     public Field2d  robotFieldWidget = new Field2d(); //TODO: include Robot odometry 
@@ -54,14 +64,14 @@ public class RobotContainer {
         driveWithJoystick = new DriveWithJoystick(drivetrain, driver);
         drivetrain.setDefaultCommand(driveWithJoystick);
 
-        loaderCommand = new LoaderCommand(loaderSubsystem, operator);
+        loaderCommand = new LoaderCommand(loaderSubsystem, driver, operator);
         loaderSubsystem.setDefaultCommand(loaderCommand);        
         
 		shooterCommand = new ShooterCommand(shooterSubsystem, lazySusanSubsystem, operator, driver);
-        
         shooterSubsystem.setDefaultCommand(shooterCommand);
         // shooterSubsystem.setDefaultCommand( new PIDShooterCommand(shooterSubsystem));//Show off pid shooter cmd Only works in sim rn
 
+        //climberCommand = new ClimberCommand(climberSubsystem);
 
        
         SmartDashboard.putData(robotFieldWidget);
@@ -77,6 +87,13 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
+
+    public ClimberSubsystem getClimberSubsystem() {
+        return climberSubsystem;
+    }
+
+
+
     public LazySusanSubsystem getLazySusanSubsystem() {
         return lazySusanSubsystem;
     }
@@ -99,6 +116,10 @@ public class RobotContainer {
     
     public ShooterCommand getShooterCommand() {
         return shooterCommand;
+    }
+
+    public LoaderSubsystem getLoaderSubsystem() {
+        return loaderSubsystem;
     }
   public Command getAutonomousCommand(Trajectory traj) {
     // Create a voltage constraint to ensure we don't accelerate too fast
