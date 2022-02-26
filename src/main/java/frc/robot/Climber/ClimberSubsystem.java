@@ -13,7 +13,10 @@ import frc.robot.Constants;
 public class ClimberSubsystem extends SubsystemBase {
     protected final CANSparkMax leftClimberMotor, rightClimberMotor;
     protected final RelativeEncoder encoder;
-    protected final Solenoid climberSolenoid;
+    protected final Solenoid hangingSolenoid;
+    protected final Solenoid armsSolenoid;
+
+
 
     public ClimberSubsystem() {
 
@@ -24,15 +27,28 @@ public class ClimberSubsystem extends SubsystemBase {
         leftClimberMotor.restoreFactoryDefaults();
         rightClimberMotor.restoreFactoryDefaults();
 
-        IdleMode mode = IdleMode.kCoast; // brakes
+        IdleMode mode = IdleMode.kBrake; // brakes
         leftClimberMotor.setIdleMode(mode);
         rightClimberMotor.setIdleMode(mode);
 
         leftClimberMotor.follow(rightClimberMotor, true);
 
-        climberSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
+        hangingSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 1);
+        armsSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 2);
+
         // leftShooterMotor.setInverted(false);
         // rightShooterMotor.setInverted(false);
 
     }
+    public CANSparkMax getWinchMotor() {
+        return rightClimberMotor;
+    }
+
+    public Solenoid getHangingSolenoid() {
+        return hangingSolenoid;
+    }
+    public Solenoid getArmsSolenoid() {
+        return armsSolenoid;
+    }
+
 }

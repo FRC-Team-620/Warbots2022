@@ -58,9 +58,8 @@ public class ShooterCommand extends CommandBase {
         this.lazySusanSubsystem = lazySusanSubsystem;
         lazySusanMotor = lazySusanSubsystem.getLazySusanMotor();
         lazySusanEnc = lazySusanSubsystem.getLazySusanEncoder();
-        autoOn = false;
-
         this.limelight = shooterSubsystem.limeLight;
+        //autoOn = false;
         
         
     }
@@ -96,11 +95,11 @@ public class ShooterCommand extends CommandBase {
         System.out.println("tempDist: " + tempDist);
         System.out.println("tempDist * metersToFeet: " + tempDist * Constants.metersToFeet);
         System.out.println("tempRPM: " + tempRPM);
-
+        // || autoOn
         System.out.println(lazySusanEnc.getPosition());
-        if(operatorXbox.getRightBumper() || autoOn) {
-            // table.getEntry("ledMode").setNumber(3);
-            limelight.setLEDMode(LedMode.ON);
+        if(Math.abs(operatorXbox.getLeftTriggerAxis()) > 0) {
+//             table.getEntry("ledMode").setNumber(3);
+                limelight.setLEDMode(LedMode.ON);
             double speeeeed = -x*diffConstLS; // this is speed
             // Making sure it's within the provided threshholds
             if ((lazySusanEnc.getPosition() <= -turntableThresh && speeeeed < 0)
@@ -132,7 +131,7 @@ public class ShooterCommand extends CommandBase {
         }
         if (input > 0) {
             setRPM(input * (maxRPM - minRPM) + minRPM); 
-        } else if(hasTarget && operatorXbox.getRightBumper()) {
+        } else if(hasTarget && Math.abs(operatorXbox.getLeftTriggerAxis()) > 0) {
              setRPM(tempRPM);
              System.out.println("Target + RightBumper: Triggered");
         } else {
