@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Auto.AutoCommand;
 import frc.robot.Loader.AutoLoad;
 import frc.robot.Loader.AutoShoot;
 import frc.robot.Shooter.AutoAimingAndSpinningUp;
@@ -67,6 +68,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     if (autonomousCommand != null) {
        autonomousCommand.cancel();
+       robotContainer.getShooterSubsystem().setDefaultCommand(robotContainer.getShooterCommand());
     }
     robotContainer.getLazySusanSubsystem().getLazySusanEncoder().setPosition(0);
     robotContainer.getDriveTrain().setMotorMode(IdleMode.kBrake);
@@ -80,76 +82,10 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     // new SequentialCommandGroup(new Commands());
-    AutoLoad autoLoad = new AutoLoad(robotContainer.getLoaderSubsystem(), 1);
-    autoLoad.schedule();
-    autonomousCommand = robotContainer.getAutonomousCommand(robotContainer.getTrajectorySelector().getPart1());
-    if (autonomousCommand != null) {
-      new ParallelCommandGroup(autoLoad, autonomousCommand).schedule();
-    }
-    AutoAimingAndSpinningUp autoAimingAndSpinningUp = new AutoAimingAndSpinningUp(robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem());
-    robotContainer.getShooterSubsystem().setDefaultCommand(autoAimingAndSpinningUp);
-    AutoShoot autoShoot = new AutoShoot(robotContainer.getLoaderSubsystem());
-    autoShoot.schedule();
-
-    autonomousCommand = robotContainer.getAutonomousCommand(robotContainer.getTrajectorySelector().getPart2());
+    autonomousCommand = new AutoCommand(robotContainer.getLoaderSubsystem(), robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer);
     if (autonomousCommand != null) {
       autonomousCommand.schedule();
     }
-    robotContainer.getShooterCommand().setAutoOn(true);
-    try {
-      wait(2000);
-    } catch (InterruptedException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    robotContainer.getLoaderCommand().setAutoFire(true);
-    try {
-      wait(1000);
-    } catch (InterruptedException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    robotContainer.getShooterCommand().setAutoOn(false);
-
-    autonomousCommand = robotContainer.getAutonomousCommand(robotContainer.getTrajectorySelector().getPart3());
-    if (autonomousCommand != null) {
-      autonomousCommand.schedule();
-    }
-    robotContainer.getShooterCommand().setAutoOn(true);
-    try {
-      wait(2000);
-    } catch (InterruptedException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    robotContainer.getLoaderCommand().setAutoFire(true);
-    try {
-      wait(1000);
-    } catch (InterruptedException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    robotContainer.getShooterCommand().setAutoOn(false);
-
-    autonomousCommand = robotContainer.getAutonomousCommand(robotContainer.getTrajectorySelector().getPart4());
-    if (autonomousCommand != null) {
-      autonomousCommand.schedule();
-    }
-    robotContainer.getShooterCommand().setAutoOn(true);
-    try {
-      wait(2000);
-    } catch (InterruptedException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    robotContainer.getLoaderCommand().setAutoFire(true);
-    try {
-      wait(1000);
-    } catch (InterruptedException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    robotContainer.getShooterCommand().setAutoOn(false);
     
 
   }
