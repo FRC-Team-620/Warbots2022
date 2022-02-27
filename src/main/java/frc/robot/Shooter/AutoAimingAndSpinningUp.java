@@ -1,26 +1,21 @@
 package frc.robot.Shooter;
 
-import javax.swing.text.StyledEditorKit.BoldAction;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.Util.LimeLight.LedMode;
 
 public class AutoAimingAndSpinningUp extends CommandBase {
     protected ShooterSubsystem shooterSubsystem;
 
     
-    protected NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-    protected NetworkTableEntry entryHasTarget = table.getEntry("tv");
-    protected NetworkTableEntry entryX = table.getEntry("tx");
-    protected NetworkTableEntry entryY = table.getEntry("ty");
-    protected NetworkTableEntry entryArea = table.getEntry("ta");
+    // protected NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    // protected NetworkTableEntry entryHasTarget = table.getEntry("tv");
+    // protected NetworkTableEntry entryX = table.getEntry("tx");
+    // protected NetworkTableEntry entryY = table.getEntry("ty");
+    // protected NetworkTableEntry entryArea = table.getEntry("ta");
     
     // turntable
     protected double ticksPerTurntableRotation,angleChangePerTick;
@@ -67,10 +62,11 @@ public class AutoAimingAndSpinningUp extends CommandBase {
 
     @Override
     public void execute() {
-        boolean hasTarget = entryHasTarget.getDouble(0.0) == 1.0;
-        double x = entryX.getDouble(0.0);
-        double y = entryY.getDouble(0.0);
-        table.getEntry("ledMode").setNumber(3);
+        boolean hasTarget = shooterSubsystem.limeLight.hasTarget();
+        double x = shooterSubsystem.limeLight.getOffsetX();
+        double y = shooterSubsystem.limeLight.getOffsetY();
+        // table.getEntry("ledMode").setNumber(3);
+        shooterSubsystem.limeLight.setLEDMode(LedMode.ON);
         double speeeeed = -x*diffConstLS; // this is speed
         double tempDist = getDistanceInMeters(Constants.azimuthAngle1, y, Constants.limelightHeight, Constants.hubHeight);
         double tempRPM = metersToRPM(tempDist);
