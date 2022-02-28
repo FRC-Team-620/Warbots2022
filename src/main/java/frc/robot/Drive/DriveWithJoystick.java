@@ -99,8 +99,9 @@ public class DriveWithJoystick extends CommandBase {
           drivetrain.setEncoderPos(i, 0);
         isDriving = false;
       }
-      for(int i = 1; i < 5; i++)
-        drivetrain.motorDrive(i, Constants.diffConstKeepPosition*drivetrain.getEncoderPos(i));
+      if(driverXbox.getLeftBumper())
+        for(int i = 1; i < 5; i++)
+          drivetrain.motorDrive(i, Constants.diffConstKeepPosition*drivetrain.getEncoderPos(i));
     } else {
       isDriving = true;
       drivetrain.curvatureInput(speed, rotation, !(driverXbox.getBButton()));
