@@ -36,19 +36,18 @@ public class ShooterCommand extends CommandBase {
     CANSparkMax lazySusanMotor;
 
     // turntable
-    protected double ticksPerTurntableRotation,angleChangePerTick;
-    protected double  currTicksGoal = 0, diffConstLS = 0.015, turntableThresh = 35;
+    protected double ticksPerTurntableRotation, angleChangePerTick;
+    protected double  currTicksGoal = 0;
     protected double inputOpRight = 0;
     // shooter
-    protected double rpm, bangBangTolerance = 0.01, minRPM = 0, maxRPM = 5500,
-            currentSpeed = 0, diffConst = 6 * Math.pow(10, -6), acceleration, 
-            input, roundTo, currRPM, deltaTheta;
+    protected double rpm, currentSpeed = 0, acceleration, input, roundTo, currRPM, deltaTheta;
 
     public ShooterCommand(ShooterSubsystem shooterSubsystem, LazySusanSubsystem lazySusanSubsystem, XboxController operatorXbox, XboxController driverXbox) {
         // timer.start();
         // prevTime = timer.get();
         this.ticksPerTurntableRotation = lazySusanSubsystem.getTicksPerMotorRotation()*Constants.motorRotationsPerTurntableRotation;
-        this.angleChangePerTick = 2*Math.PI/this.ticksPerTurntableRotation;        SmartDashboard.putNumber("Round to: ", 5);
+        this.angleChangePerTick = 2*Math.PI/this.ticksPerTurntableRotation;
+        SmartDashboard.putNumber("Round to: ", 5);
         SmartDashboard.putNumber("Set default RPM: ", 0);
         // SmartDashboard.putNumber("Change angle: ", 0);
         addRequirements(shooterSubsystem);
@@ -59,8 +58,6 @@ public class ShooterCommand extends CommandBase {
         lazySusanMotor = lazySusanSubsystem.getLazySusanMotor();
         lazySusanEnc = lazySusanSubsystem.getLazySusanEncoder();
         //autoOn = false;
-        
-        
     }
 
     @Override
@@ -98,18 +95,18 @@ public class ShooterCommand extends CommandBase {
         System.out.println(lazySusanEnc.getPosition());
         if(Math.abs(operatorXbox.getLeftTriggerAxis()) > 0) {
             table.getEntry("ledMode").setNumber(3);
-            double speeeeed = -x*diffConstLS; // this is speed
+            double speeeeed = -x*Constants.diffConstLS; // this is speed
             // Making sure it's within the provided threshholds
-            if ((lazySusanEnc.getPosition() <= -turntableThresh && speeeeed < 0)
-                || (lazySusanEnc.getPosition() >= turntableThresh && speeeeed > 0)) {
+            if ((lazySusanEnc.getPosition() <= -Constants.turntableThresh && speeeeed < 0)
+                || (lazySusanEnc.getPosition() >= Constants.turntableThresh && speeeeed > 0)) {
                 speeeeed = 0;
             }
             lazySusanMotor.set(speeeeed);
         } else if (Math.abs(inputOpRight) > 0) {
             table.getEntry("ledMode").setNumber(1);
             double speed = -inputOpRight/2.5;
-            if ((lazySusanEnc.getPosition() <= -turntableThresh && speed < 0)
-                || (lazySusanEnc.getPosition() >= turntableThresh && speed > 0)) {
+            if ((lazySusanEnc.getPosition() <= -Constants.turntableThresh && speed < 0)
+                || (lazySusanEnc.getPosition() >= Constants.turntableThresh && speed > 0)) {
                 speed = 0;
             }
             lazySusanMotor.set(speed);
@@ -126,7 +123,7 @@ public class ShooterCommand extends CommandBase {
             lowPoweredShot = false;
         }
         if (input > 0) {
-            setRPM(input * (maxRPM - minRPM) + minRPM); 
+            setRPM(input * (Constants.maxShooterRPM - Constants.minShooterRPM) + Constants.minShooterRPM); 
         } else if(hasTarget && Math.abs(operatorXbox.getLeftTriggerAxis()) > 0) {
              setRPM(tempRPM);
              System.out.println("Target + RightBumper: Triggered");
@@ -137,12 +134,12 @@ public class ShooterCommand extends CommandBase {
                 setRPM(SmartDashboard.getNumber("Set default RPM: ", 0));
             }
             
-            if (getRPM() > maxRPM)
-                setRPM(maxRPM);
-            else if (getRPM() < minRPM)
-                setRPM(minRPM);
+            if (getRPM() > Constants.maxShooterRPM)
+                setRPM(Constants.maxShooterRPM);
+            else if (getRPM() < Constants.minShooterRPM)
+                setRPM(Constants.minShooterRPM);
         }
-        acceleration = diffConst * (getRPM() - currRPM);
+        acceleration = Constants.diffConstShooter * (getRPM() - currRPM);
         SmartDashboard.putNumber("Acceleration: ", acceleration);
         // if(Math.abs(rpm-currRPM) > (bangBangTolerance * rpm))
         setShooterSpeedAndUpdate(currentSpeed + acceleration);
