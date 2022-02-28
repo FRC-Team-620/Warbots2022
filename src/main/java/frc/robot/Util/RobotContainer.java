@@ -11,6 +11,7 @@ package frc.robot.Util;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
@@ -75,6 +76,7 @@ public class RobotContainer {
        
         SmartDashboard.putData(robotFieldWidget);
         SmartDashboard.putData(trajectorySelector);
+        robotFieldWidget.getObject("Turret").setPose(new Pose2d());
         trajectorySelector.linkField(robotFieldWidget);
 
         // trajectorySelector.setDefaultOption("No Trajectory", new Trajectory());  //Uncomment this to default to no trajectory vs the first file found or null.

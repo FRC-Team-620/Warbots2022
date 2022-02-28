@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SimableCANSparkMax;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
@@ -22,7 +23,7 @@ public class LazySusanSubsystem extends SubsystemBase {
     // Sim
     private FlywheelSim simlazySusan;
     private RevEncoderSimWrapper simEncoder;
-
+    public Rotation2d turrentRotation;
     public LazySusanSubsystem() {
         lazySusan = new SimableCANSparkMax(Constants.lazySusanID, MotorType.kBrushless);
 
@@ -31,13 +32,14 @@ public class LazySusanSubsystem extends SubsystemBase {
         IdleMode mode = IdleMode.kBrake; // brakes
         lazySusan.setIdleMode(mode);
 
+        turrentRotation = new Rotation2d();
         if (RobotBase.isSimulation()) {
             initSim();
         }
     }
 
     private void initSim() {
-        simlazySusan = new FlywheelSim(DCMotor.getNEO(1), 1, Constants.kSimTurntableInertia); //TODO: add gear ratio
+        simlazySusan = new FlywheelSim(DCMotor.getNeo550(1), (156/16), Constants.kSimTurntableInertia); //TODO: add gear ratio
         simEncoder = RevEncoderSimWrapper.create(this.lazySusan);
     }
 
@@ -52,7 +54,10 @@ public class LazySusanSubsystem extends SubsystemBase {
     public double getTicksPerMotorRotation() {
         return encoder.getCountsPerRevolution();
     }
-
+    @Override
+    public void periodic() {
+        turrentRotation = Rotation2d.fromDegrees(encoder.getPosition());
+    }
     @Override
     public void simulationPeriodic() {
         simlazySusan.setInputVoltage(lazySusan.get() * RobotController.getInputVoltage());

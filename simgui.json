@@ -80,7 +80,12 @@
         }
       },
       "/SmartDashboard/Field": {
-        "image": "C:\\Users\\m10653\\Desktop\\frc fieldjank.png",
+        "Turret": {
+          "image": "C:\\Users\\m10653\\git\\Warbots2022\\img\\shooter.png",
+          "length": 5.0,
+          "width": 5.0
+        },
+        "image": "C:\\Users\\m10653\\git\\Warbots2022\\img\\2022-field.png",
         "traj": {
           "arrowSize": 5,
           "arrows": false,
@@ -111,9 +116,6 @@
     }
   },
   "NetworkTables": {
-    "FMSInfo": {
-      "open": true
-    },
     "LiveWindow": {
       "Ungrouped": {
         "PIDController[1]": {
@@ -128,7 +130,9 @@
     "SmartDashboard": {
       "PIDController[1]": {
         "open": true
-      },
+      }
+    },
+    "limelight": {
       "open": true
     }
   },
@@ -171,7 +175,10 @@
             }
           ]
         }
-      ]
+      ],
+      "window": {
+        "visible": false
+      }
     },
     "Plot <1>": {
       "plots": [
@@ -203,7 +210,10 @@
             }
           ]
         }
-      ]
+      ],
+      "window": {
+        "visible": false
+      }
     },
     "Plot <2>": {
       "plots": [

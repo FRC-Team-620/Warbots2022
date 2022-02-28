@@ -6,6 +6,8 @@ package frc.robot;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
@@ -45,9 +47,17 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
 
-    robotContainer.robotFieldWidget.setRobotPose(robotContainer.getDriveTrain().getPose()); //Example on how to update Field2d with robot position.
-    robotContainer.getShooterSubsystem().possim.setPosition(robotContainer.getDriveTrain().getPose());
-    robotContainer.getShooterSubsystem().possim.update(0.0);
+    var robotpos = robotContainer.getDriveTrain().getPose();
+    robotContainer.robotFieldWidget.setRobotPose(robotpos); //Example on how to update Field2d with robot position.
+    // var tmp = robotContainer.getDriveTrain().getPose().plus(new Pose2d(0, 0, robotContainer.getLazySusanSubsystem().turrentRotation.plus(other));
+    var hubpos =  new Pose2d(7.940, 4.08, new Rotation2d());
+    // hubpos.
+    robotContainer.robotFieldWidget.getObject("hub").setPose(hubpos);
+    var tpos = new Pose2d(robotpos.getTranslation(),robotpos.getRotation().plus(robotContainer.getLazySusanSubsystem().turrentRotation));
+    robotContainer.robotFieldWidget.getObject("Turret").setPose(tpos);
+
+    robotContainer.getShooterSubsystem().possim.setPosition(tpos);
+    robotContainer.getShooterSubsystem().possim.update(Constants.kSimUpdateTime);
     //robotContainer.drivetrain.leftFrontMotorDrive(0.3);
   } 
 

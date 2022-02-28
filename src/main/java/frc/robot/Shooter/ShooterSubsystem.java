@@ -63,7 +63,7 @@ public class ShooterSubsystem extends SubsystemBase {
         this.rightencsim = RevEncoderSimWrapper.create(this.rightShooterMotor);
         this.simLimeLight = new LimeLightSim(this.limeLight);
         var hubpos =  new Pose2d(7.940, 4.08, new Rotation2d());
-        this.possim = new LimeLightPoseSim(simLimeLight, hubpos, Constants.limelightHeight, Constants.hubHeight, 45);
+        this.possim = new LimeLightPoseSim(simLimeLight, hubpos, Constants.limelightHeight, Constants.hubHeight, Constants.azimuthAngle1);
     }
 
     public double getTicksPerMotorRotation() {

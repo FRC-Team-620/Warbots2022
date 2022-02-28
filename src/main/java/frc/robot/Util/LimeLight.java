@@ -9,6 +9,7 @@ import edu.wpi.first.hal.SimBoolean;
 import edu.wpi.first.hal.SimDevice;
 import edu.wpi.first.hal.SimDevice.Direction;
 import edu.wpi.first.hal.SimDouble;
+import edu.wpi.first.hal.SimEnum;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -21,7 +22,9 @@ public class LimeLight {
     private SimDevice m_simDevice;
     private SimBoolean s_tv;
     private SimDouble s_tx, s_ty, s_ta, s_tl;
+    private SimEnum s_ledmode;
     private static int index = 0;
+    private final int id;
 
     public LimeLight() {
         this(NetworkTableInstance.getDefault().getTable("limelight"));
@@ -41,14 +44,16 @@ public class LimeLight {
         e_stream = ntable.getEntry("stream");
         e_snapshot = ntable.getEntry("snapshot");
         e_getpipe = ntable.getEntry("getpipe");
-
-        m_simDevice = SimDevice.create("LimeLight", index++);
+        this.id = index++;
+        m_simDevice = SimDevice.create("LimeLight", this.id);
         if (isSim()) {
-            s_ty = m_simDevice.createDouble("Offset Y", Direction.kInput, 0.0);
-            s_tx = m_simDevice.createDouble("Offset X", Direction.kInput, 0.0);
-            s_ta = m_simDevice.createDouble("Target Area", Direction.kInput, 0.0);
-            s_tl = m_simDevice.createDouble("Pipeline Latancy", Direction.kInput, 0.0);
-            s_tv = m_simDevice.createBoolean("Has Target", Direction.kInput, false);
+            // System.out.println(m_simDevice.);
+            s_ty = m_simDevice.createDouble("Offset Y", Direction.kOutput, 0.0);
+            s_tx = m_simDevice.createDouble("Offset X", Direction.kOutput, 0.0);
+            s_ta = m_simDevice.createDouble("Target Area", Direction.kOutput, 0.0);
+            s_tl = m_simDevice.createDouble("Pipeline Latancy", Direction.kOutput, 0.0);
+            s_tv = m_simDevice.createBoolean("Has Target", Direction.kOutput, false);
+            // s_ledmode = m_simDevice.createEnum("Led Mode", Direction.kBidir, new String[]{"Pipeline", "OFF","Blink", "ON"}, 0);
         }
 
     }
@@ -58,7 +63,7 @@ public class LimeLight {
     }
 
     public int getId() {
-        return index;
+        return this.id;
     }
 
     public boolean hasTarget() {
