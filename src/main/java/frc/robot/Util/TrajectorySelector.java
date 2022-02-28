@@ -75,13 +75,13 @@ public class TrajectorySelector extends SendableChooser<Trajectory> {
                 } else {
                     this.addOption("* " + name, traj);// Add star to paths imported from disk scan
                 }
-                if (name == "Part1") {
+                if (name.equals("Part1")) {
                     part1 = traj;
-                } else if (name == "Part2") {
+                } else if (name.equals("Part2")) {
                     part2 = traj;
-                } else if (name == "Part3") {
+                } else if (name.equals("Part3")) {
                     part3 = traj;
-                } else if (name == "Part4") {
+                } else if (name.equals("Part4")) {
                     part4 = traj;
                 }
             } catch (IOException e) {

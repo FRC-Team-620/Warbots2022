@@ -21,7 +21,7 @@ public class AutoCommand extends SequentialCommandGroup {
         this.lazySusanSubsystem = lSS;
         this.robotContainer = rC;
         addRequirements(loaderSubsystem, shooterSubsystem, lazySusanSubsystem);
-        if (robotContainer.getOperatorController().getXButton()) {
+        
         AutoLoad autoLoad = new AutoLoad(loaderSubsystem, 1);
         AutoAimingAndSpinningUp autoAimingAndSpinningUp = new AutoAimingAndSpinningUp(shooterSubsystem, lazySusanSubsystem);
         shooterSubsystem.setDefaultCommand(autoAimingAndSpinningUp);
@@ -47,6 +47,6 @@ public class AutoCommand extends SequentialCommandGroup {
             new AutoLoad(loaderSubsystem, 0)
             
         );
-        }
+        
     }
 }
