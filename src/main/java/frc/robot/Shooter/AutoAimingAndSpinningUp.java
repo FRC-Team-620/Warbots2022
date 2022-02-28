@@ -66,7 +66,7 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         double x = entryX.getDouble(0.0);
         double y = entryY.getDouble(0.0);
         table.getEntry("ledMode").setNumber(3);
-        double speeeeed = -x*Constants.diffConstLS; // this is speed
+        double speeeeed = -x*Constants.diffConstLS; // this is lazy susan turntable speed
         double tempDist = getDistanceInMeters(Constants.azimuthAngle1, y, Constants.limelightHeight, Constants.hubHeight);
         double tempRPM = metersToRPM(tempDist);
         // Making sure it's within the provided threshholds (important that you don't use absolute 
