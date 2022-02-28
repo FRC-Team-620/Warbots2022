@@ -149,6 +149,10 @@ public class ShooterCommand extends CommandBase {
 
         SmartDashboard.putNumber("Shooter RPM: ",
                 roundUpToNearestMultiple(currRPM, (int) roundTo));
+        
+        if (operatorXbox.getAButtonPressed()) {
+            lazySusanSubsystem.getLazySusanEncoder().setPosition(0);
+        }
     }
 
     public double getDistanceInMeters(double a1, double a2, double h1, double h2) {

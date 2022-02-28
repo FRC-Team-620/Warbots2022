@@ -258,7 +258,7 @@ public class Drivetrain extends SubsystemBase {
     odometry.update(gyro.getRotation2d(), getDistance(leftBackEncoder), getDistance(rightBackEncoder));
   }
 
-  protected double getDistance(RelativeEncoder enc) {
+  protected double getDistance(RelativeEncoder enc) {//TODO: This is the bug getPositionConversionFactor
     return enc.getPosition() * enc.getPositionConversionFactor();
   }
   public double getDrawnCurrentAmps(){

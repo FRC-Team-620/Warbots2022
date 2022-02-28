@@ -85,7 +85,7 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         }
         acceleration = diffConst * (getRPM() - currRPM);
         setShooterSpeedAndUpdate(currentSpeed + acceleration);
-
+        
         
     }
 
