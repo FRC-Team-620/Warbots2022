@@ -7,6 +7,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SimableCANSparkMax;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
@@ -15,6 +17,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Util.LimeLight;
+import frc.robot.Util.RobotContainer;
+import frc.robot.Util.sim.LimeLightPoseSim;
 import frc.robot.Util.sim.LimeLightSim;
 import frc.robot.Util.sim.RevEncoderSimWrapper;
 
@@ -23,6 +27,7 @@ public class ShooterSubsystem extends SubsystemBase {
     protected final RelativeEncoder encoder;
     protected final DecimalFormat decFormat = new DecimalFormat("#.#");
     public LimeLight limeLight;
+    public LimeLightPoseSim possim;
 
 
     //Sim
@@ -57,6 +62,8 @@ public class ShooterSubsystem extends SubsystemBase {
         this.leftencsim = RevEncoderSimWrapper.create(this.leftShooterMotor);
         this.rightencsim = RevEncoderSimWrapper.create(this.rightShooterMotor);
         this.simLimeLight = new LimeLightSim(this.limeLight);
+        var hubpos =  new Pose2d(7.940, 4.08, new Rotation2d());
+        this.possim = new LimeLightPoseSim(simLimeLight, hubpos, Constants.limelightHeight, Constants.hubHeight, 45);
     }
 
     public double getTicksPerMotorRotation() {

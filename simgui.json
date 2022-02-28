@@ -22,6 +22,7 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/LiveWindow/ClimberSubsystem": "Subsystem",
       "/LiveWindow/Drivetrain": "Subsystem",
       "/LiveWindow/LazySusanSubsystem": "Subsystem",
       "/LiveWindow/LoaderSubsystem": "Subsystem",
@@ -226,6 +227,24 @@
                 1.0
               ],
               "id": "NT:/SmartDashboard/Turntable Set"
+            }
+          ]
+        }
+      ]
+    },
+    "Plot <3>": {
+      "plots": [
+        {
+          "height": 338,
+          "series": [
+            {
+              "color": [
+                0.2980392277240753,
+                0.44705885648727417,
+                0.6901960968971252,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/Y Angle"
             }
           ]
         }

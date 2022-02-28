@@ -46,6 +46,8 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
 
     robotContainer.robotFieldWidget.setRobotPose(robotContainer.getDriveTrain().getPose()); //Example on how to update Field2d with robot position.
+    robotContainer.getShooterSubsystem().possim.setPosition(robotContainer.getDriveTrain().getPose());
+    robotContainer.getShooterSubsystem().possim.update(0.0);
     //robotContainer.drivetrain.leftFrontMotorDrive(0.3);
   } 
 

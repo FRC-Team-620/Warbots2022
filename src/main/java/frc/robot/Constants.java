@@ -102,4 +102,8 @@ public final class Constants {
     public static final double kSimShooterInertia = 0.5*Units.lbsToKilograms(1.5)*Math.pow(Units.inchesToMeters(4),2); //1/2*M*R^2 
     public static final double kSimTurntableInertia = 0.5*Units.lbsToKilograms(25)*Math.pow(Units.inchesToMeters(4),2); //TODO: switch to ring formula vs disk
     public static final double kSimUpdateTime = 0.02;
+    public static final double kSimRobotWeight = Units.lbsToKilograms(120);
+    public static final double kSimClimberGearRatio = 1;
+    public static final double kSimClimberDrumSize = 0.2;
+    public static final double ksimClimberMaxHeight = Units.feetToMeters(6);
 }
