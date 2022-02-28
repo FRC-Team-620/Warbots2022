@@ -72,25 +72,38 @@ public final class Constants {
 
     public static final double lowPoweredShotRPM = 3000;
 
-    // Drivetrain
+    // Drivetrain CAN IDs
     public static final int rightBackMotorID = 1;
     public static final int leftBackMotorID = 3;
     public static final int rightFrontMotorID = 2;
     public static final int leftFrontMotorID = 4;
 
-    // shooter
+    // shooter CAN IDs
     public static final int leftShooterMotorID = 5;
     public static final int rightShooterMotorID = 6;
 
-    // climber
+    // climber CAN IDs
     public static final int leftClimberMotorID = 7;
     public static final int rightClimberMotorID = 8;
 
-    // lazysusan
+    // lazysusan CAN IDs
     public static final int lazySusanID = 9;
 
-    // loader
+    // loader CAN IDs
     public static final int intakeMotorID = 10;
+
+    // shooter
+    public static final int minShooterRPM = 0;
+    public static final int maxShooterRPM = 5500;
+
+    // lazysusan
+    public static final int turntableThresh = 35;
+
+    // differential constants (very cool)
+    public static final double diffConstLS = 0.015;
+    public static final double diffConstShooter = 6 * Math.pow(10, -6);
+    public static final double diffConstKeepPosition = 0.00001; // TODO: Test this constant and optimize it
+
 
     // Sim Vars
     public static final double kSimGearRatio = Constants.gearRatio;

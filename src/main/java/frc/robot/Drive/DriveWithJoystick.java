@@ -23,6 +23,7 @@ public class DriveWithJoystick extends CommandBase {
   protected SendableChooser<String> presetChooser = new SendableChooser<>();
   protected String currentDriver = "Default";
   protected List<Double> currentDriverPreset = Presets.presets.get(currentDriver);
+  protected boolean isDriving = false;
   
   /** Creates a new DriveWithJoystick. */
   public DriveWithJoystick(Drivetrain drivetrain, XboxController driverXbox) {
@@ -86,22 +87,29 @@ public class DriveWithJoystick extends CommandBase {
 
     rotation = rotationConstant * rotationInput;
 
-
     if (rightTriggerInput > leftTriggerInput) {
-      speed = rightTriggerInput * speedConstant;//Constants.speed
+      speed = rightTriggerInput * speedConstant; // Constants.speed
     } else if (rightTriggerInput < leftTriggerInput) {
       speed = leftTriggerInput * -speedConstant;
+    }
+
+    if(rightTriggerInput == 0 && leftTriggerInput == 0 && rotationInput == 0) {
+      if(isDriving) {
+        for(int i = 1; i < 5; i++)
+          drivetrain.setEncoderPos(i, 0);
+        isDriving = false;
+      }
+      for(int i = 1; i < 5; i++)
+        drivetrain.motorDrive(i, Constants.diffConstKeepPosition*drivetrain.getEncoderPos(i));
+    } else {
+      isDriving = true;
+      drivetrain.curvatureInput(speed, rotation, !(driverXbox.getBButton()));
     }
 
     // SmartDashboard.putNumber("RightRPM",
     //     (drivetrain.getRPM(1) + drivetrain.getRPM(2)) / 2);
     // SmartDashboard.putNumber("LeftRPM",
     //     (drivetrain.getRPM(3) + drivetrain.getRPM(4)) / 2);
-
-  
-        
-
-    drivetrain.curvatureInput(speed, rotation, !(driverXbox.getBButton()));
   }
 
   // Returns true when the command should end.
