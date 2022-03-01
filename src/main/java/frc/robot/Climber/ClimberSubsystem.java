@@ -40,6 +40,11 @@ public class ClimberSubsystem extends SubsystemBase {
         // rightShooterMotor.setInverted(false);
 
     }
+
+    public void setWinchSpeed(double winchSpeed) {
+        rightClimberMotor.set(winchSpeed);
+    }
+
     public CANSparkMax getWinchMotor() {
         return rightClimberMotor;
     }

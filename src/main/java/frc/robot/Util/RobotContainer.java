@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.Climber.ClimberCommand;
+import frc.robot.Climber.ClimberManual;
 import frc.robot.Climber.ClimberSubsystem;
 import frc.robot.Climber.LowerArms;
 import frc.robot.Climber.LowerHooks;
@@ -88,6 +89,7 @@ public class RobotContainer {
         // shooterSubsystem.setDefaultCommand( new PIDShooterCommand(shooterSubsystem));//Show off pid shooter cmd Only works in sim rn
 
         //climberCommand = new ClimberCommand(climberSubsystem);
+        climberSubsystem.setDefaultCommand(new ClimberManual(climberSubsystem, operator));
 
        
         SmartDashboard.putData(robotFieldWidget);

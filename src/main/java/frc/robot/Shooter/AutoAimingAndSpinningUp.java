@@ -27,9 +27,9 @@ public class AutoAimingAndSpinningUp extends CommandBase {
     protected double  currTicksGoal = 0;
     protected double inputOpRight = 0;
     // shooter
-    protected double rpm, minRPM = 0, maxRPM = 5500,
+    protected double rpm, minRPM = 0,
             currentSpeed = 0, acceleration, 
-            input, roundTo, currRPM, deltaTheta;
+            currRPM;
     protected CANSparkMax lazySusanMotor;
     protected RelativeEncoder lazySusanEnc;
     public AutoAimingAndSpinningUp(ShooterSubsystem shooterSubsystem, LazySusanSubsystem lazySusanSubsystem) {
@@ -39,7 +39,7 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         lazySusanEnc = lazySusanSubsystem.getLazySusanEncoder();
     }
     public double getDistanceInMeters(double a1, double a2, double h1, double h2) {
-        return (h2 - h1) / Math.tan((a1 + a2) * (Math.PI/180));
+        return (h2 - h1) / Math.tan((a1 + a2) * (Constants.degreesToRadians));
     }
 
     public double metersToRPM(double meters) {
