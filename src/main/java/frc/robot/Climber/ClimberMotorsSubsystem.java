@@ -46,4 +46,7 @@ public class ClimberMotorsSubsystem extends SubsystemBase {
     public double getWinchPosition() {
         return encoder.getPosition();
     }
+    public double getWinchCountsPerRevolution() {
+        return encoder.getCountsPerRevolution();
+    }
 }

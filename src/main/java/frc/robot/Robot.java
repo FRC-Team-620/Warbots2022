@@ -68,9 +68,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    robotContainer.getShooterSubsystem().setDefaultCommand(robotContainer.getShooterCommand());
     if (autonomousCommand != null) {
        autonomousCommand.cancel();
-       robotContainer.getShooterSubsystem().setDefaultCommand(robotContainer.getShooterCommand());
     }
     robotContainer.getLazySusanSubsystem().getLazySusanEncoder().setPosition(0);
     robotContainer.getDriveTrain().setMotorMode(IdleMode.kBrake);
