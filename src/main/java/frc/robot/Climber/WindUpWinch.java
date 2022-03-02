@@ -2,22 +2,23 @@ package frc.robot.Climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class WindUpWinch extends CommandBase {
-    protected ClimberSubsystem climberSubsystem;
-    protected double counts;
+    protected ClimberMotorsSubsystem climberMotorsSubsystem;
+    protected double deltaCounts, targetCounts;
 
-    public WindUpWinch(ClimberSubsystem climberSubsystem, double rotations) {
-        addRequirements(climberSubsystem);
-        this.climberSubsystem = climberSubsystem;
-        this.counts = rotations*climberSubsystem.getWinchMotor().getEncoder().getCountsPerRevolution();
+    public WindUpWinch(ClimberMotorsSubsystem climberMotorsSubsystem, double deltaCounts) {
+        addRequirements(climberMotorsSubsystem);
+        this.climberMotorsSubsystem = climberMotorsSubsystem;
+        this.deltaCounts = deltaCounts;
     }
 
     @Override
     public void initialize() {
-        climberSubsystem.getWinchMotor().getEncoder().setPosition(0);
+        this.targetCounts = this.climberMotorsSubsystem.getWinchPosition() - this.deltaCounts;
         System.out.println("Winch begins wind up");
-        climberSubsystem.getWinchMotor().set(1);
+        this.climberMotorsSubsystem.setWinchSpeed(-1);
     }
 
     @Override
@@ -27,13 +28,11 @@ public class WindUpWinch extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        climberSubsystem.getWinchMotor().set(0);
+
     }
 
     @Override
-    public boolean isFinished() {
-        return climberSubsystem.getWinchMotor().getEncoder().getPosition() >= counts;
+    public boolean isFinished() {//climberSubsystem.getWinchMotor().getEncoder().getPosition() <= -counts
+        return climberMotorsSubsystem.getWinchPosition() <= Math.max(this.targetCounts, Constants.winchMinLimit);
     }
-    
-
 }

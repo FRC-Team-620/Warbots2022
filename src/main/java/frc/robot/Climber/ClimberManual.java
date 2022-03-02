@@ -6,17 +6,19 @@ package frc.robot.Climber;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.Util.RobotContainer;
 
 public class ClimberManual extends CommandBase {
   /** Creates a new ClimberManual. */
-  protected ClimberSubsystem climberSubsystem;
+  protected ClimberMotorsSubsystem climberMotorsSubsystem;
   protected XboxController operatorController;
-  public ClimberManual(ClimberSubsystem climberSubsystem, XboxController operatorController) {
+  protected double winchSpeed;
+  public ClimberManual(ClimberMotorsSubsystem climberMotorsSubsystem, XboxController operatorController) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.climberSubsystem = climberSubsystem; 
+    this.climberMotorsSubsystem = climberMotorsSubsystem; 
     this.operatorController = operatorController;
-    addRequirements(climberSubsystem);
+    addRequirements(climberMotorsSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -28,14 +30,45 @@ public class ClimberManual extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    int dpadDir = operatorController.getPOV();
-    if (dpadDir == 0) {
-      climberSubsystem.setWinchSpeed(1);//DPAD up
-    } else if (dpadDir == 180) {
-      climberSubsystem.setWinchSpeed(-1);//DPAD down
+    //int dpadDir = operatorController.getPOV();
+    // if (climberMotorsSubsystem.getWinchMotor().getEncoder().getPosition() >= 30) {
+
+    // }
+    // if(climberMotorsSubsystem.getWinchPosition() < Constants.winchLimit) {
+    //   if (operatorController.getLeftStickButton()) {
+    //     climberMotorsSubsystem.setWinchSpeed(0.8);
+    //   } else if (operatorController.getBackButton()) {
+    //     climberMotorsSubsystem.setWinchSpeed(0.1);
+    //   }
+    // }
+    // if(climberMotorsSubsystem.getWinchPosition() > 0) {
+    //   if(operatorController.getRightStickButton()) {
+    //     climberMotorsSubsystem.setWinchSpeed(-0.8);
+    //   }
+    // }
+    if (operatorController.getLeftStickButton()) {
+      winchSpeed = 0.8;
+    } else if (operatorController.getRightStickButton()) {
+      winchSpeed = -0.8;
+    } else if (operatorController.getBackButton()) {
+      winchSpeed = 0.1;
     } else {
-      climberSubsystem.setWinchSpeed(0);//DPAD nothing
+      winchSpeed = 0;
     }
+    // Winch soft limits -- BE SURE TO START WITH THE CLIMBER IN THE MINIMUM POSITION
+    if((climberMotorsSubsystem.getWinchPosition() >= Constants.winchMaxLimit && winchSpeed > 0) || 
+     (climberMotorsSubsystem.getWinchPosition() <= Constants.winchMinLimit && winchSpeed < 0)) {
+      winchSpeed = 0;
+    }
+    climberMotorsSubsystem.setWinchSpeed(winchSpeed);
+    System.out.println("Winch Position: " + climberMotorsSubsystem.getWinchMotor().getEncoder().getPosition());
+    // if (dpadDir == 0) {
+    //   climberSubsystem.setWinchSpeed(1);//DPAD up
+    // } else if (dpadDir == 180) {
+    //   climberSubsystem.setWinchSpeed(-1);//DPAD down
+    // } else {
+    //   climberSubsystem.setWinchSpeed(0);//DPAD nothing
+    // }
   }
 
   // Called once the command ends or is interrupted.

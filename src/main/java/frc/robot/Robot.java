@@ -6,21 +6,19 @@ package frc.robot;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Util.LimeLight.LedMode;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Auto.AutoCommand;
-import frc.robot.Loader.AutoLoad;
-import frc.robot.Loader.AutoShoot;
-import frc.robot.Shooter.AutoAimingAndSpinningUp;
 import frc.robot.Util.RobotContainer;
 
 
@@ -28,20 +26,21 @@ public class Robot extends TimedRobot {
   protected RobotContainer robotContainer;
   protected Command autonomousCommand;
   
-  // UsbCamera camera;
-  // NetworkTableEntry cameraSelection; 
+  UsbCamera camera;
+  NetworkTableEntry cameraSelection; 
 
   @Override
   public void robotInit() {
     CommandScheduler.getInstance().cancelAll();
     robotContainer = new RobotContainer();
     robotContainer.init();
-    robotContainer.getShooterSubsystem().limeLight.setLEDMode(LedMode.OFF);
-    // robotContainer.getShooterCommand().getTable().getEntry("ledMode").setNumber(1);
-
-    // camera = CameraServer.startAutomaticCapture(0);
-    // cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection");
-    // cameraSelection.setString(camera.getName());
+    robotContainer.getShooterCommand().getTable().getEntry("ledMode").setNumber(1);
+    // robotContainer.getShooterSubsystem().limeLight.setLEDMode(LedMode.OFF); //Sim:
+  
+    camera = CameraServer.startAutomaticCapture(0);
+    camera.setResolution(640, 480);
+    cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection");
+    cameraSelection.setString(camera.getName());
   }
 
   @Override
@@ -71,17 +70,18 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
     //robotContainer.drivetrain.leftFrontMotorDrive(0.3);
-    robotContainer.getClimberSubsystem().getWinchMotor().set(1);
+    //robotContainer.getClimberMotorsSubsystem().getWinchMotor().set(-0.3);
   }
 
   @Override
   public void teleopInit() {
+    robotContainer.getShooterSubsystem().setDefaultCommand(robotContainer.getShooterCommand());
     if (autonomousCommand != null) {
        autonomousCommand.cancel();
-       robotContainer.getShooterSubsystem().setDefaultCommand(robotContainer.getShooterCommand());
     }
     robotContainer.getLazySusanSubsystem().getLazySusanEncoder().setPosition(0);
     robotContainer.getDriveTrain().setMotorMode(IdleMode.kBrake);
+    robotContainer.getClimberMotorsSubsystem().getWinchMotor().getEncoder().setPosition(0);
   }
 
   @Override
