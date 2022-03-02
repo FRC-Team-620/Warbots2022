@@ -53,7 +53,7 @@ public class LimeLight {
             s_ta = m_simDevice.createDouble("Target Area", Direction.kOutput, 0.0);
             s_tl = m_simDevice.createDouble("Pipeline Latancy", Direction.kOutput, 0.0);
             s_tv = m_simDevice.createBoolean("Has Target", Direction.kOutput, false);
-            // s_ledmode = m_simDevice.createEnum("Led Mode", Direction.kBidir, new String[]{"Pipeline", "OFF","Blink", "ON"}, 0);
+            s_ledmode = m_simDevice.createEnum("Led Mode", Direction.kBidir, new String[]{"Pipeline", "OFF","Blink", "ON"}, 0);
         }
 
     }
@@ -103,6 +103,9 @@ public class LimeLight {
     }
 
     public LedMode getLEDMode() {
+        if(isSim()){
+            return LedMode.fromInt(s_ledmode.get());
+        }
         int modeid = (int) e_ledMode.getDouble(0.0);
         return LedMode.fromInt(modeid);
     }
@@ -116,6 +119,9 @@ public class LimeLight {
     }
 
     public boolean setLEDMode(LedMode mode) {
+        if(isSim()){
+            s_ledmode.set(mode.getValue());
+        }
         return e_ledMode.setNumber(mode.getValue());
     }
 

@@ -33,7 +33,7 @@ public class LimeLightPoseSim {
         try {
             if(xclamp == xangle && yclamp == yangle){
                 sim.setHasTarget(true);
-                sim.setOffsetX(xangle);
+                sim.setOffsetX(-xangle);
                 sim.setOffsetY(yangle);
             }else{
                 sim.setHasTarget(false);

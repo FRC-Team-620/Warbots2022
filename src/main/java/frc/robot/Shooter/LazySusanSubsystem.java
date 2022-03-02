@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,9 +20,9 @@ import frc.robot.Util.sim.RevEncoderSimWrapper;
 public class LazySusanSubsystem extends SubsystemBase {
     protected SimableCANSparkMax lazySusan;
     protected RelativeEncoder encoder;
-
+    private double turntableThresh = 35;
     // Sim
-    private FlywheelSim simlazySusan;
+    private DCMotorSim simlazySusan;
     private RevEncoderSimWrapper simEncoder;
     public Rotation2d turrentRotation;
     public LazySusanSubsystem() {
@@ -39,7 +40,7 @@ public class LazySusanSubsystem extends SubsystemBase {
     }
 
     private void initSim() {
-        simlazySusan = new FlywheelSim(DCMotor.getNeo550(1), (156/16), Constants.kSimTurntableInertia); //TODO: add gear ratio
+        simlazySusan = new DCMotorSim(DCMotor.getNeo550(1), Constants.kSimTurntableGearRatio, Constants.kSimTurntableInertia); //TODO: add gear ratio
         simEncoder = RevEncoderSimWrapper.create(this.lazySusan);
     }
 
@@ -56,7 +57,7 @@ public class LazySusanSubsystem extends SubsystemBase {
     }
     @Override
     public void periodic() {
-        turrentRotation = Rotation2d.fromDegrees(encoder.getPosition());
+        turrentRotation = Rotation2d.fromDegrees((encoder.getPosition()/Constants.kSimTurntableGearRatio)*360);
     }
     @Override
     public void simulationPeriodic() {
@@ -64,10 +65,10 @@ public class LazySusanSubsystem extends SubsystemBase {
         simlazySusan.update(Constants.kSimUpdateTime);
         simEncoder.setVelocity(simlazySusan.getAngularVelocityRPM());
         // simlazySusan.
-        simEncoder.setDistance(simEncoder.getPosition()+(simlazySusan.getAngularVelocityRPM()*Constants.kSimUpdateTime)); //TODO: Hacky should be fixed/use proper linear system (square raymond sum)
+        simEncoder.setDistance(simlazySusan.getAngularPositionRotations()* Constants.kSimTurntableGearRatio/5); //TODO: Hacky should be fixed/use proper linear system (square raymond sum)
         SmartDashboard.putNumber("Turntable Velocity", encoder.getVelocity());
         SmartDashboard.putNumber("Turntable ticks", encoder.getPosition());
-        SmartDashboard.putNumber("Turntable Set", lazySusan.get());
+        SmartDashboard.putNumber("Turntable Set", simlazySusan.getAngularPositionRotations());
     }
 
     public double getDrawnCurrentAmps() {
