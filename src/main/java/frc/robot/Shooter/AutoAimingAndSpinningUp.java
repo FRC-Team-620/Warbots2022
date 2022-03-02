@@ -62,7 +62,7 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         double y = shooterSubsystem.limeLight.getOffsetY();
         // table.getEntry("ledMode").setNumber(3);
         shooterSubsystem.limeLight.setLEDMode(LedMode.ON);
-        double speeeeed = -x*diffConstLS; // this is speed
+        double speeeeed = -x*Constants.diffConstLS; // this is speed
 
         double tempDist = getDistanceInMeters(Constants.azimuthAngle1, y, Constants.limelightHeight, Constants.hubHeight);
         double tempRPM = metersToRPM(tempDist);
