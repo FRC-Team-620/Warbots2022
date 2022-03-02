@@ -53,7 +53,7 @@ public class Robot extends TimedRobot {
     var hubpos =  new Pose2d(7.940, 4.08, new Rotation2d());
     // hubpos.
     robotContainer.robotFieldWidget.getObject("hub").setPose(hubpos);
-    var tpos = new Pose2d(robotpos.getTranslation(),robotpos.getRotation().plus(robotContainer.getLazySusanSubsystem().turrentRotation));
+    var tpos = new Pose2d(robotpos.getTranslation(),robotpos.getRotation().plus(robotContainer.getLazySusanSubsystem().simTurrentRotation));
     robotContainer.robotFieldWidget.getObject("Turret").setPose(tpos);
 
     robotContainer.getShooterSubsystem().possim.setPosition(tpos);

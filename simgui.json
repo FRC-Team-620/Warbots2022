@@ -22,6 +22,7 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/LiveWindow/ClimberMotorsSubsystem": "Subsystem",
       "/LiveWindow/ClimberSubsystem": "Subsystem",
       "/LiveWindow/Drivetrain": "Subsystem",
       "/LiveWindow/LazySusanSubsystem": "Subsystem",

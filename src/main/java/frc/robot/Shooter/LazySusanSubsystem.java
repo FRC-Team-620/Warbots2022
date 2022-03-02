@@ -24,7 +24,7 @@ public class LazySusanSubsystem extends SubsystemBase {
     // Sim
     private DCMotorSim simlazySusan;
     private RevEncoderSimWrapper simEncoder;
-    public Rotation2d turrentRotation;
+    public Rotation2d simTurrentRotation;
     public LazySusanSubsystem() {
         lazySusan = new SimableCANSparkMax(Constants.lazySusanID, MotorType.kBrushless);
 
@@ -33,7 +33,7 @@ public class LazySusanSubsystem extends SubsystemBase {
         IdleMode mode = IdleMode.kBrake; // brakes
         lazySusan.setIdleMode(mode);
 
-        turrentRotation = new Rotation2d();
+        simTurrentRotation = new Rotation2d();
         if (RobotBase.isSimulation()) {
             initSim();
         }
@@ -56,19 +56,16 @@ public class LazySusanSubsystem extends SubsystemBase {
         return encoder.getCountsPerRevolution();
     }
     @Override
-    public void periodic() {
-        turrentRotation = Rotation2d.fromDegrees((encoder.getPosition()/Constants.kSimTurntableGearRatio)*360);
-    }
-    @Override
     public void simulationPeriodic() {
+        simTurrentRotation = Rotation2d.fromDegrees((encoder.getPosition()/Constants.kSimTurntableGearRatio)*360);
         simlazySusan.setInputVoltage(lazySusan.get() * RobotController.getInputVoltage());
         simlazySusan.update(Constants.kSimUpdateTime);
         simEncoder.setVelocity(simlazySusan.getAngularVelocityRPM());
         // simlazySusan.
-        simEncoder.setDistance(simlazySusan.getAngularPositionRotations()* Constants.kSimTurntableGearRatio/5); //TODO: Hacky should be fixed/use proper linear system (square raymond sum)
+        simEncoder.setDistance(simlazySusan.getAngularPositionRotations()* Constants.kSimTurntableGearRatio/5); //TODO: Remove magic number 5 that represents the first gear reduction
         SmartDashboard.putNumber("Turntable Velocity", encoder.getVelocity());
         SmartDashboard.putNumber("Turntable ticks", encoder.getPosition());
-        SmartDashboard.putNumber("Turntable Set", simlazySusan.getAngularPositionRotations());
+        SmartDashboard.putNumber("Turntable Set", lazySusan.get());
     }
 
     public double getDrawnCurrentAmps() {

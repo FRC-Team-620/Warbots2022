@@ -66,10 +66,14 @@ public class ShooterCommand extends CommandBase {
 
     @Override
     public void execute() {
-        boolean hasTarget = limelight.hasTarget();
-        double x = limelight.getOffsetX();
-        double y = limelight.getOffsetY();
-        double area = limelight.getArea();
+        boolean hasTarget = entryHasTarget.getDouble(0.0) == 1.0;
+        double x = entryX.getDouble(0.0);
+        double y = entryY.getDouble(0.0);
+        double area = entryArea.getDouble(0.0);
+        // boolean hasTarget = limelight.hasTarget();
+        // double x = limelight.getOffsetX();
+        // double y = limelight.getOffsetY();
+        // double area = limelight.getArea();
 
         double borkedJoystickDeadband = 0.05;
         input = operatorXbox.getRightY();
@@ -98,8 +102,8 @@ public class ShooterCommand extends CommandBase {
         // || autoOn
         // System.out.println(lazySusanEnc.getPosition());
         if(Math.abs(operatorXbox.getLeftTriggerAxis()) > 0) {
-//             table.getEntry("ledMode").setNumber(3);
-            limelight.setLEDMode(LedMode.ON);
+            table.getEntry("ledMode").setNumber(3);
+            // limelight.setLEDMode(LedMode.ON);
             double speeeeed =  -x*Constants.diffConstLS; // this is speed
             // Making sure it's within the provided threshholds
             if ((lazySusanEnc.getPosition() <= -Constants.turntableThresh && speeeeed < 0)
@@ -110,8 +114,8 @@ public class ShooterCommand extends CommandBase {
             // System.out.println("Negative X: " + -x);
             // System.out.println("Speed With Constant: " + -x*Constants.diffConstLS);
         } else if (Math.abs(inputOpRight) > 0) {
-            // table.getEntry("ledMode").setNumber(1);
-            limelight.setLEDMode(LedMode.OFF);
+            table.getEntry("ledMode").setNumber(1);
+            // limelight.setLEDMode(LedMode.OFF);
             double speed = -inputOpRight/2.5;
             if ((lazySusanEnc.getPosition() <= -Constants.turntableThresh && speed < 0)
                 || (lazySusanEnc.getPosition() >= Constants.turntableThresh && speed > 0)) {
@@ -123,8 +127,8 @@ public class ShooterCommand extends CommandBase {
             
 
         } else {
-            // table.getEntry("ledMode").setNumber(1);
-            limelight.setLEDMode(LedMode.OFF);
+            table.getEntry("ledMode").setNumber(1);
+            // limelight.setLEDMode(LedMode.OFF);
             lazySusanMotor.set(0);
 
         }
