@@ -88,11 +88,11 @@ public class ShooterCommand extends CommandBase {
         // new math for static limelight shooting
         double tempDist = getDistanceInMeters(Constants.azimuthAngle1, y, Constants.limelightHeight, Constants.hubHeight);
         double tempRPM = metersToRPM(tempDist);
-        System.out.println("tempDist: " + tempDist);
-        System.out.println("tempDist * metersToFeet: " + tempDist * Constants.metersToFeet);
-        System.out.println("tempRPM: " + tempRPM);
+        // System.out.println("tempDist: " + tempDist);
+        // System.out.println("tempDist * metersToFeet: " + tempDist * Constants.metersToFeet);
+        // System.out.println("tempRPM: " + tempRPM);
         // || autoOn
-        System.out.println(lazySusanEnc.getPosition());
+        // System.out.println(lazySusanEnc.getPosition());
         if(Math.abs(operatorXbox.getLeftTriggerAxis()) > 0) {
             table.getEntry("ledMode").setNumber(3);
             double speeeeed = -x*Constants.diffConstLS; // this is speed
@@ -102,6 +102,8 @@ public class ShooterCommand extends CommandBase {
                 speeeeed = 0;
             }
             lazySusanMotor.set(speeeeed);
+            // System.out.println("Negative X: " + -x);
+            // System.out.println("Speed With Constant: " + -x*Constants.diffConstLS);
         } else if (Math.abs(inputOpRight) > 0) {
             table.getEntry("ledMode").setNumber(1);
             double speed = -inputOpRight/2.5;
@@ -110,6 +112,8 @@ public class ShooterCommand extends CommandBase {
                 speed = 0;
             }
             lazySusanMotor.set(speed);
+            // System.out.println("Speed Man: "+ speed);
+            // System.out.println("Curr Enc Pos: " + lazySusanEnc.getPosition());
             
 
         } else {

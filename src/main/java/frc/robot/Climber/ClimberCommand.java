@@ -15,43 +15,43 @@ public class ClimberCommand extends SequentialCommandGroup {
         this.operatorController = operatorController;
         if (operatorController.getXButton()) {
             addCommands(
-                new WindDownWinch(climberSubsystem, encoderTicksPerWinchRotation), // unwind winch
+                //new WindDownWinch(climberSubsystem, encoderTicksPerWinchRotation), // unwind winch
 
                 new RaiseArms(climberSubsystem), // extend piston/arm
 
-                new WindUpWinch(climberSubsystem, encoderTicksPerWinchRotation/2), // rewind winch 1/2-way
+                //new WindUpWinch(climberSubsystem, encoderTicksPerWinchRotation/2), // rewind winch 1/2-way
                 
                 new LowerArms(climberSubsystem), // retract piston/arm
 
-                new WindUpWinch(climberSubsystem, encoderTicksPerWinchRotation/2), // rewind winch the rest of the way
+                //new WindUpWinch(climberSubsystem, encoderTicksPerWinchRotation/2), // rewind winch the rest of the way
 
                 new RaiseHooks(climberSubsystem), // latch hooks
 
-                new WindDownWinch(climberSubsystem, encoderTicksPerWinchRotation), // unwind winch
+                //new WindDownWinch(climberSubsystem, encoderTicksPerWinchRotation), // unwind winch
 
                 new RaiseArms(climberSubsystem), // extend piston/arms
 
-                new WindUpWinch(climberSubsystem, encoderTicksPerWinchRotation/2), // rewind winch 1/2-way
+                //new WindUpWinch(climberSubsystem, encoderTicksPerWinchRotation/2), // rewind winch 1/2-way
 
                 new LowerHooks(climberSubsystem), // unlatch hooks
 
                 new LowerArms(climberSubsystem), // retract piston/arms
 
-                new WindUpWinch(climberSubsystem, encoderTicksPerWinchRotation/2), // rewind winch rest of the way
+                //new WindUpWinch(climberSubsystem, encoderTicksPerWinchRotation/2), // rewind winch rest of the way
 
                 new RaiseHooks(climberSubsystem), // latch hooks second round
 
-                new WindDownWinch(climberSubsystem, encoderTicksPerWinchRotation), // unwind winch
+                //new WindDownWinch(climberSubsystem, encoderTicksPerWinchRotation), // unwind winch
 
                 new RaiseArms(climberSubsystem), // extend piston/arms
 
-                new WindUpWinch(climberSubsystem, encoderTicksPerWinchRotation/2), // rewind winch 1/2-way
+                //new WindUpWinch(climberSubsystem, encoderTicksPerWinchRotation/2), // rewind winch 1/2-way
 
                 new LowerHooks(climberSubsystem), // unlatch hooks
 
-                new LowerArms(climberSubsystem), // retract piston/arms
+                new LowerArms(climberSubsystem) // retract piston/arms
 
-                new WindUpWinch(climberSubsystem, encoderTicksPerWinchRotation/2) // rewind winch rest of the way
+                //new WindUpWinch(climberSubsystem, encoderTicksPerWinchRotation/2) // rewind winch rest of the way
 
             );
         }

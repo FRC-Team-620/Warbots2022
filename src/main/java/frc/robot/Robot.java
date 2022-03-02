@@ -29,8 +29,8 @@ public class Robot extends TimedRobot {
   protected RobotContainer robotContainer;
   protected Command autonomousCommand;
   
-  // UsbCamera camera;
-  // NetworkTableEntry cameraSelection; 
+  UsbCamera camera;
+  NetworkTableEntry cameraSelection; 
 
   @Override
   public void robotInit() {
@@ -38,10 +38,12 @@ public class Robot extends TimedRobot {
     robotContainer = new RobotContainer();
     robotContainer.init();
     robotContainer.getShooterCommand().getTable().getEntry("ledMode").setNumber(1);
+    
   
-    // camera = CameraServer.startAutomaticCapture(0);
-    // cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection");
-    // cameraSelection.setString(camera.getName());
+    camera = CameraServer.startAutomaticCapture(0);
+    camera.setResolution(640, 480);
+    cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection");
+    cameraSelection.setString(camera.getName());
   }
 
   @Override
@@ -61,7 +63,7 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
     //robotContainer.drivetrain.leftFrontMotorDrive(0.3);
-    robotContainer.getClimberSubsystem().getWinchMotor().set(1);
+    //robotContainer.getClimberMotorsSubsystem().getWinchMotor().set(-0.3);
   }
 
   @Override
@@ -72,6 +74,7 @@ public class Robot extends TimedRobot {
     }
     robotContainer.getLazySusanSubsystem().getLazySusanEncoder().setPosition(0);
     robotContainer.getDriveTrain().setMotorMode(IdleMode.kBrake);
+    robotContainer.getClimberMotorsSubsystem().getWinchMotor().getEncoder().setPosition(0);
   }
 
   @Override

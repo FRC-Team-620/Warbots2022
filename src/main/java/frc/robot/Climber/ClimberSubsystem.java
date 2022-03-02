@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ClimberSubsystem extends SubsystemBase {
-    protected final CANSparkMax leftClimberMotor, rightClimberMotor;
-    protected final RelativeEncoder encoder;
+    // protected final CANSparkMax leftClimberMotor, rightClimberMotor;
+    // protected final RelativeEncoder encoder;
     protected final Solenoid hangingSolenoid;
     protected final Solenoid armsSolenoid;
 
@@ -20,18 +20,18 @@ public class ClimberSubsystem extends SubsystemBase {
 
     public ClimberSubsystem() {
 
-        leftClimberMotor = new CANSparkMax(Constants.leftClimberMotorID, MotorType.kBrushless);
-        rightClimberMotor = new CANSparkMax(Constants.rightClimberMotorID, MotorType.kBrushless);
-        encoder = rightClimberMotor.getEncoder();
+        // leftClimberMotor = new CANSparkMax(Constants.leftClimberMotorID, MotorType.kBrushless);
+        // rightClimberMotor = new CANSparkMax(Constants.rightClimberMotorID, MotorType.kBrushless);
+        // encoder = rightClimberMotor.getEncoder();
 
-        leftClimberMotor.restoreFactoryDefaults();
-        rightClimberMotor.restoreFactoryDefaults();
+        // leftClimberMotor.restoreFactoryDefaults();
+        // rightClimberMotor.restoreFactoryDefaults();
 
-        IdleMode mode = IdleMode.kBrake; // brakes
-        leftClimberMotor.setIdleMode(mode);
-        rightClimberMotor.setIdleMode(mode);
+        // IdleMode mode = IdleMode.kBrake; // brakes
+        // leftClimberMotor.setIdleMode(mode);
+        // rightClimberMotor.setIdleMode(mode);
 
-        leftClimberMotor.follow(rightClimberMotor, false);
+        // leftClimberMotor.follow(rightClimberMotor, true);
 
         hangingSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 2);
         armsSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 1);
@@ -41,13 +41,13 @@ public class ClimberSubsystem extends SubsystemBase {
 
     }
 
-    public void setWinchSpeed(double winchSpeed) {
-        rightClimberMotor.set(winchSpeed);
-    }
+    // public void setWinchSpeed(double winchSpeed) {
+    //     rightClimberMotor.set(winchSpeed);
+    // }
 
-    public CANSparkMax getWinchMotor() {
-        return rightClimberMotor;
-    }
+    // public CANSparkMax getWinchMotor() {
+    //     return rightClimberMotor;
+    // }
 
     public Solenoid getHangingSolenoid() {
         return hangingSolenoid;

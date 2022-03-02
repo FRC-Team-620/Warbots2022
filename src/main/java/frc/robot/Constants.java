@@ -61,8 +61,8 @@ public final class Constants {
     // public static final double kEncoderDistancePerPulse = 0.0359;//0.00136
     // //TODO: Not used Remove?
 
-    public static final double speed = 1.0;
-    public static final double rotation = -0.75;
+    public static final double speed = 0.7;
+    public static final double rotation = -0.60;
     public static final double rampRate = 0.0;
 
     public static final double limelightHeight = 0.69; // based on last year's robot
@@ -93,6 +93,11 @@ public final class Constants {
     // loader CAN IDs
     public static final int intakeMotorID = 10;
 
+    //climber
+    public static final int winchMinLimit = 0;
+    public static final int winchMaxLimit = 85;
+
+
     // shooter
     public static final int minShooterRPM = 0;
     public static final int maxShooterRPM = 5500;
@@ -101,7 +106,7 @@ public final class Constants {
     public static final int turntableThresh = 35;
 
     // differential constants (very cool)
-    public static final double diffConstLS = 0.015;
+    public static final double diffConstLS = 0.008;
     public static final double diffConstShooter = 6 * Math.pow(10, -6);
     public static final double diffConstKeepPosition = 0.00001; // TODO: Test this constant and optimize it
 
