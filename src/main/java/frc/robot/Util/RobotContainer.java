@@ -26,7 +26,14 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.Climber.ClimberCommand;
+import frc.robot.Climber.ClimberManual;
 import frc.robot.Climber.ClimberSubsystem;
+import frc.robot.Climber.LowerArms;
+import frc.robot.Climber.LowerHooks;
+import frc.robot.Climber.RaiseArms;
+import frc.robot.Climber.RaiseHooks;
+import frc.robot.Climber.WindDownWinch;
+import frc.robot.Climber.WindUpWinch;
 import frc.robot.Drive.DriveWithJoystick;
 import frc.robot.Drive.Drivetrain;
 import frc.robot.Loader.LoaderCommand;
@@ -48,14 +55,24 @@ public class RobotContainer {
     protected DriveWithJoystick driveWithJoystick;
     protected LoaderCommand loaderCommand;
     protected ShooterCommand shooterCommand;
-    //protected ClimberCommand climberCommand;
+    protected ClimberCommand climberCommand;
 
     //public Command getDriveWithJoystick() {
         //return new DriveWithJoystick(drivetrain, driver);
     //}\
     public RobotContainer() {
         JoystickButton operatorYButton = new JoystickButton(operator, Button.kY.value);
-        //operatorYButton.whenPressed(climberCommand);
+        operatorYButton.whenPressed(new RaiseArms(climberSubsystem));
+        JoystickButton operatorXButton = new JoystickButton(operator, Button.kX.value);
+        operatorXButton.whenPressed(new RaiseHooks(climberSubsystem));
+        JoystickButton operatorBButton = new JoystickButton(operator, Button.kB.value);
+        operatorBButton.whenPressed(new LowerArms(climberSubsystem));
+        JoystickButton operatorStartButton = new JoystickButton(operator, Button.kStart.value);
+        operatorStartButton.whenPressed(new LowerHooks(climberSubsystem));
+        JoystickButton operatorBackButton = new JoystickButton(operator, Button.kBack.value);
+        operatorBackButton.whenPressed(new WindDownWinch(climberSubsystem, 77.5));
+        JoystickButton operatorLeftBumper = new JoystickButton(operator, Button.kLeftBumper.value);
+        operatorLeftBumper.whenPressed(new WindUpWinch(climberSubsystem, 77.5));
     }
     
     TrajectorySelector trajectorySelector = new TrajectorySelector(Filesystem.getDeployDirectory().toPath().resolve("paths/"), true);
@@ -72,6 +89,7 @@ public class RobotContainer {
         // shooterSubsystem.setDefaultCommand( new PIDShooterCommand(shooterSubsystem));//Show off pid shooter cmd Only works in sim rn
 
         //climberCommand = new ClimberCommand(climberSubsystem);
+        climberSubsystem.setDefaultCommand(new ClimberManual(climberSubsystem, operator));
 
        
         SmartDashboard.putData(robotFieldWidget);
@@ -121,6 +139,10 @@ public class RobotContainer {
 
     public LoaderSubsystem getLoaderSubsystem() {
         return loaderSubsystem;
+    }
+
+    public XboxController getOperatorController() {
+        return operator;
     }
   public Command getAutonomousCommand(Trajectory traj) {
     // Create a voltage constraint to ensure we don't accelerate too fast

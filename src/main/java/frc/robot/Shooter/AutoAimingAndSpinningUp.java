@@ -19,12 +19,12 @@ public class AutoAimingAndSpinningUp extends CommandBase {
     
     // turntable
     protected double ticksPerTurntableRotation,angleChangePerTick;
-    protected double  currTicksGoal = 0, diffConstLS = 0.015, turntableThresh = 35;
+    protected double  currTicksGoal = 0;
     protected double inputOpRight = 0;
     // shooter
-    protected double rpm, bangBangTolerance = 0.01, minRPM = 0, maxRPM = 5500,
-            currentSpeed = 0, diffConst = 6 * Math.pow(10, -6), acceleration, 
-            input, roundTo, currRPM, deltaTheta;
+    protected double rpm, minRPM = 0,
+            currentSpeed = 0, acceleration, 
+            currRPM;
     protected CANSparkMax lazySusanMotor;
     protected RelativeEncoder lazySusanEnc;
     public AutoAimingAndSpinningUp(ShooterSubsystem shooterSubsystem, LazySusanSubsystem lazySusanSubsystem) {
@@ -34,18 +34,13 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         lazySusanEnc = lazySusanSubsystem.getLazySusanEncoder();
     }
     public double getDistanceInMeters(double a1, double a2, double h1, double h2) {
-        return (h2 - h1) / Math.tan((a1 + a2) * (Math.PI/180));
+        return (h2 - h1) / Math.tan((a1 + a2) * (Constants.degreesToRadians));
     }
 
     public double metersToRPM(double meters) {
         double distanceInFeet = Constants.metersToFeet * meters;
         System.out.println("Distance In Meters " + meters);
         return 117.3708 * distanceInFeet + 1632.61502;
-    }
-
-    static long roundUpToNearestMultiple(double input, int step) {
-        int i = (int) Math.ceil(input);
-        return ((i + step - 1) / step) * step;
     }
 
     public void setShooterSpeedAndUpdate(double speed) {
@@ -68,21 +63,21 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         // table.getEntry("ledMode").setNumber(3);
         shooterSubsystem.limeLight.setLEDMode(LedMode.ON);
         double speeeeed = -x*diffConstLS; // this is speed
+
         double tempDist = getDistanceInMeters(Constants.azimuthAngle1, y, Constants.limelightHeight, Constants.hubHeight);
         double tempRPM = metersToRPM(tempDist);
-        // Making sure it's within the provided threshholds
-        if ((lazySusanEnc.getPosition() <= -turntableThresh && speeeeed < 0)
-            || (lazySusanEnc.getPosition() >= turntableThresh && speeeeed > 0)) {
+        // Making sure it's within the provided threshholds (important that you don't use absolute 
+        // value -- don't obliterate the sign)
+        if ((lazySusanEnc.getPosition() <= -Constants.turntableThresh && speeeeed < 0)
+            || (lazySusanEnc.getPosition() >= Constants.turntableThresh && speeeeed > 0)) {
             speeeeed = 0;
         }
         lazySusanMotor.set(speeeeed);
         if(hasTarget) {
             setRPM(tempRPM);
         }
-        acceleration = diffConst * (getRPM() - currRPM);
+        acceleration = Constants.diffConstShooter * (getRPM() - currRPM);
         setShooterSpeedAndUpdate(currentSpeed + acceleration);
-
-        
     }
 
     @Override

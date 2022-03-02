@@ -1,63 +1,61 @@
 package frc.robot.Climber;
 
+
+
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
 public class ClimberCommand extends SequentialCommandGroup {
     protected ClimberSubsystem climberSubsystem;
+    protected double encoderTicksPerWinchRotation = 77.5;
+    protected XboxController operatorController;
 
-    protected int prevTime = -1;
-
-    public ClimberCommand(ClimberSubsystem climberSubsystem) {
+    public ClimberCommand(ClimberSubsystem climberSubsystem, XboxController operatorController) {
         addRequirements(climberSubsystem);
         this.climberSubsystem = climberSubsystem;
-        addCommands(
-            new WindDownWinch(climberSubsystem, 77.5),
+        this.operatorController = operatorController;
+        if (operatorController.getXButton()) {
+            addCommands(
+                new WindDownWinch(climberSubsystem, encoderTicksPerWinchRotation), // unwind winch
 
-            new RaiseArms(climberSubsystem),
+                new RaiseArms(climberSubsystem), // extend piston/arm
 
-            new WindUpWinch(climberSubsystem, 38.75),
-            
-            new LowerArms(climberSubsystem),
+                new WindUpWinch(climberSubsystem, encoderTicksPerWinchRotation/2), // rewind winch 1/2-way
+                
+                new LowerArms(climberSubsystem), // retract piston/arm
 
-            new WindUpWinch(climberSubsystem, 38.75),
+                new WindUpWinch(climberSubsystem, encoderTicksPerWinchRotation/2), // rewind winch the rest of the way
 
-            new RaiseHooks(climberSubsystem),
+                new RaiseHooks(climberSubsystem), // latch hooks
 
-            new WindDownWinch(climberSubsystem, 77.5),
+                new WindDownWinch(climberSubsystem, encoderTicksPerWinchRotation), // unwind winch
 
-            new RaiseArms(climberSubsystem),
+                new RaiseArms(climberSubsystem), // extend piston/arms
 
-            new WindUpWinch(climberSubsystem, 38.75),
+                new WindUpWinch(climberSubsystem, encoderTicksPerWinchRotation/2), // rewind winch 1/2-way
 
-            new LowerHooks(climberSubsystem),
+                new LowerHooks(climberSubsystem), // unlatch hooks
 
-            new LowerArms(climberSubsystem),
+                new LowerArms(climberSubsystem), // retract piston/arms
 
-            new WindUpWinch(climberSubsystem, 38.75),
+                new WindUpWinch(climberSubsystem, encoderTicksPerWinchRotation/2), // rewind winch rest of the way
 
-            new RaiseHooks(climberSubsystem),//second round
+                new RaiseHooks(climberSubsystem), // latch hooks second round
 
-            new WindDownWinch(climberSubsystem, 77.5),
+                new WindDownWinch(climberSubsystem, encoderTicksPerWinchRotation), // unwind winch
 
-            new RaiseArms(climberSubsystem),
+                new RaiseArms(climberSubsystem), // extend piston/arms
 
-            new WindUpWinch(climberSubsystem, 38.75),
+                new WindUpWinch(climberSubsystem, encoderTicksPerWinchRotation/2), // rewind winch 1/2-way
 
-            new LowerHooks(climberSubsystem),
+                new LowerHooks(climberSubsystem), // unlatch hooks
 
-            new LowerArms(climberSubsystem),
+                new LowerArms(climberSubsystem), // retract piston/arms
 
-            new WindUpWinch(climberSubsystem, 38.75)
+                new WindUpWinch(climberSubsystem, encoderTicksPerWinchRotation/2) // rewind winch rest of the way
 
-
-
-
-
-        );
+            );
+        }
     }
 
     @Override

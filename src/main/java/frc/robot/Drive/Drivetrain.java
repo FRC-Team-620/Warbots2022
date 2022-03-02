@@ -228,24 +228,18 @@ public class Drivetrain extends SubsystemBase {
     return rightBackEncoder;
   }
 
+  public void motorDrive(int idx, double s) {
+    this.getMotor((idx - 1) % 4 + 1).set(s);
+  }
+  public void setEncoderPos(int idx, double p) {
+    this.getEncoder((idx - 1) % 4 + 1).setPosition(p);
+  }
+  public double getEncoderPos(int idx) {
+    return this.getEncoder((idx - 1) % 4 + 1).getPosition();
+  }
+
   public void curvatureInput(double speed, double rotation, boolean isCurvatureDrive) {
     diffDrive.curvatureDrive(speed, rotation, isCurvatureDrive);
-  }
-
-  public void rightFrontMotorDrive(double x) {
-    rightFrontMotor.set(x);
-  }
-
-  public void leftFrontMotorDrive(double x) {
-    leftFrontMotor.set(x);
-  }
-
-  public void rightBackMotorDrive(double x) {
-    rightBackMotor.set(x);
-  }
-
-  public void leftBackMotorDrive(double x) {
-    leftBackMotor.set(x);
   }
 
   public double getRPM(int idx) {
@@ -258,7 +252,7 @@ public class Drivetrain extends SubsystemBase {
     odometry.update(gyro.getRotation2d(), getDistance(leftBackEncoder), getDistance(rightBackEncoder));
   }
 
-  protected double getDistance(RelativeEncoder enc) {
+  protected double getDistance(RelativeEncoder enc) {//TODO: This is the bug getPositionConversionFactor
     return enc.getPosition() * enc.getPositionConversionFactor();
   }
   public double getDrawnCurrentAmps(){

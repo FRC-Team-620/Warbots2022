@@ -39,10 +39,10 @@ public class ClimberSubsystem extends SubsystemBase {
         leftClimberMotor.setIdleMode(mode);
         rightClimberMotor.setIdleMode(mode);
 
-        leftClimberMotor.follow(rightClimberMotor, true);
+        leftClimberMotor.follow(rightClimberMotor, false);
 
-        hangingSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 1);
-        armsSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 2);
+        hangingSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 2);
+        armsSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 1);
 
         // leftShooterMotor.setInverted(false);
         // rightShooterMotor.setInverted(false);
@@ -55,6 +55,11 @@ public class ClimberSubsystem extends SubsystemBase {
         leftencsim = RevEncoderSimWrapper.create(leftClimberMotor);
         rightencsim = RevEncoderSimWrapper.create(rightClimberMotor);
     }
+
+    public void setWinchSpeed(double winchSpeed) {
+        rightClimberMotor.set(winchSpeed);
+    }
+
     public CANSparkMax getWinchMotor() {
         return rightClimberMotor;
     }
