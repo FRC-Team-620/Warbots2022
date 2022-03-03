@@ -21,7 +21,7 @@ public class LowerPistons extends CommandBase {
     @Override
     public void initialize() {
         System.out.println("Arms were lowered");
-        this.targetFrames = (int) (this.portion * Constants.pistonMaxFrames);
+        this.targetFrames = (int)Math.round(this.portion * Constants.pistonMaxFrames);
         climberSubsystem.getArmsSolenoid().set(false);
     }
 
