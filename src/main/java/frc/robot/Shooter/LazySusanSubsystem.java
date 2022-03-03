@@ -52,6 +52,10 @@ public class LazySusanSubsystem extends SubsystemBase {
         return encoder;
     }
 
+    public double getLazySusanPosition() {
+        return encoder.getPosition();
+    }
+
     public double getTicksPerMotorRotation() {
         return encoder.getCountsPerRevolution();
     }

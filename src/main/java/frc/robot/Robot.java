@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Auto.AutoCommand;
+import frc.robot.Climber.RaiseHooks;
 import frc.robot.Util.RobotContainer;
 
 
@@ -56,8 +57,8 @@ public class Robot extends TimedRobot {
     var tpos = new Pose2d(robotpos.getTranslation(),robotpos.getRotation().plus(robotContainer.getLazySusanSubsystem().simTurrentRotation));
     robotContainer.robotFieldWidget.getObject("Turret").setPose(tpos);
 
-    robotContainer.getShooterSubsystem().possim.setPosition(tpos);
-    robotContainer.getShooterSubsystem().possim.update(Constants.kSimUpdateTime);
+    // robotContainer.getShooterSubsystem().possim.setPosition(tpos);
+    // robotContainer.getShooterSubsystem().possim.update(Constants.kSimUpdateTime);
     //robotContainer.drivetrain.leftFrontMotorDrive(0.3);
   } 
 
@@ -121,5 +122,7 @@ public class Robot extends TimedRobot {
     IdleMode mode = IdleMode.kCoast;
     robotContainer.getDriveTrain().setMotorMode(mode);
     robotContainer.getShooterSubsystem().setShooterSpeed(0);
+    CommandScheduler.getInstance().cancelAll();
+    new RaiseHooks(robotContainer.getClimberSubsystem()).schedule();;
   }
 }

@@ -25,12 +25,14 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.Climber.ClimbAndStow;
 import frc.robot.Climber.ClimberCommand;
 import frc.robot.Climber.ClimberManual;
 import frc.robot.Climber.ClimberMotorsSubsystem;
 import frc.robot.Climber.ClimberSubsystem;
 import frc.robot.Climber.LowerArms;
 import frc.robot.Climber.LowerHooks;
+import frc.robot.Climber.RaiseAndGrab;
 import frc.robot.Climber.RaiseArms;
 import frc.robot.Climber.RaiseHooks;
 // import frc.robot.Climber.WindDownWinch;
@@ -63,14 +65,21 @@ public class RobotContainer {
         //return new DriveWithJoystick(drivetrain, driver);
     //}\
     public RobotContainer() {
+        JoystickButton operatorYButton = new JoystickButton(operator, Button.kY.value);
+        operatorYButton.whenPressed(new RaiseArms(climberSubsystem));
+        JoystickButton operatorXButton = new JoystickButton(operator, Button.kX.value);
+        operatorXButton.whenPressed(new ClimbAndStow(lazySusanSubsystem, climberMotorsSubsystem, shooterSubsystem));
+        JoystickButton operatorBButton = new JoystickButton(operator, Button.kB.value);
+        operatorBButton.whenPressed(new RaiseAndGrab(climberMotorsSubsystem, climberSubsystem));
+
         // JoystickButton operatorYButton = new JoystickButton(operator, Button.kY.value);
         // operatorYButton.whenPressed(new RaiseArms(climberSubsystem));
         // JoystickButton operatorXButton = new JoystickButton(operator, Button.kX.value);
         // operatorXButton.whenPressed(new RaiseHooks(climberSubsystem));
         // JoystickButton operatorBButton = new JoystickButton(operator, Button.kB.value);
         // operatorBButton.whenPressed(new LowerArms(climberSubsystem));
-        // JoystickButton operatorStartButton = new JoystickButton(operator, Button.kStart.value);
-        // operatorStartButton.whenPressed(new LowerHooks(climberSubsystem));
+         JoystickButton operatorStartButton = new JoystickButton(operator, Button.kStart.value);
+         operatorStartButton.whenPressed(new LowerHooks(climberSubsystem));
 
         // JoystickButton operatorBackButton = new JoystickButton(operator, Button.kBack.value);
         // operatorBackButton.whenPressed(new WindDownWinch(climberSubsystem, 77.5));
@@ -89,10 +98,10 @@ public class RobotContainer {
         
 		shooterCommand = new ShooterCommand(shooterSubsystem, lazySusanSubsystem, operator, driver);
         shooterSubsystem.setDefaultCommand(shooterCommand);
-        // shooterSubsystem.setDefaultCommand( new PIDShooterCommand(shooterSubsystem));//Show off pid shooter cmd Only works in sim rn
+        //shooterSubsystem.setDefaultCommand( new PIDShooterCommand(shooterSubsystem));//Show off pid shooter cmd Only works in sim rn
 
         //climberCommand = new ClimberCommand(climberSubsystem);
-        climberMotorsSubsystem.setDefaultCommand(new ClimberManual(climberMotorsSubsystem, operator));
+        //climberMotorsSubsystem.setDefaultCommand(new ClimberManual(climberMotorsSubsystem, operator));
 
        
         SmartDashboard.putData(robotFieldWidget);
