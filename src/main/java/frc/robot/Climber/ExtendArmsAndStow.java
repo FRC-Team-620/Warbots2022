@@ -7,19 +7,24 @@ import frc.robot.Shooter.LazySusanSubsystem;
 import frc.robot.Shooter.ShooterSubsystem;
 import frc.robot.Shooter.StowTurret;
 
-public class ClimbAndStow extends SequentialCommandGroup {
+public class ExtendArmsAndStow extends SequentialCommandGroup {
     LazySusanSubsystem lazySusanSubsystem;
     ClimberMotorsSubsystem climberMotorsSubsystem;
+    ClimberSubsystem climberSubsystem;
     ShooterSubsystem shooterSubsystem;
-    public ClimbAndStow(LazySusanSubsystem lazySusanSubsystem, ClimberMotorsSubsystem climberMotorsSubsystem, ShooterSubsystem shooterSubsystem) {
+    public ExtendArmsAndStow(LazySusanSubsystem lazySusanSubsystem, ClimberMotorsSubsystem climberMotorsSubsystem, ClimberSubsystem climberSubsystem, ShooterSubsystem shooterSubsystem) {
         this.lazySusanSubsystem = lazySusanSubsystem;
         this.climberMotorsSubsystem = climberMotorsSubsystem;
+        this.climberSubsystem = climberSubsystem;
         this.shooterSubsystem = shooterSubsystem;
         addRequirements(lazySusanSubsystem, climberMotorsSubsystem, shooterSubsystem);
         //shooterSubsystem.setDefaultCommand(new StowTurret(lazySusanSubsystem, shooterSubsystem));
         //CommandScheduler.getInstance().cancelAll();
         addCommands(
-            new WinchExtend(climberMotorsSubsystem, Constants.winchMaxLimit)
+            new RaiseArms(this.climberSubsystem),
+            new WinchExtend(climberMotorsSubsystem, Constants.winchMaxLimit/2.0),
+            // new LowerArms(climberMotorsSubsystem),
+            new WinchExtend(climberMotorsSubsystem, Constants.winchMaxLimit/2.0)
         );
     }
 
