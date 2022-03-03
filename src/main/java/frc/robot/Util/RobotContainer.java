@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants;
@@ -39,6 +40,7 @@ import frc.robot.Loader.LoaderSubsystem;
 import frc.robot.Shooter.LazySusanSubsystem;
 import frc.robot.Shooter.ShooterCommand;
 import frc.robot.Shooter.ShooterSubsystem;
+import frc.robot.Shooter.StowTurret;
 /** Add your docs here. */
 public class RobotContainer {
     protected Drivetrain drivetrain = new Drivetrain();
@@ -63,7 +65,7 @@ public class RobotContainer {
         JoystickButton operatorYButton = new JoystickButton(operator, Button.kY.value);
         operatorYButton.whenPressed(new RaisePistons(climberSubsystem));
         JoystickButton operatorXButton = new JoystickButton(operator, Button.kX.value);
-        operatorXButton.whenPressed(new ExtendArmsAndStow(lazySusanSubsystem, climberMotorsSubsystem, climberSubsystem, shooterSubsystem, shooterCommand));
+        operatorXButton.whenPressed(new ParallelCommandGroup(new ExtendArmsAndStow(climberMotorsSubsystem, climberSubsystem), new StowTurret(lazySusanSubsystem, shooterSubsystem)) );
         JoystickButton operatorBButton = new JoystickButton(operator, Button.kB.value);
         operatorBButton.whenPressed(new RaiseAndGrab(climberMotorsSubsystem, climberSubsystem));
 

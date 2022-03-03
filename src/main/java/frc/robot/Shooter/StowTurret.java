@@ -13,11 +13,12 @@ public class StowTurret extends CommandBase {
     
     protected CANSparkMax lazySusanMotor;
     protected double stowedPosition = 50;
+    protected double frames = 0;
 
     public StowTurret(LazySusanSubsystem lazySusanSubsystem, ShooterSubsystem shooterSubsystem) {
         this.lazySusanSubsystem = lazySusanSubsystem;
         this.shooterSubsystem = shooterSubsystem;
-        addRequirements(shooterSubsystem);
+        addRequirements(shooterSubsystem, lazySusanSubsystem);
         lazySusanMotor = lazySusanSubsystem.getLazySusanMotor();
     }
 
@@ -26,10 +27,11 @@ public class StowTurret extends CommandBase {
         System.out.println("(Q&&#^$*&Q#^$&");
         lazySusanMotor.set(
             Constants.diffConstLS*(stowedPosition - lazySusanSubsystem.getLazySusanPosition()));
+        frames++;
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        return frames > 15;
     }
 }
