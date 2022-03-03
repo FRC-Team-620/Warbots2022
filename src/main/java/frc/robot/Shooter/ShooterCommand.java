@@ -76,11 +76,11 @@ public class ShooterCommand extends CommandBase {
         // double area = limelight.getArea();
 
         double borkedJoystickDeadband = 0.05;
-        input = operatorXbox.getRightY();
+        // input = operatorXbox.getRightY();
         inputOpRight = operatorXbox.getLeftX();
-        if (Math.abs(input) < borkedJoystickDeadband) {
-            input = 0;
-        }
+        // if (Math.abs(input) < borkedJoystickDeadband) {
+        //     input = 0;
+        // }
         if (Math.abs(inputOpRight) < borkedJoystickDeadband) {
             inputOpRight = 0;
         }
@@ -137,9 +137,8 @@ public class ShooterCommand extends CommandBase {
         } else {
             lowPoweredShot = false;
         }
-        if (input > 0) {
-            setRPM(input * (Constants.maxShooterRPM - Constants.minShooterRPM) + Constants.minShooterRPM); 
-        } else if(hasTarget && Math.abs(operatorXbox.getLeftTriggerAxis()) > 0) {
+        
+        if(hasTarget && Math.abs(operatorXbox.getLeftTriggerAxis()) > 0) {
              setRPM(tempRPM);
              System.out.println("Target + RightBumper: Triggered");
         } else {

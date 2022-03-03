@@ -63,7 +63,7 @@ public class RobotContainer {
         JoystickButton operatorYButton = new JoystickButton(operator, Button.kY.value);
         operatorYButton.whenPressed(new RaisePistons(climberSubsystem));
         JoystickButton operatorXButton = new JoystickButton(operator, Button.kX.value);
-        operatorXButton.whenPressed(new ExtendArmsAndStow(lazySusanSubsystem, climberMotorsSubsystem, climberSubsystem, shooterSubsystem));
+        operatorXButton.whenPressed(new ExtendArmsAndStow(lazySusanSubsystem, climberMotorsSubsystem, climberSubsystem, shooterSubsystem, shooterCommand));
         JoystickButton operatorBButton = new JoystickButton(operator, Button.kB.value);
         operatorBButton.whenPressed(new RaiseAndGrab(climberMotorsSubsystem, climberSubsystem));
 
@@ -85,7 +85,7 @@ public class RobotContainer {
     TrajectorySelector trajectorySelector = new TrajectorySelector(Filesystem.getDeployDirectory().toPath().resolve("paths/"), true);
     public Field2d  robotFieldWidget = new Field2d(); //TODO: include Robot odometry 
     public void init() {
-        driveWithJoystick = new DriveWithJoystick(drivetrain, driver);
+        driveWithJoystick = new DriveWithJoystick(drivetrain, driver, operator);
         drivetrain.setDefaultCommand(driveWithJoystick);
 
         loaderCommand = new LoaderCommand(loaderSubsystem, driver, operator);

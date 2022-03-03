@@ -6,6 +6,8 @@ package frc.robot.Drive;
 
 import java.util.List;
 
+import javax.xml.xpath.XPathNodes;
+
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -17,6 +19,7 @@ import frc.robot.Presets;
 public class DriveWithJoystick extends CommandBase {
   protected Drivetrain drivetrain;
   protected XboxController driverXbox;
+  protected XboxController operatorXbox;
   protected double speedConstant = Constants.speed;
   protected double rotationConstant = Constants.rotation;
   protected double openLoopRampRateConstant = Constants.rampRate;
@@ -26,10 +29,11 @@ public class DriveWithJoystick extends CommandBase {
   protected boolean isDriving = false;
   
   /** Creates a new DriveWithJoystick. */
-  public DriveWithJoystick(Drivetrain drivetrain, XboxController driverXbox) {
+  public DriveWithJoystick(Drivetrain drivetrain, XboxController driverXbox, XboxController operatorXbox) {
     addRequirements(drivetrain);
     this.drivetrain = drivetrain;
     this.driverXbox = driverXbox;
+    this.operatorXbox = operatorXbox;
 
     SmartDashboard.putNumber("speed", currentDriverPreset.get(0));
     SmartDashboard.putNumber("rotation", currentDriverPreset.get(1));
