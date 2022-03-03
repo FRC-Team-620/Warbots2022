@@ -25,18 +25,13 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants;
 import frc.robot.Robot;
-import frc.robot.Climber.ClimbAndStow;
 import frc.robot.Climber.ClimberCommand;
-import frc.robot.Climber.ClimberManual;
 import frc.robot.Climber.ClimberMotorsSubsystem;
 import frc.robot.Climber.ClimberSubsystem;
-import frc.robot.Climber.LowerArms;
+import frc.robot.Climber.ExtendArmsAndStow;
 import frc.robot.Climber.LowerHooks;
 import frc.robot.Climber.RaiseAndGrab;
-import frc.robot.Climber.RaiseArms;
-import frc.robot.Climber.RaiseHooks;
-// import frc.robot.Climber.WindDownWinch;
-// import frc.robot.Climber.WindUpWinch;
+import frc.robot.Climber.RaisePistons;
 import frc.robot.Drive.DriveWithJoystick;
 import frc.robot.Drive.Drivetrain;
 import frc.robot.Loader.LoaderCommand;
@@ -66,9 +61,9 @@ public class RobotContainer {
     //}\
     public RobotContainer() {
         JoystickButton operatorYButton = new JoystickButton(operator, Button.kY.value);
-        operatorYButton.whenPressed(new RaiseArms(climberSubsystem));
+        operatorYButton.whenPressed(new RaisePistons(climberSubsystem));
         JoystickButton operatorXButton = new JoystickButton(operator, Button.kX.value);
-        operatorXButton.whenPressed(new ClimbAndStow(lazySusanSubsystem, climberMotorsSubsystem, shooterSubsystem));
+        operatorXButton.whenPressed(new ExtendArmsAndStow(lazySusanSubsystem, climberMotorsSubsystem, climberSubsystem, shooterSubsystem));
         JoystickButton operatorBButton = new JoystickButton(operator, Button.kB.value);
         operatorBButton.whenPressed(new RaiseAndGrab(climberMotorsSubsystem, climberSubsystem));
 

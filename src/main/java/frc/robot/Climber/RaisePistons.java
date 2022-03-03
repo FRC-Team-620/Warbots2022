@@ -1,18 +1,18 @@
 package frc.robot.Climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 
-public class LowerArms extends CommandBase {
+public class RaisePistons extends CommandBase {
     ClimberSubsystem climberSubsystem;
-    protected final int MAX_FRAMES = 15;
-    protected double portion; // from 0 - 1
+    protected double portion; // decimal percentage from 0 to 1
     protected int frames, targetFrames;
 
-    public LowerArms(ClimberSubsystem climberSubsystem) {
+    public RaisePistons(ClimberSubsystem climberSubsystem) {
         this(climberSubsystem, 1.0);
     }
 
-    public LowerArms(ClimberSubsystem climberSubsystem, double portion) {
+    public RaisePistons(ClimberSubsystem climberSubsystem, double portion) {
         addRequirements(climberSubsystem);
         this.climberSubsystem = climberSubsystem;
         this.portion = portion;
@@ -20,9 +20,9 @@ public class LowerArms extends CommandBase {
 
     @Override
     public void initialize() {
-        System.out.println("Arms were lowered");
-        this.targetFrames = (int)(this.portion*MAX_FRAMES);
-        climberSubsystem.getArmsSolenoid().set(false);
+        System.out.println("Arms were raised");
+        this.targetFrames = (int) (this.portion * Constants.pistonMaxFrames);
+        climberSubsystem.getArmsSolenoid().set(true);
     }
 
     @Override
@@ -32,8 +32,7 @@ public class LowerArms extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return this.frames >= this.targetFrames;
+        return frames >= this.targetFrames;
     }
-
 
 }

@@ -21,10 +21,10 @@ public class ExtendArmsAndStow extends SequentialCommandGroup {
         //shooterSubsystem.setDefaultCommand(new StowTurret(lazySusanSubsystem, shooterSubsystem));
         //CommandScheduler.getInstance().cancelAll();
         addCommands(
-            new RaiseArms(this.climberSubsystem),
-            new WinchExtend(climberMotorsSubsystem, Constants.winchMaxLimit/2.0),
-            // new LowerArms(climberMotorsSubsystem),
-            new WinchExtend(climberMotorsSubsystem, Constants.winchMaxLimit/2.0)
+            new RaisePistons(this.climberSubsystem, 0.1), // Bump the arms up slightly
+            new WinchExtend(this.climberMotorsSubsystem, Constants.winchMaxLimit / 2.0),
+            new LowerPistons(this.climberSubsystem, 0.1),
+            new WinchExtend(this.climberMotorsSubsystem, Constants.winchMaxLimit / 2.0)
         );
     }
 
