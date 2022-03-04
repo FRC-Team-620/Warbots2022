@@ -6,7 +6,7 @@ public class AutoShoot extends CommandBase {
     protected LoaderSubsystem loaderSubsystem;
     protected int frames = 0;
     public AutoShoot(LoaderSubsystem loaderSubsystem) {
-        addRequirements(loaderSubsystem);
+       // addRequirements(loaderSubsystem);
         this.loaderSubsystem = loaderSubsystem;
     }
 

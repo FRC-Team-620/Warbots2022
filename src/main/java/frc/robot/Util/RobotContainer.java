@@ -161,6 +161,7 @@ public class RobotContainer {
     
   public Command getAutonomousCommand(Trajectory traj) {
     // Create a voltage constraint to ensure we don't accelerate too fast
+    System.out.println("Auto Path Ran");
     var autoVoltageConstraint =
         new DifferentialDriveVoltageConstraint(
             new SimpleMotorFeedforward(

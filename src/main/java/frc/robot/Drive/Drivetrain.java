@@ -253,7 +253,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   protected double getDistance(RelativeEncoder enc) {//TODO: This is the bug getPositionConversionFactor
-    return enc.getPosition() * enc.getPositionConversionFactor();
+    return enc.getPosition();
   }
   public double getDrawnCurrentAmps(){
     if(RobotBase.isSimulation()){

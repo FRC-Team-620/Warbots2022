@@ -22,9 +22,14 @@ public class AutoLoad extends CommandBase{
         //System.out.println("Loader was turned on");
         loaderSubsystem.getLoaderMotor().set(speed);
     }
+    
+    @Override
+    public void end(boolean interrupt) {
+        loaderSubsystem.getLoaderMotor().set(0);
+    }
 
     @Override
     public boolean isFinished() {
-        return true;
+        return frames > 750;
     }
 }

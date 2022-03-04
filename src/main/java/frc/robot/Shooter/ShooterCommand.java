@@ -140,7 +140,7 @@ public class ShooterCommand extends CommandBase {
         
         if(hasTarget && Math.abs(operatorXbox.getLeftTriggerAxis()) > 0) {
              setRPM(tempRPM);
-             System.out.println("Target + RightBumper: Triggered");
+             //System.out.println("Target + RightBumper: Triggered");
         } else {
             if (lowPoweredShot) {
                 setRPM(Constants.lowPoweredShotRPM);

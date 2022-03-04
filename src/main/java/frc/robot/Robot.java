@@ -18,8 +18,11 @@ import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Auto.AutoCommand;
 import frc.robot.Climber.RaiseHooks;
+import frc.robot.Loader.AutoLoad;
+import frc.robot.Shooter.AutoAimingAndSpinningUp;
 import frc.robot.Util.RobotContainer;
 
 
@@ -76,7 +79,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    robotContainer.getShooterSubsystem().setDefaultCommand(robotContainer.getShooterCommand());
     if (autonomousCommand != null) {
        autonomousCommand.cancel();
     }
@@ -93,7 +95,13 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     // new SequentialCommandGroup(new Commands());
-    autonomousCommand = new AutoCommand(robotContainer.getLoaderSubsystem(), robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer);
+    autonomousCommand = new ParallelCommandGroup (
+      new AutoAimingAndSpinningUp(robotContainer.getShooterSubsystem(), 
+      robotContainer.getLazySusanSubsystem()), 
+      new AutoCommand(robotContainer.getLoaderSubsystem(), 
+      robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer), 
+      new AutoLoad(robotContainer.getLoaderSubsystem(), 1));
+    
     if (autonomousCommand != null) {
       autonomousCommand.schedule();
     }

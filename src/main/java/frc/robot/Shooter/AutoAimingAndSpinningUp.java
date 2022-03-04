@@ -24,6 +24,7 @@ public class AutoAimingAndSpinningUp extends CommandBase {
     protected double ticksPerTurntableRotation,angleChangePerTick;
     protected double  currTicksGoal = 0;
     protected double inputOpRight = 0;
+    protected int frames = 0;
     // shooter
     protected double rpm, minRPM = 0,
             currentSpeed = 0, acceleration, 
@@ -42,7 +43,7 @@ public class AutoAimingAndSpinningUp extends CommandBase {
 
     public double metersToRPM(double meters) {
         double distanceInFeet = Constants.metersToFeet * meters;
-        System.out.println("Distance In Meters " + meters);
+        //System.out.println("Distance In Meters " + meters);
         return 117.3708 * distanceInFeet + 1632.61502;
     }
 
@@ -85,11 +86,13 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         }
         acceleration = Constants.diffConstShooter * (getRPM() - currRPM);
         setShooterSpeedAndUpdate(currentSpeed + acceleration);
+        //System.out.println("Frames: " + frames);
+        frames++;
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        return frames > 750;
     }
 
     

@@ -25,32 +25,24 @@ public class AutoCommand extends SequentialCommandGroup {
         this.shooterSubsystem = sS;
         this.lazySusanSubsystem = lSS;
         this.robotContainer = rC;
-        addRequirements(loaderSubsystem, shooterSubsystem, lazySusanSubsystem);
-        
-        AutoLoad autoLoad = new AutoLoad(loaderSubsystem, 1);
-        AutoAimingAndSpinningUp autoAimingAndSpinningUp = new AutoAimingAndSpinningUp(shooterSubsystem, lazySusanSubsystem);
-        shooterSubsystem.setDefaultCommand(autoAimingAndSpinningUp);
+        // addRequirements(loaderSubsystem, shooterSubsystem, lazySusanSubsystem);
         try {
             addCommands(
-                autoLoad,
-
-                robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("Part1.wpilib.json"))),
+                robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("paths/Part1.wpilib.json"))),
 
                 new AutoShoot(loaderSubsystem),
 
-                robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("Part2.wpilib.json"))),
+                robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("paths/Part2.wpilib.json"))),
 
                 new AutoShoot(loaderSubsystem),
 
-                robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("Part3.wpilib.json"))),
+                robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("paths/Part3.wpilib.json"))),
 
                 new AutoShoot(loaderSubsystem),
 
-                robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("Part4.wpilib.json"))),
+                robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("paths/Part4.wpilib.json"))),
 
-                new AutoShoot(loaderSubsystem),
-
-                new AutoLoad(loaderSubsystem, 0)
+                new AutoShoot(loaderSubsystem)
                 
             );
         } catch (IOException e) {
