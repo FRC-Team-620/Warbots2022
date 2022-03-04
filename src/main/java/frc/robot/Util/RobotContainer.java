@@ -40,7 +40,7 @@ import frc.robot.Loader.LoaderSubsystem;
 import frc.robot.Shooter.LazySusanSubsystem;
 import frc.robot.Shooter.ShooterCommand;
 import frc.robot.Shooter.ShooterSubsystem;
-import frc.robot.Shooter.StowTurret;
+import frc.robot.Shooter.DirectTurret;
 /** Add your docs here. */
 public class RobotContainer {
     protected Drivetrain drivetrain = new Drivetrain();
@@ -64,7 +64,8 @@ public class RobotContainer {
         JoystickButton operatorYButton = new JoystickButton(operator, Button.kY.value);
         operatorYButton.whenPressed(new RaisePistons(climberSubsystem));
         JoystickButton operatorXButton = new JoystickButton(operator, Button.kX.value);
-        operatorXButton.whenPressed(new ParallelCommandGroup(new ExtendArmsAndStow(climberMotorsSubsystem, climberSubsystem), new StowTurret(lazySusanSubsystem, shooterSubsystem)) );
+        operatorXButton.whenPressed(new ParallelCommandGroup(new ExtendArmsAndStow(climberMotorsSubsystem, climberSubsystem), 
+            new DirectTurret(lazySusanSubsystem, shooterSubsystem, Constants.stowedPosition, false)));
         JoystickButton operatorBButton = new JoystickButton(operator, Button.kB.value);
         operatorBButton.whenPressed(new RaiseAndGrab(climberMotorsSubsystem, climberSubsystem));
         JoystickButton operatorLeftJoystickClick = new JoystickButton(operator, Button.kStart.value);
