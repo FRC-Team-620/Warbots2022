@@ -65,7 +65,7 @@ public class RobotContainer {
         operatorYButton.whenPressed(new RaisePistons(climberSubsystem));
         JoystickButton operatorXButton = new JoystickButton(operator, Button.kX.value);
         operatorXButton.whenPressed(new ParallelCommandGroup(new ExtendArmsAndStow(climberMotorsSubsystem, climberSubsystem), 
-            new DirectTurret(lazySusanSubsystem, shooterSubsystem, Constants.stowedPosition, false)));
+            new DirectTurret(lazySusanSubsystem, shooterSubsystem, Constants.stowedPosition)));
         JoystickButton operatorBButton = new JoystickButton(operator, Button.kB.value);
         operatorBButton.whenPressed(new RaiseAndGrab(climberMotorsSubsystem, climberSubsystem));
         JoystickButton operatorLeftJoystickClick = new JoystickButton(operator, Button.kStart.value);
