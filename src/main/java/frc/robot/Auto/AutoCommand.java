@@ -1,5 +1,10 @@
 package frc.robot.Auto;
 
+import java.io.IOException;
+import java.nio.file.Path;
+
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Loader.AutoLoad;
@@ -25,28 +30,32 @@ public class AutoCommand extends SequentialCommandGroup {
         AutoLoad autoLoad = new AutoLoad(loaderSubsystem, 1);
         AutoAimingAndSpinningUp autoAimingAndSpinningUp = new AutoAimingAndSpinningUp(shooterSubsystem, lazySusanSubsystem);
         shooterSubsystem.setDefaultCommand(autoAimingAndSpinningUp);
-        addCommands(
-            autoLoad,
+        try {
+            addCommands(
+                autoLoad,
 
-            robotContainer.getAutonomousCommand(robotContainer.getTrajectorySelector().getPart1()),
+                robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("Part1.wpilib.json"))),
 
-            new AutoShoot(loaderSubsystem),
+                new AutoShoot(loaderSubsystem),
 
-            robotContainer.getAutonomousCommand(robotContainer.getTrajectorySelector().getPart2()),
+                robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("Part2.wpilib.json"))),
 
-            new AutoShoot(loaderSubsystem),
+                new AutoShoot(loaderSubsystem),
 
-            robotContainer.getAutonomousCommand(robotContainer.getTrajectorySelector().getPart3()),
+                robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("Part3.wpilib.json"))),
 
-            new AutoShoot(loaderSubsystem),
+                new AutoShoot(loaderSubsystem),
 
-            robotContainer.getAutonomousCommand(robotContainer.getTrajectorySelector().getPart4()),
+                robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("Part4.wpilib.json"))),
 
-            new AutoShoot(loaderSubsystem),
+                new AutoShoot(loaderSubsystem),
 
-            new AutoLoad(loaderSubsystem, 0)
-            
-        );
+                new AutoLoad(loaderSubsystem, 0)
+                
+            );
+        } catch (IOException e) {
+            System.out.println("JSON file not found");
+        }
         
     }
 }
