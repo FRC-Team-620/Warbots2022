@@ -23,6 +23,7 @@ public class DriveWithJoystick extends CommandBase {
   protected double speedConstant = Constants.speed;
   protected double rotationConstant = Constants.rotation;
   protected double openLoopRampRateConstant = Constants.rampRate;
+  protected double operatorControlCoef = 0.15;
   protected SendableChooser<String> presetChooser = new SendableChooser<>();
   protected String currentDriver = "Default";
   protected List<Double> currentDriverPreset = Presets.presets.get(currentDriver);
@@ -108,9 +109,8 @@ public class DriveWithJoystick extends CommandBase {
         drivetrain.motorDrive(i, Constants.diffConstKeepPosition*drivetrain.getEncoderPos(i));
     } else {
       isDriving = true;
-      drivetrain.curvatureInput(speed, rotation, !(driverXbox.getBButton()));
+      drivetrain.curvatureInput(speed, rotation + operatorControlCoef*operatorXbox.getRightX(), !(driverXbox.getBButton()));
     }
-
     // SmartDashboard.putNumber("RightRPM",
     //     (drivetrain.getRPM(1) + drivetrain.getRPM(2)) / 2);
     // SmartDashboard.putNumber("LeftRPM",
