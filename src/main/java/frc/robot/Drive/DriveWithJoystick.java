@@ -76,6 +76,10 @@ public class DriveWithJoystick extends CommandBase {
       //TESTING ONLY. SET BACK TO CONSTANTS FOR THE COMPETITION
       speedConstant = speedEntry.getDouble(0.5);
       rotationConstant = rotationEntry.getDouble(-0.5);
+      if (driverXbox.getBButton()) {
+        speedConstant = speedConstant/2;
+        rotationConstant = rotationConstant/2;
+      }
       openLoopRampRateConstant = openLoopRampRateEntry.getDouble(0.2);
 
     // Otherwise, use the driver-specific custom presets.

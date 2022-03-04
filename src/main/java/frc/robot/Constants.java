@@ -61,7 +61,7 @@ public final class Constants {
     // public static final double kEncoderDistancePerPulse = 0.0359;//0.00136
     // //TODO: Not used Remove?
 
-    public static final double speed = 0.7;
+    public static double speed = 0.7;
     public static final double rotation = -0.60;
     public static final double rampRate = 0.0;
 
