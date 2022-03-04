@@ -132,7 +132,7 @@ public class ShooterCommand extends CommandBase {
             lazySusanMotor.set(0);
 
         }
-        if (driverXbox.getBButton()) {
+        if (driverXbox.getYButton()) {
             lowPoweredShot = true;
         } else {
             lowPoweredShot = false;
