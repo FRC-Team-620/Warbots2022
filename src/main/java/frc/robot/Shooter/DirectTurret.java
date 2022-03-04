@@ -11,18 +11,23 @@ public class DirectTurret extends CommandBase {
     protected ShooterSubsystem shooterSubsystem;
     
     protected CANSparkMax lazySusanMotor;
-    protected double tolerance = 0.1, targetPosition;
-    protected boolean resetUponCompletion;
+    protected double tolerance = 0.1, targetPosition, setFinalEncoderCount;
 
-    public DirectTurret(LazySusanSubsystem lazySusanSubsystem, ShooterSubsystem shooterSubsystem,
-        double targetPosition, boolean resetUponCompletion) {
+    public DirectTurret(LazySusanSubsystem lazySusanSubsystem, ShooterSubsystem shooterSubsystem, 
+        double targetPosition) {
 
         this.lazySusanSubsystem = lazySusanSubsystem;
         this.shooterSubsystem = shooterSubsystem;
         this.targetPosition = targetPosition;
-        this.resetUponCompletion = resetUponCompletion;
+        this.setFinalEncoderCount = this.targetPosition;
         addRequirements(shooterSubsystem, lazySusanSubsystem);
         lazySusanMotor = this.lazySusanSubsystem.getLazySusanMotor();
+    }
+    public DirectTurret(LazySusanSubsystem lazySusanSubsystem, ShooterSubsystem shooterSubsystem,
+        double targetPosition, double setFinalEncoderCount) {
+
+        this(lazySusanSubsystem, shooterSubsystem, targetPosition);
+        this.setFinalEncoderCount = setFinalEncoderCount;
     }
 
     @Override
@@ -33,8 +38,7 @@ public class DirectTurret extends CommandBase {
 
     @Override
     public void end(boolean interrupt) {
-        if(this.resetUponCompletion)
-            this.lazySusanMotor.set(0);
+        this.lazySusanMotor.getEncoder().setPosition(this.setFinalEncoderCount);
     }
 
     @Override
