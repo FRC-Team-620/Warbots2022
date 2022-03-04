@@ -123,6 +123,5 @@ public class Robot extends TimedRobot {
     robotContainer.getDriveTrain().setMotorMode(mode);
     robotContainer.getShooterSubsystem().setShooterSpeed(0);
     CommandScheduler.getInstance().cancelAll();
-    new RaiseHooks(robotContainer.getClimberSubsystem()).schedule();;
   }
 }

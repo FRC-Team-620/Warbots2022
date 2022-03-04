@@ -26,13 +26,13 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants;
 import frc.robot.Robot;
-import frc.robot.Climber.ClimberCommand;
 import frc.robot.Climber.ClimberMotorsSubsystem;
 import frc.robot.Climber.ClimberSubsystem;
 import frc.robot.Climber.ExtendArmsAndStow;
 import frc.robot.Climber.LowerHooks;
 import frc.robot.Climber.RaiseAndGrab;
 import frc.robot.Climber.RaisePistons;
+import frc.robot.Climber.WinchReset;
 import frc.robot.Drive.DriveWithJoystick;
 import frc.robot.Drive.Drivetrain;
 import frc.robot.Loader.LoaderCommand;
@@ -56,7 +56,6 @@ public class RobotContainer {
     protected DriveWithJoystick driveWithJoystick;
     protected LoaderCommand loaderCommand;
     protected ShooterCommand shooterCommand;
-    protected ClimberCommand climberCommand;
 
     //public Command getDriveWithJoystick() {
         //return new DriveWithJoystick(drivetrain, driver);
@@ -68,6 +67,7 @@ public class RobotContainer {
         operatorXButton.whenPressed(new ParallelCommandGroup(new ExtendArmsAndStow(climberMotorsSubsystem, climberSubsystem), new StowTurret(lazySusanSubsystem, shooterSubsystem)) );
         JoystickButton operatorBButton = new JoystickButton(operator, Button.kB.value);
         operatorBButton.whenPressed(new RaiseAndGrab(climberMotorsSubsystem, climberSubsystem));
+        JoystickButton operatorLeftJoystickClick = new JoystickButton(operator, Button.kStart.value);
 
         // JoystickButton operatorYButton = new JoystickButton(operator, Button.kY.value);
         // operatorYButton.whenPressed(new RaiseArms(climberSubsystem));
@@ -77,6 +77,7 @@ public class RobotContainer {
         // operatorBButton.whenPressed(new LowerArms(climberSubsystem));
          JoystickButton operatorStartButton = new JoystickButton(operator, Button.kStart.value);
          operatorStartButton.whenPressed(new LowerHooks(climberSubsystem));
+         operatorLeftJoystickClick.whenPressed(new WinchReset(climberMotorsSubsystem));
 
         // JoystickButton operatorBackButton = new JoystickButton(operator, Button.kBack.value);
         // operatorBackButton.whenPressed(new WindDownWinch(climberSubsystem, 77.5));
