@@ -18,6 +18,8 @@ public class LoaderSubsystem extends SubsystemBase {
         loader.restoreFactoryDefaults();
         loader.setInverted(true);
 
+        loader.setSmartCurrentLimit(25);
+
         trigger = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
         trigger.set(false);
     }

@@ -47,6 +47,9 @@ public class ShooterSubsystem extends SubsystemBase {
         leftShooterMotor.setIdleMode(mode);
         rightShooterMotor.setIdleMode(mode);
 
+        leftShooterMotor.setSmartCurrentLimit(45);
+        rightShooterMotor.setSmartCurrentLimit(45);
+
         leftShooterMotor.follow(rightShooterMotor, true);
         // leftShooterMotor.setInverted(false);
         // rightShooterMotor.setInverted(false);
@@ -71,6 +74,10 @@ public class ShooterSubsystem extends SubsystemBase {
     }
     public double getRPM() {
         return encoder.getVelocity(); //TODO: Why convert to string and then parse double. Use math round functions
+    }
+    public void stopMotors() {
+        rightShooterMotor.stopMotor();
+        leftShooterMotor.stopMotor();
     }
     public long getTotalWheelRotations() {
         return (long)encoder.getPosition(); // The conversion factor was previously set

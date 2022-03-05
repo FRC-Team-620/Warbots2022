@@ -96,6 +96,8 @@ public class ShooterCommand extends CommandBase {
         // new math for static limelight shooting
         double tempDist = getDistanceInMeters(Constants.azimuthAngle1, y, Constants.limelightHeight, Constants.hubHeight);
         double tempRPM = metersToRPM(tempDist);
+        System.out.println("Dist: " + tempDist);
+        System.out.println("RPM: " + tempRPM);
         // System.out.println("tempDist: " + tempDist);
         // System.out.println("tempDist * metersToFeet: " + tempDist * Constants.metersToFeet);
         // System.out.println("tempRPM: " + tempRPM);
@@ -104,7 +106,7 @@ public class ShooterCommand extends CommandBase {
         if(Math.abs(operatorXbox.getLeftTriggerAxis()) > 0) {
             table.getEntry("ledMode").setNumber(3);
             // limelight.setLEDMode(LedMode.ON);
-            double speeeeed =  -x*Constants.diffConstLS; // this is speed
+            double speeeeed =  -(x-Constants.leftBias)*Constants.diffConstLS; // this is speed
             // Making sure it's within the provided threshholds
             if ((lazySusanEnc.getPosition() <= -Constants.turntableThresh && speeeeed < 0)
                 || (lazySusanEnc.getPosition() >= Constants.turntableThresh && speeeeed > 0)) {
@@ -133,6 +135,7 @@ public class ShooterCommand extends CommandBase {
 
         }
         if (driverXbox.getYButton()) {
+            System.out.println("UGIOEHGIAENNAEION00");
             lowPoweredShot = true;
         } else {
             lowPoweredShot = false;
@@ -157,7 +160,10 @@ public class ShooterCommand extends CommandBase {
         SmartDashboard.putNumber("Acceleration: ", acceleration);
         // if(Math.abs(rpm-currRPM) > (bangBangTolerance * rpm))
         setShooterSpeedAndUpdate(currentSpeed + acceleration);
-
+        // System.out.println(rpm);
+        if(rpm == 0.0) {
+            setShooterSpeedAndUpdate(0);
+        }
         SmartDashboard.putNumber("Shooter RPM: ",
                 roundUpToNearestMultiple(currRPM, (int) roundTo));
         
@@ -173,7 +179,8 @@ public class ShooterCommand extends CommandBase {
     public double metersToRPM(double meters) {
         double distanceInFeet = Constants.metersToFeet * meters;
         // System.out.println("Distance In Meters " + meters);
-        return 117.3708 * distanceInFeet + 1632.61502;
+        //return 117.3708 * distanceInFeet + 1632.61502;
+        return 117.3708 * distanceInFeet + 1700;
     }
 
     static long roundUpToNearestMultiple(double input, int step) {
@@ -182,7 +189,10 @@ public class ShooterCommand extends CommandBase {
     }
 
     public void setShooterSpeedAndUpdate(double speed) {
-        shooterSubsystem.setShooterSpeed(speed);
+        if(speed == 0)
+            shooterSubsystem.stopMotors();
+        else
+            shooterSubsystem.setShooterSpeed(speed);
         currentSpeed = speed;
     }
 

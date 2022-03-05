@@ -101,7 +101,7 @@ public class RobotContainer {
 
         //climberCommand = new ClimberCommand(climberSubsystem);
         //climberMotorsSubsystem.setDefaultCommand(new ClimberManual(climberMotorsSubsystem, operator));
-
+        new LowerHooks(climberSubsystem).schedule();
        
         SmartDashboard.putData(robotFieldWidget);
         SmartDashboard.putData(trajectorySelector);

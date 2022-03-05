@@ -44,7 +44,7 @@ public class AutoAimingAndSpinningUp extends CommandBase {
     public double metersToRPM(double meters) {
         double distanceInFeet = Constants.metersToFeet * meters;
         //System.out.println("Distance In Meters " + meters);
-        return 117.3708 * distanceInFeet + 1632.61502;
+        return 117.3708 * distanceInFeet + 1750;
     }
 
     public void setShooterSpeedAndUpdate(double speed) {

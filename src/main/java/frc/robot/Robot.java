@@ -19,10 +19,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Auto.AutoCommand;
+import frc.robot.Climber.LowerHooks;
 import frc.robot.Climber.RaiseHooks;
+import frc.robot.Drive.DriveBackwards;
 import frc.robot.Loader.AutoLoad;
 import frc.robot.Shooter.AutoAimingAndSpinningUp;
+import frc.robot.Shooter.DirectTurret;
 import frc.robot.Util.RobotContainer;
 
 
@@ -30,8 +34,8 @@ public class Robot extends TimedRobot {
   protected RobotContainer robotContainer;
   protected Command autonomousCommand;
   
-  UsbCamera camera;
-  NetworkTableEntry cameraSelection; 
+  // UsbCamera camera;
+  // NetworkTableEntry cameraSelection; 
 
   @Override
   public void robotInit() {
@@ -41,10 +45,10 @@ public class Robot extends TimedRobot {
     robotContainer.getShooterCommand().getTable().getEntry("ledMode").setNumber(1);
     // robotContainer.getShooterSubsystem().limeLight.setLEDMode(LedMode.OFF); //Sim:
   
-    camera = CameraServer.startAutomaticCapture(0);
-    camera.setResolution(640, 480);
-    cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection");
-    cameraSelection.setString(camera.getName());
+    // camera = CameraServer.startAutomaticCapture(0);
+    // camera.setResolution(540, 405);
+    // cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection");
+    // cameraSelection.setString(camera.getName());
   }
 
   @Override
@@ -82,6 +86,7 @@ public class Robot extends TimedRobot {
     if (autonomousCommand != null) {
        autonomousCommand.cancel();
     }
+    new LowerHooks(robotContainer.getClimberSubsystem()).schedule();
     robotContainer.getLazySusanSubsystem().getLazySusanEncoder().setPosition(0);
     robotContainer.getDriveTrain().setMotorMode(IdleMode.kBrake);
     robotContainer.getClimberMotorsSubsystem().getWinchMotor().getEncoder().setPosition(0);
@@ -95,12 +100,18 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     // new SequentialCommandGroup(new Commands());
-    autonomousCommand = new ParallelCommandGroup (
+    robotContainer.getLazySusanSubsystem().getLazySusanEncoder().setPosition(0);
+    new LowerHooks(robotContainer.getClimberSubsystem()).schedule();
+    autonomousCommand = new SequentialCommandGroup(
+      new DirectTurret(robotContainer.getLazySusanSubsystem(), //-1.5*
+      robotContainer.getShooterSubsystem(), Constants.stowedPosition, 0), 
+      new ParallelCommandGroup (
       new AutoAimingAndSpinningUp(robotContainer.getShooterSubsystem(), 
       robotContainer.getLazySusanSubsystem()), 
       new AutoCommand(robotContainer.getLoaderSubsystem(), 
-      robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer), 
-      new AutoLoad(robotContainer.getLoaderSubsystem(), 1));
+      robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer),
+      new AutoLoad(robotContainer.getLoaderSubsystem(), 1)
+      ));
     
     if (autonomousCommand != null) {
       autonomousCommand.schedule();
@@ -127,7 +138,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-    IdleMode mode = IdleMode.kCoast;
+    IdleMode mode = IdleMode.kBrake;
     robotContainer.getDriveTrain().setMotorMode(mode);
     robotContainer.getShooterSubsystem().setShooterSpeed(0);
     CommandScheduler.getInstance().cancelAll();

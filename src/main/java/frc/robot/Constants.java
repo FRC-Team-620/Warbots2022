@@ -31,18 +31,18 @@ public final class Constants {
     //
     //
     //
-    public static final double ksVolts = 0.11848;// 0.16249
-    public static final double kvVoltSecondsPerMeter = 6.9735;// 3.2952
-    public static final double kaVoltSecondsSquaredPerMeter = 1.2862;// 0.30496
+    public static final double ksVolts = 0.13271;// 0.16249 0.13271
+    public static final double kvVoltSecondsPerMeter = 2.1525;// 3.2952 2.1525
+    public static final double kaVoltSecondsSquaredPerMeter = 0.40778;// 0.30496 0.40778
 
-    public static final double kPDriveVel = 1.3256;// 3.869//2.0146
+    public static final double kPDriveVel = 2.9285;// 3.869//2.0146
 
     public static final double kTrackwidthMeters = 0.64;// 0.5207
     public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(
             kTrackwidthMeters);
 
-    public static final double kMaxSpeedMetersPerSecond = 0.3;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 0.05;
+    public static final double kMaxSpeedMetersPerSecond = 2;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 0.5;
 
     // Reasonable baseline values for a RAMETE follower in units of meters and
     // seconds
@@ -58,11 +58,14 @@ public final class Constants {
 
     public static final double motorRotationsPerTurntableRotation = 104.0;
 
+
     // public static final double kEncoderDistancePerPulse = 0.0359;//0.00136
     // //TODO: Not used Remove?
 
-    public static double speed = 0.7;
-    public static final double rotation = -0.60;
+    public static final double speedHigh = 0.7;
+    public static final double speedLow = 0.35;
+    public static final double rotationHigh = -0.60;
+    public static final double rotationLow = -0.30;
     public static final double rampRate = 0.0;
 
     public static final double limelightHeight = 0.69; // based on last year's robot
@@ -71,7 +74,7 @@ public final class Constants {
     public static final double metersToFeet = 3.28084;
     public static final double degreesToRadians = Math.PI/180;
 
-    public static final double lowPoweredShotRPM = 3000;
+    public static final double lowPoweredShotRPM = 1200;
 
     // Drivetrain CAN IDs
     public static final int rightBackMotorID = 1;
@@ -103,15 +106,16 @@ public final class Constants {
     public static final int maxShooterRPM = 5500;
 
     // lazysusan
-    public static final int turntableThresh = 35;
-    public static final double stowedPosition = 60;
+    public static final int turntableThresh = 45;
+    public static final double stowedPosition = 50;
 
     // differential constants (very cool)
-    public static final double diffConstLS = 0.008;
+    public static final double diffConstLS = 0.012;//0.012
     public static final double diffConstShooter = 6 * Math.pow(10, -6);
     public static final double diffConstKeepPosition = 0.00001; // TODO: Test this constant and optimize it
 
 
+    public static final double leftBias = 1.3;
     // Sim Vars
     public static final double kSimGearRatio = Constants.gearRatio;
     public static final double kSimTrackwidthMeters = Constants.kTrackwidthMeters;

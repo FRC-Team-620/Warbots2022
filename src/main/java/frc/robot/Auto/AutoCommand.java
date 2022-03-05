@@ -7,6 +7,7 @@ import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Drive.DriveBackwards;
 import frc.robot.Loader.AutoLoad;
 import frc.robot.Loader.AutoShoot;
 import frc.robot.Loader.LoaderSubsystem;
@@ -26,28 +27,27 @@ public class AutoCommand extends SequentialCommandGroup {
         this.lazySusanSubsystem = lSS;
         this.robotContainer = rC;
         // addRequirements(loaderSubsystem, shooterSubsystem, lazySusanSubsystem);
-        try {
             addCommands(
-                robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("paths/Part1.wpilib.json"))),
+                //robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("paths/Part1.wpilib.json"))),
+                new DriveBackwards(robotContainer.getDriveTrain()),
 
-                new AutoShoot(loaderSubsystem),
-
-                robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("paths/Part2.wpilib.json"))),
-
-                new AutoShoot(loaderSubsystem),
-
-                robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("paths/Part3.wpilib.json"))),
-
-                new AutoShoot(loaderSubsystem),
-
-                robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("paths/Part4.wpilib.json"))),
+                new WaitCommand(0.5),
 
                 new AutoShoot(loaderSubsystem)
+
+                // robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("paths/Part2.wpilib.json"))),
+
+                // new AutoShoot(loaderSubsystem),
+
+                // robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("paths/Part3.wpilib.json"))),
+
+                // new AutoShoot(loaderSubsystem),
+
+                // robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("paths/Part4.wpilib.json"))),
+
+                // new AutoShoot(loaderSubsystem)
                 
             );
-        } catch (IOException e) {
-            System.out.println("JSON file not found");
-        }
         
     }
 }
