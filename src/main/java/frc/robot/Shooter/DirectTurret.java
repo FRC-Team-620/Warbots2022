@@ -12,7 +12,7 @@ public class DirectTurret extends CommandBase {
     
     protected CANSparkMax lazySusanMotor;
     protected double tolerance = 0.07, speed = 0.4, targetPosition, setFinalEncoderCount;
-    protected boolean directionToTarget; // true is counterclockwise
+    protected boolean directionToTarget; // setFinal = false; // true is counterclockwise (positive)
 
     public DirectTurret(LazySusanSubsystem lazySusanSubsystem, 
         ShooterSubsystem shooterSubsystem, double targetPosition) {
@@ -31,6 +31,7 @@ public class DirectTurret extends CommandBase {
 
         this(lazySusanSubsystem, shooterSubsystem, targetPosition);
         this.setFinalEncoderCount = setFinalEncoderCount;
+        // this.setFinal = true;
     }
 
     @Override
@@ -58,6 +59,7 @@ public class DirectTurret extends CommandBase {
     @Override
     public void end(boolean interrupt) {
         System.out.println("HERE!!!");
+        // if(this.setFinal)
         this.lazySusanMotor.getEncoder().setPosition(this.setFinalEncoderCount);
         this.lazySusanMotor.set(0);
     }

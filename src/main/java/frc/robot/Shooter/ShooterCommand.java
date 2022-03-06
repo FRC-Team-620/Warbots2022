@@ -118,7 +118,8 @@ public class ShooterCommand extends CommandBase {
         } else if (Math.abs(inputOpRight) > 0) {
             table.getEntry("ledMode").setNumber(1);
             // limelight.setLEDMode(LedMode.OFF);
-            double speed = -inputOpRight/2.5;
+            double speed = -inputOpRight/1.4;
+            System.out.println("JIWJF_" + lazySusanEnc.getPosition());
             if ((lazySusanEnc.getPosition() <= -Constants.turntableThresh && speed < 0)
                 || (lazySusanEnc.getPosition() >= Constants.turntableThresh && speed > 0)) {
                 speed = 0;

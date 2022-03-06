@@ -78,7 +78,7 @@ public class Drivetrain extends SubsystemBase {
     leftBackMotor.setOpenLoopRampRate(openLoopRampRate);
     leftFrontMotor.setOpenLoopRampRate(openLoopRampRate);
 
-    int currentLimit = 45; // maxmium amps
+    int currentLimit = 75; // maxmium amps
     rightBackMotor.setSmartCurrentLimit(currentLimit);
     rightFrontMotor.setSmartCurrentLimit(currentLimit);
     leftBackMotor.setSmartCurrentLimit(currentLimit);

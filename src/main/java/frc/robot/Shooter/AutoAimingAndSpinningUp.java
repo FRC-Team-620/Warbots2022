@@ -28,7 +28,7 @@ public class AutoAimingAndSpinningUp extends CommandBase {
     // shooter
     protected double rpm, minRPM = 0,
             currentSpeed = 0, acceleration, 
-            currRPM;
+            currRPM, maxRPM = 3000;
     protected CANSparkMax lazySusanMotor;
     protected RelativeEncoder lazySusanEnc;
     public AutoAimingAndSpinningUp(ShooterSubsystem shooterSubsystem, LazySusanSubsystem lazySusanSubsystem) {
@@ -84,6 +84,9 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         if(hasTarget) {
             setRPM(tempRPM);
         }
+        // if(getRPM() > this.maxRPM)
+        //     setRPM(this.maxRPM);
+        setRPM(Math.min(getRPM(), this.maxRPM));
         acceleration = Constants.diffConstShooter * (getRPM() - currRPM);
         setShooterSpeedAndUpdate(currentSpeed + acceleration);
         //System.out.println("Frames: " + frames);

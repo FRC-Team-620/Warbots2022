@@ -27,6 +27,7 @@ import frc.robot.Drive.DriveBackwards;
 import frc.robot.Loader.AutoLoad;
 import frc.robot.Shooter.AutoAimingAndSpinningUp;
 import frc.robot.Shooter.DirectTurret;
+import frc.robot.Shooter.DirectTurretAuto;
 import frc.robot.Util.RobotContainer;
 
 
@@ -100,11 +101,11 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     // new SequentialCommandGroup(new Commands());
-    robotContainer.getLazySusanSubsystem().getLazySusanEncoder().setPosition(0);
+    robotContainer.getLazySusanSubsystem().setLazySusanPosition(0);
     new LowerHooks(robotContainer.getClimberSubsystem()).schedule();
     autonomousCommand = new SequentialCommandGroup(
-      new DirectTurret(robotContainer.getLazySusanSubsystem(), //-1.5*
-      robotContainer.getShooterSubsystem(), Constants.stowedPosition, 0), 
+      new DirectTurretAuto(robotContainer.getLazySusanSubsystem(), //-1.5*
+      robotContainer.getShooterSubsystem(), 0),
       new ParallelCommandGroup (
       new AutoAimingAndSpinningUp(robotContainer.getShooterSubsystem(), 
       robotContainer.getLazySusanSubsystem()), 

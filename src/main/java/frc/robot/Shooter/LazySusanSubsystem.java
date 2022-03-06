@@ -33,7 +33,7 @@ public class LazySusanSubsystem extends SubsystemBase {
         IdleMode mode = IdleMode.kBrake; // brakes
         lazySusan.setIdleMode(mode);
 
-        lazySusan.setSmartCurrentLimit(25);
+        lazySusan.setSmartCurrentLimit(35);
 
         simTurrentRotation = new Rotation2d();
         if (RobotBase.isSimulation()) {
@@ -56,6 +56,10 @@ public class LazySusanSubsystem extends SubsystemBase {
 
     public double getLazySusanPosition() {
         return encoder.getPosition();
+    }
+
+    public void setLazySusanPosition(double p) {
+        encoder.setPosition(p);
     }
 
     public double getTicksPerMotorRotation() {

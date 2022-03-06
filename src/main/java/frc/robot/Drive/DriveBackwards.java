@@ -18,6 +18,6 @@ public class DriveBackwards extends CommandBase{
 
     @Override
     public boolean isFinished() {
-        return frames > 75;
+        return frames > 40;
     }
 }
