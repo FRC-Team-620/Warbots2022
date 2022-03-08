@@ -32,7 +32,6 @@ public class ShooterCommand extends CommandBase {
     protected NetworkTableEntry entryArea = table.getEntry("ta");
     protected double turretControlConstant= 0.01;
     protected RelativeEncoder lazySusanEnc;
-    protected boolean autoOn;
     protected boolean lowPoweredShot = false;
     
     CANSparkMax lazySusanMotor;
@@ -204,9 +203,6 @@ public class ShooterCommand extends CommandBase {
         return this.rpm;
     }
 
-    public void setAutoOn(boolean x) {
-        autoOn = x;
-    }
     public NetworkTable getTable() {
         return table;
     }
