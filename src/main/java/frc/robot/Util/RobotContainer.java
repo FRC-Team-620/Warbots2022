@@ -30,6 +30,7 @@ import frc.robot.Climber.ExtendArmsAndStow;
 import frc.robot.Climber.LowerHooks;
 import frc.robot.Climber.RaiseAndGrab;
 import frc.robot.Climber.RaisePistons;
+import frc.robot.Climber.WinchHold;
 import frc.robot.Climber.WinchReset;
 import frc.robot.Controls.ControlBoard;
 import frc.robot.Drive.DriveWithJoystick;
@@ -97,6 +98,9 @@ public class RobotContainer {
 
         controls.lowerHooksButton.whenPressed(
                 new LowerHooks(climberHooks));
+
+        controls.winchHoldButton.whenPressed(
+                new WinchHold(winch, Constants.holdTime));
 
         // TODO: here, now make a unified aiming/flywheel spinup command that we can use
         // for both auto and tele
