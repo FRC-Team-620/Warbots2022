@@ -5,12 +5,16 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class RaiseHooks extends CommandBase {
     ClimberMotorsSubsystem climberMotorsSubsystem;
     ClimberSubsystem climberSubsystem;
-    protected int frames;
+    protected int frames, maxFrame;
 
-    public RaiseHooks(ClimberMotorsSubsystem climberMotorsSubsystem, ClimberSubsystem climberSubsystem) {
+    public RaiseHooks(ClimberMotorsSubsystem climberMotorsSubsystem, ClimberSubsystem climberSubsystem, int maxFrame) {
         addRequirements(climberSubsystem);
         this.climberSubsystem = climberSubsystem;
         this.climberMotorsSubsystem = climberMotorsSubsystem;
+        this.maxFrame = maxFrame;
+    }
+    public RaiseHooks(ClimberMotorsSubsystem climberMotorsSubsystem, ClimberSubsystem climberSubsystem) {
+        this(climberMotorsSubsystem, climberSubsystem, 15);
     }
 
     @Override
@@ -33,7 +37,7 @@ public class RaiseHooks extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return frames >= 15;
+        return this.frames >= this.maxFrame;
     }
 
 }
