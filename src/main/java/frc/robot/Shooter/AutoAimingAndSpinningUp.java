@@ -37,6 +37,12 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         lazySusanMotor = lazySusanSubsystem.getLazySusanMotor();
         lazySusanEnc = lazySusanSubsystem.getLazySusanEncoder();
     }
+
+    @Override
+    public void initialize() {
+        this.frames = 0;
+    }
+
     public double getDistanceInMeters(double a1, double a2, double h1, double h2) {
         return (h2 - h1) / Math.tan((a1 + a2) * (Constants.degreesToRadians));
     }

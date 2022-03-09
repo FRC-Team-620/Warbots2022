@@ -15,6 +15,7 @@ public class RaiseHooks extends CommandBase {
 
     @Override
     public void initialize() {
+        this.frames = 0;
         System.out.println("Hooks were raised");
         climberMotorsSubsystem.setWinchSpeed(0.0);
         climberSubsystem.getHangingSolenoid().set(false);
