@@ -59,6 +59,11 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         return this.rpm;
     }
 
+    @Override 
+    public void initialize() {
+        this.frames = 0;
+    }
+
     @Override
     public void execute() {
         boolean hasTarget = entryHasTarget.getDouble(0.0) == 1.0;

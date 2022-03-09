@@ -10,12 +10,13 @@ public class RaiseHooks extends CommandBase {
     public RaiseHooks(ClimberMotorsSubsystem climberMotorsSubsystem, ClimberSubsystem climberSubsystem) {
         addRequirements(climberSubsystem);
         this.climberSubsystem = climberSubsystem;
-        this.climberMotorsSubsystem = climberMotorsSubsystem;
+        this.climberMotorsSubsystem = climberMotorsSubsystem;  
     }
 
     @Override
     public void initialize() {
         System.out.println("Hooks were raised");
+        this.frames = 0;
         climberMotorsSubsystem.setWinchSpeed(0.0);
         climberSubsystem.getHangingSolenoid().set(false);
     }
