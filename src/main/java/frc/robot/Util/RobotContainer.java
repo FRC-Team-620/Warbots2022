@@ -17,13 +17,11 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.Climber.ClimberMotorsSubsystem;
@@ -33,107 +31,139 @@ import frc.robot.Climber.LowerHooks;
 import frc.robot.Climber.RaiseAndGrab;
 import frc.robot.Climber.RaisePistons;
 import frc.robot.Climber.WinchReset;
+import frc.robot.Controls.ControlBoard;
 import frc.robot.Drive.DriveWithJoystick;
 import frc.robot.Drive.Drivetrain;
 import frc.robot.Loader.LoaderCommand;
 import frc.robot.Loader.LoaderSubsystem;
+import frc.robot.Shooter.DirectTurret;
 import frc.robot.Shooter.LazySusanSubsystem;
 import frc.robot.Shooter.ShooterCommand;
 import frc.robot.Shooter.ShooterSubsystem;
-import frc.robot.Shooter.DirectTurret;
+
 /** Add your docs here. */
 public class RobotContainer {
-    protected Drivetrain drivetrain = new Drivetrain();
-    protected XboxController driver = new XboxController(0);
-    protected XboxController operator = new XboxController(1);
-    protected LoaderSubsystem loaderSubsystem = new LoaderSubsystem();
-    protected ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
-	protected LazySusanSubsystem lazySusanSubsystem = new LazySusanSubsystem();
-    protected ClimberSubsystem climberSubsystem = new ClimberSubsystem();
-    protected ClimberMotorsSubsystem climberMotorsSubsystem = new ClimberMotorsSubsystem();
-    
 
-    protected DriveWithJoystick driveWithJoystick;
-    protected LoaderCommand loaderCommand;
-    protected ShooterCommand shooterCommand;
+    // initialize subsystems
+    private Drivetrain drivetrain;
+    private LoaderSubsystem intake;
+    private ShooterSubsystem shooter;
+    private LazySusanSubsystem turret;
+    private ClimberSubsystem climberHooks;
+    private ClimberMotorsSubsystem winch;
+    private ControlBoard controls;
 
-    //public Command getDriveWithJoystick() {
-        //return new DriveWithJoystick(drivetrain, driver);
-    //}\
+    private DriveWithJoystick driveWithJoystick;
+    private LoaderCommand loaderCommand;
+    private ShooterCommand shooterCommand;
+
+    // TODO: *sighs emoji*
+    TrajectorySelector trajectorySelector = new TrajectorySelector(
+            Filesystem.getDeployDirectory().toPath().resolve("paths/"), true);
+    public Field2d robotFieldWidget = new Field2d(); // TODO: include Robot odometry
+
     public RobotContainer() {
-        JoystickButton operatorYButton = new JoystickButton(operator, Button.kY.value);
-        operatorYButton.whenPressed(new RaisePistons(climberSubsystem));
-        JoystickButton operatorXButton = new JoystickButton(operator, Button.kX.value);
-        operatorXButton.whenPressed(new ParallelCommandGroup(new ExtendArmsAndStow(climberMotorsSubsystem, climberSubsystem), 
-            new DirectTurret(lazySusanSubsystem, shooterSubsystem, Constants.stowedPosition)));
-        JoystickButton operatorBButton = new JoystickButton(operator, Button.kB.value);
-        operatorBButton.whenPressed(new RaiseAndGrab(climberMotorsSubsystem, climberSubsystem));
-        JoystickButton operatorLeftJoystickClick = new JoystickButton(operator, Button.kStart.value);
-
-        // JoystickButton operatorYButton = new JoystickButton(operator, Button.kY.value);
-        // operatorYButton.whenPressed(new RaiseArms(climberSubsystem));
-        // JoystickButton operatorXButton = new JoystickButton(operator, Button.kX.value);
-        // operatorXButton.whenPressed(new RaiseHooks(climberSubsystem));
-        // JoystickButton operatorBButton = new JoystickButton(operator, Button.kB.value);
-        // operatorBButton.whenPressed(new LowerArms(climberSubsystem));
-         JoystickButton operatorStartButton = new JoystickButton(operator, Button.kStart.value);
-         operatorStartButton.whenPressed(new LowerHooks(climberSubsystem));
-         operatorLeftJoystickClick.whenPressed(new WinchReset(climberMotorsSubsystem));
-
-        // JoystickButton operatorBackButton = new JoystickButton(operator, Button.kBack.value);
-        // operatorBackButton.whenPressed(new WindDownWinch(climberSubsystem, 77.5));
-        // JoystickButton operatorRightBumper = new JoystickButton(operator, Button.kLeftBumper.value);
-        // operatorRightBumper.whenPressed(new WindUpWinch(climberSubsystem, 77.5));
+        initSubsystems();
+        initControls();
     }
-    
-    TrajectorySelector trajectorySelector = new TrajectorySelector(Filesystem.getDeployDirectory().toPath().resolve("paths/"), true);
-    public Field2d  robotFieldWidget = new Field2d(); //TODO: include Robot odometry 
+
+    private void initSubsystems() {
+        drivetrain = new Drivetrain();
+        intake = new LoaderSubsystem();
+        shooter = new ShooterSubsystem();
+        turret = new LazySusanSubsystem();
+        climberHooks = new ClimberSubsystem();
+        winch = new ClimberMotorsSubsystem();
+
+    }
+
+    private void initControls() {
+        controls = new ControlBoard();
+
+        // operator
+        controls.raiseArmsButton.whenPressed(
+                new RaisePistons(climberHooks));
+
+        controls.extendArmsButton.whenPressed(
+                new ParallelCommandGroup(
+                        new ExtendArmsAndStow(winch, climberHooks),
+                        new DirectTurret(turret, shooter, Constants.stowedPosition)));
+
+        controls.climbSequenceButton.whenPressed(
+                new RaiseAndGrab(winch, climberHooks));
+
+        controls.retractArmsButton.whenPressed(
+                new WinchReset(winch));
+
+        controls.lowerHooksButton.whenPressed(
+                new LowerHooks(climberHooks));
+
+        // TODO: here, now make a unified aiming/flywheel spinup command that we can use
+        // for both auto and tele
+
+        // controls.aimTurretTrigger.whenActive(
+        // new AimTurretCommand();
+        // );
+        // controls.fireTurretTrigger.whenPressed(
+        // new FireTriggerCommand();
+        // );
+
+    }
+
     public void init() {
-        driveWithJoystick = new DriveWithJoystick(drivetrain, driver, operator);
+        // TODO: :)))))))))
+        // will fix this later
+
+        // only valid for now so this is still functional and builds
+        driveWithJoystick = new DriveWithJoystick(drivetrain, controls.getDriverController(),
+                controls.getOperatorController());
         drivetrain.setDefaultCommand(driveWithJoystick);
 
-        loaderCommand = new LoaderCommand(loaderSubsystem, driver, operator);
-        loaderSubsystem.setDefaultCommand(loaderCommand);        
-        
-		shooterCommand = new ShooterCommand(shooterSubsystem, lazySusanSubsystem, operator, driver);
-        shooterSubsystem.setDefaultCommand(shooterCommand);
-        //shooterSubsystem.setDefaultCommand( new PIDShooterCommand(shooterSubsystem));//Show off pid shooter cmd Only works in sim rn
+        loaderCommand = new LoaderCommand(intake, controls.getDriverController(), controls.getOperatorController());
+        intake.setDefaultCommand(loaderCommand);
 
-        //climberCommand = new ClimberCommand(climberSubsystem);
-        //climberMotorsSubsystem.setDefaultCommand(new ClimberManual(climberMotorsSubsystem, operator));
-        new LowerHooks(climberSubsystem).schedule();
-       
+        shooterCommand = new ShooterCommand(shooter, turret, controls.getOperatorController(),
+                controls.getDriverController());
+        shooter.setDefaultCommand(shooterCommand);
+        // shooterSubsystem.setDefaultCommand( new
+        // PIDShooterCommand(shooterSubsystem));//Show off pid shooter cmd Only works in
+        // sim rn
+
+        // climberCommand = new ClimberCommand(climberSubsystem);
+        // climberMotorsSubsystem.setDefaultCommand(new
+        // ClimberManual(climberMotorsSubsystem, operator));
+        new LowerHooks(climberHooks).schedule();
+
         SmartDashboard.putData(robotFieldWidget);
         SmartDashboard.putData(trajectorySelector);
         robotFieldWidget.getObject("Turret").setPose(new Pose2d());
         trajectorySelector.linkField(robotFieldWidget);
 
-        // trajectorySelector.setDefaultOption("No Trajectory", new Trajectory());  //Uncomment this to default to no trajectory vs the first file found or null.
+        // trajectorySelector.setDefaultOption("No Trajectory", new Trajectory());
+        // //Uncomment this to default to no trajectory vs the first file found or null.
 
-    } 
+    }
 
     /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
+     * Use this to pass the autonomous command to the main {@link Robot} class.
+     *
+     * @return the command to run in autonomous
+     */
 
     public ClimberSubsystem getClimberSubsystem() {
-        return climberSubsystem;
+        return climberHooks;
     }
-
-
 
     public LazySusanSubsystem getLazySusanSubsystem() {
-        return lazySusanSubsystem;
+        return turret;
     }
 
-	public Drivetrain getDriveTrain() {
-      	return drivetrain;
-  	}
-    
+    public Drivetrain getDriveTrain() {
+        return drivetrain;
+    }
+
     public ShooterSubsystem getShooterSubsystem() {
-        return shooterSubsystem;
+        return shooter;
     }
 
     public TrajectorySelector getTrajectorySelector() {
@@ -143,84 +173,78 @@ public class RobotContainer {
     public LoaderCommand getLoaderCommand() {
         return loaderCommand;
     }
-    
+
     public ShooterCommand getShooterCommand() {
         return shooterCommand;
     }
 
     public LoaderSubsystem getLoaderSubsystem() {
-        return loaderSubsystem;
+        return intake;
     }
 
     public XboxController getOperatorController() {
-        return operator;
+        return controls.getOperatorController();
     }
 
     public ClimberMotorsSubsystem getClimberMotorsSubsystem() {
-        return climberMotorsSubsystem;
+        return winch;
     }
-    
-  public Command getAutonomousCommand(Trajectory traj) {
-    // Create a voltage constraint to ensure we don't accelerate too fast
-    System.out.println("Auto Path Ran");
-    var autoVoltageConstraint =
-        new DifferentialDriveVoltageConstraint(
-            new SimpleMotorFeedforward(
-                Constants.ksVolts,
-                Constants.kvVoltSecondsPerMeter,
-                Constants.kaVoltSecondsSquaredPerMeter),
-            Constants.kDriveKinematics,
-            5.02);
 
-    // Create config for trajectory
-    TrajectoryConfig config =
-        new TrajectoryConfig(
+    public Command getAutonomousCommand(Trajectory traj) {
+        // Create a voltage constraint to ensure we don't accelerate too fast
+        System.out.println("Auto Path Ran");
+        var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
+                new SimpleMotorFeedforward(
+                        Constants.ksVolts,
+                        Constants.kvVoltSecondsPerMeter,
+                        Constants.kaVoltSecondsSquaredPerMeter),
+                Constants.kDriveKinematics,
+                5.02);
+
+        // Create config for trajectory
+        TrajectoryConfig config = new TrajectoryConfig(
                 Constants.kMaxSpeedMetersPerSecond,
                 Constants.kMaxAccelerationMetersPerSecondSquared)
-            // Add kinematics to ensure max speed is actually obeyed
-            .setKinematics(Constants.kDriveKinematics)
-            // Apply the voltage constraint
-            .addConstraint(autoVoltageConstraint);
+                // Add kinematics to ensure max speed is actually obeyed
+                .setKinematics(Constants.kDriveKinematics)
+                // Apply the voltage constraint
+                .addConstraint(autoVoltageConstraint);
 
-    // // An example trajectory to follow.  All units in meters.
-    //     Trajectory exampleTrajectory =
-    //     TrajectoryGenerator.generateTrajectory(
-    //         // Start at the origin facing the +X direction
-    //         new Pose2d(0, 0, new Rotation2d(0)),
-    //         // Pass through these two interior waypoints, making an 's' curve path
-    //         List.of(new Translation2d(0.5, 0)),//, new Translation2d(2, -1)//1
-    //         // End 3 meters straight ahead of where we started, facing forward
-    //         new Pose2d(1, 0, new Rotation2d(0)),
-    //         // Pass config
-    //         config);
-    //Trajectory jsonTrajectory = trajectorySelector.getSelected();
-    Trajectory jsonTrajectory = traj;
+        // // An example trajectory to follow. All units in meters.
+        // Trajectory exampleTrajectory =
+        // TrajectoryGenerator.generateTrajectory(
+        // // Start at the origin facing the +X direction
+        // new Pose2d(0, 0, new Rotation2d(0)),
+        // // Pass through these two interior waypoints, making an 's' curve path
+        // List.of(new Translation2d(0.5, 0)),//, new Translation2d(2, -1)//1
+        // // End 3 meters straight ahead of where we started, facing forward
+        // new Pose2d(1, 0, new Rotation2d(0)),
+        // // Pass config
+        // config);
+        // Trajectory jsonTrajectory = trajectorySelector.getSelected();
+        Trajectory jsonTrajectory = traj;
 
+        RamseteCommand ramseteCommand = new RamseteCommand(
+                jsonTrajectory,
+                drivetrain::getPose,
+                new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta),
+                new SimpleMotorFeedforward(
+                        Constants.ksVolts,
+                        Constants.kvVoltSecondsPerMeter,
+                        Constants.kaVoltSecondsSquaredPerMeter),
+                Constants.kDriveKinematics,
+                drivetrain::getWheelSpeeds,
+                new PIDController(Constants.kPDriveVel, 0, 0),
+                new PIDController(Constants.kPDriveVel, 0, 0),
+                // RamseteCommand passes volts to the callback
+                drivetrain::tankDriveVolts,
+                drivetrain);
 
-    RamseteCommand ramseteCommand =
-        new RamseteCommand(
-            jsonTrajectory,
-            drivetrain::getPose,
-            new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta),
-            new SimpleMotorFeedforward(
-                Constants.ksVolts,
-                Constants.kvVoltSecondsPerMeter,
-                Constants.kaVoltSecondsSquaredPerMeter),
-            Constants.kDriveKinematics,
-            drivetrain::getWheelSpeeds,
-            new PIDController(Constants.kPDriveVel, 0, 0),
-            new PIDController(Constants.kPDriveVel, 0, 0),
-            // RamseteCommand passes volts to the callback
-            drivetrain::tankDriveVolts,
-            drivetrain);
+        // Reset odometry to the starting pose of the trajectory.
+        drivetrain.resetOdometry(jsonTrajectory.getInitialPose());
 
-    // Reset odometry to the starting pose of the trajectory.
-    drivetrain.resetOdometry(jsonTrajectory.getInitialPose());
-
-
-    // Run path following command, then stop at the end.
-    return ramseteCommand.andThen(() -> drivetrain.tankDriveVolts(0, 0));
-  }
-
+        // Run path following command, then stop at the end.
+        return ramseteCommand.andThen(() -> drivetrain.tankDriveVolts(0, 0));
+    }
 
 }
