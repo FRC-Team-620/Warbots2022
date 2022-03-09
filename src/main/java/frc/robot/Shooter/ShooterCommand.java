@@ -93,8 +93,8 @@ public class ShooterCommand extends CommandBase {
         SmartDashboard.putNumber("LimelightArea", area);
 
         // new math for static limelight shooting
-        double tempDist = getDistanceInMeters(Constants.azimuthAngle1, y, Constants.limelightHeight, Constants.hubHeight);
-        double tempRPM = metersToRPM(tempDist);
+        double tempDist = ShooterMath.getDistanceInMeters(Constants.azimuthAngle1, y, Constants.limelightHeight, Constants.hubHeight);
+        double tempRPM = ShooterMath.metersToRPM(tempDist);
         System.out.println("Dist: " + tempDist);
         System.out.println("RPM: " + tempRPM);
         // System.out.println("tempDist: " + tempDist);
@@ -165,27 +165,11 @@ public class ShooterCommand extends CommandBase {
             setShooterSpeedAndUpdate(0);
         }
         SmartDashboard.putNumber("Shooter RPM: ",
-                roundUpToNearestMultiple(currRPM, (int) roundTo));
+                ShooterMath.roundUpToNearestMultiple(currRPM, (int) roundTo));
         
         if (operatorXbox.getAButtonPressed()) {
             lazySusanSubsystem.getLazySusanEncoder().setPosition(0);
         }
-    }
-
-    public double getDistanceInMeters(double a1, double a2, double h1, double h2) {
-        return (h2 - h1) / Math.tan((a1 + a2) * (Constants.degreesToRadians));
-    }
-
-    public double metersToRPM(double meters) {
-        double distanceInFeet = Constants.metersToFeet * meters;
-        // System.out.println("Distance In Meters " + meters);
-        //return 117.3708 * distanceInFeet + 1632.61502;
-        return 117.3708 * distanceInFeet + 1700;
-    }
-
-    static long roundUpToNearestMultiple(double input, int step) {
-        int i = (int) Math.ceil(input);
-        return ((i + step - 1) / step) * step;
     }
 
     public void setShooterSpeedAndUpdate(double speed) {
