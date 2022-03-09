@@ -22,7 +22,7 @@ public class RaiseHooks extends CommandBase {
         this.frames = 0;
         System.out.println("Hooks were raised");
         climberMotorsSubsystem.setWinchSpeed(0.0);
-        climberSubsystem.getHangingSolenoid().set(false);
+        climberSubsystem.setHangingSolenoid(false);
     }
 
     @Override

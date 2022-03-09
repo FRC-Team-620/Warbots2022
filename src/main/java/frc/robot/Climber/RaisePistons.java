@@ -23,7 +23,7 @@ public class RaisePistons extends CommandBase {
         this.frames = 0;
         System.out.println("Arms were raised");
         this.targetFrames = (int)Math.round(this.portion * Constants.pistonMaxFrames);
-        climberSubsystem.getArmsSolenoid().set(true);
+        climberSubsystem.setArmsSolenoid(true);
     }
 
     @Override
