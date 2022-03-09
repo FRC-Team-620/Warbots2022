@@ -15,7 +15,7 @@ public class LowerHooks extends CommandBase {
     public void initialize() {
         this.frames = 0;
         System.out.println("Hooks were lowered");
-        climberSubsystem.getHangingSolenoid().set(true);
+        climberSubsystem.setHangingSolenoid(true);    
     }
 
     @Override

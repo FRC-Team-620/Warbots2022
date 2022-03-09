@@ -28,41 +28,10 @@ public class ClimberSubsystem extends SubsystemBase {
     RevEncoderSimWrapper leftencsim,rightencsim;
     public ClimberSubsystem() {
 
-        // leftClimberMotor = new CANSparkMax(Constants.leftClimberMotorID, MotorType.kBrushless);
-        // rightClimberMotor = new CANSparkMax(Constants.rightClimberMotorID, MotorType.kBrushless);
-        // encoder = rightClimberMotor.getEncoder();
-
-        // leftClimberMotor.restoreFactoryDefaults();
-        // rightClimberMotor.restoreFactoryDefaults();
-
-        // IdleMode mode = IdleMode.kBrake; // brakes
-        // leftClimberMotor.setIdleMode(mode);
-        // rightClimberMotor.setIdleMode(mode);
-
-        // leftClimberMotor.follow(rightClimberMotor, true);
-
         hangingSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 2);
         armsSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 1);
 
-        // leftShooterMotor.setInverted(false);
-        // rightShooterMotor.setInverted(false);
-        // if(RobotBase.isSimulation()){
-        //     initSim();
-        // }
     }
-    // public void initSim(){
-    //     climbeSim = new ElevatorSim(DCMotor.getNEO(2), Constants.kSimClimberGearRatio, Constants.kSimRobotWeight, Constants.kSimClimberDrumSize, 0, Constants.ksimClimberMaxHeight);
-    //     leftencsim = RevEncoderSimWrapper.create(leftClimberMotor);
-    //     rightencsim = RevEncoderSimWrapper.create(rightClimberMotor);
-    // }
-
-    // public void setWinchSpeed(double winchSpeed) {
-    //     rightClimberMotor.set(winchSpeed);
-    // }
-
-    // public CANSparkMax getWinchMotor() {
-    //     return rightClimberMotor;
-    // }
 
     public Solenoid getHangingSolenoid() {
         return hangingSolenoid;
@@ -70,19 +39,12 @@ public class ClimberSubsystem extends SubsystemBase {
     public Solenoid getArmsSolenoid() {
         return armsSolenoid;
     }
-    // @Override
-    // public void simulationPeriodic() {
-    //    climbeSim.setInputVoltage(rightClimberMotor.get() * RobotController.getInputVoltage());
-    //    climbeSim.update(Constants.kSimUpdateTime);
-    //    rightencsim.setVelocity(climbeSim.getVelocityMetersPerSecond());
-    //    rightencsim.setDistance(climbeSim.getPositionMeters());
 
-    //    leftencsim.setVelocity(climbeSim.getVelocityMetersPerSecond());
-    //    rightencsim.setDistance(climbeSim.getPositionMeters());
-
-    //    //TODO: Convert to correct pulses/conversions
-    //    //TODO: handle encoder zeroing?
-    // }
-
+    public void setHangingSolenoid(boolean b) {
+        this.getHangingSolenoid().set(b);
+    }
+    public void setArmsSolenoid(boolean b) {
+        this.getArmsSolenoid().set(b);
+    }
 
 }

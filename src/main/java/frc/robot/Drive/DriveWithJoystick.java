@@ -93,40 +93,6 @@ public class DriveWithJoystick extends CommandBase {
       isDriving = true;
       drivetrain.curvatureInput(speed, rotation, !(driverXbox.getXButton()));
     }
-
-    // NetworkTableEntry speedEntry = drivetrain.table.getEntry("speed");
-    // NetworkTableEntry rotationEntry = drivetrain.table.getEntry("rotation");
-    // NetworkTableEntry openLoopRampRateEntry =
-    // drivetrain.table.getEntry("openloopramprate");
-
-    // currentDriver = presetChooser.getSelected();
-    // currentDriverPreset = Presets.presets.get(currentDriver);
-
-    // When the default drive mode is selected, then allow customizable values.
-    // if (currentDriver.toLowerCase().equals("default")) {
-    // //TESTING ONLY. SET BACK TO CONSTANTS FOR THE COMPETITION
-    // speedConstant = speedEntry.getDouble(0.5);
-    // rotationConstant = rotationEntry.getDouble(-0.5);
-    // if (driverXbox.getBButton()) {
-    // speedConstant = speedConstant/2;
-    // rotationConstant = rotationConstant/2;
-    // }
-    // openLoopRampRateConstant = openLoopRampRateEntry.getDouble(0.2);
-
-    // // Otherwise, use the driver-specific custom presets.
-    // } else {
-    // speedConstant = currentDriverPreset.get(0);
-    // speedEntry.setDouble(speedConstant);
-    // rotationConstant = currentDriverPreset.get(1);
-    // rotationEntry.setDouble(rotationConstant);
-    // openLoopRampRateConstant = currentDriverPreset.get(2);
-    // openLoopRampRateEntry.setDouble(openLoopRampRateConstant);
-    // }
-
-    // SmartDashboard.putNumber("RightRPM",
-    // (drivetrain.getRPM(1) + drivetrain.getRPM(2)) / 2);
-    // SmartDashboard.putNumber("LeftRPM",
-    // (drivetrain.getRPM(3) + drivetrain.getRPM(4)) / 2);
   }
 
   // Returns true when the command should end.
