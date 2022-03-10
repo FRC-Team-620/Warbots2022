@@ -66,7 +66,7 @@ public final class Constants {
     public static final double speedLow = 0.35;
     public static final double rotationHigh = -0.60;
     public static final double rotationLow = -0.30;
-    public static final double rampRate = 0.0;
+    public static final double rampRate = 0.2;
 
     public static final double limelightHeight = 0.69; // based on last year's robot
     public static final double hubHeight = 2.7178;
@@ -112,10 +112,10 @@ public final class Constants {
     // differential constants (very cool)
     public static final double diffConstLS = 0.012;//0.012
     public static final double diffConstShooter = 6 * Math.pow(10, -6);
-    public static final double diffConstWinchHold = 0.00001;
+    public static final double diffConstWinchHold = 0.3;
     public static final double diffConstKeepPosition = 0.00001; // TODO: Test this constant and optimize it
     
-    public static final int holdTime = 100;
+    public static final int holdTime = 1000;
 
 
     public static final double leftBias = 1.3;

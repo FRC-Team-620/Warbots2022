@@ -25,19 +25,21 @@ public class WinchHold extends CommandBase {
     @Override
     public void execute() {
         double pos = this.climberMotorsSubsystem.getWinchPosition();
-        this.climberMotorsSubsystem.setWinchSpeed(Constants.diffConstWinchHold*(this.holdPos-pos));
+        double speed = Constants.diffConstWinchHold*(this.holdPos-pos);
+        System.out.println("Speed: " + speed);
+        this.climberMotorsSubsystem.setWinchSpeed(speed);
         frames++;
     }
 
     @Override
     public void end(boolean interrupted) {
+        System.out.println("DONE DONE DONE");
         System.out.println("EXITING");
         this.climberMotorsSubsystem.setWinchSpeed(0);
     }
 
     @Override
     public boolean isFinished() {//climberSubsystem.getWinchMotor().getEncoder().getPosition() >= counts
-        System.out.println("DONE DONE DONE DONE");
         return this.frames >= this.endFrame;
     }
 }

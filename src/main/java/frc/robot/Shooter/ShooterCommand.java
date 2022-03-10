@@ -95,8 +95,8 @@ public class ShooterCommand extends CommandBase {
         // new math for static limelight shooting
         double tempDist = ShooterMath.getDistanceInMeters(Constants.azimuthAngle1, y, Constants.limelightHeight, Constants.hubHeight);
         double tempRPM = ShooterMath.metersToRPM(tempDist);
-        System.out.println("Dist: " + tempDist);
-        System.out.println("RPM: " + tempRPM);
+        // System.out.println("Dist: " + tempDist);
+        // System.out.println("RPM: " + tempRPM);
         // System.out.println("tempDist: " + tempDist);
         // System.out.println("tempDist * metersToFeet: " + tempDist * Constants.metersToFeet);
         // System.out.println("tempRPM: " + tempRPM);
