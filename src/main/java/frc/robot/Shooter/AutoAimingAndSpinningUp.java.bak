@@ -42,9 +42,13 @@ public class AutoAimingAndSpinningUp extends CommandBase {
     public void initialize() {
         this.frames = 0;
     }
+<<<<<<< HEAD
+    
+=======
 
+>>>>>>> 4e983922fc220a95f202737ce7083791453e1731
     public void setShooterSpeedAndUpdate(double speed) {
-        shooterSubsystem.setShooterSpeed(speed);
+        shooterSubsystem.setSpeed(speed);
         currentSpeed = speed;
     }
 

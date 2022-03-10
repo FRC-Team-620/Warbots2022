@@ -17,6 +17,8 @@ public class WinchHold extends CommandBase {
 
     @Override
     public void initialize() {
+        this.frames = 0;
+        System.out.println("WINCH HOLD WINCH HOLD");
         this.holdPos = this.climberMotorsSubsystem.getWinchPosition();
     }
 
@@ -35,6 +37,7 @@ public class WinchHold extends CommandBase {
 
     @Override
     public boolean isFinished() {//climberSubsystem.getWinchMotor().getEncoder().getPosition() >= counts
+        System.out.println("DONE DONE DONE DONE");
         return this.frames >= this.endFrame;
     }
 }
