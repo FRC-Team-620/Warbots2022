@@ -95,8 +95,8 @@ public class ShooterCommand extends CommandBase {
         // new math for static limelight shooting
         double tempDist = ShooterMath.getDistanceInMeters(Constants.azimuthAngle1, y, Constants.limelightHeight, Constants.hubHeight);
         double tempRPM = ShooterMath.metersToRPM(tempDist);
-        // System.out.println("Dist: " + tempDist);
-        // System.out.println("RPM: " + tempRPM);
+        System.out.println("Dist: " + tempDist);
+        System.out.println("RPM: " + tempRPM);
         // System.out.println("tempDist: " + tempDist);
         // System.out.println("tempDist * metersToFeet: " + tempDist * Constants.metersToFeet);
         // System.out.println("tempRPM: " + tempRPM);
@@ -105,13 +105,16 @@ public class ShooterCommand extends CommandBase {
         if(Math.abs(operatorXbox.getLeftTriggerAxis()) > 0) {
             table.getEntry("ledMode").setNumber(3);
             // limelight.setLEDMode(LedMode.ON);
-            double speeeeed =  -(x-Constants.leftBias)*Constants.diffConstLS; // this is speed
+            double speed =  -(x-Constants.leftBias)*Constants.diffConstLS; // this is speed
             // Making sure it's within the provided threshholds
-            if ((lazySusanEnc.getPosition() <= -Constants.turntableThresh && speeeeed < 0)
-                || (lazySusanEnc.getPosition() >= Constants.turntableThresh && speeeeed > 0)) {
-                speeeeed = 0;
+            // if ((lazySusanEnc.getPosition() <= -Constants.turntableThresh && speeeeed < 0)
+            //    || (lazySusanEnc.getPosition() >= Constants.turntableThresh && speeeeed > 0)) {
+            //    speed = 0;
+            // }
+            if (!ShooterMath.inThreshold(speed > 0, lazySusanEnc.getPosition(), Constants.turntableThresh)) {
+                speed = 0;
             }
-            lazySusanMotor.set(speeeeed);
+            lazySusanMotor.set(speed);
             // System.out.println("Negative X: " + -x);
             // System.out.println("Speed With Constant: " + -x*Constants.diffConstLS);
         } else if (Math.abs(inputOpRight) > 0) {

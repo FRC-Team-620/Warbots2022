@@ -17,6 +17,7 @@ public class AutoShoot extends CommandBase {
 
     @Override
     public void initialize() {
+        this.frames = 0;
         System.out.println("Ball was shot");
         loaderSubsystem.getSolenoid().set(true);
     }

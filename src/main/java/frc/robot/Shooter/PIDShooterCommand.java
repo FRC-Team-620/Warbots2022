@@ -26,7 +26,7 @@ public class PIDShooterCommand extends CommandBase {
         
         output = MathUtil.clamp(output,powerDecel ? -1: 0,1);
         SmartDashboard.putNumber("Shooter pid out", output);
-        this.shooter.setShooterSpeed(output);
+        this.shooter.setSpeed(output);
         
         super.execute();
     }
