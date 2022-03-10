@@ -44,7 +44,7 @@ public class AutoAimingAndSpinningUp extends CommandBase {
     }
 
     public void setShooterSpeedAndUpdate(double speed) {
-        shooterSubsystem.setShooterSpeed(speed);
+        shooterSubsystem.setSpeed(speed);
         currentSpeed = speed;
     }
 
@@ -61,7 +61,7 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         double x = entryX.getDouble(0.0);
         double y = entryY.getDouble(0.0);
         table.getEntry("ledMode").setNumber(3);
-        double speeeeed = -x*Constants.diffConstLS; // this is lazy susan turntable speed
+        double speed = -x*Constants.diffConstLS; // this is lazy susan turntable speed
         // boolean hasTarget = shooterSubsystem.limeLight.hasTarget(); //Sim:
         // double x = shooterSubsystem.limeLight.getOffsetX();
         // double y = shooterSubsystem.limeLight.getOffsetY();
@@ -72,11 +72,10 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         double tempRPM = ShooterMath.metersToRPM(tempDist);
         // Making sure it's within the provided threshholds (important that you don't use absolute 
         // value -- don't obliterate the sign)
-        if ((lazySusanEnc.getPosition() <= -Constants.turntableThresh && speeeeed < 0)
-            || (lazySusanEnc.getPosition() >= Constants.turntableThresh && speeeeed > 0)) {
-            speeeeed = 0;
+        if (!ShooterMath.inThreshold(speed > 0, lazySusanEnc.getPosition(), Constants.turntableThresh)) {
+            speed = 0;
         }
-        lazySusanMotor.set(speeeeed);
+        lazySusanMotor.set(speed);
         if(hasTarget) {
             setRPM(tempRPM);
         }
