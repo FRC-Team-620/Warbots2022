@@ -72,7 +72,6 @@ public final class Constants {
     public static final double hubHeight = 2.7178;
     public static final double azimuthAngle1 = 40; // mount angle of the limelight
     public static final double metersToFeet = 3.28084;
-    public static final double degreesToRadians = Math.PI/180;
 
     public static final double lowPoweredShotRPM = 1200;
 

@@ -42,19 +42,9 @@ public class AutoAimingAndSpinningUp extends CommandBase {
     public void initialize() {
         this.frames = 0;
     }
-
-    public double getDistanceInMeters(double a1, double a2, double h1, double h2) {
-        return (h2 - h1) / Math.tan((a1 + a2) * (Constants.degreesToRadians));
-    }
-
-    public double metersToRPM(double meters) {
-        double distanceInFeet = Constants.metersToFeet * meters;
-        //System.out.println("Distance In Meters " + meters);
-        return 117.3708 * distanceInFeet + 1750;
-    }
-
+    
     public void setShooterSpeedAndUpdate(double speed) {
-        shooterSubsystem.setShooterSpeed(speed);
+        shooterSubsystem.setSpeed(speed);
         currentSpeed = speed;
     }
 
@@ -78,8 +68,8 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         // shooterSubsystem.limeLight.setLEDMode(LedMode.ON);
         // double speeeeed = -x*Constants.diffConstLS; // this is speed
 
-        double tempDist = getDistanceInMeters(Constants.azimuthAngle1, y, Constants.limelightHeight, Constants.hubHeight);
-        double tempRPM = metersToRPM(tempDist);
+        double tempDist = ShooterMath.getDistanceInMeters(Constants.azimuthAngle1, y, Constants.limelightHeight, Constants.hubHeight);
+        double tempRPM = ShooterMath.metersToRPM(tempDist);
         // Making sure it's within the provided threshholds (important that you don't use absolute 
         // value -- don't obliterate the sign)
         if ((lazySusanEnc.getPosition() <= -Constants.turntableThresh && speeeeed < 0)

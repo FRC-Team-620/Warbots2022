@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Util.LimeLight;
-import frc.robot.Util.LimeLight.LedMode;
 
 public class ShooterCommand extends CommandBase {
     protected XboxController operatorXbox;
@@ -32,7 +31,6 @@ public class ShooterCommand extends CommandBase {
     protected NetworkTableEntry entryArea = table.getEntry("ta");
     protected double turretControlConstant= 0.01;
     protected RelativeEncoder lazySusanEnc;
-    protected boolean lowPoweredShot = false;
     
     CANSparkMax lazySusanMotor;
 
@@ -41,14 +39,14 @@ public class ShooterCommand extends CommandBase {
     protected double  currTicksGoal = 0;
     protected double inputOpRight = 0;
     // shooter
-    protected double rpm, currentSpeed = 0, acceleration, input, roundTo, currRPM, deltaTheta;
+    protected double rpm, acceleration, input, roundTo, currRPM, deltaTheta;
 
     protected LimeLight limelight;
     public ShooterCommand(ShooterSubsystem shooterSubsystem, LazySusanSubsystem lazySusanSubsystem, XboxController operatorXbox, XboxController driverXbox) {
         // timer.start();
         // prevTime = timer.get();
         this.ticksPerTurntableRotation = lazySusanSubsystem.getTicksPerMotorRotation()*Constants.motorRotationsPerTurntableRotation;
-        this.angleChangePerTick = 2*Math.PI/this.ticksPerTurntableRotation;
+        this.angleChangePerTick = 2 * Math.PI / this.ticksPerTurntableRotation;
         SmartDashboard.putNumber("Round to: ", 5);
         SmartDashboard.putNumber("Set default RPM: ", 0);
         // SmartDashboard.putNumber("Change angle: ", 0);
@@ -65,24 +63,17 @@ public class ShooterCommand extends CommandBase {
 
     @Override
     public void execute() {
-        boolean hasTarget = entryHasTarget.getDouble(0.0) == 1.0;
-        double x = entryX.getDouble(0.0);
-        double y = entryY.getDouble(0.0);
-        double area = entryArea.getDouble(0.0);
-        // boolean hasTarget = limelight.hasTarget();
-        // double x = limelight.getOffsetX();
-        // double y = limelight.getOffsetY();
-        // double area = limelight.getArea();
+        boolean hasTarget = entryHasTarget.getDouble(0) == 1;
+        double x = entryX.getDouble(0);
+        double y = entryY.getDouble(0);
 
         double borkedJoystickDeadband = 0.05;
-        // input = operatorXbox.getRightY();
         inputOpRight = operatorXbox.getLeftX();
-        // if (Math.abs(input) < borkedJoystickDeadband) {
-        //     input = 0;
-        // }
+
         if (Math.abs(inputOpRight) < borkedJoystickDeadband) {
             inputOpRight = 0;
         }
+
         roundTo = SmartDashboard.getNumber("Round to: ", 5);
         currRPM = shooterSubsystem.getRPM();
 
@@ -90,62 +81,39 @@ public class ShooterCommand extends CommandBase {
         SmartDashboard.putBoolean("LimelightHasTarget", hasTarget);
         SmartDashboard.putNumber("LimelightX", x);
         SmartDashboard.putNumber("LimelightY", y);
-        SmartDashboard.putNumber("LimelightArea", area);
 
-        // new math for static limelight shooting
-        double tempDist = getDistanceInMeters(Constants.azimuthAngle1, y, Constants.limelightHeight, Constants.hubHeight);
-        double tempRPM = metersToRPM(tempDist);
+        // math for static limelight shooting
+        double tempDist = ShooterMath.getDistanceInMeters(Constants.azimuthAngle1, y, 
+        Constants.limelightHeight, Constants.hubHeight);
+        double tempRPM = ShooterMath.metersToRPM(tempDist);
         System.out.println("Dist: " + tempDist);
         System.out.println("RPM: " + tempRPM);
-        // System.out.println("tempDist: " + tempDist);
-        // System.out.println("tempDist * metersToFeet: " + tempDist * Constants.metersToFeet);
-        // System.out.println("tempRPM: " + tempRPM);
-        // || autoOn
-        // System.out.println(lazySusanEnc.getPosition());
+
         if(Math.abs(operatorXbox.getLeftTriggerAxis()) > 0) {
-            table.getEntry("ledMode").setNumber(3);
-            // limelight.setLEDMode(LedMode.ON);
-            double speeeeed =  -(x-Constants.leftBias)*Constants.diffConstLS; // this is speed
+            table.getEntry("ledMode").setNumber(3); // Force LimeLight on
+            double speed = -(x-Constants.leftBias)*Constants.diffConstLS; // this is speed
             // Making sure it's within the provided threshholds
-            if ((lazySusanEnc.getPosition() <= -Constants.turntableThresh && speeeeed < 0)
-                || (lazySusanEnc.getPosition() >= Constants.turntableThresh && speeeeed > 0)) {
-                speeeeed = 0;
-            }
-            lazySusanMotor.set(speeeeed);
-            // System.out.println("Negative X: " + -x);
-            // System.out.println("Speed With Constant: " + -x*Constants.diffConstLS);
-        } else if (Math.abs(inputOpRight) > 0) {
-            table.getEntry("ledMode").setNumber(1);
-            // limelight.setLEDMode(LedMode.OFF);
-            double speed = -inputOpRight/1.4;
-            System.out.println("JIWJF_" + lazySusanEnc.getPosition());
-            if ((lazySusanEnc.getPosition() <= -Constants.turntableThresh && speed < 0)
-                || (lazySusanEnc.getPosition() >= Constants.turntableThresh && speed > 0)) {
+            if (!ShooterMath.inThreshold(speed > 0, lazySusanEnc.getPosition(), Constants.turntableThresh)) {
                 speed = 0;
             }
             lazySusanMotor.set(speed);
-            // System.out.println("Speed Man: "+ speed);
-            // System.out.println("Curr Enc Pos: " + lazySusanEnc.getPosition());
-            
-
+        } else if (Math.abs(inputOpRight) > 0) {
+            table.getEntry("ledMode").setNumber(1); // Force LimeLight off
+            double speed = -inputOpRight/1.4;
+            System.out.println("JIWJF_" + lazySusanEnc.getPosition());
+            if (!ShooterMath.inThreshold(speed > 0, lazySusanEnc.getPosition(), Constants.turntableThresh)) {
+                speed = 0;
+            }
+            lazySusanMotor.set(speed);
         } else {
             table.getEntry("ledMode").setNumber(1);
-            // limelight.setLEDMode(LedMode.OFF);
             lazySusanMotor.set(0);
-
-        }
-        if (driverXbox.getYButton()) {
-            System.out.println("UGIOEHGIAENNAEION00");
-            lowPoweredShot = true;
-        } else {
-            lowPoweredShot = false;
         }
         
         if(hasTarget && Math.abs(operatorXbox.getLeftTriggerAxis()) > 0) {
              setRPM(tempRPM);
-             //System.out.println("Target + RightBumper: Triggered");
         } else {
-            if (lowPoweredShot) {
+            if (driverXbox.getYButton()) { // The Y Button triggers the low powered shot
                 setRPM(Constants.lowPoweredShotRPM);
             } else {
                 setRPM(SmartDashboard.getNumber("Set default RPM: ", 0));
@@ -158,47 +126,24 @@ public class ShooterCommand extends CommandBase {
         }
         acceleration = Constants.diffConstShooter * (getRPM() - currRPM);
         SmartDashboard.putNumber("Acceleration: ", acceleration);
-        // if(Math.abs(rpm-currRPM) > (bangBangTolerance * rpm))
-        setShooterSpeedAndUpdate(currentSpeed + acceleration);
-        // System.out.println(rpm);
-        if(rpm == 0.0) {
-            setShooterSpeedAndUpdate(0);
+        shooterSubsystem.setSpeed(shooterSubsystem.getSpeed() + acceleration);
+        
+        if (rpm == 0) {
+            shooterSubsystem.setSpeed(0);
         }
+
         SmartDashboard.putNumber("Shooter RPM: ",
-                roundUpToNearestMultiple(currRPM, (int) roundTo));
+                ShooterMath.roundUpToNearestMultiple(currRPM, (int) roundTo));
         
         if (operatorXbox.getAButtonPressed()) {
             lazySusanSubsystem.getLazySusanEncoder().setPosition(0);
         }
     }
 
-    public double getDistanceInMeters(double a1, double a2, double h1, double h2) {
-        return (h2 - h1) / Math.tan((a1 + a2) * (Constants.degreesToRadians));
-    }
-
-    public double metersToRPM(double meters) {
-        double distanceInFeet = Constants.metersToFeet * meters;
-        // System.out.println("Distance In Meters " + meters);
-        //return 117.3708 * distanceInFeet + 1632.61502;
-        return 117.3708 * distanceInFeet + 1700;
-    }
-
-    static long roundUpToNearestMultiple(double input, int step) {
-        int i = (int) Math.ceil(input);
-        return ((i + step - 1) / step) * step;
-    }
-
-    public void setShooterSpeedAndUpdate(double speed) {
-        if(speed == 0)
-            shooterSubsystem.stopMotors();
-        else
-            shooterSubsystem.setShooterSpeed(speed);
-        currentSpeed = speed;
-    }
-
     public void setRPM(double rpm) {
         this.rpm = rpm;
     }
+
     public double getRPM() {
         return this.rpm;
     }
@@ -207,7 +152,6 @@ public class ShooterCommand extends CommandBase {
         return table;
     }
     
-
     @Override
     public boolean isFinished() {
         return false;
