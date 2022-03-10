@@ -179,7 +179,7 @@ public class ShooterCommand extends CommandBase {
         if(speed == 0)
             shooterSubsystem.stopMotors();
         else
-            shooterSubsystem.setShooterSpeed(speed);
+            shooterSubsystem.setSpeed(speed);
         currentSpeed = speed;
     }
 
