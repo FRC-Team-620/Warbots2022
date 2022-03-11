@@ -11,6 +11,8 @@ import com.revrobotics.SimableCANSparkMax;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -26,10 +28,14 @@ import frc.robot.Util.sim.RevEncoderSimWrapper;
 public class ShooterSubsystem extends SubsystemBase {
     private final SimableCANSparkMax rightShooterMotor, leftShooterMotor;
     private final MotorControllerGroup shooterMotors;
+    protected NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     protected final RelativeEncoder encoder;
     protected final DecimalFormat decFormat = new DecimalFormat("#.#");
     public LimeLight limeLight;
     public LimeLightPoseSim possim;
+    public double targetRpm;
+    public double currentSpeed = 0;
+    
 
     //Sim
     FlywheelSim simFlywheel;
@@ -93,6 +99,15 @@ public class ShooterSubsystem extends SubsystemBase {
         return simFlywheel.getAngularVelocityRPM();
     }
 
+    public void setTargetRPM(double rpm) {
+        this.targetRpm = rpm;
+    }
+
+    public double getTargetRPM() {
+        return this.targetRpm;
+    }
+
+
     @Override
     public void simulationPeriodic() {
         simFlywheel.setInputVoltage(rightShooterMotor.get() * RobotController.getInputVoltage());
@@ -102,6 +117,14 @@ public class ShooterSubsystem extends SubsystemBase {
         leftencsim.setVelocity(simFlywheel.getAngularVelocityRPM());
         
         SmartDashboard.putNumber("Right Flywheel motor", getRPM());
+    }
+
+    public void setShooterSpeedAndUpdate(double speed) {
+        if(speed == 0)
+            this.stopMotors();
+        else
+            this.setSpeed(speed);
+        currentSpeed = speed;
     }
 
     public double getDrawnCurrentAmps(){

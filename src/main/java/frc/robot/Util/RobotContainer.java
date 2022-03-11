@@ -35,10 +35,13 @@ import frc.robot.Climber.WinchReset;
 import frc.robot.Controls.ControlBoard;
 import frc.robot.Drive.DriveWithJoystick;
 import frc.robot.Drive.Drivetrain;
+import frc.robot.Loader.AutoShoot;
 import frc.robot.Loader.LoaderCommand;
 import frc.robot.Loader.LoaderSubsystem;
+import frc.robot.Shooter.AutoAimingAndSpinningUp;
 import frc.robot.Shooter.DirectTurret;
 import frc.robot.Shooter.LazySusanSubsystem;
+import frc.robot.Shooter.LowShotCommand;
 import frc.robot.Shooter.ShooterCommand;
 import frc.robot.Shooter.ShooterSubsystem;
 
@@ -101,10 +104,15 @@ public class RobotContainer {
 
         controls.winchHoldButton.whenPressed(
                 new WinchHold(winch, Constants.holdTime));
+        
+        controls.lowShotButton.whileActiveContinuous(new LowShotCommand(shooter), true);
 
         // TODO: here, now make a unified aiming/flywheel spinup command that we can use
         // for both auto and tele
-
+        controls.aimTurretTrigger.whileActiveContinuous(new AutoAimingAndSpinningUp(getShooterSubsystem(),
+        getLazySusanSubsystem(), false));
+        controls.fireTurretTrigger.whenActive(
+        new AutoShoot(getLoaderSubsystem()));
         // controls.aimTurretTrigger.whenActive(
         // new AimTurretCommand();
         // );
@@ -126,9 +134,9 @@ public class RobotContainer {
         loaderCommand = new LoaderCommand(intake, controls.getDriverController(), controls.getOperatorController());
         intake.setDefaultCommand(loaderCommand);
 
-        shooterCommand = new ShooterCommand(shooter, turret, controls.getOperatorController(),
-                controls.getDriverController());
-        shooter.setDefaultCommand(shooterCommand);
+        //shooterCommand = new ShooterCommand(shooter, turret, controls.getOperatorController(),
+                //controls.getDriverController());
+        //shooter.setDefaultCommand(shooterCommand);
         // shooterSubsystem.setDefaultCommand( new
         // PIDShooterCommand(shooterSubsystem));//Show off pid shooter cmd Only works in
         // sim rn

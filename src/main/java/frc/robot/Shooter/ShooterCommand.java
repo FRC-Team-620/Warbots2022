@@ -41,7 +41,7 @@ public class ShooterCommand extends CommandBase {
     protected double  currTicksGoal = 0;
     protected double inputOpRight = 0;
     // shooter
-    protected double rpm, currentSpeed = 0, acceleration, input, roundTo, currRPM, deltaTheta;
+    protected double targetRpm, currentSpeed = shooterSubsystem.currentSpeed, acceleration, input, roundTo, currRPM, deltaTheta;
 
     protected LimeLight limelight;
     public ShooterCommand(ShooterSubsystem shooterSubsystem, LazySusanSubsystem lazySusanSubsystem, XboxController operatorXbox, XboxController driverXbox) {
@@ -111,7 +111,7 @@ public class ShooterCommand extends CommandBase {
             //    || (lazySusanEnc.getPosition() >= Constants.turntableThresh && speeeeed > 0)) {
             //    speed = 0;
             // }
-            if (!ShooterMath.inThreshold(speed > 0, lazySusanEnc.getPosition(), Constants.turntableThresh)) {
+            if (!ShooterMath.inThreshold(speed > 0, lazySusanEnc.getPosition())) {
                 speed = 0;
             }
             lazySusanMotor.set(speed);
@@ -145,27 +145,27 @@ public class ShooterCommand extends CommandBase {
         }
         
         if(hasTarget && Math.abs(operatorXbox.getLeftTriggerAxis()) > 0) {
-             setRPM(tempRPM);
+             shooterSubsystem.setTargetRPM(tempRPM);
              //System.out.println("Target + RightBumper: Triggered");
         } else {
             if (lowPoweredShot) {
-                setRPM(Constants.lowPoweredShotRPM);
+                shooterSubsystem.setTargetRPM(Constants.lowPoweredShotRPM);
             } else {
-                setRPM(SmartDashboard.getNumber("Set default RPM: ", 0));
+                shooterSubsystem.setTargetRPM(SmartDashboard.getNumber("Set default RPM: ", 0));
             }
             
-            if (getRPM() > Constants.maxShooterRPM)
-                setRPM(Constants.maxShooterRPM);
-            else if (getRPM() < Constants.minShooterRPM)
-                setRPM(Constants.minShooterRPM);
+            if (shooterSubsystem.getTargetRPM() > Constants.maxShooterRPM)
+            shooterSubsystem.setTargetRPM(Constants.maxShooterRPM);
+            else if (shooterSubsystem.getTargetRPM() < Constants.minShooterRPM)
+            shooterSubsystem.setTargetRPM(Constants.minShooterRPM);
         }
-        acceleration = Constants.diffConstShooter * (getRPM() - currRPM);
+        acceleration = Constants.diffConstShooter * (shooterSubsystem.getTargetRPM() - currRPM);
         SmartDashboard.putNumber("Acceleration: ", acceleration);
         // if(Math.abs(rpm-currRPM) > (bangBangTolerance * rpm))
-        setShooterSpeedAndUpdate(currentSpeed + acceleration);
+        shooterSubsystem.setShooterSpeedAndUpdate(currentSpeed + acceleration);
         // System.out.println(rpm);
-        if(rpm == 0.0) {
-            setShooterSpeedAndUpdate(0);
+        if(targetRpm == 0.0) {
+            shooterSubsystem.setShooterSpeedAndUpdate(0);
         }
         SmartDashboard.putNumber("Shooter RPM: ",
                 ShooterMath.roundUpToNearestMultiple(currRPM, (int) roundTo));
@@ -175,26 +175,10 @@ public class ShooterCommand extends CommandBase {
         }
     }
 
-    public void setShooterSpeedAndUpdate(double speed) {
-        if(speed == 0)
-            shooterSubsystem.stopMotors();
-        else
-            shooterSubsystem.setSpeed(speed);
-        currentSpeed = speed;
-    }
-
-    public void setRPM(double rpm) {
-        this.rpm = rpm;
-    }
-    public double getRPM() {
-        return this.rpm;
-    }
-
     public NetworkTable getTable() {
         return table;
     }
     
-
     @Override
     public boolean isFinished() {
         return false;

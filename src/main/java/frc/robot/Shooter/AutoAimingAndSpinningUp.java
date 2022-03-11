@@ -31,11 +31,15 @@ public class AutoAimingAndSpinningUp extends CommandBase {
             currRPM, maxRPM = 3000;
     protected CANSparkMax lazySusanMotor;
     protected RelativeEncoder lazySusanEnc;
-    public AutoAimingAndSpinningUp(ShooterSubsystem shooterSubsystem, LazySusanSubsystem lazySusanSubsystem) {
+    // auto
+    protected boolean isAuto;
+    protected boolean finished;
+    public AutoAimingAndSpinningUp(ShooterSubsystem shooterSubsystem, LazySusanSubsystem lazySusanSubsystem, boolean isAuto) {
         this.shooterSubsystem = shooterSubsystem;
         addRequirements(shooterSubsystem);
         lazySusanMotor = lazySusanSubsystem.getLazySusanMotor();
         lazySusanEnc = lazySusanSubsystem.getLazySusanEncoder();
+        this.isAuto = isAuto;
     }
 
     @Override
@@ -57,6 +61,7 @@ public class AutoAimingAndSpinningUp extends CommandBase {
 
     @Override
     public void execute() {
+        finished = false;
         boolean hasTarget = entryHasTarget.getDouble(0.0) == 1.0;
         double x = entryX.getDouble(0.0);
         double y = entryY.getDouble(0.0);
@@ -72,7 +77,7 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         double tempRPM = ShooterMath.metersToRPM(tempDist);
         // Making sure it's within the provided threshholds (important that you don't use absolute 
         // value -- don't obliterate the sign)
-        if (!ShooterMath.inThreshold(speed > 0, lazySusanEnc.getPosition(), Constants.turntableThresh)) {
+        if (!ShooterMath.inThreshold(speed > 0, lazySusanEnc.getPosition())) {
             speed = 0;
         }
         lazySusanMotor.set(speed);
@@ -86,11 +91,20 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         setShooterSpeedAndUpdate(currentSpeed + acceleration);
         //System.out.println("Frames: " + frames);
         frames++;
+        if (isAuto) {
+            finished = true;
+        }
     }
 
     @Override
     public boolean isFinished() {
-        return frames > 750;
+        if (frames > 750) {
+            return true;
+        } else if(finished) {
+            return true;
+        }
+        return false;
+        
     }
 
     

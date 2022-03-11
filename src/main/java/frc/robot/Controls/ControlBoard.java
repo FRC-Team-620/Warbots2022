@@ -17,6 +17,7 @@ public class ControlBoard {
             climbSequenceButton,
             lowerHooksButton,
             retractArmsButton,
+            lowShotButton,
             winchHoldButton;
 
     public TriggerPressed aimTurretTrigger,
@@ -40,7 +41,7 @@ public class ControlBoard {
         // driver controls
         intakeButton = new JoystickButton(driver, Button.kB.value);
         outakeButton = new JoystickButton(driver, Button.kA.value);
-        
+        lowShotButton = new JoystickButton(driver, Button.kY.value);
         winchHoldButton = new JoystickButton(driver, Button.kX.value);
     }
 
