@@ -103,8 +103,8 @@ public class RobotContainer {
                 new LowerHooks(climberHooks));
 
         controls.winchHoldButton.whenPressed(
-                new WinchHold(winch, Constants.holdTime));
-        
+                new WinchHold(winch, winch.getWinchPosition(), Constants.holdTime));
+
         controls.lowShotButton.whileActiveContinuous(new LowShotCommand(shooter), true);
 
         // TODO: here, now make a unified aiming/flywheel spinup command that we can use
@@ -112,7 +112,7 @@ public class RobotContainer {
         controls.aimTurretTrigger.whileActiveContinuous(new AutoAimingAndSpinningUp(getShooterSubsystem(),
         getLazySusanSubsystem(), false));
         controls.fireTurretTrigger.whenActive(
-        new AutoShoot(getLoaderSubsystem()));
+        new AutoShoot(getLoaderSubsystem()));        
         // controls.aimTurretTrigger.whenActive(
         // new AimTurretCommand();
         // );
