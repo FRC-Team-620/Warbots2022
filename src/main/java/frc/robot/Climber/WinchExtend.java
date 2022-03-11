@@ -20,7 +20,7 @@ public class WinchExtend extends CommandBase {
         this.targetCounts = this.climberMotorsSubsystem.getWinchPosition() + this.deltaCounts;
         // System.out.println("Winch begins wind down");
         System.out.println("Target: " + this.targetCounts);
-        this.climberMotorsSubsystem.setWinchSpeed(0.8);
+        this.climberMotorsSubsystem.setWinchSpeed(1);
     }
 
     @Override

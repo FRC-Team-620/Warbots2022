@@ -100,7 +100,7 @@ public class RobotContainer {
                 new LowerHooks(climberHooks));
 
         controls.winchHoldButton.whenPressed(
-                new WinchHold(winch, Constants.holdTime));
+                new WinchHold(winch, winch.getWinchPosition(), Constants.holdTime));
 
         // TODO: here, now make a unified aiming/flywheel spinup command that we can use
         // for both auto and tele

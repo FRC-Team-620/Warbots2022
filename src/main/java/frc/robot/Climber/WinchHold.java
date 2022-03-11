@@ -6,12 +6,13 @@ import frc.robot.Constants;
 
 public class WinchHold extends CommandBase {
     protected ClimberMotorsSubsystem climberMotorsSubsystem;
-    protected double frames, holdPos;
+    protected double frames, holdCount;
     protected int endFrame;
 
-    public WinchHold(ClimberMotorsSubsystem climberMotorsSubsystem, int endFrame) {
+    public WinchHold(ClimberMotorsSubsystem climberMotorsSubsystem, double holdCount, int endFrame) {
         addRequirements(climberMotorsSubsystem);
         this.climberMotorsSubsystem = climberMotorsSubsystem;
+        this.holdCount = holdCount;
         this.endFrame = endFrame;
     }
 
@@ -19,14 +20,13 @@ public class WinchHold extends CommandBase {
     public void initialize() {
         this.frames = 0;
         System.out.println("WINCH HOLD WINCH HOLD");
-        this.holdPos = this.climberMotorsSubsystem.getWinchPosition();
     }
 
     @Override
     public void execute() {
         double pos = this.climberMotorsSubsystem.getWinchPosition();
-        double speed = Constants.diffConstWinchHold*(this.holdPos-pos);
-        System.out.println("Speed: " + speed);
+        double speed = Constants.diffConstWinchHold*(this.holdCount-pos);
+        System.out.println("Speed !! : " + speed);
         this.climberMotorsSubsystem.setWinchSpeed(speed);
         frames++;
     }
