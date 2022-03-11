@@ -18,13 +18,15 @@ public class WinchRetract extends CommandBase {
         System.out.println("Current: " + this.climberMotorsSubsystem.getWinchPosition());
         this.targetCounts = this.climberMotorsSubsystem.getWinchPosition() - this.deltaCounts;
         System.out.println("Target: " + this.targetCounts);
+        this.climberMotorsSubsystem.setWinchSpeed(-1);
         // System.out.println("Winch begins wind up");
-        this.climberMotorsSubsystem.setWinchSpeed(-.8);
     }
 
     @Override
     public void execute() {
         System.out.println("Winch is winding");
+        // this.climberMotorsSubsystem.setWinchSpeed(
+        //     Math.abs(this.targetCounts-this.climberMotorsSubsystem.getWinchPosition())>10?-1:-.2);
     }
 
     @Override
