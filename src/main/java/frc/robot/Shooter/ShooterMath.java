@@ -17,7 +17,7 @@ public final class ShooterMath {
         return i + step - 1;
     }
 
-    public static boolean inThreshold(boolean isPositive, double encoderPosition) {
+    public static boolean inBounds(boolean isPositive, double encoderPosition) {
         return !((isPositive && encoderPosition >= Constants.turntableThresh) 
         || (!isPositive && encoderPosition <= -Constants.turntableThresh));
     }

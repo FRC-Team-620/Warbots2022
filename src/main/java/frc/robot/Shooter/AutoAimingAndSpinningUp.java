@@ -47,26 +47,26 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         this.frames = 0;
     }
 
-    public void setShooterSpeedAndUpdate(double speed) {
-        shooterSubsystem.setSpeed(speed);
-        currentSpeed = speed;
-    }
+    // public void setShooterSpeedAndUpdate(double speed) {
+    //     shooterSubsystem.setSpeed(speed);
+    //     currentSpeed = speed;
+    // }
 
-    public void setRPM(double rpm) {
-        this.rpm = rpm;
-    }
-    public double getRPM() {
-        return this.rpm;
-    }
+    // public void setRPM(double rpm) {
+    //     this.rpm = rpm;
+    // }
+    // public double getRPM() {
+    //     return this.rpm;
+    // }
 
     @Override
     public void execute() {
-        finished = false;
+        //finished = false;
         boolean hasTarget = entryHasTarget.getDouble(0.0) == 1.0;
         double x = entryX.getDouble(0.0);
         double y = entryY.getDouble(0.0);
         table.getEntry("ledMode").setNumber(3);
-        double speed = -x*Constants.diffConstLS; // this is lazy susan turntable speed
+        double speed = -(x-Constants.leftBias)*Constants.diffConstLS; // this is lazy susan turntable speed
         // boolean hasTarget = shooterSubsystem.limeLight.hasTarget(); //Sim:
         // double x = shooterSubsystem.limeLight.getOffsetX();
         // double y = shooterSubsystem.limeLight.getOffsetY();
@@ -77,32 +77,54 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         double tempRPM = ShooterMath.metersToRPM(tempDist);
         // Making sure it's within the provided threshholds (important that you don't use absolute 
         // value -- don't obliterate the sign)
-        if (!ShooterMath.inThreshold(speed > 0, lazySusanEnc.getPosition())) {
+        if (!ShooterMath.inBounds(speed > 0, lazySusanEnc.getPosition())) {
             speed = 0;
         }
         lazySusanMotor.set(speed);
+
+
         if(hasTarget) {
-            setRPM(tempRPM);
+            System.out.println(tempRPM);
+            shooterSubsystem.setTargetRPM(tempRPM);
+            System.out.println(shooterSubsystem.getTargetRPM());
+        } else {
+            shooterSubsystem.setTargetRPM(0);
         }
+        System.out.println("hasTarget: " + hasTarget);
         // if(getRPM() > this.maxRPM)
         //     setRPM(this.maxRPM);
-        setRPM(Math.min(getRPM(), this.maxRPM));
-        acceleration = Constants.diffConstShooter * (getRPM() - currRPM);
-        setShooterSpeedAndUpdate(currentSpeed + acceleration);
+        //shooterSubsystem.setTargetRPM(Math.min(shooterSubsystem.getRPM(), this.maxRPM));
+        //System.out.println(shooterSubsystem.getTargetRPM());
+        System.out.println("RPM: " + shooterSubsystem.getRPM());
+        acceleration = Constants.diffConstShooter * (shooterSubsystem.getTargetRPM() - shooterSubsystem.getRPM());
+        shooterSubsystem.setShooterSpeedAndUpdate(shooterSubsystem.getCurrentSpeed() + acceleration);
+        System.out.println("ShooterSpeed: " + shooterSubsystem.getCurrentSpeed() + acceleration);
         //System.out.println("Frames: " + frames);
-        frames++;
-        if (isAuto) {
-            finished = true;
-        }
+        
+        // if (isAuto) {
+        //     finished = true;
+        // } 
+        // else {
+        //     frames++;
+        // }
     }
 
     @Override
+    public void end(boolean interrupt) {
+        //System.out.println("HERE!!!");
+        lazySusanMotor.set(0);
+        shooterSubsystem.stopMotors();
+        table.getEntry("ledMode").setNumber(1);
+    }
+        
+
+    @Override
     public boolean isFinished() {
-        if (frames > 750) {
-            return true;
-        } else if(finished) {
-            return true;
-        }
+        // if (frames > 750) {
+        //     return true;
+        // } else if(finished) {
+        //     return false;
+        // }
         return false;
         
     }

@@ -27,9 +27,10 @@ import frc.robot.Util.sim.RevEncoderSimWrapper;
 
 public class ShooterSubsystem extends SubsystemBase {
     private final SimableCANSparkMax rightShooterMotor, leftShooterMotor;
-    private final MotorControllerGroup shooterMotors;
+    // private final MotorControllerGroup shooterMotors;
     protected NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-    protected final RelativeEncoder encoder;
+    protected final RelativeEncoder leftEncoder;
+    protected final RelativeEncoder rightEncoder;
     protected final DecimalFormat decFormat = new DecimalFormat("#.#");
     public LimeLight limeLight;
     public LimeLightPoseSim possim;
@@ -45,20 +46,28 @@ public class ShooterSubsystem extends SubsystemBase {
     public ShooterSubsystem() {
         rightShooterMotor = new SimableCANSparkMax(Constants.rightShooterMotorID, MotorType.kBrushless);
         leftShooterMotor = new SimableCANSparkMax(Constants.leftShooterMotorID, MotorType.kBrushless);
-        shooterMotors = new MotorControllerGroup(rightShooterMotor, leftShooterMotor);
-        encoder = rightShooterMotor.getEncoder();
+        // leftShooterMotor.setInverted(true);
+        // rightShooterMotor.setInverted(false);
+        
+        // shooterMotors = new MotorControllerGroup(rightShooterMotor, leftShooterMotor);
+        //shooterMotors.setInverted();
+        rightEncoder = rightShooterMotor.getEncoder();
+        leftEncoder = leftShooterMotor.getEncoder();
         
         for (SimableCANSparkMax canSparkMax : List.of(rightShooterMotor, leftShooterMotor)) {
             canSparkMax.restoreFactoryDefaults();
             canSparkMax.setIdleMode(IdleMode.kCoast);
             canSparkMax.setSmartCurrentLimit(45);
         }
-        
+        leftShooterMotor.follow(rightShooterMotor, true);
+        //rightShooterMotor.setInverted(true);
+
         limeLight = new LimeLight();
         if(RobotBase.isSimulation()){
             initSim();
         }
     }
+        
 
     private void initSim(){
         simFlywheel = new FlywheelSim(DCMotor.getNEO(1), Constants.shooterGearRatio, Constants.kSimShooterInertia); //TODO replace with sim const
@@ -71,28 +80,33 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public double getTicksPerMotorRotation() {
-        return encoder.getCountsPerRevolution();
+        return rightEncoder.getCountsPerRevolution();
     }
 
     public double getRPM() {
-        return encoder.getVelocity();
+        return rightEncoder.getVelocity();
+        //return (rightEncoder.getVelocity() + leftEncoder.getVelocity())/2;
     }
 
     public void stopMotors() {
-        shooterMotors.stopMotor();
+        // shooterMotors.stopMotor();
+        rightShooterMotor.stopMotor();
     }
     
     public long getTotalWheelRotations() {
-        return (long) encoder.getPosition(); // The conversion factor was previously set
+        return (long) rightEncoder.getPosition(); // The conversion factor was previously set
     }
 
-    public double getSpeed() {
-        return shooterMotors.get();
-    }
+    // public double getSpeed() {
+    //     // return shooterMotors.get();
+    //     return leftShooterMotor.get
+    // }
 
     public void setSpeed(double speed) {
         SmartDashboard.putNumber("shooter setpoint speed", speed);
-        shooterMotors.set(speed);
+        // shooterMotors.set(speed);
+        rightShooterMotor.set(speed);
+        // rightShooterMotor.set(speed);
     }
 
     public double getSimRPM(){
@@ -125,6 +139,10 @@ public class ShooterSubsystem extends SubsystemBase {
         else
             this.setSpeed(speed);
         currentSpeed = speed;
+    }
+
+    public double getCurrentSpeed() {
+        return currentSpeed;
     }
 
     public double getDrawnCurrentAmps(){

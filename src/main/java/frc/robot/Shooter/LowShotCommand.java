@@ -27,6 +27,7 @@ public class LowShotCommand extends CommandBase {
     protected ShooterSubsystem shooterSubsystem;
     protected LazySusanSubsystem lazySusanSubsystem;
     protected ControlBoard controlBoard;
+  protected double acceleration; 
   /** Creates a new LowShotCommand. */
   public LowShotCommand(ShooterSubsystem shooterSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -41,6 +42,16 @@ public class LowShotCommand extends CommandBase {
   @Override
   public void execute() {
     shooterSubsystem.setTargetRPM(Constants.lowPoweredShotRPM);
+    acceleration = Constants.diffConstShooter * (shooterSubsystem.getTargetRPM() - shooterSubsystem.getRPM());
+        SmartDashboard.putNumber("Acceleration: ", acceleration);
+        // if(Math.abs(rpm-currRPM) > (bangBangTolerance * rpm))
+        shooterSubsystem.setShooterSpeedAndUpdate(shooterSubsystem.getCurrentSpeed() + acceleration);
+        // System.out.println(rpm);
+        if(shooterSubsystem.getTargetRPM() == 0.0) {
+            shooterSubsystem.setShooterSpeedAndUpdate(0);
+        }
+        SmartDashboard.putNumber("Shooter RPM: ",
+                ShooterMath.roundUpToNearestMultiple(shooterSubsystem.getRPM(), 5));
   }
 
   // Called once the command ends or is interrupted.

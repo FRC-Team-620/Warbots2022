@@ -109,7 +109,7 @@ public class RobotContainer {
 
         // TODO: here, now make a unified aiming/flywheel spinup command that we can use
         // for both auto and tele
-        controls.aimTurretTrigger.whileActiveContinuous(new AutoAimingAndSpinningUp(getShooterSubsystem(),
+        controls.aimTurretTrigger.whileActiveOnce(new AutoAimingAndSpinningUp(getShooterSubsystem(),
         getLazySusanSubsystem(), false));
         controls.fireTurretTrigger.whenActive(
         new AutoShoot(getLoaderSubsystem()));        

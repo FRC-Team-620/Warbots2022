@@ -111,9 +111,9 @@ public class ShooterCommand extends CommandBase {
             //    || (lazySusanEnc.getPosition() >= Constants.turntableThresh && speeeeed > 0)) {
             //    speed = 0;
             // }
-            if (!ShooterMath.inThreshold(speed > 0, lazySusanEnc.getPosition())) {
-                speed = 0;
-            }
+            // if (!ShooterMath.inThreshold(speed > 0, lazySusanEnc.getPosition())) {
+            //     speed = 0;
+            // }
             lazySusanMotor.set(speed);
             // System.out.println("Negative X: " + -x);
             // System.out.println("Speed With Constant: " + -x*Constants.diffConstLS);
