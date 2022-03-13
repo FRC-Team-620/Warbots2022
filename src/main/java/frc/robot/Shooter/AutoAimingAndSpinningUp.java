@@ -107,6 +107,9 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         // else {
         //     frames++;
         // }
+        if (isAuto) {
+            frames++;
+        }
     }
 
     @Override
@@ -125,6 +128,9 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         // } else if(finished) {
         //     return false;
         // }
+        if (isAuto && frames > 750) {
+            return true;
+        }
         return false;
         
     }

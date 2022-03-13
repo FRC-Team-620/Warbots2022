@@ -99,10 +99,15 @@ public class Drivetrain extends SubsystemBase {
 
     var conversionFactor = Constants.gearRatio * Constants.wheelDiameterInInches * Constants.inchesToMetersFactor
         * Math.PI;
-    leftBackEncoder.setPositionConversionFactor(conversionFactor);
+    leftBackEncoder.setPositionConversionFactor(conversionFactor);//Need to burn to SPARKMax
     leftFrontEncoder.setPositionConversionFactor(conversionFactor);
     rightFrontEncoder.setPositionConversionFactor(conversionFactor);
     rightBackEncoder.setPositionConversionFactor(conversionFactor);
+
+    leftBackMotor.burnFlash();
+    leftFrontMotor.burnFlash();
+    rightFrontMotor.burnFlash();
+    rightBackMotor.burnFlash();
 
     gyro = new AHRS(SerialPort.Port.kMXP);
 
@@ -170,7 +175,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(getDistance(leftBackEncoder), getDistance(rightBackEncoder));
+    return new DifferentialDriveWheelSpeeds(leftFrontEncoder.getVelocity(), rightBackEncoder.getVelocity());
   }
 
   public double getHeading() {
@@ -196,9 +201,9 @@ public class Drivetrain extends SubsystemBase {
    * @param leftVolts  the commanded left output
    * @param rightVolts the commanded right output
    */
-  public void tankDriveVolts(double rightVolts, double leftVolts) {
-    rightFrontMotor.setVoltage(rightVolts);
+  public void tankDriveVolts(double leftVolts, double rightVolts) {
     leftFrontMotor.setVoltage(leftVolts);
+    rightFrontMotor.setVoltage(rightVolts);
     diffDrive.feed();
   }
 

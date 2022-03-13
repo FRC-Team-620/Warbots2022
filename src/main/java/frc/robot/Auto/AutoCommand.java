@@ -29,7 +29,11 @@ public class AutoCommand extends SequentialCommandGroup {
         // addRequirements(loaderSubsystem, shooterSubsystem, lazySusanSubsystem);
             addCommands(
                 //robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("paths/Part1.wpilib.json"))),
-                new DriveBackwards(robotContainer.getDriveTrain())
+                new DriveBackwards(robotContainer.getDriveTrain()),
+
+                new WaitCommand(1),
+
+                new AutoShoot(loaderSubsystem)
 
                 // robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("paths/Part2.wpilib.json"))),
 
