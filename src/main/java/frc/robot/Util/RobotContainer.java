@@ -42,6 +42,7 @@ import frc.robot.Shooter.AutoAimingAndSpinningUp;
 import frc.robot.Shooter.DirectTurret;
 import frc.robot.Shooter.LazySusanSubsystem;
 import frc.robot.Shooter.LowShotCommand;
+import frc.robot.Shooter.ManualAiming;
 import frc.robot.Shooter.ShooterCommand;
 import frc.robot.Shooter.ShooterSubsystem;
 
@@ -133,6 +134,8 @@ public class RobotContainer {
 
         loaderCommand = new LoaderCommand(intake, controls.getDriverController(), controls.getOperatorController());
         intake.setDefaultCommand(loaderCommand);
+
+        turret.setDefaultCommand(new ManualAiming(turret, controls.getOperatorController()));
 
         //shooterCommand = new ShooterCommand(shooter, turret, controls.getOperatorController(),
                 //controls.getDriverController());

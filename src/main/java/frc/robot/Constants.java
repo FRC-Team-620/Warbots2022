@@ -109,7 +109,7 @@ public final class Constants {
     public static final double stowedPosition = 50;
 
     // differential constants (very cool)
-    public static final double diffConstLS = 0.012;//0.012
+    public static final double diffConstLS = 0.014;//0.012 0.014
     public static final double diffConstShooter = 6 * Math.pow(10, -6);
     public static final double diffConstWinchHold = 0.3;
     public static final double diffConstKeepPosition = 0.00001; // TODO: Test this constant and optimize it
