@@ -107,6 +107,7 @@ public final class Constants {
     // lazysusan
     public static final int turntableThresh = 45;
     public static final double stowedPosition = 50;
+    public static final double disabledPosition = 0;
 
     // differential constants (very cool)
     public static final double diffConstLS = 0.014;//0.012 0.014

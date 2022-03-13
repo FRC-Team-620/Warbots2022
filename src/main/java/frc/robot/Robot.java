@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -16,6 +17,7 @@ import frc.robot.Climber.LowerHooks;
 import frc.robot.Loader.AutoLoad;
 import frc.robot.Shooter.AutoAimingAndSpinningUp;
 import frc.robot.Shooter.DirectTurretAuto;
+import frc.robot.Shooter.LazySusanSubsystem;
 import frc.robot.Util.RobotContainer;
 
 public class Robot extends TimedRobot {
@@ -96,6 +98,14 @@ public class Robot extends TimedRobot {
     robotContainer.getDriveTrain().setMotorMode(mode);
     robotContainer.getShooterSubsystem().setSpeed(0);
     CommandScheduler.getInstance().cancelAll();
+    LazySusanSubsystem lazySusan = robotContainer.getLazySusanSubsystem();
+
+    // TODO: Needs to be tested
+    while (Math.abs(lazySusan.getLazySusanPosition()) > Constants.disabledPosition) {
+      double position = lazySusan.getLazySusanPosition();
+      double direction = position > 0 ? -1 : 1;
+      lazySusan.getLazySusanMotor().set(position * direction * Constants.diffConstLS);
+    }
   }
 
   @Override
