@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -102,9 +101,7 @@ public class Robot extends TimedRobot {
 
     // TODO: Needs to be tested
     while (Math.abs(lazySusan.getLazySusanPosition()) > Constants.disabledPosition) {
-      double position = lazySusan.getLazySusanPosition();
-      double direction = position > 0 ? -1 : 1;
-      lazySusan.getLazySusanMotor().set(position * direction * Constants.diffConstLS);
+      lazySusan.getLazySusanMotor().set(-lazySusan.getLazySusanPosition() * Constants.diffConstLS);
     }
   }
 
