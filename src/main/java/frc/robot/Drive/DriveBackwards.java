@@ -9,6 +9,10 @@ public class DriveBackwards extends CommandBase{
         this.drivetrain = drivetrain;
         addRequirements(drivetrain);
     }
+    @Override
+    public void initialize() {
+        this.frames = 0;
+    }
 
     @Override
     public void execute() {
