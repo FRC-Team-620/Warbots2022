@@ -103,6 +103,7 @@ public final class Constants {
     // shooter
     public static final int minShooterRPM = 0;
     public static final int maxShooterRPM = 5500;
+    public static final double shooterVibrationTolerance = 0.01;
 
     // lazysusan
     public static final int turntableThresh = 45;
