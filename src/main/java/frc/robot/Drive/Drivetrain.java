@@ -206,6 +206,10 @@ public class Drivetrain extends SubsystemBase {
     rightFrontMotor.setVoltage(rightVolts);
     diffDrive.feed();
   }
+  public void tankDriveSet(double leftSpeed, double rightSpeed) {
+    leftFrontMotor.set(leftSpeed);
+    rightFrontMotor.set(rightSpeed);
+  }
 
   public CANSparkMax getMotor(int idx) {
     idx = (idx - 1) % 4 + 1;
