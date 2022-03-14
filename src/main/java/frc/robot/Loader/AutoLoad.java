@@ -22,7 +22,7 @@ public class AutoLoad extends CommandBase{
         this.frames = 0;
         //System.out.println("Loader was turned on");
         loaderSubsystem.getLoaderMotor().set(speed);
-    }//amogus?
+    }
     
     @Override
     public void end(boolean interrupt) {
