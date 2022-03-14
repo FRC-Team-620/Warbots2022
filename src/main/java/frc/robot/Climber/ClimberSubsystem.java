@@ -1,5 +1,7 @@
 package frc.robot.Climber;
 
+import java.util.PropertyResourceBundle;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -22,6 +24,7 @@ public class ClimberSubsystem extends SubsystemBase {
     // protected final RelativeEncoder encoder;
     protected final Solenoid hangingSolenoid;
     protected final Solenoid armsSolenoid;
+    protected final Solenoid bumperSolenoid;
 
     //Sim
     private ElevatorSim climbeSim;
@@ -30,6 +33,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
         hangingSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 2);
         armsSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 1);
+        bumperSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 3);
 
     }
 
@@ -39,12 +43,18 @@ public class ClimberSubsystem extends SubsystemBase {
     public Solenoid getArmsSolenoid() {
         return armsSolenoid;
     }
+    public Solenoid getBumperSolenoid() {
+        return bumperSolenoid;
+    }
 
     public void setHangingSolenoid(boolean b) {
         this.getHangingSolenoid().set(b);
     }
     public void setArmsSolenoid(boolean b) {
         this.getArmsSolenoid().set(b);
+    }
+    public void setBumperSolenoid(boolean b) {
+        this.getBumperSolenoid().set(b);
     }
 
 }

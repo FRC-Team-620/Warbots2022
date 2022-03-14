@@ -17,8 +17,10 @@ public final class ShooterMath {
         return i + step - 1;
     }
 
-    public static boolean inBounds(boolean isPositive, double encoderPosition) {
-        return !((isPositive && encoderPosition >= Constants.turntableThresh) 
-        || (!isPositive && encoderPosition <= -Constants.turntableThresh));
+    // Takes in a boolean of which direction the encoder will be moving in
+    // and the current position of the encoder, to see whether it is in the boundaries.
+    public static boolean inBounds(boolean directionIsPositive, double encoderPosition) {
+        return !((directionIsPositive && encoderPosition >= Constants.turntableThresh) 
+        || (!directionIsPositive && encoderPosition <= -Constants.turntableThresh));
     }
 }

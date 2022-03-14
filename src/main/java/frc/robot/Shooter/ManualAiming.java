@@ -33,8 +33,7 @@ public class ManualAiming extends CommandBase {
             // limelight.setLEDMode(LedMode.OFF);
             double speed = -inputOpLeft/1.4;
             System.out.println("JIWJF_" + lazySusanEnc.getPosition());
-            if ((lazySusanEnc.getPosition() <= -Constants.turntableThresh && speed < 0)
-                || (lazySusanEnc.getPosition() >= Constants.turntableThresh && speed > 0)) {
+            if (!ShooterMath.inBounds(speed > 0, lazySusanEnc.getPosition())) {
                 speed = 0;
             }
             lazySusanMotor.set(speed);
