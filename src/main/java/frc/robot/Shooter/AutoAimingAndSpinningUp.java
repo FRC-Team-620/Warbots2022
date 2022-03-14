@@ -6,6 +6,8 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Util.LimeLight.LedMode;
@@ -31,15 +33,17 @@ public class AutoAimingAndSpinningUp extends CommandBase {
             currRPM, maxRPM = 3000;
     protected CANSparkMax lazySusanMotor;
     protected RelativeEncoder lazySusanEnc;
+    protected XboxController operatorXbox;
     // auto
     protected boolean isAuto;
     protected boolean finished;
-    public AutoAimingAndSpinningUp(ShooterSubsystem shooterSubsystem, LazySusanSubsystem lazySusanSubsystem, boolean isAuto) {
+    public AutoAimingAndSpinningUp(ShooterSubsystem shooterSubsystem, LazySusanSubsystem lazySusanSubsystem, boolean isAuto, XboxController operatorXbox) {
         this.shooterSubsystem = shooterSubsystem;
         addRequirements(shooterSubsystem);
         lazySusanMotor = lazySusanSubsystem.getLazySusanMotor();
         lazySusanEnc = lazySusanSubsystem.getLazySusanEncoder();
         this.isAuto = isAuto;
+        this.operatorXbox = operatorXbox;
     }
 
     @Override
@@ -98,6 +102,11 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         System.out.println("RPM: " + shooterSubsystem.getRPM());
         acceleration = Constants.diffConstShooter * (shooterSubsystem.getTargetRPM() - shooterSubsystem.getRPM());
         shooterSubsystem.setShooterSpeedAndUpdate(shooterSubsystem.getCurrentSpeed() + acceleration);
+        if (!(isAuto) && shooterSubsystem.getTargetRPM() == shooterSubsystem.getRPM()) {
+            operatorXbox.setRumble(RumbleType.kLeftRumble, 0.5);
+            operatorXbox.setRumble(RumbleType.kRightRumble, 0.5);
+        }
+        
         System.out.println("ShooterSpeed: " + shooterSubsystem.getCurrentSpeed() + acceleration);
         //System.out.println("Frames: " + frames);
         

@@ -75,7 +75,7 @@ public class Robot extends TimedRobot {
             robotContainer.getShooterSubsystem(), 0),
         new ParallelCommandGroup(
             new AutoAimingAndSpinningUp(robotContainer.getShooterSubsystem(),
-                robotContainer.getLazySusanSubsystem(), true),
+                robotContainer.getLazySusanSubsystem(), true, robotContainer.getOperatorController()),
             new AutoCommand(robotContainer.getLoaderSubsystem(),
                 robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer),
             new AutoLoad(robotContainer.getLoaderSubsystem(), 1)));
