@@ -74,11 +74,11 @@ public class RobotContainer {
 
     private void initSubsystems() {
         drivetrain = new Drivetrain();
-        intake = new LoaderSubsystem();
-        shooter = new ShooterSubsystem();
-        turret = new LazySusanSubsystem();
-        climberHooks = new ClimberSubsystem();
-        winch = new ClimberMotorsSubsystem();
+        // intake = new LoaderSubsystem();
+        // shooter = new ShooterSubsystem();
+        // turret = new LazySusanSubsystem();
+        // climberHooks = new ClimberSubsystem();
+        // winch = new ClimberMotorsSubsystem();
 
     }
 
@@ -86,34 +86,34 @@ public class RobotContainer {
         controls = new ControlBoard();
 
         // operator
-        controls.raiseArmsButton.whenPressed(
-                new RaisePistons(climberHooks));
+        // controls.raiseArmsButton.whenPressed(
+        //         new RaisePistons(climberHooks));
 
-        controls.extendArmsButton.whenPressed(
-                new ParallelCommandGroup(
-                        new ExtendArmsAndStow(winch, climberHooks),
-                        new DirectTurret(turret, shooter, Constants.stowedPosition)));
+        // controls.extendArmsButton.whenPressed(
+        //         new ParallelCommandGroup(
+        //                 new ExtendArmsAndStow(winch, climberHooks),
+        //                 new DirectTurret(turret, shooter, Constants.stowedPosition)));
 
-        controls.climbSequenceButton.whenPressed(
-                new RaiseAndGrab(winch, climberHooks));
+        // controls.climbSequenceButton.whenPressed(
+        //         new RaiseAndGrab(winch, climberHooks));
 
-        controls.retractArmsButton.whenPressed(
-                new WinchReset(winch));
+        // controls.retractArmsButton.whenPressed(
+        //         new WinchReset(winch));
 
-        controls.lowerHooksButton.whenPressed(
-                new LowerHooks(climberHooks));
+        // controls.lowerHooksButton.whenPressed(
+        //         new LowerHooks(climberHooks));
 
-        controls.winchHoldButton.whenPressed(
-                new WinchHold(winch, winch.getWinchPosition(), Constants.holdTime));
+        // controls.winchHoldButton.whenPressed(
+        //         new WinchHold(winch, winch.getWinchPosition(), Constants.holdTime));
 
-        controls.lowShotButton.whileActiveContinuous(new LowShotCommand(shooter), true);
+        // controls.lowShotButton.whileActiveContinuous(new LowShotCommand(shooter), true);
 
         // TODO: here, now make a unified aiming/flywheel spinup command that we can use
         // for both auto and tele
-        controls.aimTurretTrigger.whileActiveOnce(new AutoAimingAndSpinningUp(getShooterSubsystem(),
-        getLazySusanSubsystem(), false, controls.getOperatorController()));
-        controls.fireTurretTrigger.whenActive(
-        new AutoShoot(getLoaderSubsystem()));        
+        // controls.aimTurretTrigger.whileActiveOnce(new AutoAimingAndSpinningUp(getShooterSubsystem(),
+        // getLazySusanSubsystem(), false, controls.getOperatorController()));
+        // controls.fireTurretTrigger.whenActive(
+        // new AutoShoot(getLoaderSubsystem()));        
         // controls.aimTurretTrigger.whenActive(
         // new AimTurretCommand();
         // );
@@ -132,10 +132,10 @@ public class RobotContainer {
                 controls.getOperatorController());
         drivetrain.setDefaultCommand(driveWithJoystick);
 
-        loaderCommand = new LoaderCommand(intake, controls.getDriverController(), controls.getOperatorController());
-        intake.setDefaultCommand(loaderCommand);
+        // loaderCommand = new LoaderCommand(intake, controls.getDriverController(), controls.getOperatorController());
+        // intake.setDefaultCommand(loaderCommand);
 
-        turret.setDefaultCommand(new ManualAiming(turret, controls.getOperatorController()));
+        // turret.setDefaultCommand(new ManualAiming(turret, controls.getOperatorController()));
 
         //shooterCommand = new ShooterCommand(shooter, turret, controls.getOperatorController(),
                 //controls.getDriverController());
@@ -147,11 +147,11 @@ public class RobotContainer {
         // climberCommand = new ClimberCommand(climberSubsystem);
         // climberMotorsSubsystem.setDefaultCommand(new
         // ClimberManual(climberMotorsSubsystem, operator));
-        new LowerHooks(climberHooks).schedule();
+        // new LowerHooks(climberHooks).schedule();
 
         SmartDashboard.putData(robotFieldWidget);
         SmartDashboard.putData(trajectorySelector);
-        robotFieldWidget.getObject("Turret").setPose(new Pose2d());
+        // robotFieldWidget.getObject("Turret").setPose(new Pose2d());
         trajectorySelector.linkField(robotFieldWidget);
 
         // trajectorySelector.setDefaultOption("No Trajectory", new Trajectory());

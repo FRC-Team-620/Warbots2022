@@ -4,18 +4,18 @@
 
 package frc.robot;
 
+import java.io.IOException;
+
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Auto.AutoCommand;
 import frc.robot.Climber.LowerHooks;
-import frc.robot.Loader.AutoLoad;
-import frc.robot.Shooter.AutoAimingAndSpinningUp;
-import frc.robot.Shooter.DirectTurretAuto;
 import frc.robot.Util.RobotContainer;
 
 public class Robot extends TimedRobot {
@@ -58,27 +58,33 @@ public class Robot extends TimedRobot {
       autonomousCommand.cancel();
     }
     // TODO: move to initializer in robotContainer
-    new LowerHooks(robotContainer.getClimberSubsystem()).schedule();
-    robotContainer.getLazySusanSubsystem().getLazySusanEncoder().setPosition(0);
+    // new LowerHooks(robotContainer.getClimberSubsystem()).schedule();
+    // robotContainer.getLazySusanSubsystem().getLazySusanEncoder().setPosition(0);
     robotContainer.getDriveTrain().setMotorMode(IdleMode.kBrake);
-    robotContainer.getClimberMotorsSubsystem().getWinchMotor().getEncoder().setPosition(0);
+    // robotContainer.getClimberMotorsSubsystem().getWinchMotor().getEncoder().setPosition(0);
   }
 
   @Override
   public void autonomousInit() {
 
     // TODO: move to autonomousCommand in separate file.
-    robotContainer.getLazySusanSubsystem().setLazySusanPosition(0);
-    new LowerHooks(robotContainer.getClimberSubsystem()).schedule();
-    autonomousCommand = new SequentialCommandGroup(
-        new DirectTurretAuto(robotContainer.getLazySusanSubsystem(), // -1.5*
-            robotContainer.getShooterSubsystem(), 0),
-        new ParallelCommandGroup(
-            new AutoAimingAndSpinningUp(robotContainer.getShooterSubsystem(),
-                robotContainer.getLazySusanSubsystem(), true, robotContainer.getOperatorController()),
-            new AutoCommand(robotContainer.getLoaderSubsystem(),
-                robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer),
-            new AutoLoad(robotContainer.getLoaderSubsystem(), 1)));
+    // robotContainer.getLazySusanSubsystem().setLazySusanPosition(0);
+    // new LowerHooks(robotContainer.getClimberSubsystem()).schedule();
+    try {
+      autonomousCommand = robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("paths/Part1.wpilib.json") ) );
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    // new SequentialCommandGroup(
+    //     new DirectTurretAuto(robotContainer.getLazySusanSubsystem(), // -1.5*
+    //         robotContainer.getShooterSubsystem(), 0),
+    //     new ParallelCommandGroup(
+    //         new AutoAimingAndSpinningUp(robotContainer.getShooterSubsystem(),
+    //             robotContainer.getLazySusanSubsystem(), true, robotContainer.getOperatorController()),
+    //         new AutoCommand(robotContainer.getLoaderSubsystem(),
+    //             robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer),
+    //         new AutoLoad(robotContainer.getLoaderSubsystem(), 1)));
 
     if (autonomousCommand != null) {
       autonomousCommand.schedule();
@@ -92,9 +98,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-    IdleMode mode = IdleMode.kBrake;
+    IdleMode mode = IdleMode.kCoast;
     robotContainer.getDriveTrain().setMotorMode(mode);
-    robotContainer.getShooterSubsystem().setSpeed(0);
+    // robotContainer.getShooterSubsystem().setSpeed(0);
     CommandScheduler.getInstance().cancelAll();
   }
 
