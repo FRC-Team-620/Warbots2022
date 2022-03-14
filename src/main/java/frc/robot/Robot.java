@@ -71,7 +71,7 @@ public class Robot extends TimedRobot {
     // robotContainer.getLazySusanSubsystem().setLazySusanPosition(0);
     // new LowerHooks(robotContainer.getClimberSubsystem()).schedule();
     try {
-      autonomousCommand = robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("paths/Part1.wpilib.json") ) );
+      autonomousCommand = robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("paths/TestPath2.wpilib.json") ) );
     } catch (IOException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
