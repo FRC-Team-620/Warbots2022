@@ -52,12 +52,12 @@ public class LoaderCommand extends CommandBase {
         
         // shooting code
         if (Math.abs(operatorXbox.getRightTriggerAxis()) > 0) {
-            loaderSubsystem.getSolenoid().set(true);
+            loaderSubsystem.getLoaderSolenoid().set(true);
             // autoFire = false;
             //  || autoFire == false
             //  || autoFire
         } else if (Math.abs(operatorXbox.getRightTriggerAxis()) == 0) {
-            loaderSubsystem.getSolenoid().set(false);
+            loaderSubsystem.getLoaderSolenoid().set(false);
         }
     }
 
