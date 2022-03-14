@@ -20,7 +20,7 @@ public class AutoShoot extends CommandBase {
         this.frames = 0;
         System.out.println("Ball was shot");
         loaderSubsystem.getSolenoid().set(true);
-    }
+    }//hello nate how is your day
 
     @Override
     public void end(boolean interrupted) {

@@ -102,7 +102,8 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         System.out.println("RPM: " + shooterSubsystem.getRPM());
         acceleration = Constants.diffConstShooter * (shooterSubsystem.getTargetRPM() - shooterSubsystem.getRPM());
         shooterSubsystem.setShooterSpeedAndUpdate(shooterSubsystem.getCurrentSpeed() + acceleration);
-        if (!(isAuto) && shooterSubsystem.getTargetRPM() == shooterSubsystem.getRPM()) {
+        if (!(isAuto) && shooterSubsystem.getTargetRPM() < (1+Constants.shooterVibrationTolerance)*shooterSubsystem.getRPM() &&
+            shooterSubsystem.getTargetRPM() > (1-Constants.shooterVibrationTolerance)*shooterSubsystem.getRPM()) {
             operatorXbox.setRumble(RumbleType.kLeftRumble, 0.5);
             operatorXbox.setRumble(RumbleType.kRightRumble, 0.5);
         }
