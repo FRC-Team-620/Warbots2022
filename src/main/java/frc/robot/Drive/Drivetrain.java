@@ -21,6 +21,7 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SerialPort;
@@ -40,6 +41,8 @@ public class Drivetrain extends SubsystemBase {
   protected double openLoopRampRate = 0.2;
   // The gyro sensor
   protected final AHRS gyro;
+
+  protected DigitalInput proSensor;
 
   // Odometry class for tracking robot pose
   protected final DifferentialDriveOdometry odometry;
@@ -127,9 +130,12 @@ public class Drivetrain extends SubsystemBase {
       initSim();
     }
 
+    proSensor = new DigitalInput(0);
+
     // ShuffleboardTab tab = Shuffleboard.getTab("Smart Dashboard");
   }
 
+ 
   private void initSim() {
     LinearSystem<N2, N2, N2> m_drivetrainSystem = LinearSystemId.identifyDrivetrainSystem(Constants.kSimDrivekVLinear,
         Constants.ksimDrivekALinear, Constants.ksimDrivekVAngular,
@@ -255,6 +261,7 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     odometry.update(gyro.getRotation2d(), getDistance(leftBackEncoder), getDistance(rightBackEncoder));
+    System.out.println("proSensor: " + proSensor.get());
   }
 
   protected double getDistance(RelativeEncoder enc) {//TODO: This is the bug getPositionConversionFactor
