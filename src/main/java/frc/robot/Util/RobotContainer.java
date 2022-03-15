@@ -128,9 +128,9 @@ public class RobotContainer {
         // will fix this later
 
         // only valid for now so this is still functional and builds
-        driveWithJoystick = new DriveWithJoystick(drivetrain, controls.getDriverController(),
-                controls.getOperatorController());
-        drivetrain.setDefaultCommand(driveWithJoystick);
+        // driveWithJoystick = new DriveWithJoystick(drivetrain, controls.getDriverController(),
+        //         controls.getOperatorController());
+        // drivetrain.setDefaultCommand(driveWithJoystick);
 
         loaderCommand = new LoaderCommand(intake, controls.getDriverController(), controls.getOperatorController());
         intake.setDefaultCommand(loaderCommand);
@@ -203,6 +203,12 @@ public class RobotContainer {
 
     public ClimberMotorsSubsystem getClimberMotorsSubsystem() {
         return winch;
+    }
+
+    public void setTeleopDrive() {
+        driveWithJoystick = new DriveWithJoystick(drivetrain, controls.getDriverController(),
+                controls.getOperatorController());
+        drivetrain.setDefaultCommand(driveWithJoystick);
     }
 
     public Command getAutonomousCommand(Trajectory traj) {

@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Auto.AutoCommand;
 import frc.robot.Climber.LowerHooks;
+import frc.robot.Drive.DriveWithJoystick;
 import frc.robot.Drive.TurnDegrees;
 import frc.robot.Loader.AutoLoad;
 import frc.robot.Shooter.AutoAimingAndSpinningUp;
@@ -58,6 +59,7 @@ public class Robot extends TimedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
+    robotContainer.setTeleopDrive();
     // TODO: move to initializer in robotContainer
     new LowerHooks(robotContainer.getClimberSubsystem()).schedule();
     robotContainer.getLazySusanSubsystem().getLazySusanEncoder().setPosition(0);
@@ -74,8 +76,10 @@ public class Robot extends TimedRobot {
     autonomousCommand = new SequentialCommandGroup(
         new TurnDegrees(robotContainer.getDriveTrain(), 180),
         new TurnDegrees(robotContainer.getDriveTrain(), -180),
-        new TurnDegrees(robotContainer.getDriveTrain(), 360),
-        new TurnDegrees(robotContainer.getDriveTrain(), -360));
+        new TurnDegrees(robotContainer.getDriveTrain(), 180),
+        new TurnDegrees(robotContainer.getDriveTrain(), -180),
+        new TurnDegrees(robotContainer.getDriveTrain(), 180),
+        new TurnDegrees(robotContainer.getDriveTrain(), -180));
     // new LowerHooks(robotContainer.getClimberSubsystem()).schedule();
     // autonomousCommand = new SequentialCommandGroup(
     //     new DirectTurretAuto(robotContainer.getLazySusanSubsystem(), // -1.5*

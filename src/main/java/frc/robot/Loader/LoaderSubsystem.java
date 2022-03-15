@@ -16,9 +16,9 @@ public class LoaderSubsystem extends SubsystemBase {
         loader.restoreFactoryDefaults();
         loader.setInverted(true);
 
-        extendedLoader = new CANSparkMax(Constants.extendedIntakeMotorID, MotorType.kBrushless);
-        extendedLoader.restoreFactoryDefaults();
-        extendedLoader.setInverted(true);
+        // extendedLoader = new CANSparkMax(Constants.extendedIntakeMotorID, MotorType.kBrushless);
+        // extendedLoader.restoreFactoryDefaults();
+        // extendedLoader.setInverted(true);
 
         loader.setSmartCurrentLimit(25);
 
