@@ -10,6 +10,7 @@ import com.revrobotics.SimableCANSparkMax;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
@@ -25,6 +26,7 @@ public class ClimberSubsystem extends SubsystemBase {
     protected final Solenoid hangingSolenoid;
     protected final Solenoid armsSolenoid;
     protected final Solenoid bumperSolenoid;
+    protected final DigitalInput climberSensor;
 
     //Sim
     private ElevatorSim climbeSim;
@@ -34,8 +36,15 @@ public class ClimberSubsystem extends SubsystemBase {
         hangingSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 2);
         armsSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 1);
         bumperSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 3);
+        climberSensor = new DigitalInput(9);
 
     }
+
+    @Override
+    public void periodic() {
+        System.out.println(getClimberSensor());
+    }
+
 
     public Solenoid getHangingSolenoid() {
         return hangingSolenoid;
@@ -46,6 +55,10 @@ public class ClimberSubsystem extends SubsystemBase {
     public Solenoid getBumperSolenoid() {
         return bumperSolenoid;
     }
+    public boolean getClimberSensor() {
+        return climberSensor.get();
+    }
+
 
     public void setHangingSolenoid(boolean b) {
         this.getHangingSolenoid().set(b);
