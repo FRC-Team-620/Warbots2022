@@ -9,6 +9,7 @@ public class TurnDegrees extends CommandBase {
     
     public TurnDegrees(Drivetrain drivetrain, double deltaDegrees) {
         this.drivetrain = drivetrain;
+        this.deltaDegrees = deltaDegrees;
     }
 
     public void initialize() {
@@ -17,7 +18,7 @@ public class TurnDegrees extends CommandBase {
 
     public void execute() {
         double speed = Constants.diffConstTurn*(this.targetDegrees-this.drivetrain.getHeading());
-        drivetrain.tankDriveSet(speed, -speed);
+        drivetrain.tankDriveSet(-speed, speed);
     }
 
     public boolean isFinished() {
