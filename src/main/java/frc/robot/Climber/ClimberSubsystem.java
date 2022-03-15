@@ -35,7 +35,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
         hangingSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 2);
         armsSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 1);
-        bumperSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 3);
+        bumperSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 4);
         climberSensor = new DigitalInput(9);
 
     }

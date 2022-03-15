@@ -24,7 +24,7 @@ public class LoaderSubsystem extends SubsystemBase {
 
         trigger = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
         trigger.set(false);
-        extension = new Solenoid(PneumaticsModuleType.CTREPCM, 4);
+        extension = new Solenoid(PneumaticsModuleType.CTREPCM, 3);
         extension.set(false);
     }
     public CANSparkMax getLoaderMotor() {

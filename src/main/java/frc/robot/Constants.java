@@ -98,7 +98,7 @@ public final class Constants {
 
     //climber
     public static final int winchMinLimit = 0;
-    public static final int winchMaxLimit = 85;
+    public static final int winchMaxLimit = 88;
     public static final int pistonMaxFrames = 15;
 
     // shooter
@@ -112,7 +112,7 @@ public final class Constants {
 
     // differential constants (very cool)
     public static final double diffConstLS = 0.014;//0.012 0.014
-    public static final double diffConstShooter = 6 * Math.pow(10, -6);
+    public static final double diffConstShooter = 9 * Math.pow(10, -6);
     public static final double diffConstWinchHold = 0.3;
     public static final double diffConstKeepPosition = 0.00001; // TODO: Test this constant and optimize it
     public static final double diffConstTurn = 0.004;

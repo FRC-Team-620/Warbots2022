@@ -18,6 +18,9 @@ public class TurnDegrees extends CommandBase {
 
     public void execute() {
         double speed = Constants.diffConstTurn*(this.targetDegrees-this.drivetrain.getHeading());
+        // System.out.println("SPEED:" + speed);
+        // System.out.println("ANGLE: " + this.drivetrain.getHeading());
+        // System.out.println("TARGET: " + this.targetDegrees);
         drivetrain.tankDriveSet(-speed, speed);
     }
 

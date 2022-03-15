@@ -39,11 +39,15 @@ public class LoaderCommand extends CommandBase {
             if (driverXbox.getBButton()) {
                 temp.setInverted(true);
                 temp.set(1);
+                this.loaderSubsystem.getExtensionSolenoid().set(true);
             } else {
                 temp.setInverted(false);
                 temp.set(0);
+                this.loaderSubsystem.getExtensionSolenoid().set(false);
             }
         }
+
+
         
         // if (autoOn) {
         //     temp.set(1);

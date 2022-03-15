@@ -106,6 +106,9 @@ public class AutoAimingAndSpinningUp extends CommandBase {
             && shooterSubsystem.getTargetRPM() < (1+Constants.shooterVibrationTolerance)*shooterSubsystem.getRPM()) {
             operatorXbox.setRumble(RumbleType.kLeftRumble, 0.5);
             operatorXbox.setRumble(RumbleType.kRightRumble, 0.5);
+        } else {
+            operatorXbox.setRumble(RumbleType.kLeftRumble, 0);
+            operatorXbox.setRumble(RumbleType.kRightRumble, 0);
         }
         
         System.out.println("ShooterSpeed: " + shooterSubsystem.getCurrentSpeed() + acceleration);
@@ -128,9 +131,10 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         lazySusanMotor.set(0);
         shooterSubsystem.stopMotors();
         table.getEntry("ledMode").setNumber(1);
+        operatorXbox.setRumble(RumbleType.kLeftRumble, 0);
+        operatorXbox.setRumble(RumbleType.kRightRumble, 0);
     }
         
-
     @Override
     public boolean isFinished() {
         // if (frames > 750) {
