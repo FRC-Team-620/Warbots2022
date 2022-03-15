@@ -5,7 +5,7 @@ import frc.robot.Constants;
 
 public class TurnDegrees extends CommandBase {
     Drivetrain drivetrain;
-    double deltaDegrees, targetDegrees, tolerance = 0.05;
+    double deltaDegrees, targetDegrees, tolerance = 0.035;
     
     public TurnDegrees(Drivetrain drivetrain, double deltaDegrees) {
         this.drivetrain = drivetrain;
