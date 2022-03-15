@@ -16,14 +16,16 @@ public class RaiseAndGrab extends SequentialCommandGroup {
             new ParallelCommandGroup(
                 new WinchRetract(climberMotorsSubsystem, Constants.winchMaxLimit/2.0),
                 new LowerPistons(climberSubsystem)),
-            new ParallelCommandGroup(
-                new LowerHooks(climberSubsystem),
-                new WinchRetract(climberMotorsSubsystem, Constants.winchMaxLimit)
-            ),
+            // new ParallelCommandGroup(
+            //     new LowerHooks(climberSubsystem),
+            //     new WinchRetract(climberMotorsSubsystem, Constants.winchMaxLimit)
+            // ),
+            new LowerHooks(climberSubsystem),
+            new WinchRetract(climberMotorsSubsystem, Constants.winchMaxLimit),
             // new RaiseHooks(climberMotorsSubsystem, climberSubsystem);
             new ParallelCommandGroup(
                 new RaiseHooks(climberMotorsSubsystem, climberSubsystem, this.raiseHooksFrames),
-                new WinchHold(climberMotorsSubsystem, -1, this.raiseHooksFrames))
+                new WinchHold(climberMotorsSubsystem, -5, this.raiseHooksFrames))
         );
     }
 
