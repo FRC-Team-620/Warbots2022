@@ -3,6 +3,7 @@ package frc.robot.Climber;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxLimitSwitch.Type;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SimableCANSparkMax;
 
@@ -26,7 +27,8 @@ public class ClimberMotorsSubsystem extends SubsystemBase {
         leftClimberMotor = new SimableCANSparkMax(Constants.leftClimberMotorID, MotorType.kBrushless);
         rightClimberMotor = new SimableCANSparkMax(Constants.rightClimberMotorID, MotorType.kBrushless);
         encoder = rightClimberMotor.getEncoder();
-
+        // rightClimberMotor.limi
+        rightClimberMotor.getForwardLimitSwitch(Type.kNormallyOpen);
         leftClimberMotor.restoreFactoryDefaults();
         rightClimberMotor.restoreFactoryDefaults();
 
