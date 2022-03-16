@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Auto.AutoCommand;
 import frc.robot.Climber.LowerHooks;
+import frc.robot.Drive.DriveBackwards;
+import frc.robot.Drive.DriveForwards;
 import frc.robot.Drive.TurnDegrees;
 import frc.robot.Loader.AutoLoad;
 import frc.robot.Shooter.AutoAimingAndSpinningUp;
@@ -71,11 +73,21 @@ public class Robot extends TimedRobot {
     // TODO: move to autonomousCommand in separate file.
     robotContainer.getLazySusanSubsystem().setLazySusanPosition(0);
     new LowerHooks(robotContainer.getClimberSubsystem()).schedule();
-    autonomousCommand = new SequentialCommandGroup(
-        new TurnDegrees(robotContainer.getDriveTrain(), 180),
-        new TurnDegrees(robotContainer.getDriveTrain(), -180),
-        new TurnDegrees(robotContainer.getDriveTrain(), 360),
-        new TurnDegrees(robotContainer.getDriveTrain(), -360));
+    //new DirectTurretAuto(robotContainer.getLazySusanSubsystem(), // -1.5*
+    //robotContainer.getShooterSubsystem(), 0),
+    autonomousCommand = new SequentialCommandGroup( 
+             new ParallelCommandGroup(new AutoCommand(robotContainer.getLoaderSubsystem(), 
+             robotContainer.getShooterSubsystem(), 
+             robotContainer.getLazySusanSubsystem(), robotContainer), 
+             new AutoAimingAndSpinningUp(robotContainer.getShooterSubsystem(), 
+             robotContainer.getLazySusanSubsystem(), true, robotContainer.getOperatorController()), 
+             new AutoLoad(robotContainer.getLoaderSubsystem(), 1)));
+
+    // autonomousCommand = new SequentialCommandGroup(
+    //     new TurnDegrees(robotContainer.getDriveTrain(), 180),
+    //     new TurnDegrees(robotContainer.getDriveTrain(), -180),
+    //     new TurnDegrees(robotContainer.getDriveTrain(), 360),
+    //     new TurnDegrees(robotContainer.getDriveTrain(), -360));
     // new LowerHooks(robotContainer.getClimberSubsystem()).schedule();
     // autonomousCommand = new SequentialCommandGroup(
     //     new DirectTurretAuto(robotContainer.getLazySusanSubsystem(), // -1.5*

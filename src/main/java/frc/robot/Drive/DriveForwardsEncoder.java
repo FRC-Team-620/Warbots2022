@@ -4,10 +4,11 @@ import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class DriveForwards extends CommandBase {
+public class DriveForwardsEncoder extends CommandBase {
     private Drivetrain drivetrain;
     private double frames;
-    public DriveForwards(Drivetrain drivetrain) {
+    private double encoders;
+    public DriveForwardsEncoder(Drivetrain drivetrain) {
         this.drivetrain = drivetrain;
         addRequirements(drivetrain);
     }
@@ -28,7 +29,8 @@ public class DriveForwards extends CommandBase {
 
     @Override
     public boolean isFinished() {//40 = 7ft
-        return frames > 60;
+        // return frames > 60;
+        return drivetrain.getEncoderPos(2) > 20;
     }
 }
 

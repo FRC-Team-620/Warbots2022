@@ -31,7 +31,7 @@ public class ManualAiming extends CommandBase {
         if (Math.abs(inputOpLeft) > 0) {
             table.getEntry("ledMode").setNumber(1);
             // limelight.setLEDMode(LedMode.OFF);
-            double speed = -inputOpLeft/1.4;
+            double speed = -inputOpLeft/1.6;
             System.out.println("JIWJF_" + lazySusanEnc.getPosition());
             if (!ShooterMath.inBounds(speed > 0, lazySusanEnc.getPosition())) {
                 speed = 0;
