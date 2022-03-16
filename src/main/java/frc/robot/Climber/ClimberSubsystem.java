@@ -28,9 +28,6 @@ public class ClimberSubsystem extends SubsystemBase {
     protected final Solenoid bumperSolenoid;
     protected final DigitalInput climberSensor;
 
-    //Sim
-    private ElevatorSim climbeSim;
-    RevEncoderSimWrapper leftencsim,rightencsim;
     public ClimberSubsystem() {
 
         hangingSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 2);

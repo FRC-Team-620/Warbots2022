@@ -36,47 +36,26 @@ public class ShooterSubsystem extends SubsystemBase {
     public LimeLightPoseSim possim;
     public double targetRpm;
     public double currentSpeed = 0;
-    
-
-    //Sim
-    FlywheelSim simFlywheel;
-    RevEncoderSimWrapper leftencsim,rightencsim;
-    LimeLightSim simLimeLight;
 
     public ShooterSubsystem() {
         rightShooterMotor = new SimableCANSparkMax(Constants.rightShooterMotorID, MotorType.kBrushless);
         leftShooterMotor = new SimableCANSparkMax(Constants.leftShooterMotorID, MotorType.kBrushless);
         // leftShooterMotor.setInverted(true);
         // rightShooterMotor.setInverted(false);
-        
-        // shooterMotors = new MotorControllerGroup(rightShooterMotor, leftShooterMotor);
-        //shooterMotors.setInverted();
+
+        // shooterMotors = new MotorControllerGroup(rightShooterMotor,
+        // leftShooterMotor);
+        // shooterMotors.setInverted();
         rightEncoder = rightShooterMotor.getEncoder();
         leftEncoder = leftShooterMotor.getEncoder();
-        
+
         for (SimableCANSparkMax canSparkMax : List.of(rightShooterMotor, leftShooterMotor)) {
             canSparkMax.restoreFactoryDefaults();
             canSparkMax.setIdleMode(IdleMode.kCoast);
             canSparkMax.setSmartCurrentLimit(45);
         }
         leftShooterMotor.follow(rightShooterMotor, true);
-        //rightShooterMotor.setInverted(true);
-
-        limeLight = new LimeLight();
-        if(RobotBase.isSimulation()){
-            initSim();
-        }
-    }
-        
-
-    private void initSim(){
-        simFlywheel = new FlywheelSim(DCMotor.getNEO(1), Constants.shooterGearRatio, Constants.kSimShooterInertia); //TODO replace with sim const
-
-        this.leftencsim = RevEncoderSimWrapper.create(this.leftShooterMotor);
-        this.rightencsim = RevEncoderSimWrapper.create(this.rightShooterMotor);
-        this.simLimeLight = new LimeLightSim(this.limeLight);
-        var hubpos =  new Pose2d(7.940, 4.08, new Rotation2d());
-        this.possim = new LimeLightPoseSim(simLimeLight, hubpos, Constants.limelightHeight, Constants.hubHeight, Constants.azimuthAngle1);
+        // rightShooterMotor.setInverted(true);
     }
 
     public double getTicksPerMotorRotation() {
@@ -85,21 +64,21 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public double getRPM() {
         return rightEncoder.getVelocity();
-        //return (rightEncoder.getVelocity() + leftEncoder.getVelocity())/2;
+        // return (rightEncoder.getVelocity() + leftEncoder.getVelocity())/2;
     }
 
     public void stopMotors() {
         // shooterMotors.stopMotor();
         rightShooterMotor.stopMotor();
     }
-    
+
     public long getTotalWheelRotations() {
         return (long) rightEncoder.getPosition(); // The conversion factor was previously set
     }
 
     // public double getSpeed() {
-    //     // return shooterMotors.get();
-    //     return leftShooterMotor.get
+    // // return shooterMotors.get();
+    // return leftShooterMotor.get
     // }
 
     public void setSpeed(double speed) {
@@ -107,10 +86,6 @@ public class ShooterSubsystem extends SubsystemBase {
         // shooterMotors.set(speed);
         rightShooterMotor.set(speed);
         // rightShooterMotor.set(speed);
-    }
-
-    public double getSimRPM(){
-        return simFlywheel.getAngularVelocityRPM();
     }
 
     public void setTargetRPM(double rpm) {
@@ -121,20 +96,8 @@ public class ShooterSubsystem extends SubsystemBase {
         return this.targetRpm;
     }
 
-
-    @Override
-    public void simulationPeriodic() {
-        simFlywheel.setInputVoltage(rightShooterMotor.get() * RobotController.getInputVoltage());
-        simFlywheel.update(Constants.kSimUpdateTime);
-        SmartDashboard.putNumber("Right Flywheel Sim", simFlywheel.getAngularVelocityRPM());
-        rightencsim.setVelocity(simFlywheel.getAngularVelocityRPM());
-        leftencsim.setVelocity(simFlywheel.getAngularVelocityRPM());
-        
-        SmartDashboard.putNumber("Right Flywheel motor", getRPM());
-    }
-
     public void setShooterSpeedAndUpdate(double speed) {
-        if(speed == 0)
+        if (speed == 0)
             this.stopMotors();
         else
             this.setSpeed(speed);
@@ -145,10 +108,45 @@ public class ShooterSubsystem extends SubsystemBase {
         return currentSpeed;
     }
 
-    public double getDrawnCurrentAmps(){
-        if(RobotBase.isSimulation()){
-            return this.simFlywheel.getCurrentDrawAmps()*2;
+    public double getDrawnCurrentAmps() {
+        if (RobotBase.isSimulation()) {
+            return this.simFlywheel.getCurrentDrawAmps() * 2;
         }
         return this.rightShooterMotor.getOutputCurrent() + this.leftShooterMotor.getOutputCurrent();
+    }
+
+    /**
+     * Simulation Code
+     */
+    FlywheelSim simFlywheel;
+    RevEncoderSimWrapper leftencsim, rightencsim;
+    LimeLightSim simLimeLight;
+    private boolean simInit = false;
+
+    private void initSim() {
+        limeLight = new LimeLight();
+        simFlywheel = new FlywheelSim(DCMotor.getNEO(1), Constants.shooterGearRatio, Constants.kSimShooterInertia);
+
+        this.leftencsim = RevEncoderSimWrapper.create(this.leftShooterMotor);
+        this.rightencsim = RevEncoderSimWrapper.create(this.rightShooterMotor);
+        this.simLimeLight = new LimeLightSim(this.limeLight);
+        var hubpos = new Pose2d(7.940, 4.08, new Rotation2d());
+        this.possim = new LimeLightPoseSim(simLimeLight, hubpos, Constants.limelightHeight, Constants.hubHeight,
+                Constants.azimuthAngle1);
+    }
+
+    @Override
+    public void simulationPeriodic() {
+        if (!simInit) {
+            initSim();
+            simInit = true;
+        }
+        simFlywheel.setInputVoltage(rightShooterMotor.get() * RobotController.getInputVoltage());
+        simFlywheel.update(Constants.kSimUpdateTime);
+        SmartDashboard.putNumber("Right Flywheel Sim", simFlywheel.getAngularVelocityRPM());
+        rightencsim.setVelocity(simFlywheel.getAngularVelocityRPM());
+        leftencsim.setVelocity(simFlywheel.getAngularVelocityRPM());
+
+        SmartDashboard.putNumber("Right Flywheel motor", getRPM());
     }
 }
