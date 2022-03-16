@@ -54,13 +54,16 @@ public class ClimberManual extends CommandBase {
     } else {
       winchSpeed = 0;
     }
-    // Winch soft limits -- BE SURE TO START WITH THE CLIMBER IN THE MINIMUM POSITION
-    if((climberMotorsSubsystem.getWinchPosition() >= Constants.winchMaxLimit && winchSpeed > 0) || 
-     (climberMotorsSubsystem.getWinchPosition() <= Constants.winchMinLimit && winchSpeed < 0)) {
-      winchSpeed = 0;
+    if (climberMotorsSubsystem.getClimberSensor()) {
+      winchSpeed = winchSpeed * 0.5;
     }
+    // // Winch soft limits -- BE SURE TO START WITH THE CLIMBER IN THE MINIMUM POSITION
+    // if((climberMotorsSubsystem.getWinchPosition() >= Constants.winchMaxLimit && winchSpeed > 0) || 
+    //  (climberMotorsSubsystem.getWinchPosition() <= Constants.winchMinLimit && winchSpeed < 0)) {
+    //   winchSpeed = 0;
+    // }
     climberMotorsSubsystem.setWinchSpeed(winchSpeed);
-    System.out.println("Winch Position: " + climberMotorsSubsystem.getWinchMotor().getEncoder().getPosition());
+    //System.out.println("Winch Position: " + climberMotorsSubsystem.getWinchMotor().getEncoder().getPosition());
     // if (dpadDir == 0) {
     //   climberSubsystem.setWinchSpeed(1);//DPAD up
     // } else if (dpadDir == 180) {

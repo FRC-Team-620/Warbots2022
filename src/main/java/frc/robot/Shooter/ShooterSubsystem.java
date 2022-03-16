@@ -8,6 +8,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SimableCANSparkMax;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -35,6 +37,11 @@ public class ShooterSubsystem extends SubsystemBase {
     public LimeLightPoseSim possim;
     public double targetRpm;
     public double currentSpeed = 0;
+    private boolean powerDecel = true;
+
+    //PIDs
+    protected final PIDController leftShooterPID;
+    protected final PIDController rightShooterPID;
 
     public ShooterSubsystem() {
         rightShooterMotor = new SimableCANSparkMax(Constants.rightShooterMotorID, MotorType.kBrushless);
@@ -53,9 +60,39 @@ public class ShooterSubsystem extends SubsystemBase {
             canSparkMax.setIdleMode(IdleMode.kCoast);
             canSparkMax.setSmartCurrentLimit(45);
         }
-        leftShooterMotor.follow(rightShooterMotor, true);
+        //leftShooterMotor.follow(rightShooterMotor, true);
         // rightShooterMotor.setInverted(true);
+        rightShooterMotor.setInverted(true);
+        
+        leftShooterPID = new PIDController(Constants.diffConstShooter, 0, 0);
+        rightShooterPID = new PIDController(Constants.diffConstShooter, 0, 0);
+        leftShooterPID.setTolerance(10, 3);
+        rightShooterPID.setTolerance(10, 3);
+        SmartDashboard.putData("leftShooterPID: ", leftShooterPID);
+        SmartDashboard.putData("rightShooterPID: ", rightShooterPID);
     }
+
+    @Override
+    public void periodic() {
+        leftShooterPID.calculate(leftShooterMotor.getEncoder().getVelocity());
+        rightShooterPID.calculate(rightShooterMotor.getEncoder().getVelocity());
+
+        double leftOutput = leftShooterPID.calculate(leftShooterMotor.getEncoder().getVelocity());
+        double rightOutput = rightShooterPID.calculate(rightShooterMotor.getEncoder().getVelocity());
+        
+        leftShooterMotor.set(MathUtil.clamp(leftOutput,powerDecel ? -1: 0,1));
+        rightShooterMotor.set(MathUtil.clamp(rightOutput,powerDecel ? -1: 0,1));
+        //MathUtil.clamp(output,powerDecel ? -1: 0,1);
+    }
+
+    public boolean atTargetRPM() {
+        return leftShooterPID.atSetpoint() && rightShooterPID.atSetpoint();
+    }
+    public void setTargetRPMPID(double tRPM) {
+        leftShooterPID.setSetpoint(tRPM);
+        rightShooterPID.setSetpoint(tRPM);
+    }
+
 
     public double getTicksPerMotorRotation() {
         return rightEncoder.getCountsPerRevolution();

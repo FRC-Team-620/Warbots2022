@@ -10,6 +10,7 @@ import com.revrobotics.SparkMaxLimitSwitch;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,7 +22,7 @@ public class ClimberMotorsSubsystem extends SubsystemBase {
     protected final SimableCANSparkMax leftClimberMotor, rightClimberMotor;
     protected final RelativeEncoder encoder;
     protected final SparkMaxLimitSwitch rearLimit;
-
+    protected final DigitalInput climberSensor;
 
 
     public ClimberMotorsSubsystem() {
@@ -39,9 +40,14 @@ public class ClimberMotorsSubsystem extends SubsystemBase {
         rightClimberMotor.setIdleMode(mode);
 
         leftClimberMotor.follow(rightClimberMotor, true);
+        climberSensor = new DigitalInput(9);
 
     }
 
+    public boolean getClimberSensor() {
+        return climberSensor.get();
+    }
+    
     public void setWinchSpeed(double winchSpeed) {
         rightClimberMotor.set(winchSpeed);
     }

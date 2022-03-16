@@ -11,14 +11,14 @@ public class ClimberSubsystem extends SubsystemBase {
     protected final Solenoid hangingSolenoid;
     protected final Solenoid armsSolenoid;
     protected final Solenoid bumperSolenoid;
-    protected final DigitalInput climberSensor;
+    
 
     public ClimberSubsystem() {
 
         hangingSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 2);
         armsSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 1);
         bumperSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 4);
-        climberSensor = new DigitalInput(9);
+        
 
     }
 
@@ -37,9 +37,7 @@ public class ClimberSubsystem extends SubsystemBase {
     public Solenoid getBumperSolenoid() {
         return bumperSolenoid;
     }
-    public boolean getClimberSensor() {
-        return climberSensor.get();
-    }
+    
 
 
     public void setHangingSolenoid(boolean b) {

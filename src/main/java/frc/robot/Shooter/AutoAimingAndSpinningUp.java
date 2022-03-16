@@ -94,10 +94,12 @@ public class AutoAimingAndSpinningUp extends CommandBase {
 
         if(hasTarget) {
             System.out.println(tempRPM);
-            shooterSubsystem.setTargetRPM(tempRPM);
+            // shooterSubsystem.setTargetRPM(tempRPM);
+            shooterSubsystem.setTargetRPMPID(tempRPM);
             System.out.println(shooterSubsystem.getTargetRPM());
         } else {
-            shooterSubsystem.setTargetRPM(0);
+            // shooterSubsystem.setTargetRPM(0);
+            shooterSubsystem.setTargetRPMPID(tempRPM);
         }
         System.out.println("hasTarget: " + hasTarget);
         // if(getRPM() > this.maxRPM)
@@ -105,8 +107,8 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         //shooterSubsystem.setTargetRPM(Math.min(shooterSubsystem.getRPM(), this.maxRPM));
         //System.out.println(shooterSubsystem.getTargetRPM());
         System.out.println("RPM: " + shooterSubsystem.getRPM());
-        acceleration = Constants.diffConstShooter * (shooterSubsystem.getTargetRPM() - shooterSubsystem.getRPM());
-        shooterSubsystem.setShooterSpeedAndUpdate(shooterSubsystem.getCurrentSpeed() + acceleration);
+        // acceleration = Constants.diffConstShooter * (shooterSubsystem.getTargetRPM() - shooterSubsystem.getRPM());
+        // shooterSubsystem.setShooterSpeedAndUpdate(shooterSubsystem.getCurrentSpeed() + acceleration);
         if (!(isAuto) && shooterSubsystem.getTargetRPM() > (1-Constants.shooterVibrationTolerance)*shooterSubsystem.getRPM()
             && shooterSubsystem.getTargetRPM() < (1+Constants.shooterVibrationTolerance)*shooterSubsystem.getRPM()) {
             operatorXbox.setRumble(RumbleType.kLeftRumble, 0.5);
@@ -134,7 +136,7 @@ public class AutoAimingAndSpinningUp extends CommandBase {
     public void end(boolean interrupt) {
         //System.out.println("HERE!!!");
         lazySusanMotor.set(0);
-        shooterSubsystem.stopMotors();
+        //shooterSubsystem.stopMotors();
         table.getEntry("ledMode").setNumber(1);
         operatorXbox.setRumble(RumbleType.kLeftRumble, 0);
         operatorXbox.setRumble(RumbleType.kRightRumble, 0);
