@@ -19,7 +19,7 @@ import frc.robot.Util.sim.RevEncoderSimWrapper;
 public class LazySusanSubsystem extends SubsystemBase {
     protected SimableCANSparkMax lazySusan;
     protected RelativeEncoder encoder;
-    private double turntableThresh = 35;
+    // private double turntableThresh = 35;
 
     public LazySusanSubsystem() {
         lazySusan = new SimableCANSparkMax(Constants.lazySusanID, MotorType.kBrushless);

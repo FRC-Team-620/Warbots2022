@@ -62,12 +62,10 @@ public class Robot extends TimedRobot {
     //new DirectTurretAuto(robotContainer.getLazySusanSubsystem(), // -1.5*
     //robotContainer.getShooterSubsystem(), 0),
     autonomousCommand = new SequentialCommandGroup( 
-             new ParallelCommandGroup(new AutoCommand(robotContainer.getLoaderSubsystem(), 
-             robotContainer.getShooterSubsystem(), 
-             robotContainer.getLazySusanSubsystem(), robotContainer), 
-             new AutoAimingAndSpinningUp(robotContainer.getShooterSubsystem(), 
-             robotContainer.getLazySusanSubsystem(), true, robotContainer.getOperatorController()), 
-             new AutoLoad(robotContainer.getLoaderSubsystem(), 1)));
+             new ParallelCommandGroup(new AutoCommand(robotContainer.getLoaderSubsystem(), robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer), 
+                new AutoAimingAndSpinningUp(robotContainer.getShooterSubsystem(),  robotContainer.getLazySusanSubsystem(), true, robotContainer.getOperatorController()), 
+                new AutoLoad(robotContainer.getLoaderSubsystem(), 1))
+              );
 
     // autonomousCommand = new SequentialCommandGroup(
     //     new TurnDegrees(robotContainer.getDriveTrain(), 180),

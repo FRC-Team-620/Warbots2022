@@ -1,20 +1,10 @@
 package frc.robot.Auto;
 
-import java.io.IOException;
-import java.nio.file.Path;
-
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Drive.DriveBackwards;
-import frc.robot.Drive.DriveForwards;
 import frc.robot.Drive.DriveForwardsEncoder;
-import frc.robot.Drive.TurnDegrees;
-import frc.robot.Loader.AutoLoad;
 import frc.robot.Loader.AutoShoot;
 import frc.robot.Loader.LoaderSubsystem;
-import frc.robot.Shooter.AutoAimingAndSpinningUp;
 import frc.robot.Shooter.LazySusanSubsystem;
 import frc.robot.Shooter.ShooterSubsystem;
 import frc.robot.Util.RobotContainer;

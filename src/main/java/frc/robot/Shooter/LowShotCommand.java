@@ -4,20 +4,11 @@
 
 package frc.robot.Shooter;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.Controls.ControlConstants;
 import frc.robot.Controls.ControlBoard;
-import frc.robot.Util.LimeLight;
-import frc.robot.Util.LimeLight.LedMode;
 
 
 

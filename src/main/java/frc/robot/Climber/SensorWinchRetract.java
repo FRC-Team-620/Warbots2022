@@ -5,7 +5,6 @@
 package frc.robot.Climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 
 public class SensorWinchRetract extends CommandBase {
   protected ClimberMotorsSubsystem climberMotorsSubsystem;
