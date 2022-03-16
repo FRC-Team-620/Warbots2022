@@ -42,7 +42,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        System.out.println(getClimberSensor());
+        // System.out.println(getClimberSensor());
     }
 
 

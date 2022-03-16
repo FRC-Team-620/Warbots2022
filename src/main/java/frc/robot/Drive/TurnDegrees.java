@@ -5,7 +5,7 @@ import frc.robot.Constants;
 
 public class TurnDegrees extends CommandBase {
     Drivetrain drivetrain;
-    double deltaDegrees, targetDegrees, tolerance = 0.035;
+    double deltaDegrees, targetDegrees, tolerance = 3, maxSpeed = 0.8;
     
     public TurnDegrees(Drivetrain drivetrain, double deltaDegrees) {
         this.drivetrain = drivetrain;
@@ -18,14 +18,19 @@ public class TurnDegrees extends CommandBase {
 
     public void execute() {
         double speed = Constants.diffConstTurn*(this.targetDegrees-this.drivetrain.getHeading());
-        // System.out.println("SPEED:" + speed);
-        // System.out.println("ANGLE: " + this.drivetrain.getHeading());
-        // System.out.println("TARGET: " + this.targetDegrees);
+        System.out.println("SPEED:" + speed);
+        System.out.println("ANGLE: " + this.drivetrain.getHeading());
+        System.out.println("TARGET: " + this.targetDegrees);
+        int sign = speed < 0 ? -1 : 1;
+        speed = sign*Math.min(Math.abs(speed), this.maxSpeed);
+
         drivetrain.tankDriveSet(-speed, speed);
+        // drivetrain.diffDrive.arcadeDrive(0, speed);
     }
 
     public boolean isFinished() {
         double angle = this.drivetrain.getHeading();
-        return angle > (1-this.tolerance)*this.targetDegrees && angle < (1+this.tolerance)*this.targetDegrees;
+        return angle > this.targetDegrees-this.tolerance && 
+            angle < this.targetDegrees+this.tolerance;
     }
 }

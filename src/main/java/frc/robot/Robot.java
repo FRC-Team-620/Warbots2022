@@ -15,6 +15,7 @@ import frc.robot.Auto.AutoCommand;
 import frc.robot.Climber.LowerHooks;
 import frc.robot.Drive.DriveBackwards;
 import frc.robot.Drive.DriveForwards;
+import frc.robot.Drive.DriveWithJoystick;
 import frc.robot.Drive.TurnDegrees;
 import frc.robot.Loader.AutoLoad;
 import frc.robot.Shooter.AutoAimingAndSpinningUp;
@@ -60,6 +61,7 @@ public class Robot extends TimedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
+    robotContainer.setTeleopDrive();
     // TODO: move to initializer in robotContainer
     new LowerHooks(robotContainer.getClimberSubsystem()).schedule();
     robotContainer.getLazySusanSubsystem().getLazySusanEncoder().setPosition(0);
