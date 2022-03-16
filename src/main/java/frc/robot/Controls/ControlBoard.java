@@ -51,7 +51,7 @@ public class ControlBoard {
         raiseArmsButton = new JoystickButton(operator, Button.kY.value);
         climbSequenceButton = new JoystickButton(operator, Button.kB.value);
         lowerHooksButton = new JoystickButton(operator, Button.kStart.value);
-        retractArmsButton = new JoystickButton(operator, Button.kLeftStick.value);
+        retractArmsButton = new JoystickButton(operator, Button.kLeftBumper.value);
         aimTurretTrigger = new TriggerPressed(operator, Axis.kLeftTrigger.value);
         fireTurretTrigger = new TriggerPressed(operator, Axis.kRightTrigger.value);
     }
