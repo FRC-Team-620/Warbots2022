@@ -22,7 +22,7 @@ public class PIDShooterCommand extends CommandBase {
     @Override
     public void execute() {
         // TODO Auto-generated method stub
-        var output = this.controller.calculate(this.shooter.getSimRPM());
+        var output = this.controller.calculate(this.shooter.getRPM());
         
         output = MathUtil.clamp(output,powerDecel ? -1: 0,1);
         SmartDashboard.putNumber("Shooter pid out", output);

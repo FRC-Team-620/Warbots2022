@@ -48,12 +48,6 @@ public class Drivetrain extends SubsystemBase {
   protected final NetworkTableInstance instance;
   protected final NetworkTable table;
 
-  // Sim Variables
-  private NavxWrapper simGryo;
-  private DifferentialDrivetrainSim m_drivetrainSimulator;
-  private RevEncoderSimWrapper leftencsim;
-  private RevEncoderSimWrapper rightencsim;
-
   /** Creates a new Drivetrain. */
   public Drivetrain() {
     rightBackMotor = new SimableCANSparkMax(Constants.rightBackMotorID, MotorType.kBrushless);
@@ -99,7 +93,7 @@ public class Drivetrain extends SubsystemBase {
 
     var conversionFactor = Constants.gearRatio * Constants.wheelDiameterInInches * Constants.inchesToMetersFactor
         * Math.PI;
-    leftBackEncoder.setPositionConversionFactor(conversionFactor);//Need to burn to SPARKMax
+    leftBackEncoder.setPositionConversionFactor(conversionFactor);// Need to burn to SPARKMax
     leftFrontEncoder.setPositionConversionFactor(conversionFactor);
     rightFrontEncoder.setPositionConversionFactor(conversionFactor);
     rightBackEncoder.setPositionConversionFactor(conversionFactor);
@@ -122,28 +116,7 @@ public class Drivetrain extends SubsystemBase {
     instance = NetworkTableInstance.getDefault();
     table = instance.getTable("/SmartDashboard");
 
-    // Start Sim components if in the matrix
-    if (RobotBase.isSimulation()) {
-      initSim();
-    }
-
     // ShuffleboardTab tab = Shuffleboard.getTab("Smart Dashboard");
-  }
-
-  private void initSim() {
-    LinearSystem<N2, N2, N2> m_drivetrainSystem = LinearSystemId.identifyDrivetrainSystem(Constants.kSimDrivekVLinear,
-        Constants.ksimDrivekALinear, Constants.ksimDrivekVAngular,
-        Constants.kSimDrivekAAngular);
-    m_drivetrainSimulator = new DifferentialDrivetrainSim(
-        m_drivetrainSystem, DCMotor.getNEO(2), Constants.gearRatio, Constants.kTrackwidthMeters,
-        Units.inchesToMeters(Constants.wheelDiameterInInches / 2), null);
-
-    // Setup Leader Motors
-    this.leftencsim = RevEncoderSimWrapper.create(this.leftFrontMotor);
-    this.rightencsim = RevEncoderSimWrapper.create(this.rightFrontMotor);
-
-    // Sim Motors
-    simGryo = new NavxWrapper();
   }
 
   public double getOpenLoopRampRate() {
@@ -206,6 +179,7 @@ public class Drivetrain extends SubsystemBase {
     rightFrontMotor.setVoltage(rightVolts);
     diffDrive.feed();
   }
+
   public void tankDriveSet(double leftSpeed, double rightSpeed) {
     leftFrontMotor.set(leftSpeed);
     rightFrontMotor.set(rightSpeed);
@@ -240,9 +214,11 @@ public class Drivetrain extends SubsystemBase {
   public void motorDrive(int idx, double s) {
     this.getMotor((idx - 1) % 4 + 1).set(s);
   }
+
   public void setEncoderPos(int idx, double p) {
     this.getEncoder((idx - 1) % 4 + 1).setPosition(p);
   }
+
   public double getEncoderPos(int idx) {
     return this.getEncoder((idx - 1) % 4 + 1).getPosition();
   }
@@ -261,21 +237,52 @@ public class Drivetrain extends SubsystemBase {
     odometry.update(gyro.getRotation2d(), getDistance(leftBackEncoder), getDistance(rightBackEncoder));
   }
 
-  protected double getDistance(RelativeEncoder enc) {//TODO: This is the bug getPositionConversionFactor
+  protected double getDistance(RelativeEncoder enc) {// TODO: This is the bug getPositionConversionFactor
     return enc.getPosition();
   }
-  public double getDrawnCurrentAmps(){
-    if(RobotBase.isSimulation()){
+
+  public double getDrawnCurrentAmps() {
+    if (RobotBase.isSimulation()) {
       return this.m_drivetrainSimulator.getCurrentDrawAmps();
     }
-    return this.leftFrontMotor.getOutputCurrent() + this.leftBackMotor.getOutputCurrent() + this.rightFrontMotor.getOutputCurrent() + this.rightBackMotor.getOutputCurrent();
+    return this.leftFrontMotor.getOutputCurrent() + this.leftBackMotor.getOutputCurrent()
+        + this.rightFrontMotor.getOutputCurrent() + this.rightBackMotor.getOutputCurrent();
+  }
+
+  /**
+   * Simulation Code
+   */
+  private NavxWrapper simGryo;
+  private DifferentialDrivetrainSim m_drivetrainSimulator;
+  private RevEncoderSimWrapper leftencsim;
+  private RevEncoderSimWrapper rightencsim;
+  private boolean simInit = false;
+
+  private void initSim() {
+    LinearSystem<N2, N2, N2> m_drivetrainSystem = LinearSystemId.identifyDrivetrainSystem(Constants.kSimDrivekVLinear,
+        Constants.ksimDrivekALinear, Constants.ksimDrivekVAngular,
+        Constants.kSimDrivekAAngular);
+    m_drivetrainSimulator = new DifferentialDrivetrainSim(
+        m_drivetrainSystem, DCMotor.getNEO(2), Constants.gearRatio, Constants.kTrackwidthMeters,
+        Units.inchesToMeters(Constants.wheelDiameterInInches / 2), null);
+
+    // Setup Leader Motors
+    this.leftencsim = RevEncoderSimWrapper.create(this.leftFrontMotor);
+    this.rightencsim = RevEncoderSimWrapper.create(this.rightFrontMotor);
+
+    // Sim Motors
+    simGryo = new NavxWrapper();
   }
 
   @Override
   public void simulationPeriodic() {
+    if (!simInit) {
+      initSim();
+      simInit = true;
+    }
     m_drivetrainSimulator.setInputs(
-        this.leftFrontMotor.get()*RobotController.getInputVoltage(),
-        this.rightFrontMotor.get()*RobotController.getInputVoltage());
+        this.leftFrontMotor.get() * RobotController.getInputVoltage(),
+        this.rightFrontMotor.get() * RobotController.getInputVoltage());
     m_drivetrainSimulator.update(Constants.kSimUpdateTime);
     this.leftencsim.setDistance(m_drivetrainSimulator.getLeftPositionMeters());
     this.leftencsim.setVelocity(m_drivetrainSimulator.getLeftVelocityMetersPerSecond());
