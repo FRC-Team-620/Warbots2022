@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Util.LimeLight;
-import frc.robot.Util.LimeLight.LedMode;
 
 public class ShooterCommand extends CommandBase {
     protected XboxController operatorXbox;
@@ -23,7 +22,6 @@ public class ShooterCommand extends CommandBase {
 
     // protected Timer timer = new Timer(); // For dealing with RPM
     // protected long prevRotations = 0;
-    // protected double secondsTimestep = 0.2, prevTime, currentTime, prevRPM = 0;
 
     protected NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     protected NetworkTableEntry entryHasTarget = table.getEntry("tv");

@@ -11,7 +11,6 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
-import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -20,11 +19,8 @@ import frc.robot.Util.sim.RevEncoderSimWrapper;
 public class LazySusanSubsystem extends SubsystemBase {
     protected SimableCANSparkMax lazySusan;
     protected RelativeEncoder encoder;
-    private double turntableThresh = 35;
-    // Sim
-    private DCMotorSim simlazySusan;
-    private RevEncoderSimWrapper simEncoder;
-    public Rotation2d simTurrentRotation;
+    // private double turntableThresh = 35;
+
     public LazySusanSubsystem() {
         lazySusan = new SimableCANSparkMax(Constants.lazySusanID, MotorType.kBrushless);
 
@@ -35,15 +31,6 @@ public class LazySusanSubsystem extends SubsystemBase {
 
         lazySusan.setSmartCurrentLimit(35);
 
-        simTurrentRotation = new Rotation2d();
-        if (RobotBase.isSimulation()) {
-            initSim();
-        }
-    }
-
-    private void initSim() {
-        simlazySusan = new DCMotorSim(DCMotor.getNeo550(1), Constants.kSimTurntableGearRatio, Constants.kSimTurntableInertia); //TODO: add gear ratio
-        simEncoder = RevEncoderSimWrapper.create(this.lazySusan);
     }
 
     public CANSparkMax getLazySusanMotor() {
@@ -65,23 +52,43 @@ public class LazySusanSubsystem extends SubsystemBase {
     public double getTicksPerMotorRotation() {
         return encoder.getCountsPerRevolution();
     }
-    @Override
-    public void simulationPeriodic() {
-        simTurrentRotation = Rotation2d.fromDegrees((encoder.getPosition()/Constants.kSimTurntableGearRatio)*360);
-        simlazySusan.setInputVoltage(lazySusan.get() * RobotController.getInputVoltage());
-        simlazySusan.update(Constants.kSimUpdateTime);
-        simEncoder.setVelocity(simlazySusan.getAngularVelocityRPM());
-        // simlazySusan.
-        simEncoder.setDistance(simlazySusan.getAngularPositionRotations()* Constants.kSimTurntableGearRatio/5); //TODO: Remove magic number 5 that represents the first gear reduction
-        SmartDashboard.putNumber("Turntable Velocity", encoder.getVelocity());
-        SmartDashboard.putNumber("Turntable ticks", encoder.getPosition());
-        SmartDashboard.putNumber("Turntable Set", lazySusan.get());
-    }
 
     public double getDrawnCurrentAmps() {
         if (RobotBase.isSimulation()) {
             return this.simlazySusan.getCurrentDrawAmps();
         }
         return this.lazySusan.getOutputCurrent();
+    }
+
+    /**
+     * Simulation Code
+     */
+    private DCMotorSim simlazySusan;
+    private RevEncoderSimWrapper simEncoder;
+    public Rotation2d simTurrentRotation;
+    private boolean simInit = false;
+
+    private void initSim() {
+        simTurrentRotation = new Rotation2d();
+        simlazySusan = new DCMotorSim(DCMotor.getNeo550(1), Constants.kSimTurntableGearRatio,
+                Constants.kSimTurntableInertia); // TODO: add gear ratio
+        simEncoder = RevEncoderSimWrapper.create(this.lazySusan);
+    }
+
+    @Override
+    public void simulationPeriodic() {
+        if (!simInit) {
+            initSim();
+            simInit = true;
+        }
+        simTurrentRotation = Rotation2d.fromDegrees((encoder.getPosition() / Constants.kSimTurntableGearRatio) * 360);
+        simlazySusan.setInputVoltage(lazySusan.get() * RobotController.getInputVoltage());
+        simlazySusan.update(Constants.kSimUpdateTime);
+        simEncoder.setVelocity(simlazySusan.getAngularVelocityRPM());
+        simEncoder.setDistance(simlazySusan.getAngularPositionRotations() * Constants.kSimTurntableGearRatio / 5);
+        // TODO: Remove magic number 5 that represents the first gear reduction
+        SmartDashboard.putNumber("Turntable Velocity", encoder.getVelocity());
+        SmartDashboard.putNumber("Turntable ticks", encoder.getPosition());
+        SmartDashboard.putNumber("Turntable Set", lazySusan.get());
     }
 }

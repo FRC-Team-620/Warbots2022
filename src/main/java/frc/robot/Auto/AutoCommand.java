@@ -1,17 +1,10 @@
 package frc.robot.Auto;
 
-import java.io.IOException;
-import java.nio.file.Path;
-
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Drive.DriveBackwards;
-import frc.robot.Loader.AutoLoad;
+import frc.robot.Drive.DriveForwardsEncoder;
 import frc.robot.Loader.AutoShoot;
 import frc.robot.Loader.LoaderSubsystem;
-import frc.robot.Shooter.AutoAimingAndSpinningUp;
 import frc.robot.Shooter.LazySusanSubsystem;
 import frc.robot.Shooter.ShooterSubsystem;
 import frc.robot.Util.RobotContainer;
@@ -28,8 +21,15 @@ public class AutoCommand extends SequentialCommandGroup {
         this.robotContainer = rC;
         // addRequirements(loaderSubsystem, shooterSubsystem, lazySusanSubsystem);
             addCommands(
-                //robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("paths/Part1.wpilib.json"))),
-                new DriveBackwards(robotContainer.getDriveTrain()),
+            //robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("paths/Part1.wpilib.json"))),
+                // new DriveForwards(robotContainer.getDriveTrain()),
+                new DriveForwardsEncoder(robotContainer.getDriveTrain()),
+
+                //new TurnDegrees(robotContainer.getDriveTrain(), 180),
+
+                new WaitCommand(1),
+
+                new AutoShoot(loaderSubsystem),
 
                 new WaitCommand(1),
 
@@ -46,6 +46,7 @@ public class AutoCommand extends SequentialCommandGroup {
                 // robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("paths/Part4.wpilib.json"))),
 
                 // new AutoShoot(loaderSubsystem)
+                
                 
             );
         

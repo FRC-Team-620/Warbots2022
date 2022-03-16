@@ -50,7 +50,7 @@ public final class Constants {
     public static final double kRamseteZeta = 0.7;// 0.7
     // It seems that the meter value is three times what it should be.
 
-    public static final double wheelDiameterInInches = 4; // TODO: Be more clear on if this is A drive wheel or shooter
+    public static final double wheelDiameterInInches = 6; // TODO: Be more clear on if this is A drive wheel or shooter
                                                           // wheel
     public static final double inchesToMetersFactor = 0.0254; // TODO: remove use Units.inchestoMeter
     public static final double shooterGearRatio = 1;
@@ -112,6 +112,7 @@ public final class Constants {
 
     // differential constants (very cool)
     public static final double diffConstLS = 0.014;//0.012 0.014
+    public static final double diffConstAutoLS = 0.040;
     public static final double diffConstShooter = 9 * Math.pow(10, -6);
     public static final double diffConstWinchHold = 0.3;
     public static final double diffConstKeepPosition = 0.00001; // TODO: Test this constant and optimize it

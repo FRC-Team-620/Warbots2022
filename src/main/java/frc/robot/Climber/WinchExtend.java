@@ -1,7 +1,6 @@
 package frc.robot.Climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class WinchExtend extends CommandBase {

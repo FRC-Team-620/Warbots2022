@@ -6,7 +6,7 @@ public class AutoShoot extends CommandBase {
     protected LoaderSubsystem loaderSubsystem;
     protected int frames = 0;
     public AutoShoot(LoaderSubsystem loaderSubsystem) {
-       // addRequirements(loaderSubsystem);
+        //addRequirements(loaderSubsystem);
         this.loaderSubsystem = loaderSubsystem;
     }
 
@@ -29,6 +29,6 @@ public class AutoShoot extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return frames >= 15;
+        return frames >= 80;
     }
 }

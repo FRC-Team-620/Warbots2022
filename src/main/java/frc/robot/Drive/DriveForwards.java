@@ -1,5 +1,7 @@
 package frc.robot.Drive;
 
+import com.revrobotics.CANSparkMax.IdleMode;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class DriveForwards extends CommandBase {
@@ -19,10 +21,14 @@ public class DriveForwards extends CommandBase {
         drivetrain.curvatureInput(0.5, 0, false);
         frames++;
     }
+    @Override
+    public void end(boolean interrupted) {
+        this.drivetrain.setMotorMode(IdleMode.kBrake);
+    } 
 
     @Override
-    public boolean isFinished() {
-        return frames > 40;
+    public boolean isFinished() {//40 = 7ft
+        return frames > 60;
     }
 }
 
