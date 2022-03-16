@@ -50,7 +50,7 @@ public final class Constants {
     public static final double kRamseteZeta = 0.7;// 0.7
     // It seems that the meter value is three times what it should be.
 
-    public static final double wheelDiameterInInches = 4; // TODO: Be more clear on if this is A drive wheel or shooter
+    public static final double wheelDiameterInInches = 6; // TODO: Be more clear on if this is A drive wheel or shooter
                                                           // wheel
     public static final double inchesToMetersFactor = 0.0254; // TODO: remove use Units.inchestoMeter
     public static final double shooterGearRatio = 1;
