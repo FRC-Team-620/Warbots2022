@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxLimitSwitch.Type;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SimableCANSparkMax;
+import com.revrobotics.SparkMaxLimitSwitch;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
@@ -19,6 +20,7 @@ import frc.robot.Util.sim.RevEncoderSimWrapper;
 public class ClimberMotorsSubsystem extends SubsystemBase {
     protected final SimableCANSparkMax leftClimberMotor, rightClimberMotor;
     protected final RelativeEncoder encoder;
+    protected final SparkMaxLimitSwitch rearLimit;
 
 
 
@@ -28,7 +30,7 @@ public class ClimberMotorsSubsystem extends SubsystemBase {
         rightClimberMotor = new SimableCANSparkMax(Constants.rightClimberMotorID, MotorType.kBrushless);
         encoder = rightClimberMotor.getEncoder();
         // rightClimberMotor.limi
-        rightClimberMotor.getForwardLimitSwitch(Type.kNormallyOpen);
+        rearLimit = rightClimberMotor.getForwardLimitSwitch(Type.kNormallyOpen);
         leftClimberMotor.restoreFactoryDefaults();
         rightClimberMotor.restoreFactoryDefaults();
 
@@ -55,6 +57,10 @@ public class ClimberMotorsSubsystem extends SubsystemBase {
     }
     public double getWinchCountsPerRevolution() {
         return encoder.getCountsPerRevolution();
+    }
+
+    public boolean hitRearLimitSwitch() {
+        return rearLimit.isPressed();
     }
 
     /**
