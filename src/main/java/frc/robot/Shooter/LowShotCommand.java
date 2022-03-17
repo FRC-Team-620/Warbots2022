@@ -33,16 +33,16 @@ public class LowShotCommand extends CommandBase {
   @Override
   public void execute() {
     shooterSubsystem.setTargetRPM(Constants.lowPoweredShotRPM);
-    acceleration = Constants.diffConstShooter * (shooterSubsystem.getTargetRPM() - shooterSubsystem.getRPM());
-        SmartDashboard.putNumber("Acceleration: ", acceleration);
-        // if(Math.abs(rpm-currRPM) > (bangBangTolerance * rpm))
-        shooterSubsystem.setShooterSpeedAndUpdate(shooterSubsystem.getCurrentSpeed() + acceleration);
-        // System.out.println(rpm);
-        if(shooterSubsystem.getTargetRPM() == 0.0) {
-            shooterSubsystem.setShooterSpeedAndUpdate(0);
-        }
-        SmartDashboard.putNumber("Shooter RPM: ",
-                ShooterMath.roundUpToNearestMultiple(shooterSubsystem.getRPM(), 5));
+    // acceleration = Constants.diffConstShooter * (shooterSubsystem.getTargetRPM() - shooterSubsystem.getRPM());
+    //     SmartDashboard.putNumber("Acceleration: ", acceleration);
+    //     // if(Math.abs(rpm-currRPM) > (bangBangTolerance * rpm))
+    //     shooterSubsystem.setShooterSpeedAndUpdate(shooterSubsystem.getCurrentSpeed() + acceleration);
+    //     // System.out.println(rpm);
+    //     if(shooterSubsystem.getTargetRPM() == 0.0) {
+    //         shooterSubsystem.setShooterSpeedAndUpdate(0);
+    //     }
+    //     SmartDashboard.putNumber("Shooter RPM: ",
+    //             ShooterMath.roundUpToNearestMultiple(shooterSubsystem.getRPM(), 5));
   }
 
   // Called once the command ends or is interrupted.

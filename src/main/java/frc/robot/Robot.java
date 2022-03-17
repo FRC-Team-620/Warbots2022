@@ -37,6 +37,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+    // robotContainer.getShooterSubsystem().setTargetRPMPID(5000*robotContainer.getOperatorController().getLeftX());
     CommandScheduler.getInstance().run();
   }
 
@@ -98,7 +99,7 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     IdleMode mode = IdleMode.kBrake;
     robotContainer.getDriveTrain().setMotorMode(mode);
-    robotContainer.getShooterSubsystem().setSpeed(0);
+    robotContainer.getShooterSubsystem().setTargetRPM(0);
     CommandScheduler.getInstance().cancelAll();
   }
 

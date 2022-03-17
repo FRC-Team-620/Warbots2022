@@ -94,12 +94,12 @@ public class AutoAimingAndSpinningUp extends CommandBase {
 
         if(hasTarget) {
             System.out.println(tempRPM);
-            // shooterSubsystem.setTargetRPM(tempRPM);
-            shooterSubsystem.setTargetRPMPID(tempRPM);
+            shooterSubsystem.setTargetRPM(tempRPM);
+            // shooterSubsystem.setTargetRPMPID(tempRPM);
             System.out.println(shooterSubsystem.getTargetRPM());
         } else {
-            // shooterSubsystem.setTargetRPM(0);
-            shooterSubsystem.setTargetRPMPID(tempRPM);
+            shooterSubsystem.setTargetRPM(0);
+            // shooterSubsystem.setTargetRPMPID(tempRPM);
         }
         System.out.println("hasTarget: " + hasTarget);
         // if(getRPM() > this.maxRPM)
@@ -118,7 +118,7 @@ public class AutoAimingAndSpinningUp extends CommandBase {
             operatorXbox.setRumble(RumbleType.kRightRumble, 0);
         }
         
-        System.out.println("ShooterSpeed: " + shooterSubsystem.getCurrentSpeed() + acceleration);
+        // System.out.println("ShooterSpeed: " + shooterSubsystem.getCurrentSpeed() + acceleration);
         //System.out.println("Frames: " + frames);
         
         // if (isAuto) {
@@ -136,7 +136,7 @@ public class AutoAimingAndSpinningUp extends CommandBase {
     public void end(boolean interrupt) {
         //System.out.println("HERE!!!");
         lazySusanMotor.set(0);
-        //shooterSubsystem.stopMotors();
+        shooterSubsystem.stopMotors();
         table.getEntry("ledMode").setNumber(1);
         operatorXbox.setRumble(RumbleType.kLeftRumble, 0);
         operatorXbox.setRumble(RumbleType.kRightRumble, 0);
