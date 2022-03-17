@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Drive.DriveForwardsEncoder;
 import frc.robot.Loader.AutoShoot;
 import frc.robot.Loader.LoaderSubsystem;
+import frc.robot.Shooter.DirectTurretAuto;
 import frc.robot.Shooter.LazySusanSubsystem;
 import frc.robot.Shooter.ShooterSubsystem;
 import frc.robot.Util.RobotContainer;
@@ -33,7 +34,11 @@ public class AutoCommand extends SequentialCommandGroup {
 
                 new WaitCommand(1),
 
-                new AutoShoot(loaderSubsystem)
+                new AutoShoot(loaderSubsystem),
+
+                new WaitCommand(3),
+
+                new DirectTurretAuto(robotContainer.getLazySusanSubsystem(), robotContainer.getShooterSubsystem(), 0)
 
                 // robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("paths/Part2.wpilib.json"))),
 
