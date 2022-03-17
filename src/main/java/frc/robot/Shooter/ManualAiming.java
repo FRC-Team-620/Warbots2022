@@ -37,6 +37,12 @@ public class ManualAiming extends CommandBase {
             lazySusanMotor.set(speed);
             // System.out.println("Speed Man: "+ speed);
             // System.out.println("Curr Enc Pos: " + lazySusanEnc.getPosition());
+        } else {
+            lazySusanMotor.set(0);
         }
+        if(operatorXbox.getRightBumper()) {
+            lazySusanEnc.setPosition(0);
+        }
+        System.out.println("LAZY POS: " + lazySusanEnc.getPosition());
     }
 }
