@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
@@ -28,6 +29,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    // NetworkTableInstance.getDefault().setUpdateRate(0.02); //Uncomment to increase network tables update rate.
     
     CommandScheduler.getInstance().cancelAll();
     robotContainer = new RobotContainer();

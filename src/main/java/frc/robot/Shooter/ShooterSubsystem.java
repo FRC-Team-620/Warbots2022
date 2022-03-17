@@ -84,6 +84,12 @@ public class ShooterSubsystem extends SubsystemBase {
         
         leftShooterMotor.set(MathUtil.clamp(leftOutput,powerDecel ? -1: 0,1));
         rightShooterMotor.set(MathUtil.clamp(rightOutput,powerDecel ? -1: 0,1));
+
+
+        SmartDashboard.putNumber("Flywheel Right RPM", rightShooterMotor.getEncoder().getVelocity());
+        SmartDashboard.putNumber("Flywheel Left RPM", leftShooterMotor.getEncoder().getVelocity());
+        SmartDashboard.putNumber("Flywheel Right Setpoint", rightShooterPID.getSetpoint());
+        SmartDashboard.putNumber("Flywheel Left Setpoint", leftShooterPID.getSetpoint());
         //MathUtil.clamp(output,powerDecel ? -1: 0,1);
     }
 
@@ -147,7 +153,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public double getDrawnCurrentAmps() {
         if (RobotBase.isSimulation()) {
-            return this.simFlywheel.getCurrentDrawAmps() * 2;
+            return this.simFlywheelLeft.getCurrentDrawAmps() + this.simFlywheelRight.getCurrentDrawAmps();
         }
         return this.rightShooterMotor.getOutputCurrent() + this.leftShooterMotor.getOutputCurrent();
     }
@@ -155,14 +161,15 @@ public class ShooterSubsystem extends SubsystemBase {
     /**
      * Simulation Code
      */
-    FlywheelSim simFlywheel;
+    FlywheelSim simFlywheelLeft,simFlywheelRight;
     RevEncoderSimWrapper leftencsim, rightencsim;
     LimeLightSim simLimeLight;
     private boolean simInit = false;
 
     private void initSim() {
         limeLight = new LimeLight();
-        simFlywheel = new FlywheelSim(DCMotor.getNEO(1), Constants.shooterGearRatio, Constants.kSimShooterInertia);
+        simFlywheelLeft = new FlywheelSim(DCMotor.getNEO(1), Constants.shooterGearRatio, Constants.kSimShooterInertia);
+        simFlywheelRight = new FlywheelSim(DCMotor.getNEO(1), Constants.shooterGearRatio, Constants.kSimShooterInertia);
 
         this.leftencsim = RevEncoderSimWrapper.create(this.leftShooterMotor);
         this.rightencsim = RevEncoderSimWrapper.create(this.rightShooterMotor);
@@ -178,13 +185,16 @@ public class ShooterSubsystem extends SubsystemBase {
             initSim();
             simInit = true;
         }
-        SmartDashboard.putNumber("Right Flywheel motor set", rightShooterMotor.get());
-        simFlywheel.setInputVoltage(rightShooterMotor.get() * RobotController.getInputVoltage());
-        simFlywheel.update(Constants.kSimUpdateTime);
-        SmartDashboard.putNumber("Right Flywheel Sim", simFlywheel.getAngularVelocityRPM());
-        rightencsim.setVelocity(simFlywheel.getAngularVelocityRPM());
-        leftencsim.setVelocity(simFlywheel.getAngularVelocityRPM());
+        // SmartDashboard.putNumber("Right Flywheel motor set", rightShooterMotor.get());
+        simFlywheelRight.setInputVoltage(rightShooterMotor.get() * RobotController.getInputVoltage());
+        simFlywheelRight.update(Constants.kSimUpdateTime);
 
-        SmartDashboard.putNumber("Right Flywheel motor", getRPM());
+        simFlywheelLeft.setInputVoltage(leftShooterMotor.get() * RobotController.getInputVoltage());
+        simFlywheelLeft.update(Constants.kSimUpdateTime);
+        // SmartDashboard.putNumber("Right Flywheel Sim", rightencsim.getAngularVelocityRPM());
+        rightencsim.setVelocity(simFlywheelRight.getAngularVelocityRPM());
+        leftencsim.setVelocity(simFlywheelLeft.getAngularVelocityRPM());
+
+        // SmartDashboard.putNumber("Right Flywheel motor", getRPM());
     }
 }
