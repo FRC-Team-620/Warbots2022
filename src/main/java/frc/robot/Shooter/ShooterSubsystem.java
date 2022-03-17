@@ -60,9 +60,9 @@ public class ShooterSubsystem extends SubsystemBase {
             canSparkMax.setIdleMode(IdleMode.kCoast);
             canSparkMax.setSmartCurrentLimit(45);
         }
-        //leftShooterMotor.follow(rightShooterMotor, true);
+        leftShooterMotor.follow(rightShooterMotor, true);
         // rightShooterMotor.setInverted(true);
-        leftShooterMotor.setInverted(true);
+        //leftShooterMotor.setInverted(true);
         
         leftShooterPID = new PIDController(Constants.diffConstShooter, 0, 0);
         rightShooterPID = new PIDController(Constants.diffConstShooter, 0, 0);
