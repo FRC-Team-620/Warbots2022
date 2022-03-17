@@ -118,6 +118,7 @@ public class ShooterSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("shooter setpoint speed", speed);
         // shooterMotors.set(speed);
         rightShooterMotor.set(speed);
+        leftShooterMotor.set(speed);
         // rightShooterMotor.set(speed);
     }
 
