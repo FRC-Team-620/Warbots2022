@@ -62,7 +62,7 @@ public class ShooterSubsystem extends SubsystemBase {
         }
         //leftShooterMotor.follow(rightShooterMotor, true);
         // rightShooterMotor.setInverted(true);
-        rightShooterMotor.setInverted(true);
+        leftShooterMotor.setInverted(true);
         
         leftShooterPID = new PIDController(Constants.diffConstShooter, 0, 0);
         rightShooterPID = new PIDController(Constants.diffConstShooter, 0, 0);
@@ -72,18 +72,15 @@ public class ShooterSubsystem extends SubsystemBase {
         SmartDashboard.putData("rightShooterPID: ", rightShooterPID);
     }
 
-    @Override
-    public void periodic() {
-        leftShooterPID.calculate(leftShooterMotor.getEncoder().getVelocity());
-        rightShooterPID.calculate(rightShooterMotor.getEncoder().getVelocity());
-
-        double leftOutput = leftShooterPID.calculate(leftShooterMotor.getEncoder().getVelocity());
-        double rightOutput = rightShooterPID.calculate(rightShooterMotor.getEncoder().getVelocity());
+    // @Override
+    // public void periodic() {
+    //     double leftOutput = leftShooterPID.calculate(leftShooterMotor.getEncoder().getVelocity());
+    //     double rightOutput = rightShooterPID.calculate(rightShooterMotor.getEncoder().getVelocity());
         
-        leftShooterMotor.set(MathUtil.clamp(leftOutput,powerDecel ? -1: 0,1));
-        rightShooterMotor.set(MathUtil.clamp(rightOutput,powerDecel ? -1: 0,1));
-        //MathUtil.clamp(output,powerDecel ? -1: 0,1);
-    }
+    //     leftShooterMotor.set(MathUtil.clamp(leftOutput,powerDecel ? -1: 0,1));
+    //     rightShooterMotor.set(MathUtil.clamp(rightOutput,powerDecel ? -1: 0,1));
+    //     //MathUtil.clamp(output,powerDecel ? -1: 0,1);
+    // }
 
     public boolean atTargetRPM() {
         return leftShooterPID.atSetpoint() && rightShooterPID.atSetpoint();

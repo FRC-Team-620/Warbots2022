@@ -33,7 +33,7 @@ public class SensorWinchRetract extends CommandBase {
   @Override
   public void execute() {
       System.out.println("Winch is winding");
-      if (climberMotorsSubsystem.getClimberSensor()) {
+      if (!(climberMotorsSubsystem.getClimberSensor())) {
         isBarDetected = true;
       }
       if (isBarDetected) {

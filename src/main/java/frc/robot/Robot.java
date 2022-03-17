@@ -17,7 +17,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Auto.AutoCommand;
+import frc.robot.Climber.ClimberMotorsSubsystem;
 import frc.robot.Climber.LowerHooks;
+import frc.robot.Climber.SensorHooksUp;
 import frc.robot.Loader.AutoLoad;
 import frc.robot.Shooter.AutoAimingAndSpinningUp;
 import frc.robot.Util.RobotContainer;
@@ -38,6 +40,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+    //System.out.println(robotContainer.getClimberMotorsSubsystem().getClimberSensor());
   }
 
   @Override
@@ -106,11 +109,14 @@ public class Robot extends TimedRobot {
   public void testInit() {
     CommandScheduler.getInstance().cancelAll();
     robotContainer.init();
+    // new LowerHooks(robotContainer.getClimberSubsystem()).schedule();
+    // new SensorHooksUp(robotContainer.getClimberMotorsSubsystem(), robotContainer.getClimberSubsystem()).schedule();
   }
 
   @Override
   public void testPeriodic() {
   }
+
 
   /**
    * Simulation Code
