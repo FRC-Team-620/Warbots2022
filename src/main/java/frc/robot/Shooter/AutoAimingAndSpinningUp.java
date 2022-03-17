@@ -82,6 +82,11 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         // shooterSubsystem.limeLight.setLEDMode(LedMode.ON);
         // double speeeeed = -x*Constants.diffConstLS; // this is speed
 
+        if(operatorXbox.getRightBumper()) {
+            lazySusanEnc.setPosition(0);
+        }
+        System.out.println("LAZY POS: " + lazySusanEnc.getPosition());
+
         double tempDist = ShooterMath.getDistanceInMeters(Constants.azimuthAngle1, y, Constants.limelightHeight, Constants.hubHeight);
         double tempRPM = ShooterMath.metersToRPM(tempDist);
         // Making sure it's within the provided threshholds (important that you don't use absolute 
@@ -90,7 +95,6 @@ public class AutoAimingAndSpinningUp extends CommandBase {
             speed = 0;
         }
         lazySusanMotor.set(speed);
-
 
         if(hasTarget) {
             System.out.println(tempRPM);
