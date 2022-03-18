@@ -66,7 +66,7 @@ public class DirectTurret extends CommandBase {
     @Override
     public boolean isFinished() {
         double p = this.lazySusanSubsystem.getLazySusanPosition();
-        System.out.println(p);
+        // System.out.println(p);
         // System.out.println("LS POS: " + p);
         // System.out.println("MAX: " + this.targetPosition*(1+this.tolerance));
         // System.out.println("MIN: " + this.targetPosition*(1-this.tolerance));

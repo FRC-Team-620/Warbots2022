@@ -186,8 +186,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public CANSparkMax getMotor(int idx) {
-    idx = (idx - 1) % 4 + 1;
-    switch (idx) {
+    switch ((idx - 1) % 4 + 1) {
       case 1:
         return rightBackMotor;
       case 2:
@@ -199,28 +198,27 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public RelativeEncoder getEncoder(int idx) {
-    idx = (idx - 1) % 4 + 1;
-    switch (idx) {
+    switch ((idx - 1) % 4 + 1) {
       case 1:
-        return leftFrontEncoder;
+        return rightBackEncoder;
       case 2:
-        return leftBackEncoder;
-      case 3:
         return rightFrontEncoder;
+      case 3:
+        return leftBackEncoder;
     }
-    return rightBackEncoder;
+    return leftFrontEncoder;
   }
 
   public void motorDrive(int idx, double s) {
-    this.getMotor((idx - 1) % 4 + 1).set(s);
+    this.getMotor(idx).set(s);
   }
 
   public void setEncoderPos(int idx, double p) {
-    this.getEncoder((idx - 1) % 4 + 1).setPosition(p);
+    this.getEncoder(idx).setPosition(p);
   }
 
   public double getEncoderPos(int idx) {
-    return this.getEncoder((idx - 1) % 4 + 1).getPosition();
+    return this.getEncoder(idx).getPosition();
   }
 
   public void curvatureInput(double speed, double rotation, boolean isCurvatureDrive) {
@@ -228,7 +226,6 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public double getRPM(int idx) {
-    idx = (idx - 1) % 4 + 1;
     return getEncoder(idx).getVelocity() * Constants.gearRatio;
   }
 
