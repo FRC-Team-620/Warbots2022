@@ -32,6 +32,7 @@ import frc.robot.Climber.RaiseAndGrab;
 import frc.robot.Climber.RaisePistons;
 import frc.robot.Climber.WinchHold;
 import frc.robot.Climber.WinchReset;
+import frc.robot.Climber.ToggleHooks;
 import frc.robot.Controls.ControlBoard;
 import frc.robot.Drive.DriveWithJoystick;
 import frc.robot.Drive.Drivetrain;
@@ -101,7 +102,7 @@ public class RobotContainer {
                 new WinchReset(winch));
 
         controls.lowerHooksButton.whenPressed(
-                new LowerHooks(climberHooks));
+                new ToggleHooks(climberHooks));
 
         controls.winchHoldButton.whenPressed(
                 new WinchHold(winch, winch.getWinchPosition(), Constants.holdTime));
