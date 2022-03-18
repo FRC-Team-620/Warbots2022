@@ -31,6 +31,7 @@ public class LoaderCommand extends CommandBase {
             if (driverXbox.getAButton()) {
                 this.loaderSubsystem.getExtensionSolenoid().set(false);
                 loaderMotor.set(1);
+                this.loaderSubsystem.getExtensionSolenoid().set(false);
             } else {
                 loaderMotor.set(0);
             }
@@ -45,7 +46,6 @@ public class LoaderCommand extends CommandBase {
             } else {
                 loaderMotor.setInverted(false);
                 loaderMotor.set(0);
-                this.loaderSubsystem.getExtensionSolenoid().set(false);
                 this.loaderSubsystem.disableExtendedLoaderMotor();
             }
         }

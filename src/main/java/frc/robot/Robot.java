@@ -30,10 +30,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    
     CommandScheduler.getInstance().cancelAll();
     robotContainer = new RobotContainer();
     robotContainer.init();// TODO: make these happen on RobotContainer instantiation
+    robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(true);
+    robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);
     // robotContainer.getShooterCommand().getTable().getEntry("ledMode").setNumber(1);
   }
 
@@ -54,6 +55,8 @@ public class Robot extends TimedRobot {
     robotContainer.getLazySusanSubsystem().getLazySusanEncoder().setPosition(0);
     robotContainer.getDriveTrain().setMotorMode(IdleMode.kBrake);
     robotContainer.getClimberMotorsSubsystem().getWinchMotor().getEncoder().setPosition(0);
+    robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(true);
+    robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);
   }
 
   @Override

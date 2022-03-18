@@ -135,7 +135,6 @@ public class RobotContainer {
 
         loaderCommand = new LoaderCommand(intake, controls.getDriverController(), controls.getOperatorController());
         intake.setDefaultCommand(loaderCommand);
-        intake.getExtensionSolenoid().set(true);
 
         turret.setDefaultCommand(new ManualAiming(turret, controls.getOperatorController()));
 
