@@ -29,12 +29,14 @@ public class ManualAiming extends CommandBase {
         if (Math.abs(inputOpLeft) > 0) {
             table.getEntry("ledMode").setNumber(1);
             // limelight.setLEDMode(LedMode.OFF);
-            double speed = -inputOpLeft/1.6;
-            System.out.println("JIWJF_" + lazySusanEnc.getPosition());
-            if (!ShooterMath.inBounds(speed > 0, lazySusanEnc.getPosition())) {
-                speed = 0;
+            double speed = 0;
+            if (ShooterMath.inBounds(speed > 0, lazySusanEnc.getPosition())) {
+                speed = -inputOpLeft/1.6;
             }
-            lazySusanMotor.set(speed);
+            
+            // lazySusanMotor.set(ShooterMath.inBounds(-inputOpLeft > 0, lazySusanEnc.getPosition())
+            //     ? -inputOpLeft/1.6 : 0);
+
             // System.out.println("Speed Man: "+ speed);
             // System.out.println("Curr Enc Pos: " + lazySusanEnc.getPosition());
         } else {

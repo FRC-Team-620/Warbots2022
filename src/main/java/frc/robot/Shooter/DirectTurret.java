@@ -70,9 +70,6 @@ public class DirectTurret extends CommandBase {
         // System.out.println("LS POS: " + p);
         // System.out.println("MAX: " + this.targetPosition*(1+this.tolerance));
         // System.out.println("MIN: " + this.targetPosition*(1-this.tolerance));
-        return (this.targetPosition*(1+this.tolerance) >= p && 
-            p >= this.targetPosition*(1-this.tolerance)) || 
-            (this.targetPosition*(1+this.tolerance) <= p && 
-            p <= this.targetPosition*(1-this.tolerance));
+        return ShooterMath.withinTolerance(p, this.targetPosition, this.tolerance);
     }
 }

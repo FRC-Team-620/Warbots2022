@@ -17,6 +17,14 @@ public final class ShooterMath {
         return i + step - 1;
     }
 
+    public static boolean withinValues(double val, double bound1, double bound2) {
+        return (bound1 >= val && val >= bound2) || (bound1 <= val && val <= bound2);
+    }
+
+    public static boolean withinTolerance(double val, double target, double tolerance) {
+        return withinValues(val, target*(1+tolerance), target*(1-tolerance));
+    }
+
     // Takes in a boolean of which direction the encoder will be moving in
     // and the current position of the encoder, to see whether it is in the boundaries.
     public static boolean inBounds(boolean directionIsPositive, double encoderPosition) {
