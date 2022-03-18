@@ -91,7 +91,7 @@ public class RobotContainer {
 
         controls.extendArmsButton.whenPressed(
                 new ParallelCommandGroup(
-                        new ExtendArmsAndStow(winch, climberHooks),
+                        new ExtendArmsAndStow(winch, climberHooks, intake),
                         new DirectTurret(turret, shooter, Constants.stowedPosition)));
 
         controls.climbSequenceButton.whenPressed(
@@ -134,6 +134,7 @@ public class RobotContainer {
 
         loaderCommand = new LoaderCommand(intake, controls.getDriverController(), controls.getOperatorController());
         intake.setDefaultCommand(loaderCommand);
+        intake.getExtensionSolenoid().set(true);
 
         turret.setDefaultCommand(new ManualAiming(turret, controls.getOperatorController()));
 
