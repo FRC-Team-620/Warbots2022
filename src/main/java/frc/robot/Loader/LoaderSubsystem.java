@@ -34,7 +34,7 @@ public class LoaderSubsystem extends SubsystemBase {
         return extendedLoader;
     }
     public void enableExtendedLoaderMotor() {
-        extendedLoader.set(1);
+        extendedLoader.set(-1);
     }
     public void disableExtendedLoaderMotor() {
         extendedLoader.set(0);
