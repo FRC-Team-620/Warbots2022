@@ -24,26 +24,28 @@ public class LoaderCommand extends CommandBase {
     }
     @Override
     public void execute() {
-        CANSparkMax temp = loaderSubsystem.getLoaderMotor();
+        CANSparkMax loaderMotor = loaderSubsystem.getLoaderMotor();
         //intake
         if (!driverXbox.getBButton()) {
-            temp.setInverted(false);
+            loaderMotor.setInverted(false);
             if (driverXbox.getAButton()) {
-                temp.set(1);
+                loaderMotor.set(1);
             } else {
-                temp.set(0);
+                loaderMotor.set(0);
             }
         }
         //reverse intake
         if (!driverXbox.getAButton()) {
             if (driverXbox.getBButton()) {
-                temp.setInverted(true);
-                temp.set(1);
+                loaderMotor.setInverted(true);
+                loaderMotor.set(1);
                 this.loaderSubsystem.getExtensionSolenoid().set(true);
+                this.loaderSubsystem.enableExtendedLoaderMotor();
             } else {
-                temp.setInverted(false);
-                temp.set(0);
+                loaderMotor.setInverted(false);
+                loaderMotor.set(0);
                 this.loaderSubsystem.getExtensionSolenoid().set(false);
+                this.loaderSubsystem.disableExtendedLoaderMotor();
             }
         }
 
