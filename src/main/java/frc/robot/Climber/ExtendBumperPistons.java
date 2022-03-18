@@ -10,6 +10,7 @@ public class ExtendBumperPistons extends CommandBase {
 
     @Override
     public void initialize() {
+        System.out.println("Bumpers out");
         climberSubsystem.setBumperSolenoid(true);
     }
 
