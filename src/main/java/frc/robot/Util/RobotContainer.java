@@ -32,6 +32,7 @@ import frc.robot.Climber.RaiseAndGrab;
 import frc.robot.Climber.RaisePistons;
 import frc.robot.Climber.WinchHold;
 import frc.robot.Climber.WinchReset;
+import frc.robot.Climber.ToggleHooks;
 import frc.robot.Controls.ControlBoard;
 import frc.robot.Drive.DriveWithJoystick;
 import frc.robot.Drive.Drivetrain;

@@ -15,7 +15,8 @@ public class ToggleHooks extends CommandBase {
     public void initialize() {
         this.frames = 0;
         System.out.println("Hooks were lowered");
-        climberSubsystem.setHangingSolenoid(!climberSubsystem.getHangingSolenoid().get());    
+        climberSubsystem.setHangingSolenoid(
+            !climberSubsystem.getHangingSolenoid().get());    
     }
 
     @Override
