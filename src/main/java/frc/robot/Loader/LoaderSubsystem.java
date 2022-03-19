@@ -32,6 +32,15 @@ public class LoaderSubsystem extends SubsystemBase {
     public CANSparkMax getLoaderMotor() {
         return loader;
     }
+    public void enableLoaderMotor() {
+        loader.set(-1);
+    }
+    public void reverseLoaderMotor() {
+        loader.set(1);
+    }
+    public void disableLoaderMotor() {
+        loader.set(0);
+    }
     public CANSparkMax getExtendedLoaderMotor() {
         return extendedLoader;
     }

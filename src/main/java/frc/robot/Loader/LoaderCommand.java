@@ -25,30 +25,26 @@ public class LoaderCommand extends CommandBase {
     @Override
     public void execute() {
         CANSparkMax loaderMotor = loaderSubsystem.getLoaderMotor();
-        //intake
+        // reverse intake
         if (!driverXbox.getBButton()) {
-            loaderMotor.setInverted(false);
             if (driverXbox.getAButton()) {
-                this.loaderSubsystem.getExtensionSolenoid().set(false);
-                loaderMotor.set(1);
-                this.loaderSubsystem.getExtensionSolenoid().set(false);
+                this.loaderSubsystem.retractExtensionSolenoid();
+                this.loaderSubsystem.reverseLoaderMotor();
             } else {
-                loaderMotor.set(0);
+                this.loaderSubsystem.disableLoaderMotor();
             }
         }
-        //reverse intake
+        // intake
         if (!driverXbox.getAButton()) {
             if (driverXbox.getBButton()) {
-                loaderMotor.setInverted(true);
-                loaderMotor.set(1);
-                this.loaderSubsystem.getExtensionSolenoid().set(true);
+                this.loaderSubsystem.enableLoaderMotor();
+                this.loaderSubsystem.extendExtensionSolenoid();;
                 this.loaderSubsystem.enableExtendedLoaderMotor();
             } else {
-                loaderMotor.setInverted(false);
-                loaderMotor.set(0);
-                this.loaderSubsystem.getExtensionSolenoid().set(false);
+                this.loaderSubsystem.disableLoaderMotor();
+                this.loaderSubsystem.retractExtensionSolenoid();
                 if (!loaderSubsystem.isClimbing()) {
-                    this.loaderSubsystem.disableExtendedLoaderMotor();
+                    this.loaderSubsystem.retractExtensionSolenoid();
                 }
                 
             }
