@@ -100,7 +100,7 @@ public class RobotContainer {
         controls.climbSequenceButton.whenPressed(
                 new RaiseAndGrab(winch, climberHooks));
 
-        controls.retractArmsButton.whileActiveOnce(
+        controls.tankDriveAimButton.whileActiveOnce(
             new TankDriveAutoAimAndSpinUp(getShooterSubsystem(), getDriveTrain(), 
                 false, controls.getOperatorController()));
 

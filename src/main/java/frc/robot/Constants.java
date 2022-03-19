@@ -98,7 +98,7 @@ public final class Constants {
 
     //climber
     public static final double winchMinLimit = 0;
-    public static final double winchMaxLimit = 88.5;
+    public static final double winchMaxLimit = 100;
     public static final int pistonMaxFrames = 15;
 
     // shooter

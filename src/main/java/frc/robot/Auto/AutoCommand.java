@@ -9,6 +9,7 @@ import frc.robot.Shooter.DirectTurretAuto;
 import frc.robot.Shooter.LazySusanSubsystem;
 import frc.robot.Shooter.ShooterSubsystem;
 import frc.robot.Util.RobotContainer;
+import frc.robot.Util.WaitFrames;
 
 public class AutoCommand extends SequentialCommandGroup {
     LoaderSubsystem loaderSubsystem;
@@ -28,11 +29,11 @@ public class AutoCommand extends SequentialCommandGroup {
 
                 //new TurnDegrees(robotContainer.getDriveTrain(), 180),
 
-                new WaitCommand(6),
+                new WaitFrames(150),
 
                 new AutoShoot(loaderSubsystem),
 
-                new WaitCommand(3),
+                new WaitFrames(150),
 
                 // new DriveForwardsEncoder(robotContainer.getDriveTrain(), 0.3),
 
@@ -40,7 +41,7 @@ public class AutoCommand extends SequentialCommandGroup {
 
                 new AutoShoot(loaderSubsystem),
 
-                new WaitCommand(3)
+                new WaitCommand(150)
                 
 
                 // robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("paths/Part2.wpilib.json"))),
