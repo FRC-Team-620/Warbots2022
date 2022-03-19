@@ -20,8 +20,8 @@ public class AutoLoad extends CommandBase{
     @Override
     public void initialize() {
         this.frames = 0;
-        //System.out.println("Loader was turned on");
-        loaderSubsystem.getLoaderMotor().set(speed);
+        System.out.println("Loader was turned on");
+        loaderSubsystem.getLoaderMotor().set(1);
         loaderSubsystem.enableExtendedLoaderMotor();
         loaderSubsystem.extendExtensionSolenoid();
     }

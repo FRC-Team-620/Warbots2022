@@ -46,6 +46,6 @@ public class ManualAiming extends CommandBase {
         if(operatorXbox.getRightBumper()) {
             lazySusanEnc.setPosition(0);
         }
-        System.out.println("LAZY POS: " + lazySusanEnc.getPosition());
+        // System.out.println("LAZY POS: " + lazySusanEnc.getPosition());
     }
 }

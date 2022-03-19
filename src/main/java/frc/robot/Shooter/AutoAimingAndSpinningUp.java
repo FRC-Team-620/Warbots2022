@@ -95,7 +95,7 @@ public class AutoAimingAndSpinningUp extends CommandBase {
             System.out.println(tempRPM);
             // shooterSubsystem.setTargetRPM(tempRPM);
             shooterSubsystem.setTargetRPM(tempRPM);
-            System.out.println(shooterSubsystem.getTargetRPM());
+            //System.out.println(shooterSubsystem.getTargetRPM());
         } else {
             // shooterSubsystem.setTargetRPM(0);
             shooterSubsystem.setTargetRPM(tempRPM);

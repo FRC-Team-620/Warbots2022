@@ -24,7 +24,7 @@ public class AutoCommand extends SequentialCommandGroup {
             addCommands(
             //robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("paths/Part1.wpilib.json"))),
                 // new DriveForwards(robotContainer.getDriveTrain()),
-                new DriveForwardsEncoder(robotContainer.getDriveTrain()),
+                new DriveForwardsEncoder(robotContainer.getDriveTrain(), 2.7),
 
                 //new TurnDegrees(robotContainer.getDriveTrain(), 180),
 
@@ -33,6 +33,10 @@ public class AutoCommand extends SequentialCommandGroup {
                 new AutoShoot(loaderSubsystem),
 
                 new WaitCommand(1),
+
+                // new DriveForwardsEncoder(robotContainer.getDriveTrain(), 0.3),
+
+                // new WaitCommand(1),
 
                 new AutoShoot(loaderSubsystem),
 

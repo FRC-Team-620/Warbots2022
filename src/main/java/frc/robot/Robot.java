@@ -63,6 +63,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
 
+    robotContainer.getDriveTrain().resetEncoders();
+
     // TODO: move to autonomousCommand in separate file.
     robotContainer.getLazySusanSubsystem().setLazySusanPosition(0);
     new ToggleHooks(robotContainer.getClimberSubsystem()).schedule();
@@ -73,6 +75,7 @@ public class Robot extends TimedRobot {
                 new AutoAimingAndSpinningUp(robotContainer.getShooterSubsystem(),  robotContainer.getLazySusanSubsystem(), true, robotContainer.getOperatorController()), 
                 new AutoLoad(robotContainer.getLoaderSubsystem(), 1))
               );
+    robotContainer.getLoaderSubsystem().extendExtensionSolenoid();
 
     // autonomousCommand = new SequentialCommandGroup(
     //     new TurnDegrees(robotContainer.getDriveTrain(), 180),

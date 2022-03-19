@@ -8,12 +8,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class DriveForwardsEncoder extends CommandBase {
     private Drivetrain drivetrain;
-    private double targetDistance = 2.7; // this number is somewhat close to meters (within a few centimeters)
+    private double targetDistance; // this number is somewhat close to meters (within a few centimeters)
     private double error;
     private boolean finished = false;
 
-    public DriveForwardsEncoder(Drivetrain drivetrain) {
+    public DriveForwardsEncoder(Drivetrain drivetrain, double targetDistance) {
         this.drivetrain = drivetrain;
+        this.targetDistance = targetDistance;
         addRequirements(drivetrain);
     }
 
