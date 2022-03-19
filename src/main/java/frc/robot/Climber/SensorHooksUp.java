@@ -24,6 +24,7 @@ public class SensorHooksUp extends CommandBase {
     public void execute() {
         //frames++;
         //System.out.println(climberMotorsSubsystem.getClimberSensor());
+        System.out.println(!(climberMotorsSubsystem.getClimberSensor()));
     }
 
     @Override

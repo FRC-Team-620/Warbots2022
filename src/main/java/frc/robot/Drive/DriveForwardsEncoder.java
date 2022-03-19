@@ -2,6 +2,7 @@ package frc.robot.Drive;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -26,9 +27,9 @@ public class DriveForwardsEncoder extends CommandBase {
         error = targetDistance - encoderVal;
 
         if (!withinError()) {
-            double kP = 0.8; // this is not tuned by any means, just enough to get it working
+            double kP = 0.5; // this is not tuned by any means, just enough to get it working
             double input = error * kP;
-            drivetrain.curvatureInput(input, 0, false);
+            drivetrain.curvatureInput(MathUtil.clamp(input, 0, 0.5), 0, false);
             // SmartDashboard.putNumber("Encoder", drivetrain.getEncoderPos(2));
             // SmartDashboard.putNumber("Input", input);
         } else {

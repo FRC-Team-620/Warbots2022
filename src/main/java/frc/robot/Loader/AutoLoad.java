@@ -7,7 +7,7 @@ public class AutoLoad extends CommandBase{
     protected int frames = 0;
     protected int speed;
     public AutoLoad(LoaderSubsystem loaderSubsystem, int speed) {
-        //addRequirements(loaderSubsystem);
+        addRequirements(loaderSubsystem);
         this.loaderSubsystem = loaderSubsystem;
         this.speed = speed;
     }
@@ -22,15 +22,15 @@ public class AutoLoad extends CommandBase{
         this.frames = 0;
         //System.out.println("Loader was turned on");
         loaderSubsystem.getLoaderMotor().set(speed);
-        loaderSubsystem.getExtendedLoaderMotor().set(speed);
-        loaderSubsystem.getExtensionSolenoid().set(true);
+        loaderSubsystem.enableExtendedLoaderMotor();
+        loaderSubsystem.extendExtensionSolenoid();
     }
     
     @Override
     public void end(boolean interrupt) {
         loaderSubsystem.getLoaderMotor().set(0);
         loaderSubsystem.getExtendedLoaderMotor().set(0);
-        loaderSubsystem.getExtensionSolenoid().set(false);
+        loaderSubsystem.retractExtensionSolenoid();
     }
 
     @Override

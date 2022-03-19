@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Auto.AutoCommand;
 import frc.robot.Climber.ClimberMotorsSubsystem;
-import frc.robot.Climber.LowerHooks;
+import frc.robot.Climber.ToggleHooks;
 import frc.robot.Climber.SensorHooksUp;
 import frc.robot.Loader.AutoLoad;
 import frc.robot.Shooter.AutoAimingAndSpinningUp;
@@ -33,8 +33,8 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
     robotContainer = new RobotContainer();
     robotContainer.init();// TODO: make these happen on RobotContainer instantiation
-    robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(true);
-    robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);
+    // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(true);
+    // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);
     // robotContainer.getShooterCommand().getTable().getEntry("ledMode").setNumber(1);
   }
 
@@ -50,13 +50,14 @@ public class Robot extends TimedRobot {
       autonomousCommand.cancel();
     }
     robotContainer.setTeleopDrive();
+    robotContainer.getLoaderSubsystem().setIsClimbing(false);
     // TODO: move to initializer in robotContainer
-    new LowerHooks(robotContainer.getClimberSubsystem()).schedule();
+    new ToggleHooks(robotContainer.getClimberSubsystem()).schedule();
     robotContainer.getLazySusanSubsystem().getLazySusanEncoder().setPosition(0);
     robotContainer.getDriveTrain().setMotorMode(IdleMode.kBrake);
     robotContainer.getClimberMotorsSubsystem().getWinchMotor().getEncoder().setPosition(0);
-    robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(true);
-    robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);
+    // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(true);
+    // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);
   }
 
   @Override
@@ -64,7 +65,7 @@ public class Robot extends TimedRobot {
 
     // TODO: move to autonomousCommand in separate file.
     robotContainer.getLazySusanSubsystem().setLazySusanPosition(0);
-    new LowerHooks(robotContainer.getClimberSubsystem()).schedule();
+    new ToggleHooks(robotContainer.getClimberSubsystem()).schedule();
     //new DirectTurretAuto(robotContainer.getLazySusanSubsystem(), // -1.5*
     //robotContainer.getShooterSubsystem(), 0),
     autonomousCommand = new SequentialCommandGroup( 

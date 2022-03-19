@@ -27,7 +27,7 @@ import frc.robot.Robot;
 import frc.robot.Climber.ClimberMotorsSubsystem;
 import frc.robot.Climber.ClimberSubsystem;
 import frc.robot.Climber.ExtendArmsAndStow;
-import frc.robot.Climber.LowerHooks;
+import frc.robot.Climber.ToggleHooks;
 import frc.robot.Climber.RaiseAndGrab;
 import frc.robot.Climber.RaisePistons;
 import frc.robot.Climber.WinchHold;
@@ -101,7 +101,7 @@ public class RobotContainer {
                 new WinchReset(winch));
 
         controls.lowerHooksButton.whenPressed(
-                new LowerHooks(climberHooks));
+                new ToggleHooks(climberHooks));
 
         controls.winchHoldButton.whenPressed(
                 new WinchHold(winch, winch.getWinchPosition(), Constants.holdTime));
@@ -147,7 +147,7 @@ public class RobotContainer {
         // climberCommand = new ClimberCommand(climberSubsystem);
         // climberMotorsSubsystem.setDefaultCommand(new
         // ClimberManual(climberMotorsSubsystem, operator));
-        new LowerHooks(climberHooks).schedule();
+        new ToggleHooks(climberHooks).schedule();
 
         SmartDashboard.putData(robotFieldWidget);
         SmartDashboard.putData(trajectorySelector);

@@ -11,6 +11,7 @@ import frc.robot.Constants;
 public class LoaderSubsystem extends SubsystemBase {
     protected CANSparkMax loader, extendedLoader;
     protected Solenoid trigger, extension;
+    protected boolean isClimbing;
     public LoaderSubsystem() {
         loader = new CANSparkMax(Constants.intakeMotorID, MotorType.kBrushless);
         loader.restoreFactoryDefaults();
@@ -26,6 +27,7 @@ public class LoaderSubsystem extends SubsystemBase {
         trigger.set(false);
         extension = new Solenoid(PneumaticsModuleType.CTREPCM, 3);
         extension.set(false);
+        isClimbing = false;
     }
     public CANSparkMax getLoaderMotor() {
         return loader;
@@ -34,7 +36,7 @@ public class LoaderSubsystem extends SubsystemBase {
         return extendedLoader;
     }
     public void enableExtendedLoaderMotor() {
-        extendedLoader.set(1);
+        extendedLoader.set(-1);
     }
     public void disableExtendedLoaderMotor() {
         extendedLoader.set(0);
@@ -44,5 +46,19 @@ public class LoaderSubsystem extends SubsystemBase {
     }
     public Solenoid getExtensionSolenoid() {
         return extension;
+    }
+    public void extendExtensionSolenoid() {
+        extension.set(true);
+    }
+    public void retractExtensionSolenoid() {
+        extension.set(false);
+    }
+    
+    public boolean isClimbing() {
+        return isClimbing;
+    }
+
+    public void setIsClimbing(boolean iC) {
+        isClimbing = iC;
     }
 }

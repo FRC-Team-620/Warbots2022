@@ -45,7 +45,11 @@ public class LoaderCommand extends CommandBase {
             } else {
                 loaderMotor.setInverted(false);
                 loaderMotor.set(0);
-                this.loaderSubsystem.disableExtendedLoaderMotor();
+                this.loaderSubsystem.getExtensionSolenoid().set(false);
+                if (!loaderSubsystem.isClimbing()) {
+                    this.loaderSubsystem.disableExtendedLoaderMotor();
+                }
+                
             }
         }
 

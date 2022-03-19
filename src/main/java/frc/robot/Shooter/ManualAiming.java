@@ -33,9 +33,10 @@ public class ManualAiming extends CommandBase {
             if (ShooterMath.inBounds(speed > 0, lazySusanEnc.getPosition())) {
                 speed = -inputOpLeft/1.6;
             }
+            lazySusanMotor.set(speed);
             
             // lazySusanMotor.set(ShooterMath.inBounds(-inputOpLeft > 0, lazySusanEnc.getPosition())
-            //     ? -inputOpLeft/1.6 : 0);
+            //      ? -inputOpLeft/1.6 : 0);
 
             // System.out.println("Speed Man: "+ speed);
             // System.out.println("Curr Enc Pos: " + lazySusanEnc.getPosition());

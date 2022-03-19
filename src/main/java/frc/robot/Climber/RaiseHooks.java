@@ -3,19 +3,19 @@ package frc.robot.Climber;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class RaiseHooks extends CommandBase {
-    ClimberMotorsSubsystem climberMotorsSubsystem;
     ClimberSubsystem climberSubsystem;
+    ClimberMotorsSubsystem climberMotorsSubsystem;
     protected int frames, maxFrame;
 
-    public RaiseHooks(ClimberMotorsSubsystem climberMotorsSubsystem, ClimberSubsystem climberSubsystem, int maxFrame) {
+    public RaiseHooks(ClimberSubsystem climberSubsystem, ClimberMotorsSubsystem climberMotorsSubsystem) {
         addRequirements(climberSubsystem);
         this.climberSubsystem = climberSubsystem;
         this.climberMotorsSubsystem = climberMotorsSubsystem;
-        this.maxFrame = maxFrame;
+        // this.maxFrame = maxFrame;
     }
-    public RaiseHooks(ClimberMotorsSubsystem climberMotorsSubsystem, ClimberSubsystem climberSubsystem) {
-        this(climberMotorsSubsystem, climberSubsystem, 15);
-    }
+    // public RaiseHooks(ClimberMotorsSubsystem climberMotorsSubsystem, ClimberSubsystem climberSubsystem) {
+    //     this(climberMotorsSubsystem, climberSubsystem, 15);
+    // }
 
     @Override
     public void initialize() {

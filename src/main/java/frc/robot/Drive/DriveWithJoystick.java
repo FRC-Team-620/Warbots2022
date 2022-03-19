@@ -79,9 +79,7 @@ public class DriveWithJoystick extends CommandBase {
     } else if (rightTriggerInput < leftTriggerInput) {
       speed = leftTriggerInput * -speedConstant;
     }
-    
-    drivetrain.curvatureInput(speed, rotation, leftTriggerInput == rightTriggerInput);
-
+    drivetrain.curvatureInput(speed, rotation, true);
   }
 
   // Returns true when the command should end.

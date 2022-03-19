@@ -28,17 +28,16 @@ public class AutoCommand extends SequentialCommandGroup {
 
                 //new TurnDegrees(robotContainer.getDriveTrain(), 180),
 
-                new WaitCommand(1),
-
-                new AutoShoot(loaderSubsystem),
-
-                new WaitCommand(1),
-
-                new AutoShoot(loaderSubsystem),
-
                 new WaitCommand(3),
 
-                new DirectTurretAuto(robotContainer.getLazySusanSubsystem(), robotContainer.getShooterSubsystem(), 0)
+                new AutoShoot(loaderSubsystem),
+
+                new WaitCommand(1),
+
+                new AutoShoot(loaderSubsystem),
+
+                new WaitCommand(3)
+                
 
                 // robotContainer.getAutonomousCommand(TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("paths/Part2.wpilib.json"))),
 

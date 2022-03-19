@@ -2,11 +2,11 @@ package frc.robot.Climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class LowerHooks extends CommandBase {
+public class ToggleHooks extends CommandBase {
     ClimberSubsystem climberSubsystem;
     protected int frames;
 
-    public LowerHooks(ClimberSubsystem climberSubsystem) {
+    public ToggleHooks(ClimberSubsystem climberSubsystem) {
         addRequirements(climberSubsystem);
         this.climberSubsystem = climberSubsystem;
     }
@@ -15,7 +15,7 @@ public class LowerHooks extends CommandBase {
     public void initialize() {
         this.frames = 0;
         System.out.println("Hooks were lowered");
-        climberSubsystem.setHangingSolenoid(true);    
+        climberSubsystem.setHangingSolenoid(!climberSubsystem.getHangingSolenoid().get());    
     }
 
     @Override
@@ -29,5 +29,4 @@ public class LowerHooks extends CommandBase {
     }
 
 }
-
 
