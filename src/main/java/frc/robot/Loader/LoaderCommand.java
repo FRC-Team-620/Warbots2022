@@ -25,26 +25,23 @@ public class LoaderCommand extends CommandBase {
     @Override
     public void execute() {
         //CANSparkMax loaderMotor = loaderSubsystem.getLoaderMotor();
-        
-        if (driverXbox.getBButton()) //B is intake
-        {
+        System.out.println();
+        System.out.print("Shooter Speed Prior: " + this.loaderSubsystem.extendedLoaderMotorSpeed());
+        if (driverXbox.getBButton()) { // B is intake
             this.loaderSubsystem.extendExtensionSolenoid();
             this.loaderSubsystem.enableLoaderMotor();
             this.loaderSubsystem.enableExtendedLoaderMotor();
-        }
-        else if (driverXbox.getAButton()) //A is extake
-        {
-            this.loaderSubsystem.extendExtensionSolenoid();
+        } else if (driverXbox.getAButton()) { // A is outtake
+            this.loaderSubsystem.retractExtensionSolenoid();
             this.loaderSubsystem.reverseLoaderMotor();
-            this.loaderSubsystem.reverseExtendedLoaderMotor();
-        }
-        else //nothing is off
-        {
+            this.loaderSubsystem.disableExtendedLoaderMotor();
+        } else { // nothing is pressed
             this.loaderSubsystem.retractExtensionSolenoid();
             this.loaderSubsystem.disableLoaderMotor();
             this.loaderSubsystem.disableExtendedLoaderMotor();
         }
-        
+        System.out.print("Shooter Speed Post: " + this.loaderSubsystem.extendedLoaderMotorSpeed());
+        System.out.println();
         // reverse intake
         // if (!driverXbox.getBButton()) {
         //     if (driverXbox.getAButton()) {
@@ -79,12 +76,12 @@ public class LoaderCommand extends CommandBase {
         
         // shooting code
         if (Math.abs(operatorXbox.getRightTriggerAxis()) > 0) {
-            loaderSubsystem.getLoaderSolenoid().set(true);
+            loaderSubsystem.extendLoaderSolenoid();
             // autoFire = false;
             //  || autoFire == false
             //  || autoFire
         } else if (Math.abs(operatorXbox.getRightTriggerAxis()) == 0) {
-            loaderSubsystem.getLoaderSolenoid().set(false);
+            loaderSubsystem.retractLoaderSolenoid();
         }
     }
 

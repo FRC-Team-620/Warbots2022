@@ -28,11 +28,11 @@ public class AutoCommand extends SequentialCommandGroup {
 
                 //new TurnDegrees(robotContainer.getDriveTrain(), 180),
 
-                new WaitCommand(3),
+                new WaitCommand(6),
 
                 new AutoShoot(loaderSubsystem),
 
-                new WaitCommand(1),
+                new WaitCommand(3),
 
                 // new DriveForwardsEncoder(robotContainer.getDriveTrain(), 0.3),
 

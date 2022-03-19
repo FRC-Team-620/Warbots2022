@@ -46,6 +46,7 @@ import frc.robot.Shooter.LowShotCommand;
 import frc.robot.Shooter.ManualAiming;
 import frc.robot.Shooter.ShooterCommand;
 import frc.robot.Shooter.ShooterSubsystem;
+import frc.robot.Shooter.TankDriveAutoAimAndSpinUp;
 
 /** Add your docs here. */
 public class RobotContainer {
@@ -99,8 +100,9 @@ public class RobotContainer {
         controls.climbSequenceButton.whenPressed(
                 new RaiseAndGrab(winch, climberHooks));
 
-        controls.retractArmsButton.whenPressed(
-                new WinchReset(winch));
+        controls.retractArmsButton.whileActiveOnce(
+            new TankDriveAutoAimAndSpinUp(getShooterSubsystem(), getDriveTrain(), 
+                false, controls.getOperatorController()));
 
         controls.lowerHooksButton.whenPressed(
                 new ToggleHooks(climberHooks));
@@ -112,8 +114,15 @@ public class RobotContainer {
 
         // TODO: here, now make a unified aiming/flywheel spinup command that we can use
         // for both auto and tele
-        controls.aimTurretTrigger.whileActiveOnce(new AutoAimingAndSpinningUp(getShooterSubsystem(),
-        getLazySusanSubsystem(), false, controls.getOperatorController()));
+
+
+        // JANK
+        controls.aimTurretTrigger.whileActiveOnce(
+            new AutoAimingAndSpinningUp(getShooterSubsystem(), getLazySusanSubsystem(), 
+                false, controls.getOperatorController()));
+
+
+
         controls.fireTurretTrigger.whenActive(
         new AutoShoot(getLoaderSubsystem()));        
         // controls.aimTurretTrigger.whenActive(

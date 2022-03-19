@@ -15,7 +15,7 @@ public class ExtendArmsAndStow extends SequentialCommandGroup {
         this.climberSubsystem = climberSubsystem;
         this.loaderSubsystem = loaderSubsystem;
         addRequirements(climberMotorsSubsystem, climberSubsystem, loaderSubsystem);
-        loaderSubsystem.setIsClimbing(true);
+        // loaderSubsystem.setIsClimbing(true);
         
         addCommands(
             new ExtendBumperPistons(this.climberSubsystem),

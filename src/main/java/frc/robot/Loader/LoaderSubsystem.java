@@ -11,7 +11,7 @@ import frc.robot.Constants;
 public class LoaderSubsystem extends SubsystemBase {
     protected CANSparkMax loader, extendedLoader;
     protected Solenoid trigger, extension;
-    protected boolean isClimbing;
+    // protected boolean isClimbing;
     public LoaderSubsystem() {
         loader = new CANSparkMax(Constants.intakeMotorID, MotorType.kBrushless);
         loader.restoreFactoryDefaults();
@@ -21,17 +21,18 @@ public class LoaderSubsystem extends SubsystemBase {
         extendedLoader.restoreFactoryDefaults();
         extendedLoader.setInverted(true);
 
-        loader.setSmartCurrentLimit(25);
+        loader.setSmartCurrentLimit(35);
+        extendedLoader.setSmartCurrentLimit(35);
 
         trigger = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
         trigger.set(false);
         extension = new Solenoid(PneumaticsModuleType.CTREPCM, 3);
         extension.set(false);
-        isClimbing = false;
+        // isClimbing = false;
     }
-    public CANSparkMax getLoaderMotor() {
-        return loader;
-    }
+    // public CANSparkMax getLoaderMotor() {
+    //     return loader;
+    // }
     public void enableLoaderMotor() {
         loader.set(1);
     }
@@ -41,24 +42,33 @@ public class LoaderSubsystem extends SubsystemBase {
     public void disableLoaderMotor() {
         loader.set(0);
     }
-    public CANSparkMax getExtendedLoaderMotor() {
-        return extendedLoader;
-    }
+    // public CANSparkMax getExtendedLoaderMotor() {
+    //     return extendedLoader;
+    // }
     public void enableExtendedLoaderMotor() {
-        extendedLoader.set(-1);
+        extendedLoader.set(-0.6);
     }
     public void disableExtendedLoaderMotor() {
         extendedLoader.set(0);
     }
     public void reverseExtendedLoaderMotor() {
-        extendedLoader.set(1);
+        extendedLoader.set(0.6);
     }
-    public Solenoid getLoaderSolenoid() {
-        return trigger;
+    public double extendedLoaderMotorSpeed() {
+        return extendedLoader.get();
     }
-    public Solenoid getExtensionSolenoid() {
-        return extension;
+    // public Solenoid getLoaderSolenoid() {
+    //     return trigger;
+    // }
+    public void extendLoaderSolenoid() {
+        trigger.set(true);
     }
+    public void retractLoaderSolenoid() {
+        trigger.set(false);
+    }
+    // public Solenoid getExtensionSolenoid() {
+    //     return extension;
+    // }
     public void extendExtensionSolenoid() {
         extension.set(true);
     }
@@ -66,11 +76,11 @@ public class LoaderSubsystem extends SubsystemBase {
         extension.set(false);
     }
     
-    public boolean isClimbing() {
-        return isClimbing;
-    }
+    // public boolean isClimbing() {
+    //     return isClimbing;
+    // }
 
-    public void setIsClimbing(boolean iC) {
-        isClimbing = iC;
-    }
+    // public void setIsClimbing(boolean iC) {
+    //     isClimbing = iC;
+    // }
 }

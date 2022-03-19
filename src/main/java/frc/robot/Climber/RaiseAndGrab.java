@@ -25,8 +25,8 @@ public class RaiseAndGrab extends SequentialCommandGroup {
             new SensorWinchRetract(climberMotorsSubsystem, climberSubsystem),
             // new RaiseHooks(climberMotorsSubsystem, climberSubsystem);
             new ParallelCommandGroup(
-                //new RaiseHooks(climberMotorsSubsystem, climberSubsystem, this.raiseHooksFrames),
-                new SensorHooksUp(climberMotorsSubsystem, climberSubsystem),
+                new RaiseHooks(climberSubsystem, climberMotorsSubsystem),
+                //new SensorHooksUp(climberMotorsSubsystem, climberSubsystem),
                 new WinchHold(climberMotorsSubsystem, -5, this.raiseHooksFrames))
         );
     }

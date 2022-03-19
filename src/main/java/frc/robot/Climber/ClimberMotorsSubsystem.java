@@ -31,7 +31,7 @@ public class ClimberMotorsSubsystem extends SubsystemBase {
         rightClimberMotor = new SimableCANSparkMax(Constants.rightClimberMotorID, MotorType.kBrushless);
         encoder = rightClimberMotor.getEncoder();
         // rightClimberMotor.limi
-        rearLimit = rightClimberMotor.getForwardLimitSwitch(Type.kNormallyOpen);
+        rearLimit = rightClimberMotor.getReverseLimitSwitch(Type.kNormallyOpen);
         leftClimberMotor.restoreFactoryDefaults();
         rightClimberMotor.restoreFactoryDefaults();
 

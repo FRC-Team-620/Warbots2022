@@ -23,6 +23,7 @@ import frc.robot.Climber.ToggleHooks;
 import frc.robot.Climber.SensorHooksUp;
 import frc.robot.Loader.AutoLoad;
 import frc.robot.Shooter.AutoAimingAndSpinningUp;
+import frc.robot.Shooter.AutoAimingAndSpinningUpDC319;
 import frc.robot.Util.RobotContainer;
 
 public class Robot extends TimedRobot {
@@ -50,7 +51,7 @@ public class Robot extends TimedRobot {
       autonomousCommand.cancel();
     }
     robotContainer.setTeleopDrive();
-    robotContainer.getLoaderSubsystem().setIsClimbing(false);
+    // robotContainer.getLoaderSubsystem().setIsClimbing(false);
     // TODO: move to initializer in robotContainer
     new ToggleHooks(robotContainer.getClimberSubsystem()).schedule();
     robotContainer.getLazySusanSubsystem().getLazySusanEncoder().setPosition(0);
@@ -70,9 +71,10 @@ public class Robot extends TimedRobot {
     new ToggleHooks(robotContainer.getClimberSubsystem()).schedule();
     //new DirectTurretAuto(robotContainer.getLazySusanSubsystem(), // -1.5*
     //robotContainer.getShooterSubsystem(), 0),
-    autonomousCommand =  new ParallelCommandGroup(new AutoCommand(robotContainer.getLoaderSubsystem(), robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer), 
-                new AutoAimingAndSpinningUp(robotContainer.getShooterSubsystem(),  robotContainer.getLazySusanSubsystem(), true, robotContainer.getOperatorController()), 
-                new AutoLoad(robotContainer.getLoaderSubsystem()));
+    autonomousCommand =  new ParallelCommandGroup(
+      new AutoCommand(robotContainer.getLoaderSubsystem(), robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer), 
+      new AutoAimingAndSpinningUp(robotContainer.getShooterSubsystem(),  robotContainer.getLazySusanSubsystem(), true, robotContainer.getOperatorController()), 
+      new AutoLoad(robotContainer.getLoaderSubsystem()));
     robotContainer.getLoaderSubsystem().extendExtensionSolenoid();
 
     // autonomousCommand = new SequentialCommandGroup(

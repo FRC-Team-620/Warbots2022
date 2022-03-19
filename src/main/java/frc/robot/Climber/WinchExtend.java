@@ -18,7 +18,7 @@ public class WinchExtend extends CommandBase {
 
     @Override
     public void initialize() {
-        this.loaderSubsystem.getExtensionSolenoid().set(true);
+        this.loaderSubsystem.extendExtensionSolenoid();
         System.out.println("Current: " + this.climberMotorsSubsystem.getWinchPosition());
         this.targetCounts = this.climberMotorsSubsystem.getWinchPosition() + this.deltaCounts;
         // System.out.println("Winch begins wind down");
