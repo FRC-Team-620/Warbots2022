@@ -24,31 +24,51 @@ public class LoaderCommand extends CommandBase {
     }
     @Override
     public void execute() {
-        CANSparkMax loaderMotor = loaderSubsystem.getLoaderMotor();
+        //CANSparkMax loaderMotor = loaderSubsystem.getLoaderMotor();
+        
+        if (driverXbox.getBButton()) //B is intake
+        {
+            this.loaderSubsystem.extendExtensionSolenoid();
+            this.loaderSubsystem.enableLoaderMotor();
+            this.loaderSubsystem.enableExtendedLoaderMotor();
+        }
+        else if (driverXbox.getAButton()) //A is extake
+        {
+            this.loaderSubsystem.extendExtensionSolenoid();
+            this.loaderSubsystem.reverseLoaderMotor();
+            this.loaderSubsystem.reverseExtendedLoaderMotor();
+        }
+        else //nothing is off
+        {
+            this.loaderSubsystem.retractExtensionSolenoid();
+            this.loaderSubsystem.disableLoaderMotor();
+            this.loaderSubsystem.disableExtendedLoaderMotor();
+        }
+        
         // reverse intake
-        if (!driverXbox.getBButton()) {
-            if (driverXbox.getAButton()) {
-                this.loaderSubsystem.retractExtensionSolenoid();
-                this.loaderSubsystem.reverseLoaderMotor();
-            } else {
-                this.loaderSubsystem.disableLoaderMotor();
-            }
-        }
-        // intake
-        if (!driverXbox.getAButton()) {
-            if (driverXbox.getBButton()) {
-                this.loaderSubsystem.enableLoaderMotor();
-                this.loaderSubsystem.extendExtensionSolenoid();;
-                this.loaderSubsystem.enableExtendedLoaderMotor();
-            } else {
-                this.loaderSubsystem.disableLoaderMotor();
-                this.loaderSubsystem.retractExtensionSolenoid();
-                if (!loaderSubsystem.isClimbing()) {
-                    this.loaderSubsystem.retractExtensionSolenoid();
-                }
+        // if (!driverXbox.getBButton()) {
+        //     if (driverXbox.getAButton()) {
+        //         this.loaderSubsystem.retractExtensionSolenoid();
+        //         this.loaderSubsystem.reverseLoaderMotor();
+        //     } else {
+        //         this.loaderSubsystem.disableLoaderMotor();
+        //     }
+        // }
+        // // intake
+        // if (!driverXbox.getAButton()) {
+        //     if (driverXbox.getBButton()) {
+        //         this.loaderSubsystem.enableLoaderMotor();
+        //         this.loaderSubsystem.extendExtensionSolenoid();;
+        //         this.loaderSubsystem.enableExtendedLoaderMotor();
+        //     } else {
+        //         this.loaderSubsystem.disableLoaderMotor();
+        //         this.loaderSubsystem.retractExtensionSolenoid();
+        //         if (!loaderSubsystem.isClimbing()) {
+        //             this.loaderSubsystem.retractExtensionSolenoid();
+        //         }
                 
-            }
-        }
+        //     }
+        // }
 
 
         

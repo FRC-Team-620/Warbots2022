@@ -24,6 +24,7 @@ public class DriveForwardsEncoder extends CommandBase {
 
     @Override
     public void execute() {
+        System.out.println("Drive Forwards Auto Running");
         double encoderVal = drivetrain.getEncoderPos(2);
         error = targetDistance - encoderVal;
 
@@ -34,6 +35,7 @@ public class DriveForwardsEncoder extends CommandBase {
             // SmartDashboard.putNumber("Encoder", drivetrain.getEncoderPos(2));
             // SmartDashboard.putNumber("Input", input);
         } else {
+            System.out.println("Exiting DriverForwardsEncoder...");
             // ik this is dumb, just leave it for now. it works.
             Timer.delay(1.5);
             finished = true;
@@ -42,7 +44,7 @@ public class DriveForwardsEncoder extends CommandBase {
     }
 
     private boolean withinError() {
-        return error < 0.1;
+        return error < 0.2;
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
@@ -35,7 +36,6 @@ public class Robot extends TimedRobot {
     robotContainer.init();// TODO: make these happen on RobotContainer instantiation
     // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(true);
     // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);
-    // robotContainer.getShooterCommand().getTable().getEntry("ledMode").setNumber(1);
   }
 
   @Override
@@ -70,11 +70,9 @@ public class Robot extends TimedRobot {
     new ToggleHooks(robotContainer.getClimberSubsystem()).schedule();
     //new DirectTurretAuto(robotContainer.getLazySusanSubsystem(), // -1.5*
     //robotContainer.getShooterSubsystem(), 0),
-    autonomousCommand = new SequentialCommandGroup( 
-             new ParallelCommandGroup(new AutoCommand(robotContainer.getLoaderSubsystem(), robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer), 
+    autonomousCommand =  new ParallelCommandGroup(new AutoCommand(robotContainer.getLoaderSubsystem(), robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer), 
                 new AutoAimingAndSpinningUp(robotContainer.getShooterSubsystem(),  robotContainer.getLazySusanSubsystem(), true, robotContainer.getOperatorController()), 
-                new AutoLoad(robotContainer.getLoaderSubsystem()))
-              );
+                new AutoLoad(robotContainer.getLoaderSubsystem()));
     robotContainer.getLoaderSubsystem().extendExtensionSolenoid();
 
     // autonomousCommand = new SequentialCommandGroup(
@@ -106,6 +104,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
     IdleMode mode = IdleMode.kBrake;
     robotContainer.getDriveTrain().setMotorMode(mode);
     robotContainer.getShooterSubsystem().setSpeed(0);
@@ -116,9 +115,11 @@ public class Robot extends TimedRobot {
   public void testInit() {
     CommandScheduler.getInstance().cancelAll();
     robotContainer.init();
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
     // new LowerHooks(robotContainer.getClimberSubsystem()).schedule();
     // new SensorHooksUp(robotContainer.getClimberMotorsSubsystem(), robotContainer.getClimberSubsystem()).schedule();
   }
+
 
   @Override
   public void testPeriodic() {

@@ -33,10 +33,10 @@ public class LoaderSubsystem extends SubsystemBase {
         return loader;
     }
     public void enableLoaderMotor() {
-        loader.set(-1);
+        loader.set(1);
     }
     public void reverseLoaderMotor() {
-        loader.set(1);
+        loader.set(-1);
     }
     public void disableLoaderMotor() {
         loader.set(0);
@@ -49,6 +49,9 @@ public class LoaderSubsystem extends SubsystemBase {
     }
     public void disableExtendedLoaderMotor() {
         extendedLoader.set(0);
+    }
+    public void reverseExtendedLoaderMotor() {
+        extendedLoader.set(1);
     }
     public Solenoid getLoaderSolenoid() {
         return trigger;

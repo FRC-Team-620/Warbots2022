@@ -10,16 +10,10 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.Util.LimelightV2;
 
-public class AutoAimingAndSpinningUp extends CommandBase {
+public class AutoAimingAndSpinningUpDC319 extends CommandBase {
     protected ShooterSubsystem shooterSubsystem;
-
-    
-    protected NetworkTable table;
-    protected NetworkTableEntry entryHasTarget;
-    protected NetworkTableEntry entryX;
-    protected NetworkTableEntry entryY;
-    protected NetworkTableEntry entryArea;
     
     // turntable
     protected double ticksPerTurntableRotation,angleChangePerTick;
@@ -37,12 +31,7 @@ public class AutoAimingAndSpinningUp extends CommandBase {
     // auto
     protected boolean isAuto;
     protected boolean finished;
-    public AutoAimingAndSpinningUp(ShooterSubsystem shooterSubsystem, LazySusanSubsystem lazySusanSubsystem, boolean isAuto, XboxController operatorXbox) {
-        table = NetworkTableInstance.getDefault().getTable("limelight");
-        entryHasTarget = table.getEntry("tv");
-        entryX = table.getEntry("tx");
-        entryY = table.getEntry("ty");
-        entryArea = table.getEntry("ta");
+    public AutoAimingAndSpinningUpDC319(ShooterSubsystem shooterSubsystem, LazySusanSubsystem lazySusanSubsystem, boolean isAuto, XboxController operatorXbox) {
         this.shooterSubsystem = shooterSubsystem;
         addRequirements(shooterSubsystem);
         lazySusanMotor = lazySusanSubsystem.getLazySusanMotor();
@@ -54,7 +43,6 @@ public class AutoAimingAndSpinningUp extends CommandBase {
     @Override
     public void initialize() {
         this.frames = 0;
-        table.getEntry("ledMode").setNumber(3);
     }
 
     // public void setShooterSpeedAndUpdate(double speed) {
@@ -72,9 +60,8 @@ public class AutoAimingAndSpinningUp extends CommandBase {
     @Override
     public void execute() {
         //finished = false;
-        boolean hasTarget = entryHasTarget.getDouble(0.0) == 1.0;
-        double x = entryX.getDouble(0.0);
-        double y = entryY.getDouble(0.0);
+        double x = LimelightV2.tX();
+        double y = LimelightV2.tY();
         if (isAuto) {
             speed = -(x-Constants.leftBias)*Constants.diffConstAutoLS;
         } else {
@@ -96,7 +83,7 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         }
         lazySusanMotor.set(speed);
 
-        if(hasTarget) {
+        if(LimelightV2.targetFound()) {
             System.out.println(tempRPM);
             // shooterSubsystem.setTargetRPM(tempRPM);
             shooterSubsystem.setTargetRPM(tempRPM);
@@ -105,7 +92,7 @@ public class AutoAimingAndSpinningUp extends CommandBase {
             // shooterSubsystem.setTargetRPM(0);
             shooterSubsystem.setTargetRPM(tempRPM);
         }
-        System.out.println("hasTarget: " + hasTarget);
+        System.out.println("hasTarget: " + LimelightV2.targetFound());
         // if(getRPM() > this.maxRPM)
         //     setRPM(this.maxRPM);
         //shooterSubsystem.setTargetRPM(Math.min(shooterSubsystem.getRPM(), this.maxRPM));
@@ -141,7 +128,7 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         //System.out.println("HERE!!!");
         lazySusanMotor.set(0);
         shooterSubsystem.stopMotors();
-        table.getEntry("ledMode").setNumber(1);
+        LimelightV2.ledOff();
         operatorXbox.setRumble(RumbleType.kLeftRumble, 0);
         operatorXbox.setRumble(RumbleType.kRightRumble, 0);
     }
