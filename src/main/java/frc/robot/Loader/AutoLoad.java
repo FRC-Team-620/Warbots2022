@@ -5,11 +5,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class AutoLoad extends CommandBase{
     protected LoaderSubsystem loaderSubsystem;
     protected int frames = 0;
-    protected int speed;
-    public AutoLoad(LoaderSubsystem loaderSubsystem, int speed) {
+    public AutoLoad(LoaderSubsystem loaderSubsystem) {
         addRequirements(loaderSubsystem);
         this.loaderSubsystem = loaderSubsystem;
-        this.speed = speed;
     }
 
     @Override
@@ -20,16 +18,16 @@ public class AutoLoad extends CommandBase{
     @Override
     public void initialize() {
         this.frames = 0;
-        System.out.println("Loader was turned on");
-        loaderSubsystem.getLoaderMotor().set(1);
+        //System.out.println("Loader was turned on");
+        loaderSubsystem.enableLoaderMotor();
         loaderSubsystem.enableExtendedLoaderMotor();
         loaderSubsystem.extendExtensionSolenoid();
     }
     
     @Override
     public void end(boolean interrupt) {
-        loaderSubsystem.getLoaderMotor().set(0);
-        loaderSubsystem.getExtendedLoaderMotor().set(0);
+        loaderSubsystem.disableLoaderMotor();
+        loaderSubsystem.disableExtendedLoaderMotor();
         loaderSubsystem.retractExtensionSolenoid();
     }
 
