@@ -138,7 +138,11 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public double getCurrentSpeed() {
-        return currentSpeed;
+        return rightShooterMotor.get();
+    }
+
+    public double calculateAccelerationPController(double targetRPM) {
+        return Constants.diffConstShooter * (targetRPM - this.getRPM());
     }
 
     public double getDrawnCurrentAmps() {

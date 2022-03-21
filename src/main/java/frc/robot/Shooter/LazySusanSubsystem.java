@@ -37,6 +37,10 @@ public class LazySusanSubsystem extends SubsystemBase {
         return lazySusan;
     }
 
+    public void setLazySusanSpeed(double speed) {
+        lazySusan.set(speed);
+    }
+    
     public RelativeEncoder getLazySusanEncoder() {
         return encoder;
     }
