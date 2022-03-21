@@ -69,10 +69,10 @@ public class Robot extends TimedRobot {
     autonomousCommand = new ParallelCommandGroup(
       new AutoCommand(robotContainer.getFiringPins(), robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer), 
       new AutoAimingAndSpinningUp(robotContainer.getShooterSubsystem(),  robotContainer.getLazySusanSubsystem(), true, robotContainer.getOperatorController()), 
-      new AutoLoad(robotContainer.getInnerIntake(), robotContainer.getIntakeArms(), robotContainer.getIntakeArmsMotor())
+      new AutoLoad(robotContainer.getIntake())
     );
 
-    robotContainer.getIntakeArms().extendIntakeArmsSolenoid();
+    robotContainer.getIntake().extendIntakeArmsSolenoid();
 
     // autonomousCommand = new SequentialCommandGroup(
     //     new TurnDegrees(robotContainer.getDriveTrain(), 180),

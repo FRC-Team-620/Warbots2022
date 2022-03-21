@@ -2,23 +2,23 @@ package frc.robot.Climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.IntakeArms.IntakeArms;
+import frc.robot.Loader.Intake;
 
 public class WinchExtend extends CommandBase {
     protected ClimberMotorsSubsystem climberMotorsSubsystem;
-    protected IntakeArms intakeArms;
+    protected Intake intake;
     protected double deltaCounts, targetCounts;
 
-    public WinchExtend(ClimberMotorsSubsystem climberMotorsSubsystem, IntakeArms intakeArms, double deltaCounts) {
+    public WinchExtend(ClimberMotorsSubsystem climberMotorsSubsystem, Intake intake, double deltaCounts) {
         addRequirements(climberMotorsSubsystem);
         this.climberMotorsSubsystem = climberMotorsSubsystem;
-        this.intakeArms = intakeArms;
+        this.intake = intake;
         this.deltaCounts = deltaCounts;
     }
 
     @Override
     public void initialize() {
-        this.intakeArms.extendIntakeArmsSolenoid();
+        this.intake.extendIntakeArmsSolenoid();
         System.out.println("Current: " + this.climberMotorsSubsystem.getWinchPosition());
         this.targetCounts = this.climberMotorsSubsystem.getWinchPosition() + this.deltaCounts;
         // System.out.println("Winch begins wind down");
