@@ -94,7 +94,7 @@ public final class Constants {
 
     // loader CAN IDs
     public static final int intakeMotorID = 10;
-    public static final int extendedIntakeMotorID = 11;
+    public static final int intakeArmsMotorID = 11;
 
     //climber
     public static final double winchMinLimit = 0;

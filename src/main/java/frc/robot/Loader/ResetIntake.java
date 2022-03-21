@@ -9,14 +9,7 @@ import frc.robot.IntakeArms.IntakeArmsMotor;
 import frc.robot.IntakeArms.RetractIntakeArms;
 
 public class ResetIntake extends ParallelCommandGroup {
-    private InnerIntake innerIntake;
-    private IntakeArms intakeArms;
-    private IntakeArmsMotor intakeArmsMotor;
-
     public ResetIntake(InnerIntake innerIntake, IntakeArms intakeArms, IntakeArmsMotor intakeArmsMotor) {
-        this.innerIntake = innerIntake;
-        this.intakeArms = intakeArms;
-        this.intakeArmsMotor = intakeArmsMotor;
         addCommands(
             new DeactivateInnerIntake(innerIntake),
             new RetractIntakeArms(intakeArms),

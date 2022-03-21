@@ -8,7 +8,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SimableCANSparkMax;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -37,7 +36,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public LimeLightPoseSim possim;
     public double targetRpm;
     public double currentSpeed = 0;
-    private boolean powerDecel = true;
+    //private boolean powerDecel = true;
 
     //PIDs
     protected final PIDController leftShooterPID;

@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Drive.DriveForwardsEncoder;
 import frc.robot.Shooter.ActivateFiringPins;
-import frc.robot.Shooter.DirectTurretAuto;
 import frc.robot.Shooter.FiringPins;
 import frc.robot.Shooter.LazySusanSubsystem;
 import frc.robot.Shooter.ShooterSubsystem;
@@ -16,6 +15,7 @@ public class AutoCommand extends SequentialCommandGroup {
     ShooterSubsystem shooterSubsystem;
     LazySusanSubsystem lazySusanSubsystem;
     RobotContainer robotContainer;
+    
     public AutoCommand(FiringPins fP, ShooterSubsystem sS, LazySusanSubsystem lSS, RobotContainer rC) {
         this.firingPins = fP;
         this.shooterSubsystem = sS;

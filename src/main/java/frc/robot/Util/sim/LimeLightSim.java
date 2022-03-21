@@ -10,7 +10,7 @@ import frc.robot.Util.LimeLight;
 public class LimeLightSim {
     private final NetworkTableEntry e_tv, e_tx, e_ty, e_ta, e_tl;
     private final SimValue s_tv, s_tx, s_ty, s_ta, s_tl;
-    private SimDeviceSim simd;
+    //private SimDeviceSim simd;
 
     public LimeLightSim(LimeLight limelight) {
         NetworkTable ntable = limelight.getTable();
@@ -26,7 +26,7 @@ public class LimeLightSim {
         s_ta = simd.getDouble("Target Area");
         e_tl = ntable.getEntry("tl");
         s_tl = simd.getDouble("Pipeline Latancy");
-        this.simd = simd;
+        //this.simd = simd;
     }
 
     public void setHasTarget(boolean hastarget) {

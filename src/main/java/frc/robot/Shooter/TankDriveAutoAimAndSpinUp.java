@@ -1,8 +1,5 @@
 package frc.robot.Shooter;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -34,6 +31,7 @@ public class TankDriveAutoAimAndSpinUp extends CommandBase {
     // auto
     protected boolean isAuto;
     protected boolean finished;
+
     public TankDriveAutoAimAndSpinUp(ShooterSubsystem shooterSubsystem, Drivetrain drivetrain, boolean isAuto, XboxController operatorXbox) {
         table = NetworkTableInstance.getDefault().getTable("limelight");
         entryHasTarget = table.getEntry("tv");
@@ -147,12 +145,6 @@ public class TankDriveAutoAimAndSpinUp extends CommandBase {
         // } else if(finished) {
         //     return false;
         // }
-        if (isAuto && frames > 750) {
-            return true;
-        }
-        return false;
-        
+        return isAuto && frames > 750;
     }
-
-    
 }

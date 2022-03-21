@@ -9,20 +9,22 @@ import frc.robot.Constants;
 public class InnerIntake extends SubsystemBase {
     protected CANSparkMax innerIntakeMotor;
     // protected boolean isClimbing;
+
     public InnerIntake() {
-        addRequirements(innerIntake);
         innerIntakeMotor = new CANSparkMax(Constants.intakeMotorID, MotorType.kBrushless);
         innerIntakeMotor.restoreFactoryDefaults();
         innerIntakeMotor.setInverted(true);
-
         innerIntakeMotor.setSmartCurrentLimit(35);
     }
+
     public void enableInnerIntakeMotor() {
         innerIntakeMotor.set(1);
     }
+
     public void reverseInnerIntakeMotor() {
         innerIntakeMotor.set(-1);
     }
+    
     public void disableInnerIntakeMotor() {
         innerIntakeMotor.set(0);
     }
