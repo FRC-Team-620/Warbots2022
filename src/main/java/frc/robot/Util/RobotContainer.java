@@ -36,11 +36,16 @@ import frc.robot.Climber.ToggleHooks;
 import frc.robot.Controls.ControlBoard;
 import frc.robot.Drive.DriveWithJoystick;
 import frc.robot.Drive.Drivetrain;
-import frc.robot.Loader.AutoShoot;
-import frc.robot.Loader.LoaderCommand;
-import frc.robot.Loader.LoaderSubsystem;
+import frc.robot.InnerIntake.InnerIntake;
+import frc.robot.IntakeArms.IntakeArms;
+import frc.robot.IntakeArms.IntakeArmsMotor;
+import frc.robot.Loader.IntakeBall;
+import frc.robot.Loader.OuttakeBall;
+import frc.robot.Loader.ResetIntake;
+import frc.robot.Shooter.ActivateFiringPins;
 import frc.robot.Shooter.AutoAimingAndSpinningUp;
 import frc.robot.Shooter.DirectTurret;
+import frc.robot.Shooter.FiringPins;
 import frc.robot.Shooter.LazySusanSubsystem;
 import frc.robot.Shooter.LowShotCommand;
 import frc.robot.Shooter.ManualAiming;
@@ -53,15 +58,17 @@ public class RobotContainer {
 
     // initialize subsystems
     private Drivetrain drivetrain;
-    private LoaderSubsystem intake;
+    private InnerIntake innerIntake;
+    private IntakeArms intakeArms;
+    private IntakeArmsMotor intakeArmsMotor;
     private ShooterSubsystem shooter;
+    private FiringPins firingPins;
     private LazySusanSubsystem turret;
     private ClimberSubsystem climberHooks;
     private ClimberMotorsSubsystem winch;
     private ControlBoard controls;
 
     private DriveWithJoystick driveWithJoystick;
-    private LoaderCommand loaderCommand;
     private ShooterCommand shooterCommand;
 
     // TODO: *sighs emoji*
@@ -77,8 +84,11 @@ public class RobotContainer {
 
     private void initSubsystems() {
         drivetrain = new Drivetrain();
-        intake = new LoaderSubsystem();
+        innerIntake = new InnerIntake();
+        intakeArms = new IntakeArms();
+        intakeArmsMotor = new IntakeArmsMotor();
         shooter = new ShooterSubsystem();
+        firingPins = new FiringPins();
         turret = new LazySusanSubsystem();
         climberHooks = new ClimberSubsystem();
         winch = new ClimberMotorsSubsystem();
@@ -94,7 +104,7 @@ public class RobotContainer {
 
         controls.extendArmsButton.whenPressed(
                 new ParallelCommandGroup(
-                        new ExtendArmsAndStow(winch, climberHooks, intake),
+                        new ExtendArmsAndStow(winch, climberHooks, intakeArms),
                         new DirectTurret(turret, shooter, Constants.stowedPosition)));
 
         controls.climbSequenceButton.whenPressed(
@@ -110,8 +120,6 @@ public class RobotContainer {
         controls.winchHoldButton.whenPressed(
                 new WinchHold(winch, winch.getWinchPosition(), Constants.holdTime));
 
-        controls.lowShotButton.whileActiveContinuous(new LowShotCommand(shooter), true);
-
         // TODO: here, now make a unified aiming/flywheel spinup command that we can use
         // for both auto and tele
 
@@ -124,7 +132,19 @@ public class RobotContainer {
 
 
         controls.fireTurretTrigger.whenActive(
-        new AutoShoot(getLoaderSubsystem()));        
+        new ActivateFiringPins(getFiringPins()));
+
+        //driver
+        controls.lowShotButton.whileActiveOnce(new LowShotCommand(shooter));
+
+        controls.intakeButton.whileActiveOnce(new IntakeBall(innerIntake, intakeArms, intakeArmsMotor));
+
+        controls.intakeButton.whenReleased(new ResetIntake(innerIntake, intakeArms, intakeArmsMotor));
+
+        controls.outakeButton.whileActiveOnce(new OuttakeBall(innerIntake, intakeArms, intakeArmsMotor));
+
+        controls.outakeButton.whenReleased(new ResetIntake(innerIntake, intakeArms, intakeArmsMotor));
+
         // controls.aimTurretTrigger.whenActive(
         // new AimTurretCommand();
         // );
@@ -142,9 +162,6 @@ public class RobotContainer {
         // driveWithJoystick = new DriveWithJoystick(drivetrain, controls.getDriverController(),
         //         controls.getOperatorController());
         // drivetrain.setDefaultCommand(driveWithJoystick);
-
-        loaderCommand = new LoaderCommand(intake, controls.getDriverController(), controls.getOperatorController());
-        intake.setDefaultCommand(loaderCommand);
 
         turret.setDefaultCommand(new ManualAiming(turret, controls.getOperatorController()));
 
@@ -196,16 +213,28 @@ public class RobotContainer {
         return trajectorySelector;
     }
 
-    public LoaderCommand getLoaderCommand() {
-        return loaderCommand;
-    }
+    // public LoaderCommand getLoaderCommand() {
+    //     return loaderCommand;
+    // }
 
     public ShooterCommand getShooterCommand() {
         return shooterCommand;
     }
 
-    public LoaderSubsystem getLoaderSubsystem() {
-        return intake;
+    public InnerIntake getInnerIntake() {
+        return innerIntake;
+    }
+
+    public IntakeArms getIntakeArms() {
+        return intakeArms;
+    }
+
+    public IntakeArmsMotor getIntakeArmsMotor() {
+        return intakeArmsMotor;
+    }
+
+    public FiringPins getFiringPins() {
+        return firingPins;
     }
 
     public XboxController getOperatorController() {
