@@ -56,7 +56,8 @@ public class Robot extends TimedRobot {
     robotContainer.getDriveTrain().setMotorMode(IdleMode.kBrake);
     robotContainer.getClimberMotorsSubsystem().getWinchMotor().getEncoder().setPosition(0);
 	// robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(true);
-    // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);  }
+    // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);  
+  }
 
   @Override
   public void autonomousInit() {
@@ -106,7 +107,6 @@ public class Robot extends TimedRobot {
 	NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
     IdleMode mode = IdleMode.kBrake;
     robotContainer.getDriveTrain().setMotorMode(mode);
-    robotContainer.getShooterSubsystem().setSpeed(0);
     robotContainer.getShooterSubsystem().setTargetRPM(0);
     CommandScheduler.getInstance().cancelAll();
   }

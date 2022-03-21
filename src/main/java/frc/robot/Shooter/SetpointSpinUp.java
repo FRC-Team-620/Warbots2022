@@ -22,9 +22,9 @@ public class SetpointSpinUp extends CommandBase {
 
     @Override
     public void execute() {
-        double acceleration = shooterSubsystem.calculateAccelerationPController(setPoint);
-        shooterSubsystem.setSpeed(shooterSubsystem.getCurrentSpeed() + acceleration);
-        
+        // double acceleration = shooterSubsystem.calculateAccelerationPController(setPoint);
+        // shooterSubsystem.setSpeed(shooterSubsystem.getCurrentSpeed() + acceleration);
+        shooterSubsystem.setTargetRPM(setPoint);
         double rumble = 0;
         if (shooterSubsystem.getRPM() > (1-Constants.shooterVibrationTolerance)*setPoint
             && shooterSubsystem.getRPM() < (1+Constants.shooterVibrationTolerance)*setPoint) {

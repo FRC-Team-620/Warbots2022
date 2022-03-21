@@ -26,9 +26,8 @@ public class LimelightSpinUp extends CommandBase {
         double y = LimelightV2.tY();
         double distance = ShooterMath.getDistanceInMeters(Constants.azimuthAngle1, y, Constants.limelightHeight, Constants.hubHeight);
         double targetRPM = ShooterMath.metersToRPM(distance);
-
-        double acceleration = shooterSubsystem.calculateAccelerationPController(targetRPM);
-        shooterSubsystem.setSpeed(shooterSubsystem.getCurrentSpeed() + acceleration);
+    
+        shooterSubsystem.setTargetRPM(targetRPM);
         
         double rumble = 0;
         if (shooterSubsystem.getRPM() > (1-Constants.shooterVibrationTolerance)*targetRPM
