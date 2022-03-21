@@ -51,7 +51,7 @@ public class Robot extends TimedRobot {
     // TODO: move to initializer in robotContainer
     new ToggleHooks(robotContainer.getClimberSubsystem()).schedule();
     robotContainer.getLazySusanSubsystem().getLazySusanEncoder().setPosition(0);
-    robotContainer.getDriveTrain().setMotorMode(IdleMode.kBrake);
+    robotContainer.getDriveTrain().setAllIdleModes(IdleMode.kBrake);
     robotContainer.getClimberMotorsSubsystem().getWinchMotor().getEncoder().setPosition(0);
     // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(true);
     // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);
@@ -59,7 +59,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    robotContainer.getDriveTrain().resetEncoders();
+    robotContainer.getDriveTrain().setAllEncoderPos(0);
 
     // TODO: move to autonomousCommand in separate file.
     robotContainer.getLazySusanSubsystem().setLazySusanPosition(0);
@@ -105,8 +105,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
-    IdleMode mode = IdleMode.kBrake;
-    robotContainer.getDriveTrain().setMotorMode(mode);
+    robotContainer.getDriveTrain().setAllIdleModes(IdleMode.kBrake);
     robotContainer.getShooterSubsystem().setSpeed(0);
     CommandScheduler.getInstance().cancelAll();
   }

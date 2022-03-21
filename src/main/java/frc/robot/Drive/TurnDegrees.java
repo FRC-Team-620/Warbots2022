@@ -17,20 +17,17 @@ public class TurnDegrees extends CommandBase {
     }
 
     public void execute() {
-        double speed = Constants.diffConstTurn*(this.targetDegrees-this.drivetrain.getHeading());
+        double speed = Constants.diffConstTurn * (this.targetDegrees - this.drivetrain.getHeading());
         System.out.println("SPEED:" + speed);
         System.out.println("ANGLE: " + this.drivetrain.getHeading());
         System.out.println("TARGET: " + this.targetDegrees);
-        int sign = speed < 0 ? -1 : 1;
-        speed = sign*Math.min(Math.abs(speed), this.maxSpeed);
-
+        speed = Math.signum(speed) * Math.min(Math.abs(speed), this.maxSpeed);
         drivetrain.tankDriveSet(-speed, speed);
-        // drivetrain.diffDrive.arcadeDrive(0, speed);
     }
 
     public boolean isFinished() {
         double angle = this.drivetrain.getHeading();
-        return angle > this.targetDegrees-this.tolerance && 
-            angle < this.targetDegrees+this.tolerance;
+        return angle > this.targetDegrees - this.tolerance && 
+            angle < this.targetDegrees + this.tolerance;
     }
 }

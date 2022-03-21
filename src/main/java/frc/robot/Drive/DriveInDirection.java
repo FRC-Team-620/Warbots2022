@@ -45,13 +45,13 @@ public class DriveInDirection extends CommandBase {
 
     @Override
     public void execute() {
-        drivetrain.curvatureInput(this.direction * this.speed, 0, false);
+        drivetrain.curvatureDrive(this.direction * this.speed, 0, false);
         this.frames++;
     }
 
     @Override
     public void end(boolean interrupted) {
-        this.drivetrain.setMotorMode(IdleMode.kBrake);
+        this.drivetrain.setAllIdleModes(IdleMode.kBrake);
     } 
 
     @Override
