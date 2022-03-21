@@ -32,12 +32,9 @@ import frc.robot.Climber.WinchHold;
 import frc.robot.Controls.ControlBoard;
 import frc.robot.Drive.DriveWithJoystick;
 import frc.robot.Drive.Drivetrain;
-import frc.robot.InnerIntake.InnerIntake;
-import frc.robot.IntakeArms.IntakeArms;
-import frc.robot.IntakeArms.IntakeArmsMotor;
+import frc.robot.Loader.Intake;
 import frc.robot.Loader.IntakeBall;
 import frc.robot.Loader.OuttakeBall;
-import frc.robot.Loader.ResetIntake;
 import frc.robot.Shooter.ActivateFiringPins;
 import frc.robot.Shooter.AutoAimingAndSpinningUp;
 import frc.robot.Shooter.DirectTurret;
@@ -54,9 +51,7 @@ public class RobotContainer {
 
     // initialize subsystems
     private Drivetrain drivetrain;
-    private InnerIntake innerIntake;
-    private IntakeArms intakeArms;
-    private IntakeArmsMotor intakeArmsMotor;
+    private Intake intake;
     private ShooterSubsystem shooter;
     private FiringPins firingPins;
     private LazySusanSubsystem turret;
@@ -80,9 +75,7 @@ public class RobotContainer {
 
     private void initSubsystems() {
         drivetrain = new Drivetrain();
-        innerIntake = new InnerIntake();
-        intakeArms = new IntakeArms();
-        intakeArmsMotor = new IntakeArmsMotor();
+        intake = new Intake();
         shooter = new ShooterSubsystem();
         firingPins = new FiringPins();
         turret = new LazySusanSubsystem();
@@ -99,7 +92,7 @@ public class RobotContainer {
 
         controls.extendArmsButton.whenPressed(
                 new ParallelCommandGroup(
-                        new ExtendArmsAndStow(winch, climberHooks, intakeArms),
+                        new ExtendArmsAndStow(winch, climberHooks, intake),
                         new DirectTurret(turret, shooter, Constants.stowedPosition)));
 
         controls.climbSequenceButton.whenPressed(
@@ -132,13 +125,9 @@ public class RobotContainer {
         //driver
         controls.lowShotButton.whileActiveOnce(new LowShotCommand(shooter));
 
-        controls.intakeButton.whileActiveOnce(new IntakeBall(innerIntake, intakeArms, intakeArmsMotor));
+        controls.intakeButton.whileActiveOnce(new IntakeBall(intake));
 
-        controls.intakeButton.whenReleased(new ResetIntake(innerIntake, intakeArms, intakeArmsMotor));
-
-        controls.outakeButton.whileActiveOnce(new OuttakeBall(innerIntake, intakeArms, intakeArmsMotor));
-
-        controls.outakeButton.whenReleased(new ResetIntake(innerIntake, intakeArms, intakeArmsMotor));
+        controls.outakeButton.whileActiveOnce(new OuttakeBall(intake));
 
         // controls.aimTurretTrigger.whenActive(
         // new AimTurretCommand();
@@ -216,16 +205,8 @@ public class RobotContainer {
         return shooterCommand;
     }
 
-    public InnerIntake getInnerIntake() {
-        return innerIntake;
-    }
-
-    public IntakeArms getIntakeArms() {
-        return intakeArms;
-    }
-
-    public IntakeArmsMotor getIntakeArmsMotor() {
-        return intakeArmsMotor;
+    public Intake getIntake() {
+        return intake;
     }
 
     public FiringPins getFiringPins() {

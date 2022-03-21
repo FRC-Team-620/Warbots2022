@@ -1,21 +1,14 @@
 package frc.robot.Loader;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.InnerIntake.InnerIntake;
-import frc.robot.IntakeArms.IntakeArms;
-import frc.robot.IntakeArms.IntakeArmsMotor;
 
 public class AutoLoad extends CommandBase{
-    protected InnerIntake innerIntake;
-    protected IntakeArms intakeArms;
-    protected IntakeArmsMotor intakeArmsMotor;
+    protected Intake intake;
     protected int frames;
 
-    public AutoLoad(InnerIntake innerIntake, IntakeArms intakeArms, IntakeArmsMotor intakeArmsMotor) {
-        this.innerIntake = innerIntake;
-        this.intakeArms = intakeArms;
-        this.intakeArmsMotor = intakeArmsMotor;
-        addRequirements(innerIntake, intakeArms, intakeArmsMotor);
+    public AutoLoad(Intake intake) {
+        this.intake = intake;
+        addRequirements(intake);
     }
 
     @Override
@@ -27,16 +20,16 @@ public class AutoLoad extends CommandBase{
     public void initialize() {
         this.frames = 0;
         //System.out.println("Loader was turned on");
-        innerIntake.enableInnerIntakeMotor();
-        intakeArmsMotor.enableIntakeArmsMotor();
-        intakeArms.extendIntakeArmsSolenoid();
+        intake.enableInnerIntakeMotor();
+        intake.enableIntakeArmsMotor();
+        intake.extendIntakeArmsSolenoid();
     }
     
     @Override
     public void end(boolean interrupt) {
-        innerIntake.disableInnerIntakeMotor();
-        intakeArmsMotor.disableIntakeArmsMotor();
-        intakeArms.retractIntakeArmsSolenoid();
+        intake.disableInnerIntakeMotor();
+        intake.disableIntakeArmsMotor();
+        intake.retractIntakeArmsSolenoid();
     }
 
     @Override
