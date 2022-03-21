@@ -33,7 +33,7 @@ public class SensorWinchRetract extends CommandBase {
   @Override
   public void execute() {
       System.out.println("Winch is winding");
-      if (climberMotorsSubsystem.getClimberSensor()) {
+      if (!(climberMotorsSubsystem.getClimberSensor())) {
         isBarDetected = true;
       }
       if (isBarDetected) {
@@ -48,6 +48,7 @@ public class SensorWinchRetract extends CommandBase {
   @Override
   public void end(boolean interrupted) {
       this.climberMotorsSubsystem.setWinchSpeed(0);
+      this.climberMotorsSubsystem.getWinchEncoder().setPosition(0);
   }
 
   @Override
@@ -56,3 +57,4 @@ public class SensorWinchRetract extends CommandBase {
       return climberMotorsSubsystem.hitRearLimitSwitch() || timer.hasElapsed(5);
   }
 }
+

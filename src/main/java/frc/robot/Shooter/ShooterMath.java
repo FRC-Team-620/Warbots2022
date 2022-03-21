@@ -9,12 +9,20 @@ public final class ShooterMath {
 
     public static double metersToRPM(double meters) {
         double distanceInFeet = Constants.metersToFeet * meters;
-        return 117.3708 * distanceInFeet + 1700;
+        return 117.3708 * distanceInFeet + 1750;
     }
 
     public static long roundUpToNearestMultiple(double input, int step) {
         int i = (int) Math.ceil(input);
         return i + step - 1;
+    }
+
+    public static boolean withinValues(double val, double bound1, double bound2) {
+        return (bound1 >= val && val >= bound2) || (bound1 <= val && val <= bound2);
+    }
+
+    public static boolean withinTolerance(double val, double target, double tolerance) {
+        return withinValues(val, target*(1+tolerance), target*(1-tolerance));
     }
 
     // Takes in a boolean of which direction the encoder will be moving in

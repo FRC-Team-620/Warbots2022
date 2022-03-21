@@ -3,13 +3,12 @@ package frc.robot.Loader;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class AutoLoad extends CommandBase{
-    protected LoaderSubsystem loaderSubsystem;
-    protected int frames = 0;
-    protected int speed;
-    public AutoLoad(LoaderSubsystem loaderSubsystem, int speed) {
-        addRequirements(loaderSubsystem);
-        this.loaderSubsystem = loaderSubsystem;
-        this.speed = speed;
+    protected Intake intake;
+    protected int frames;
+
+    public AutoLoad(Intake intake) {
+        this.intake = intake;
+        addRequirements(intake);
     }
 
     @Override
@@ -21,12 +20,16 @@ public class AutoLoad extends CommandBase{
     public void initialize() {
         this.frames = 0;
         //System.out.println("Loader was turned on");
-        loaderSubsystem.getLoaderMotor().set(speed);
+        intake.enableInnerIntakeMotor();
+        intake.enableIntakeArmsMotor();
+        intake.extendIntakeArmsSolenoid();
     }
     
     @Override
     public void end(boolean interrupt) {
-        loaderSubsystem.getLoaderMotor().set(0);
+        intake.disableInnerIntakeMotor();
+        intake.disableIntakeArmsMotor();
+        intake.retractIntakeArmsSolenoid();
     }
 
     @Override

@@ -1,8 +1,5 @@
 package frc.robot.Shooter;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -10,10 +7,11 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.Drive.Drivetrain;
 
-public class AutoAimingAndSpinningUp extends CommandBase {
+public class TankDriveAutoAimAndSpinUp extends CommandBase {
     protected ShooterSubsystem shooterSubsystem;
-
+    protected Drivetrain drivetrain;
     
     protected NetworkTable table;
     protected NetworkTableEntry entryHasTarget;
@@ -22,8 +20,6 @@ public class AutoAimingAndSpinningUp extends CommandBase {
     protected NetworkTableEntry entryArea;
     
     // turntable
-    protected double ticksPerTurntableRotation,angleChangePerTick;
-    protected double  currTicksGoal = 0;
     protected double inputOpRight = 0;
     protected int frames = 0;
     protected double speed = 0;
@@ -31,22 +27,20 @@ public class AutoAimingAndSpinningUp extends CommandBase {
     protected double rpm, minRPM = 0,
             currentSpeed = 0, acceleration, 
             currRPM, maxRPM = 3000;
-    protected CANSparkMax lazySusanMotor;
-    protected RelativeEncoder lazySusanEnc;
     protected XboxController operatorXbox;
     // auto
     protected boolean isAuto;
     protected boolean finished;
-    public AutoAimingAndSpinningUp(ShooterSubsystem shooterSubsystem, LazySusanSubsystem lazySusanSubsystem, boolean isAuto, XboxController operatorXbox) {
-		table = NetworkTableInstance.getDefault().getTable("limelight");
+
+    public TankDriveAutoAimAndSpinUp(ShooterSubsystem shooterSubsystem, Drivetrain drivetrain, boolean isAuto, XboxController operatorXbox) {
+        table = NetworkTableInstance.getDefault().getTable("limelight");
         entryHasTarget = table.getEntry("tv");
         entryX = table.getEntry("tx");
         entryY = table.getEntry("ty");
         entryArea = table.getEntry("ta");
         this.shooterSubsystem = shooterSubsystem;
-        addRequirements(shooterSubsystem);
-        lazySusanMotor = lazySusanSubsystem.getLazySusanMotor();
-        lazySusanEnc = lazySusanSubsystem.getLazySusanEncoder();
+        addRequirements(shooterSubsystem, drivetrain);
+        this.drivetrain = drivetrain;
         this.isAuto = isAuto;
         this.operatorXbox = operatorXbox;
     }
@@ -54,7 +48,7 @@ public class AutoAimingAndSpinningUp extends CommandBase {
     @Override
     public void initialize() {
         this.frames = 0;
-		table.getEntry("ledMode").setNumber(3);
+        table.getEntry("ledMode").setNumber(3);
     }
 
     // public void setShooterSpeedAndUpdate(double speed) {
@@ -76,11 +70,8 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         double x = entryX.getDouble(0.0);
         double y = entryY.getDouble(0.0);
         
-        if (isAuto) {
-            speed = -(x-Constants.leftBias)*Constants.diffConstAutoLS;
-        } else {
-            speed = -(x-Constants.leftBias)*Constants.diffConstLS;
-        }
+        speed = -(x-Constants.leftBias)*Constants.diffConstTankDriveAim;
+        
          // this is lazy susan turntable speed
         // boolean hasTarget = shooterSubsystem.limeLight.hasTarget(); //Sim:
         // double x = shooterSubsystem.limeLight.getOffsetX();
@@ -92,19 +83,19 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         double tempRPM = ShooterMath.metersToRPM(tempDist);
         // Making sure it's within the provided threshholds (important that you don't use absolute 
         // value -- don't obliterate the sign)
-        if (!ShooterMath.inBounds(speed > 0, lazySusanEnc.getPosition())) {
-            speed = 0;
-        }
-        lazySusanMotor.set(speed);
+        // if (!ShooterMath.inBounds(speed > 0, this.drivetrain)) {
+        //     speed = 0;
+        // }
+        this.drivetrain.tankDriveSet(-speed, speed);
 
         if(hasTarget) {
             System.out.println(tempRPM);
+            // shooterSubsystem.setTargetRPM(tempRPM);
             shooterSubsystem.setTargetRPM(tempRPM);
-            // shooterSubsystem.setTargetRPMPID(tempRPM);
-            // System.out.println(shooterSubsystem.getTargetRPM());
+            //System.out.println(shooterSubsystem.getTargetRPM());
         } else {
-            shooterSubsystem.setTargetRPM(0);
-            //shooterSubsystem.setTargetRPMPID(tempRPM);
+            // shooterSubsystem.setTargetRPM(0);
+            shooterSubsystem.setTargetRPM(tempRPM);
         }
         System.out.println("hasTarget: " + hasTarget);
         // if(getRPM() > this.maxRPM)
@@ -112,8 +103,8 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         //shooterSubsystem.setTargetRPM(Math.min(shooterSubsystem.getRPM(), this.maxRPM));
         //System.out.println(shooterSubsystem.getTargetRPM());
         System.out.println("RPM: " + shooterSubsystem.getRPM());
-        // acceleration = Constants.diffConstShooter * (shooterSubsystem.getTargetRPM() - shooterSubsystem.getRPM());
-        // shooterSubsystem.setShooterSpeedAndUpdate(shooterSubsystem.getCurrentSpeed() + acceleration);
+        acceleration = Constants.diffConstShooter * (shooterSubsystem.getTargetRPM() - shooterSubsystem.getRPM());
+        shooterSubsystem.setShooterSpeedAndUpdate(shooterSubsystem.getCurrentSpeed() + acceleration);
         if (!(isAuto) && shooterSubsystem.getTargetRPM() > (1-Constants.shooterVibrationTolerance)*shooterSubsystem.getRPM()
             && shooterSubsystem.getTargetRPM() < (1+Constants.shooterVibrationTolerance)*shooterSubsystem.getRPM()) {
             operatorXbox.setRumble(RumbleType.kLeftRumble, 0.5);
@@ -123,7 +114,7 @@ public class AutoAimingAndSpinningUp extends CommandBase {
             operatorXbox.setRumble(RumbleType.kRightRumble, 0);
         }
         
-        //System.out.println("ShooterSpeed: " + shooterSubsystem.getCurrentSpeed() + acceleration);
+        System.out.println("ShooterSpeed: " + shooterSubsystem.getCurrentSpeed() + acceleration);
         //System.out.println("Frames: " + frames);
         
         // if (isAuto) {
@@ -140,7 +131,7 @@ public class AutoAimingAndSpinningUp extends CommandBase {
     @Override
     public void end(boolean interrupt) {
         //System.out.println("HERE!!!");
-        lazySusanMotor.set(0);
+        this.drivetrain.tankDriveSet(0, 0);
         shooterSubsystem.stopMotors();
         table.getEntry("ledMode").setNumber(1);
         operatorXbox.setRumble(RumbleType.kLeftRumble, 0);
@@ -154,12 +145,6 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         // } else if(finished) {
         //     return false;
         // }
-        if (isAuto && frames > 750) {
-            return true;
-        }
-        return false;
-        
+        return isAuto && frames > 750;
     }
-
-    
 }

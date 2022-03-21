@@ -7,6 +7,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Util.LimelightV2;
 
 public class ManualAiming extends CommandBase {
     LazySusanSubsystem lazySusanSubsystem;
@@ -26,17 +27,28 @@ public class ManualAiming extends CommandBase {
     @Override
     public void execute() {
         inputOpLeft = operatorXbox.getLeftX();
-        if (Math.abs(inputOpLeft) > 0) {
-            table.getEntry("ledMode").setNumber(1);
+        double deadband = 0.07;
+        if (Math.abs(inputOpLeft) > deadband) { // manual control case
+            LimelightV2.ledOff();
+            //table.getEntry("ledMode").setNumber(1);//PROBLEM???
             // limelight.setLEDMode(LedMode.OFF);
-            double speed = -inputOpLeft/1.6;
-            System.out.println("JIWJF_" + lazySusanEnc.getPosition());
-            if (!ShooterMath.inBounds(speed > 0, lazySusanEnc.getPosition())) {
-                speed = 0;
+            double speed = 0;
+            if (ShooterMath.inBounds(speed > 0, lazySusanEnc.getPosition())) {
+                speed = -inputOpLeft * 0.5;
             }
             lazySusanMotor.set(speed);
+            
+            // lazySusanMotor.set(ShooterMath.inBounds(-inputOpLeft > 0, lazySusanEnc.getPosition())
+            //     ? -inputOpLeft/1.6 : 0);
+
             // System.out.println("Speed Man: "+ speed);
             // System.out.println("Curr Enc Pos: " + lazySusanEnc.getPosition());
+        } else {
+            lazySusanMotor.set(0);
         }
+        if(operatorXbox.getRightBumper()) {
+            lazySusanEnc.setPosition(0);
+        }
+        // System.out.println("LAZY POS: " + lazySusanEnc.getPosition());
     }
 }

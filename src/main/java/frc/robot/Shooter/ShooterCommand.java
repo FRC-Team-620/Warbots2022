@@ -3,14 +3,12 @@ package frc.robot.Shooter;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Util.LimeLight;
+import frc.robot.Util.LimelightV2;
 
 public class ShooterCommand extends CommandBase {
     protected XboxController operatorXbox;
@@ -22,12 +20,6 @@ public class ShooterCommand extends CommandBase {
 
     // protected Timer timer = new Timer(); // For dealing with RPM
     // protected long prevRotations = 0;
-
-    protected NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-    protected NetworkTableEntry entryHasTarget = table.getEntry("tv");
-    protected NetworkTableEntry entryX = table.getEntry("tx");
-    protected NetworkTableEntry entryY = table.getEntry("ty");
-    protected NetworkTableEntry entryArea = table.getEntry("ta");
     protected double turretControlConstant= 0.01;
     protected RelativeEncoder lazySusanEnc;
     protected boolean lowPoweredShot = false;
@@ -63,10 +55,9 @@ public class ShooterCommand extends CommandBase {
 
     @Override
     public void execute() {
-        boolean hasTarget = entryHasTarget.getDouble(0.0) == 1.0;
-        double x = entryX.getDouble(0.0);
-        double y = entryY.getDouble(0.0);
-        double area = entryArea.getDouble(0.0);
+        boolean hasTarget = LimelightV2.targetFound();
+        double x = LimelightV2.tX();
+        double y = LimelightV2.tY();
         // boolean hasTarget = limelight.hasTarget();
         // double x = limelight.getOffsetX();
         // double y = limelight.getOffsetY();
@@ -88,7 +79,7 @@ public class ShooterCommand extends CommandBase {
         SmartDashboard.putBoolean("LimelightHasTarget", hasTarget);
         SmartDashboard.putNumber("LimelightX", x);
         SmartDashboard.putNumber("LimelightY", y);
-        SmartDashboard.putNumber("LimelightArea", area);
+        //SmartDashboard.putNumber("LimelightArea", area);
 
         // new math for static limelight shooting
         double tempDist = ShooterMath.getDistanceInMeters(Constants.azimuthAngle1, y, Constants.limelightHeight, Constants.hubHeight);
@@ -100,8 +91,9 @@ public class ShooterCommand extends CommandBase {
         // System.out.println("tempRPM: " + tempRPM);
         // || autoOn
         // System.out.println(lazySusanEnc.getPosition());
-        if(Math.abs(operatorXbox.getLeftTriggerAxis()) > 0) {
-            table.getEntry("ledMode").setNumber(3);
+        if(Math.abs(operatorXbox.getLeftTriggerAxis()) > 0) { // limelight aim
+            LimelightV2.ledOn();
+            //table.getEntry("ledMode").setNumber(3);
             // limelight.setLEDMode(LedMode.ON);
             double speed =  -(x-Constants.leftBias)*Constants.diffConstLS; // this is speed
             // Making sure it's within the provided threshholds
@@ -116,7 +108,8 @@ public class ShooterCommand extends CommandBase {
             // System.out.println("Negative X: " + -x);
             // System.out.println("Speed With Constant: " + -x*Constants.diffConstLS);
         } else if (Math.abs(inputOpRight) > 0) {
-            table.getEntry("ledMode").setNumber(1);
+            LimelightV2.ledOff();
+            //table.getEntry("ledMode").setNumber(1);
             // limelight.setLEDMode(LedMode.OFF);
             double speed = -inputOpRight/1.4;
             System.out.println("JIWJF_" + lazySusanEnc.getPosition());
@@ -130,7 +123,8 @@ public class ShooterCommand extends CommandBase {
             
 
         } else {
-            table.getEntry("ledMode").setNumber(1);
+            LimelightV2.ledOff();
+            //table.getEntry("ledMode").setNumber(1);
             // limelight.setLEDMode(LedMode.OFF);
             lazySusanMotor.set(0);
 
@@ -171,10 +165,6 @@ public class ShooterCommand extends CommandBase {
         if (operatorXbox.getAButtonPressed()) {
             lazySusanSubsystem.getLazySusanEncoder().setPosition(0);
         }
-    }
-
-    public NetworkTable getTable() {
-        return table;
     }
     
     @Override

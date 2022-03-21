@@ -1,13 +1,13 @@
-package frc.robot.Loader;
+package frc.robot.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class AutoShoot extends CommandBase {
-    protected LoaderSubsystem loaderSubsystem;
+public class ActivateFiringPins extends CommandBase {
+    protected FiringPins firingPins;
     protected int frames = 0;
-    public AutoShoot(LoaderSubsystem loaderSubsystem) {
+    public ActivateFiringPins(FiringPins firingPins) {
         //addRequirements(loaderSubsystem);
-        this.loaderSubsystem = loaderSubsystem;
+        this.firingPins = firingPins;
     }
 
     @Override
@@ -19,12 +19,12 @@ public class AutoShoot extends CommandBase {
     public void initialize() {
         this.frames = 0;
         System.out.println("Ball was shot");
-        loaderSubsystem.getLoaderSolenoid().set(true);
+        firingPins.extendFiringPinsSolenoid();
     }
 
     @Override
     public void end(boolean interrupted) {
-        loaderSubsystem.getLoaderSolenoid().set(false);
+        firingPins.retractFiringPinsSolenoid();
     }
 
     @Override

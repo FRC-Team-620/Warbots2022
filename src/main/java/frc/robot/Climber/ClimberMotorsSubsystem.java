@@ -11,7 +11,6 @@ import com.revrobotics.SparkMaxLimitSwitch;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -31,7 +30,7 @@ public class ClimberMotorsSubsystem extends SubsystemBase {
         rightClimberMotor = new SimableCANSparkMax(Constants.rightClimberMotorID, MotorType.kBrushless);
         encoder = rightClimberMotor.getEncoder();
         // rightClimberMotor.limi
-        rearLimit = rightClimberMotor.getForwardLimitSwitch(Type.kNormallyOpen);
+        rearLimit = rightClimberMotor.getReverseLimitSwitch(Type.kNormallyOpen);
         leftClimberMotor.restoreFactoryDefaults();
         rightClimberMotor.restoreFactoryDefaults();
 

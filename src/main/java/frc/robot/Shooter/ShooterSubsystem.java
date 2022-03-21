@@ -42,8 +42,7 @@ public class ShooterSubsystem extends SubsystemBase {
     //PIDs
     protected final PIDController leftShooterPID;
     protected final PIDController rightShooterPID;
-    private final double kP = 0.005,kI = 0.008;
-    
+	private final double kP = 0.005,kI = 0.008;
 
     public ShooterSubsystem() {
         rightShooterMotor = new SimableCANSparkMax(Constants.rightShooterMotorID, MotorType.kBrushless);
@@ -96,8 +95,6 @@ public class ShooterSubsystem extends SubsystemBase {
     public boolean atTargetRPM() {
         return leftShooterPID.atSetpoint() && rightShooterPID.atSetpoint();
     }
-   
-
 
     public double getTicksPerMotorRotation() {
         return rightEncoder.getCountsPerRevolution();
@@ -109,10 +106,9 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void stopMotors() {
-        setTargetRPM(0);
+		setTargetRPM(0);
         // shooterMotors.stopMotor();
         // rightShooterMotor.stopMotor();
-        // setTargetRPMPID(0);
     }
 
     public long getTotalWheelRotations() {
@@ -124,32 +120,33 @@ public class ShooterSubsystem extends SubsystemBase {
     // return leftShooterMotor.get
     // }
 
-    // public void setSpeed(double speed) {
-    //     SmartDashboard.putNumber("shooter setpoint speed", speed);
-    //     // shooterMotors.set(speed);
-    //     rightShooterMotor.set(speed);
-    //     // rightShooterMotor.set(speed);
-    // }
+    //public void setSpeed(double speed) {
+        //SmartDashboard.putNumber("shooter setpoint speed", speed);
+        // shooterMotors.set(speed);
+        //rightShooterMotor.set(speed);
+        // rightShooterMotor.set(speed);
+    //}
 
     public void setTargetRPM(double tRPM) {
         leftShooterPID.setSetpoint(tRPM);
         rightShooterPID.setSetpoint(tRPM);
     }
+
     public double getTargetRPM() {
         return rightShooterPID.getSetpoint();
     }
 
-    // public void setShooterSpeedAndUpdate(double speed) {
-    //     if (speed == 0)
-    //         this.stopMotors();
-    //     else
-    //         this.setSpeed(speed);
-    //     currentSpeed = speed;
-    // }
+    //public void setShooterSpeedAndUpdate(double speed) {
+        //if (speed == 0)
+            //this.stopMotors();
+        //else
+            //this.setSpeed(speed);
+        //currentSpeed = speed;
+    //}
 
-    // public double getCurrentSpeed() {
-    //     return currentSpeed;
-    // }
+    //public double getCurrentSpeed() {
+        //return currentSpeed;
+    //}
 
     public double getDrawnCurrentAmps() {
         if (RobotBase.isSimulation()) {
@@ -170,7 +167,6 @@ public class ShooterSubsystem extends SubsystemBase {
         limeLight = new LimeLight();
         simFlywheelLeft = new FlywheelSim(DCMotor.getNEO(1), Constants.shooterGearRatio, Constants.kSimShooterInertia);
         simFlywheelRight = new FlywheelSim(DCMotor.getNEO(1), Constants.shooterGearRatio, Constants.kSimShooterInertia);
-
         this.leftencsim = RevEncoderSimWrapper.create(this.leftShooterMotor);
         this.rightencsim = RevEncoderSimWrapper.create(this.rightShooterMotor);
         this.simLimeLight = new LimeLightSim(this.limeLight);

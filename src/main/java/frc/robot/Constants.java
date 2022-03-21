@@ -94,17 +94,17 @@ public final class Constants {
 
     // loader CAN IDs
     public static final int intakeMotorID = 10;
-    public static final int extendedIntakeMotorID = 11;
+    public static final int intakeArmsMotorID = 11;
 
     //climber
-    public static final int winchMinLimit = 0;
-    public static final int winchMaxLimit = 88;
+    public static final double winchMinLimit = 0;
+    public static final double winchMaxLimit = 100;
     public static final int pistonMaxFrames = 15;
 
     // shooter
     public static final int minShooterRPM = 0;
     public static final int maxShooterRPM = 5500;
-    public static final double shooterVibrationTolerance = 0.01;
+    public static final double shooterVibrationTolerance = 0.03;
 
     // lazysusan
     public static final int turntableThresh = 45;
@@ -117,6 +117,8 @@ public final class Constants {
     public static final double diffConstWinchHold = 0.3;
     public static final double diffConstKeepPosition = 0.00001; // TODO: Test this constant and optimize it
     public static final double diffConstTurn = 0.008;
+
+    public static final double diffConstTankDriveAim = 0.014;
     
     public static final int holdTime = 1000;
 

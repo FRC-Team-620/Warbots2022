@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Auto.AutoCommand;
-import frc.robot.Climber.LowerHooks;
+import frc.robot.Climber.ToggleHooks;
 import frc.robot.Loader.AutoLoad;
 import frc.robot.Shooter.AutoAimingAndSpinningUp;
 import frc.robot.Util.RobotContainer;
@@ -29,18 +29,18 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    // NetworkTableInstance.getDefault().setUpdateRate(0.02); //Uncomment to increase network tables update rate.
     
     CommandScheduler.getInstance().cancelAll();
     robotContainer = new RobotContainer();
     robotContainer.init();// TODO: make these happen on RobotContainer instantiation
     // robotContainer.getShooterCommand().getTable().getEntry("ledMode").setNumber(1);
+	// robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(true);
+    // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);
   }
 
   @Override
   public void robotPeriodic() {
-    // robotContainer.getShooterSubsystem().setTargetRPMPID(5000*robotContainer.getOperatorController().getLeftX());
-    CommandScheduler.getInstance().run();
+      CommandScheduler.getInstance().run();
   }
 
   @Override
@@ -49,26 +49,30 @@ public class Robot extends TimedRobot {
       autonomousCommand.cancel();
     }
     robotContainer.setTeleopDrive();
+	// robotContainer.getLoaderSubsystem().setIsClimbing(false);
     // TODO: move to initializer in robotContainer
-    new LowerHooks(robotContainer.getClimberSubsystem()).schedule();
+    new ToggleHooks(robotContainer.getClimberSubsystem()).schedule();
     robotContainer.getLazySusanSubsystem().getLazySusanEncoder().setPosition(0);
     robotContainer.getDriveTrain().setMotorMode(IdleMode.kBrake);
     robotContainer.getClimberMotorsSubsystem().getWinchMotor().getEncoder().setPosition(0);
-  }
+	// robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(true);
+    // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);  }
 
   @Override
   public void autonomousInit() {
-
+    robotContainer.getDriveTrain().resetEncoders();
     // TODO: move to autonomousCommand in separate file.
     robotContainer.getLazySusanSubsystem().setLazySusanPosition(0);
-    new LowerHooks(robotContainer.getClimberSubsystem()).schedule();
+	new ToggleHooks(robotContainer.getClimberSubsystem()).schedule();
     //new DirectTurretAuto(robotContainer.getLazySusanSubsystem(), // -1.5*
     //robotContainer.getShooterSubsystem(), 0),
-    autonomousCommand = new SequentialCommandGroup( 
-             new ParallelCommandGroup(new AutoCommand(robotContainer.getLoaderSubsystem(), robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer), 
-                new AutoAimingAndSpinningUp(robotContainer.getShooterSubsystem(),  robotContainer.getLazySusanSubsystem(), true, robotContainer.getOperatorController()), 
-                new AutoLoad(robotContainer.getLoaderSubsystem(), 1))
-              );
+    autonomousCommand = new ParallelCommandGroup(
+      new AutoCommand(robotContainer.getFiringPins(), robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer), 
+      new AutoAimingAndSpinningUp(robotContainer.getShooterSubsystem(),  robotContainer.getLazySusanSubsystem(), true, robotContainer.getOperatorController()), 
+      new AutoLoad(robotContainer.getIntake())
+    );
+
+    robotContainer.getIntake().extendIntakeArmsSolenoid();
 
     // autonomousCommand = new SequentialCommandGroup(
     //     new TurnDegrees(robotContainer.getDriveTrain(), 180),
@@ -99,8 +103,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
+	NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
     IdleMode mode = IdleMode.kBrake;
     robotContainer.getDriveTrain().setMotorMode(mode);
+    robotContainer.getShooterSubsystem().setSpeed(0);
     robotContainer.getShooterSubsystem().setTargetRPM(0);
     CommandScheduler.getInstance().cancelAll();
   }
@@ -109,6 +115,9 @@ public class Robot extends TimedRobot {
   public void testInit() {
     CommandScheduler.getInstance().cancelAll();
     robotContainer.init();
+	NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
+    // new LowerHooks(robotContainer.getClimberSubsystem()).schedule();
+    // new SensorHooksUp(robotContainer.getClimberMotorsSubsystem(), robotContainer.getClimberSubsystem()).schedule();
   }
 
   @Override

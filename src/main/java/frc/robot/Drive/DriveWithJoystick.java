@@ -80,7 +80,7 @@ public class DriveWithJoystick extends CommandBase {
       speed = leftTriggerInput * -speedConstant;
     }
     
-    drivetrain.curvatureInput(speed, rotation, leftTriggerInput == rightTriggerInput);
+    drivetrain.curvatureInput(speed, rotation, true);
 
   }
 

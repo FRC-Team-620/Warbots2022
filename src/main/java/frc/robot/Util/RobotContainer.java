@@ -13,8 +13,6 @@ import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -27,39 +25,41 @@ import frc.robot.Robot;
 import frc.robot.Climber.ClimberMotorsSubsystem;
 import frc.robot.Climber.ClimberSubsystem;
 import frc.robot.Climber.ExtendArmsAndStow;
-import frc.robot.Climber.LowerHooks;
+import frc.robot.Climber.ToggleHooks;
 import frc.robot.Climber.RaiseAndGrab;
 import frc.robot.Climber.RaisePistons;
 import frc.robot.Climber.WinchHold;
-import frc.robot.Climber.WinchReset;
 import frc.robot.Controls.ControlBoard;
 import frc.robot.Drive.DriveWithJoystick;
 import frc.robot.Drive.Drivetrain;
-import frc.robot.Loader.AutoShoot;
-import frc.robot.Loader.LoaderCommand;
-import frc.robot.Loader.LoaderSubsystem;
+import frc.robot.Loader.Intake;
+import frc.robot.Loader.IntakeBall;
+import frc.robot.Loader.OuttakeBall;
+import frc.robot.Shooter.ActivateFiringPins;
 import frc.robot.Shooter.AutoAimingAndSpinningUp;
 import frc.robot.Shooter.DirectTurret;
+import frc.robot.Shooter.FiringPins;
 import frc.robot.Shooter.LazySusanSubsystem;
 import frc.robot.Shooter.LowShotCommand;
 import frc.robot.Shooter.ManualAiming;
 import frc.robot.Shooter.ShooterCommand;
 import frc.robot.Shooter.ShooterSubsystem;
+import frc.robot.Shooter.TankDriveAutoAimAndSpinUp;
 
 /** Add your docs here. */
 public class RobotContainer {
 
     // initialize subsystems
     private Drivetrain drivetrain;
-    private LoaderSubsystem intake;
+    private Intake intake;
     private ShooterSubsystem shooter;
+    private FiringPins firingPins;
     private LazySusanSubsystem turret;
     private ClimberSubsystem climberHooks;
     private ClimberMotorsSubsystem winch;
     private ControlBoard controls;
 
     private DriveWithJoystick driveWithJoystick;
-    private LoaderCommand loaderCommand;
     private ShooterCommand shooterCommand;
 
     // TODO: *sighs emoji*
@@ -70,16 +70,17 @@ public class RobotContainer {
     public RobotContainer() {
         initSubsystems();
         initControls();
+        LimelightV2.init();
     }
 
     private void initSubsystems() {
         drivetrain = new Drivetrain();
-        intake = new LoaderSubsystem();
+        intake = new Intake();
         shooter = new ShooterSubsystem();
+        firingPins = new FiringPins();
         turret = new LazySusanSubsystem();
         climberHooks = new ClimberSubsystem();
         winch = new ClimberMotorsSubsystem();
-
     }
 
     private void initControls() {
@@ -91,29 +92,43 @@ public class RobotContainer {
 
         controls.extendArmsButton.whenPressed(
                 new ParallelCommandGroup(
-                        new ExtendArmsAndStow(winch, climberHooks),
+                        new ExtendArmsAndStow(winch, climberHooks, intake),
                         new DirectTurret(turret, shooter, Constants.stowedPosition)));
 
         controls.climbSequenceButton.whenPressed(
                 new RaiseAndGrab(winch, climberHooks));
 
-        controls.retractArmsButton.whenPressed(
-                new WinchReset(winch));
+        controls.tankDriveAimButton.whileActiveOnce(
+            new TankDriveAutoAimAndSpinUp(getShooterSubsystem(), getDriveTrain(), 
+                false, controls.getOperatorController()));
 
         controls.lowerHooksButton.whenPressed(
-                new LowerHooks(climberHooks));
+                new ToggleHooks(climberHooks));
 
         controls.winchHoldButton.whenPressed(
                 new WinchHold(winch, winch.getWinchPosition(), Constants.holdTime));
 
-        controls.lowShotButton.whileActiveContinuous(new LowShotCommand(shooter), true);
-
         // TODO: here, now make a unified aiming/flywheel spinup command that we can use
         // for both auto and tele
-        controls.aimTurretTrigger.whileActiveOnce(new AutoAimingAndSpinningUp(getShooterSubsystem(),
-        getLazySusanSubsystem(), false, controls.getOperatorController()));
+
+
+        // JANK
+        controls.aimTurretTrigger.whileActiveOnce(
+            new AutoAimingAndSpinningUp(getShooterSubsystem(), getLazySusanSubsystem(), 
+                false, controls.getOperatorController()));
+
+
+
         controls.fireTurretTrigger.whenActive(
-        new AutoShoot(getLoaderSubsystem()));        
+        new ActivateFiringPins(getFiringPins()));
+
+        //driver
+        controls.lowShotButton.whileActiveOnce(new LowShotCommand(shooter));
+
+        controls.intakeButton.whileActiveOnce(new IntakeBall(intake));
+
+        controls.outakeButton.whileActiveOnce(new OuttakeBall(intake));
+
         // controls.aimTurretTrigger.whenActive(
         // new AimTurretCommand();
         // );
@@ -132,9 +147,6 @@ public class RobotContainer {
         //         controls.getOperatorController());
         // drivetrain.setDefaultCommand(driveWithJoystick);
 
-        loaderCommand = new LoaderCommand(intake, controls.getDriverController(), controls.getOperatorController());
-        intake.setDefaultCommand(loaderCommand);
-
         turret.setDefaultCommand(new ManualAiming(turret, controls.getOperatorController()));
 
         //shooterCommand = new ShooterCommand(shooter, turret, controls.getOperatorController(),
@@ -147,7 +159,7 @@ public class RobotContainer {
         // climberCommand = new ClimberCommand(climberSubsystem);
         // climberMotorsSubsystem.setDefaultCommand(new
         // ClimberManual(climberMotorsSubsystem, operator));
-        new LowerHooks(climberHooks).schedule();
+        new ToggleHooks(climberHooks).schedule();
 
         SmartDashboard.putData(robotFieldWidget);
         SmartDashboard.putData(trajectorySelector);
@@ -185,16 +197,20 @@ public class RobotContainer {
         return trajectorySelector;
     }
 
-    public LoaderCommand getLoaderCommand() {
-        return loaderCommand;
-    }
+    // public LoaderCommand getLoaderCommand() {
+    //     return loaderCommand;
+    // }
 
     public ShooterCommand getShooterCommand() {
         return shooterCommand;
     }
 
-    public LoaderSubsystem getLoaderSubsystem() {
+    public Intake getIntake() {
         return intake;
+    }
+
+    public FiringPins getFiringPins() {
+        return firingPins;
     }
 
     public XboxController getOperatorController() {
@@ -214,22 +230,22 @@ public class RobotContainer {
     public Command getAutonomousCommand(Trajectory traj) {
         // Create a voltage constraint to ensure we don't accelerate too fast
         System.out.println("Auto Path Ran");
-        var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
-                new SimpleMotorFeedforward(
-                        Constants.ksVolts,
-                        Constants.kvVoltSecondsPerMeter,
-                        Constants.kaVoltSecondsSquaredPerMeter),
-                Constants.kDriveKinematics,
-                5.02);
+        // var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
+        //         new SimpleMotorFeedforward(
+        //                 Constants.ksVolts,
+        //                 Constants.kvVoltSecondsPerMeter,
+        //                 Constants.kaVoltSecondsSquaredPerMeter),
+        //         Constants.kDriveKinematics,
+        //         5.02);
 
-        // Create config for trajectory
-        TrajectoryConfig config = new TrajectoryConfig(
-                Constants.kMaxSpeedMetersPerSecond,
-                Constants.kMaxAccelerationMetersPerSecondSquared)
-                // Add kinematics to ensure max speed is actually obeyed
-                .setKinematics(Constants.kDriveKinematics)
-                // Apply the voltage constraint
-                .addConstraint(autoVoltageConstraint);
+        // // Create config for trajectory
+        // TrajectoryConfig config = new TrajectoryConfig(
+        //         Constants.kMaxSpeedMetersPerSecond,
+        //         Constants.kMaxAccelerationMetersPerSecondSquared)
+        //         // Add kinematics to ensure max speed is actually obeyed
+        //         .setKinematics(Constants.kDriveKinematics)
+        //         // Apply the voltage constraint
+        //         .addConstraint(autoVoltageConstraint);
 
         // // An example trajectory to follow. All units in meters.
         // Trajectory exampleTrajectory =
