@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Auto.AutoCommand;
 import frc.robot.Climber.ToggleHooks;
 import frc.robot.Loader.AutoLoad;
@@ -28,17 +29,18 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    
     CommandScheduler.getInstance().cancelAll();
     robotContainer = new RobotContainer();
     robotContainer.init();// TODO: make these happen on RobotContainer instantiation
-    // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(true);
+    // robotContainer.getShooterCommand().getTable().getEntry("ledMode").setNumber(1);
+	// robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(true);
     // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);
   }
 
   @Override
   public void robotPeriodic() {
-    CommandScheduler.getInstance().run();
-    //System.out.println(robotContainer.getClimberMotorsSubsystem().getClimberSensor());
+      CommandScheduler.getInstance().run();
   }
 
   @Override
@@ -47,23 +49,21 @@ public class Robot extends TimedRobot {
       autonomousCommand.cancel();
     }
     robotContainer.setTeleopDrive();
-    // robotContainer.getLoaderSubsystem().setIsClimbing(false);
+	// robotContainer.getLoaderSubsystem().setIsClimbing(false);
     // TODO: move to initializer in robotContainer
     new ToggleHooks(robotContainer.getClimberSubsystem()).schedule();
     robotContainer.getLazySusanSubsystem().getLazySusanEncoder().setPosition(0);
     robotContainer.getDriveTrain().setMotorMode(IdleMode.kBrake);
     robotContainer.getClimberMotorsSubsystem().getWinchMotor().getEncoder().setPosition(0);
-    // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(true);
-    // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);
-  }
+	// robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(true);
+    // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);  }
 
   @Override
   public void autonomousInit() {
     robotContainer.getDriveTrain().resetEncoders();
-
     // TODO: move to autonomousCommand in separate file.
     robotContainer.getLazySusanSubsystem().setLazySusanPosition(0);
-    new ToggleHooks(robotContainer.getClimberSubsystem()).schedule();
+	new ToggleHooks(robotContainer.getClimberSubsystem()).schedule();
     //new DirectTurretAuto(robotContainer.getLazySusanSubsystem(), // -1.5*
     //robotContainer.getShooterSubsystem(), 0),
     autonomousCommand = new ParallelCommandGroup(
@@ -91,7 +91,6 @@ public class Robot extends TimedRobot {
     // robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(),
     // robotContainer),
     // new AutoLoad(robotContainer.getLoaderSubsystem(), 1)));
-
     if (autonomousCommand != null) {
       autonomousCommand.schedule();
     }
@@ -104,10 +103,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
+	NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
     IdleMode mode = IdleMode.kBrake;
     robotContainer.getDriveTrain().setMotorMode(mode);
     robotContainer.getShooterSubsystem().setSpeed(0);
+    robotContainer.getShooterSubsystem().setTargetRPM(0);
     CommandScheduler.getInstance().cancelAll();
   }
 
@@ -115,16 +115,14 @@ public class Robot extends TimedRobot {
   public void testInit() {
     CommandScheduler.getInstance().cancelAll();
     robotContainer.init();
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
+	NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
     // new LowerHooks(robotContainer.getClimberSubsystem()).schedule();
     // new SensorHooksUp(robotContainer.getClimberMotorsSubsystem(), robotContainer.getClimberSubsystem()).schedule();
   }
 
-
   @Override
   public void testPeriodic() {
   }
-
 
   /**
    * Simulation Code

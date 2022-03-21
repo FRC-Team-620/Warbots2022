@@ -38,7 +38,7 @@ public class AutoAimingAndSpinningUp extends CommandBase {
     protected boolean isAuto;
     protected boolean finished;
     public AutoAimingAndSpinningUp(ShooterSubsystem shooterSubsystem, LazySusanSubsystem lazySusanSubsystem, boolean isAuto, XboxController operatorXbox) {
-        table = NetworkTableInstance.getDefault().getTable("limelight");
+		table = NetworkTableInstance.getDefault().getTable("limelight");
         entryHasTarget = table.getEntry("tv");
         entryX = table.getEntry("tx");
         entryY = table.getEntry("ty");
@@ -54,7 +54,7 @@ public class AutoAimingAndSpinningUp extends CommandBase {
     @Override
     public void initialize() {
         this.frames = 0;
-        table.getEntry("ledMode").setNumber(3);
+		table.getEntry("ledMode").setNumber(3);
     }
 
     // public void setShooterSpeedAndUpdate(double speed) {
@@ -75,6 +75,7 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         boolean hasTarget = entryHasTarget.getDouble(0.0) == 1.0;
         double x = entryX.getDouble(0.0);
         double y = entryY.getDouble(0.0);
+        
         if (isAuto) {
             speed = -(x-Constants.leftBias)*Constants.diffConstAutoLS;
         } else {
@@ -98,12 +99,12 @@ public class AutoAimingAndSpinningUp extends CommandBase {
 
         if(hasTarget) {
             System.out.println(tempRPM);
-            // shooterSubsystem.setTargetRPM(tempRPM);
             shooterSubsystem.setTargetRPM(tempRPM);
-            //System.out.println(shooterSubsystem.getTargetRPM());
+            // shooterSubsystem.setTargetRPMPID(tempRPM);
+            // System.out.println(shooterSubsystem.getTargetRPM());
         } else {
-            // shooterSubsystem.setTargetRPM(0);
-            shooterSubsystem.setTargetRPM(tempRPM);
+            shooterSubsystem.setTargetRPM(0);
+            //shooterSubsystem.setTargetRPMPID(tempRPM);
         }
         System.out.println("hasTarget: " + hasTarget);
         // if(getRPM() > this.maxRPM)
@@ -111,8 +112,8 @@ public class AutoAimingAndSpinningUp extends CommandBase {
         //shooterSubsystem.setTargetRPM(Math.min(shooterSubsystem.getRPM(), this.maxRPM));
         //System.out.println(shooterSubsystem.getTargetRPM());
         System.out.println("RPM: " + shooterSubsystem.getRPM());
-        acceleration = Constants.diffConstShooter * (shooterSubsystem.getTargetRPM() - shooterSubsystem.getRPM());
-        shooterSubsystem.setShooterSpeedAndUpdate(shooterSubsystem.getCurrentSpeed() + acceleration);
+        // acceleration = Constants.diffConstShooter * (shooterSubsystem.getTargetRPM() - shooterSubsystem.getRPM());
+        // shooterSubsystem.setShooterSpeedAndUpdate(shooterSubsystem.getCurrentSpeed() + acceleration);
         if (!(isAuto) && shooterSubsystem.getTargetRPM() > (1-Constants.shooterVibrationTolerance)*shooterSubsystem.getRPM()
             && shooterSubsystem.getTargetRPM() < (1+Constants.shooterVibrationTolerance)*shooterSubsystem.getRPM()) {
             operatorXbox.setRumble(RumbleType.kLeftRumble, 0.5);
@@ -122,7 +123,7 @@ public class AutoAimingAndSpinningUp extends CommandBase {
             operatorXbox.setRumble(RumbleType.kRightRumble, 0);
         }
         
-        System.out.println("ShooterSpeed: " + shooterSubsystem.getCurrentSpeed() + acceleration);
+        //System.out.println("ShooterSpeed: " + shooterSubsystem.getCurrentSpeed() + acceleration);
         //System.out.println("Frames: " + frames);
         
         // if (isAuto) {

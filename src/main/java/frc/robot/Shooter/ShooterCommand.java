@@ -151,14 +151,14 @@ public class ShooterCommand extends CommandBase {
             else if (shooterSubsystem.getTargetRPM() < Constants.minShooterRPM)
             shooterSubsystem.setTargetRPM(Constants.minShooterRPM);
         }
-        acceleration = Constants.diffConstShooter * (shooterSubsystem.getTargetRPM() - currRPM);
-        SmartDashboard.putNumber("Acceleration: ", acceleration);
-        // if(Math.abs(rpm-currRPM) > (bangBangTolerance * rpm))
-        shooterSubsystem.setShooterSpeedAndUpdate(currentSpeed + acceleration);
-        // System.out.println(rpm);
-        if(targetRpm == 0.0) {
-            shooterSubsystem.setShooterSpeedAndUpdate(0);
-        }
+        // acceleration = Constants.diffConstShooter * (shooterSubsystem.getTargetRPM() - currRPM);
+        // SmartDashboard.putNumber("Acceleration: ", acceleration);
+        // // if(Math.abs(rpm-currRPM) > (bangBangTolerance * rpm))
+        // shooterSubsystem.setShooterSpeedAndUpdate(currentSpeed + acceleration);
+        // // System.out.println(rpm);
+        // if(targetRpm == 0.0) {
+        //     shooterSubsystem.setShooterSpeedAndUpdate(0);
+        // }
         SmartDashboard.putNumber("Shooter RPM: ",
                 ShooterMath.roundUpToNearestMultiple(currRPM, (int) roundTo));
         
