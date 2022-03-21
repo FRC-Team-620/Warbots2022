@@ -10,16 +10,16 @@ import frc.robot.Constants;
 
 public class FiringPins extends SubsystemBase {
     protected CANSparkMax loader, extendedLoader;
-    protected Solenoid trigger, extension;
+    protected Solenoid firingPinsSolenoid, extension;
     // protected boolean isClimbing;
     public FiringPins() {
-        trigger = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
-        trigger.set(false);
+        firingPinsSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
+        firingPinsSolenoid.set(false);
     }
-    public void extendLoaderSolenoid() {
-        trigger.set(true);
+    public void extendFiringPinsSolenoid() {
+        firingPinsSolenoid.set(true);
     }
-    public void retractLoaderSolenoid() {
-        trigger.set(false);
+    public void retractFiringPinsSolenoid() {
+        firingPinsSolenoid.set(false);
     }
 }

@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class DeactivateInnerIntake extends CommandBase {
     InnerIntake innerIntake;
     public DeactivateInnerIntake(InnerIntake innerIntake) {
+        addRequirements(innerIntake);
         this.innerIntake = innerIntake;
     }
 

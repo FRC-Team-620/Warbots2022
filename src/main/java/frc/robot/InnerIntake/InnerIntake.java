@@ -10,6 +10,7 @@ public class InnerIntake extends SubsystemBase {
     protected CANSparkMax innerIntakeMotor;
     // protected boolean isClimbing;
     public InnerIntake() {
+        addRequirements(innerIntake);
         innerIntakeMotor = new CANSparkMax(Constants.intakeMotorID, MotorType.kBrushless);
         innerIntakeMotor.restoreFactoryDefaults();
         innerIntakeMotor.setInverted(true);

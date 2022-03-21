@@ -19,12 +19,12 @@ public class ActivateFiringPins extends CommandBase {
     public void initialize() {
         this.frames = 0;
         System.out.println("Ball was shot");
-        firingPins.extendLoaderSolenoid();
+        firingPins.extendFiringPinsSolenoid();
     }
 
     @Override
     public void end(boolean interrupted) {
-        firingPins.retractLoaderSolenoid();
+        firingPins.retractFiringPinsSolenoid();
     }
 
     @Override

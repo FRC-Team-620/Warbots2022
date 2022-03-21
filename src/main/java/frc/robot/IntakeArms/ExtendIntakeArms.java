@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class ExtendIntakeArms extends CommandBase {
     IntakeArms intakeArms;
     public ExtendIntakeArms(IntakeArms intakeArms) {
+        addRequirements(intakeArms);
         this.intakeArms = intakeArms;
     }
 
