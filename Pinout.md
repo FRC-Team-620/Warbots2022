@@ -10,3 +10,4 @@ leftClimberMotor = 7
 rightClimberMotor = 8
 lazySusanMotor = 9
 intakeMotor = 10
+intakeArmsMotor = 11

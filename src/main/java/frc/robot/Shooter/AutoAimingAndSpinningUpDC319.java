@@ -3,9 +3,6 @@ package frc.robot.Shooter;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -14,6 +11,7 @@ import frc.robot.Util.LimelightV2;
 
 public class AutoAimingAndSpinningUpDC319 extends CommandBase {
     protected ShooterSubsystem shooterSubsystem;
+    protected LazySusanSubsystem lazySusanSubsystem;
     
     // turntable
     protected double ticksPerTurntableRotation,angleChangePerTick;
@@ -31,13 +29,17 @@ public class AutoAimingAndSpinningUpDC319 extends CommandBase {
     // auto
     protected boolean isAuto;
     protected boolean finished;
-    public AutoAimingAndSpinningUpDC319(ShooterSubsystem shooterSubsystem, LazySusanSubsystem lazySusanSubsystem, boolean isAuto, XboxController operatorXbox) {
+
+    public AutoAimingAndSpinningUpDC319(ShooterSubsystem shooterSubsystem, 
+    LazySusanSubsystem lazySusanSubsystem, boolean isAuto, XboxController operatorXbox) {
         this.shooterSubsystem = shooterSubsystem;
-        addRequirements(shooterSubsystem);
-        lazySusanMotor = lazySusanSubsystem.getLazySusanMotor();
-        lazySusanEnc = lazySusanSubsystem.getLazySusanEncoder();
+        this.lazySusanSubsystem = lazySusanSubsystem;
         this.isAuto = isAuto;
         this.operatorXbox = operatorXbox;
+        addRequirements(shooterSubsystem);
+
+        lazySusanMotor = lazySusanSubsystem.getLazySusanMotor();
+        lazySusanEnc = lazySusanSubsystem.getLazySusanEncoder();
     }
 
     @Override
@@ -132,7 +134,7 @@ public class AutoAimingAndSpinningUpDC319 extends CommandBase {
         operatorXbox.setRumble(RumbleType.kLeftRumble, 0);
         operatorXbox.setRumble(RumbleType.kRightRumble, 0);
     }
-        
+
     @Override
     public boolean isFinished() {
         // if (frames > 750) {
@@ -140,12 +142,6 @@ public class AutoAimingAndSpinningUpDC319 extends CommandBase {
         // } else if(finished) {
         //     return false;
         // }
-        if (isAuto && frames > 750) {
-            return true;
-        }
-        return false;
-        
+        return isAuto && frames > 750;
     }
-
-    
 }

@@ -13,8 +13,6 @@ import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -31,8 +29,6 @@ import frc.robot.Climber.ToggleHooks;
 import frc.robot.Climber.RaiseAndGrab;
 import frc.robot.Climber.RaisePistons;
 import frc.robot.Climber.WinchHold;
-import frc.robot.Climber.WinchReset;
-import frc.robot.Climber.ToggleHooks;
 import frc.robot.Controls.ControlBoard;
 import frc.robot.Drive.DriveWithJoystick;
 import frc.robot.Drive.Drivetrain;
@@ -92,7 +88,6 @@ public class RobotContainer {
         turret = new LazySusanSubsystem();
         climberHooks = new ClimberSubsystem();
         winch = new ClimberMotorsSubsystem();
-
     }
 
     private void initControls() {
@@ -254,22 +249,22 @@ public class RobotContainer {
     public Command getAutonomousCommand(Trajectory traj) {
         // Create a voltage constraint to ensure we don't accelerate too fast
         System.out.println("Auto Path Ran");
-        var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
-                new SimpleMotorFeedforward(
-                        Constants.ksVolts,
-                        Constants.kvVoltSecondsPerMeter,
-                        Constants.kaVoltSecondsSquaredPerMeter),
-                Constants.kDriveKinematics,
-                5.02);
+        // var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
+        //         new SimpleMotorFeedforward(
+        //                 Constants.ksVolts,
+        //                 Constants.kvVoltSecondsPerMeter,
+        //                 Constants.kaVoltSecondsSquaredPerMeter),
+        //         Constants.kDriveKinematics,
+        //         5.02);
 
-        // Create config for trajectory
-        TrajectoryConfig config = new TrajectoryConfig(
-                Constants.kMaxSpeedMetersPerSecond,
-                Constants.kMaxAccelerationMetersPerSecondSquared)
-                // Add kinematics to ensure max speed is actually obeyed
-                .setKinematics(Constants.kDriveKinematics)
-                // Apply the voltage constraint
-                .addConstraint(autoVoltageConstraint);
+        // // Create config for trajectory
+        // TrajectoryConfig config = new TrajectoryConfig(
+        //         Constants.kMaxSpeedMetersPerSecond,
+        //         Constants.kMaxAccelerationMetersPerSecondSquared)
+        //         // Add kinematics to ensure max speed is actually obeyed
+        //         .setKinematics(Constants.kDriveKinematics)
+        //         // Apply the voltage constraint
+        //         .addConstraint(autoVoltageConstraint);
 
         // // An example trajectory to follow. All units in meters.
         // Trajectory exampleTrajectory =

@@ -2,7 +2,7 @@ package frc.robot.Climber;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
-import frc.robot.Loader.IntakeArms;
+import frc.robot.IntakeArms.IntakeArms;
 
 public class ExtendArmsAndStow extends SequentialCommandGroup {
     ClimberMotorsSubsystem climberMotorsSubsystem;
