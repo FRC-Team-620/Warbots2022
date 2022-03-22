@@ -2,7 +2,8 @@ package frc.robot.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.Util.LimelightV2;
+import frc.robot.Util.LimeLight;
+import frc.robot.Util.LimeLight.LedMode;
 
 public class TurretAiming extends CommandBase {
     protected LazySusanSubsystem lazySusanSubsystem;
@@ -14,12 +15,12 @@ public class TurretAiming extends CommandBase {
 
     @Override
     public void initialize() {
-        LimelightV2.ledOn();
+        LimeLight.setLedMode(LedMode.ON);
     }
 
     @Override
     public void execute() {
-        double x = LimelightV2.tX();
+        double x = LimeLight.getTX();
         double speed = -(x-Constants.leftBias)*Constants.diffConstLS;
 
         if (!ShooterMath.inBounds(speed > 0, this.lazySusanSubsystem.getLazySusanPosition()))
@@ -30,6 +31,6 @@ public class TurretAiming extends CommandBase {
     @Override
     public void end(boolean interrupt) {
         this.lazySusanSubsystem.setLazySusanSpeed(0);
-        LimelightV2.ledOff();
+        LimeLight.setLedMode(LedMode.OFF);
     }
 }

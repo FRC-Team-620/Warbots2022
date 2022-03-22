@@ -1,32 +1,37 @@
 package frc.robot.Util.sim;
 
 import edu.wpi.first.hal.HALValue;
-import edu.wpi.first.hal.SimValue;
+import edu.wpi.first.hal.SimBoolean;
+import edu.wpi.first.hal.SimDevice;
+import edu.wpi.first.hal.SimDouble;
+import edu.wpi.first.hal.SimDevice.Direction;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
-import frc.robot.Util.LimeLight;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class LimeLightSim {
+    private NetworkTable ntable;
     private final NetworkTableEntry e_tv, e_tx, e_ty, e_ta, e_tl;
-    private final SimValue s_tv, s_tx, s_ty, s_ta, s_tl;
-    //private SimDeviceSim simd;
+    private SimDevice m_simDevice;
+    private SimBoolean s_tv;
+    private SimDouble s_tx, s_ty, s_ta, s_tl;
+    private static int index = 0;
+    private final int id;
 
-    public LimeLightSim(LimeLight limelight) {
-        NetworkTable ntable = limelight.getTable();
-        SimDeviceSim simd = new SimDeviceSim("LimeLight", limelight.getId());
-        System.out.println(limelight.getId());
+    public LimeLightSim() {
+        this.id = index++;
+        ntable = NetworkTableInstance.getDefault().getTable("limelight");
         e_tv = ntable.getEntry("tv");
-        s_tv = simd.getBoolean("Has Target");
         e_tx = ntable.getEntry("tx");
-        s_tx = simd.getDouble("Offset X");
         e_ty = ntable.getEntry("ty");
-        s_ty = simd.getDouble("Offset Y");
         e_ta = ntable.getEntry("ta");
-        s_ta = simd.getDouble("Target Area");
         e_tl = ntable.getEntry("tl");
-        s_tl = simd.getDouble("Pipeline Latancy");
-        //this.simd = simd;
+        m_simDevice = SimDevice.create("LimeLight", this.id);
+        s_tv = m_simDevice.createBoolean("Has Target", Direction.kOutput, false);
+        s_tx = m_simDevice.createDouble("Offset X", Direction.kOutput, 0.0);
+        s_ty = m_simDevice.createDouble("Offset Y", Direction.kOutput, 0.0);
+        s_ta = m_simDevice.createDouble("Target Area", Direction.kOutput, 0.0);
+        s_tl = m_simDevice.createDouble("Pipeline Latancy", Direction.kOutput, 0.0);
     }
 
     public void setHasTarget(boolean hastarget) {

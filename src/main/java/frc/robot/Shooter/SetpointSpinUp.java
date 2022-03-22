@@ -4,7 +4,8 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.Util.LimelightV2;
+import frc.robot.Util.LimeLight;
+import frc.robot.Util.LimeLight.LedMode;
 
 public class SetpointSpinUp extends CommandBase {
     protected ShooterSubsystem shooterSubsystem;
@@ -37,7 +38,7 @@ public class SetpointSpinUp extends CommandBase {
     @Override
     public void end(boolean interrupt) {
         shooterSubsystem.stopMotors();
-        LimelightV2.ledOff();
+        LimeLight.setLedMode(LedMode.OFF);
         operatorXbox.setRumble(RumbleType.kLeftRumble, 0);
         operatorXbox.setRumble(RumbleType.kRightRumble, 0);
     }

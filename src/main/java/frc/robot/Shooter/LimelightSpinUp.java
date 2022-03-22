@@ -4,7 +4,8 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.Util.LimelightV2;
+import frc.robot.Util.LimeLight;
+import frc.robot.Util.LimeLight.LedMode;
 
 public class LimelightSpinUp extends CommandBase {
     protected ShooterSubsystem shooterSubsystem;
@@ -18,12 +19,12 @@ public class LimelightSpinUp extends CommandBase {
 
     @Override
     public void initialize() {
-        LimelightV2.ledOn();
+        LimeLight.setLedMode(LedMode.ON);
     }
 
     @Override
     public void execute() {
-        double y = LimelightV2.tY();
+        double y = LimeLight.getTY();
         double distance = ShooterMath.getDistanceInMeters(Constants.azimuthAngle1, y, Constants.limelightHeight, Constants.hubHeight);
         double targetRPM = ShooterMath.metersToRPM(distance);
     
@@ -41,7 +42,7 @@ public class LimelightSpinUp extends CommandBase {
     @Override
     public void end(boolean interrupt) {
         shooterSubsystem.stopMotors();
-        LimelightV2.ledOff();
+        LimeLight.setLedMode(LedMode.OFF);
         operatorXbox.setRumble(RumbleType.kLeftRumble, 0);
         operatorXbox.setRumble(RumbleType.kRightRumble, 0);
     }

@@ -13,15 +13,12 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Util.LimeLight;
 import frc.robot.Util.sim.LimeLightPoseSim;
 import frc.robot.Util.sim.LimeLightSim;
 import frc.robot.Util.sim.RevEncoderSimWrapper;
@@ -29,12 +26,9 @@ import frc.robot.Util.sim.RevEncoderSimWrapper;
 public class ShooterSubsystem extends SubsystemBase {
     private final SimableCANSparkMax rightShooterMotor, leftShooterMotor;
     // private final MotorControllerGroup shooterMotors;
-    protected NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     protected final RelativeEncoder leftEncoder;
     protected final RelativeEncoder rightEncoder;
     protected final DecimalFormat decFormat = new DecimalFormat("#.#");
-    public LimeLight limeLight;
-    public LimeLightPoseSim possim;
     public double targetRpm;
     public double currentSpeed = 0;
     private boolean powerDecel = true;
@@ -170,16 +164,16 @@ public class ShooterSubsystem extends SubsystemBase {
      */
     FlywheelSim simFlywheelLeft,simFlywheelRight;
     RevEncoderSimWrapper leftencsim, rightencsim;
-    LimeLightSim simLimeLight;
+    public LimeLightSim simLimeLight;
+    public LimeLightPoseSim possim;
     private boolean simInit = false;
 
     private void initSim() {
-        limeLight = new LimeLight();
         simFlywheelLeft = new FlywheelSim(DCMotor.getNEO(1), Constants.shooterGearRatio, Constants.kSimShooterInertia);
         simFlywheelRight = new FlywheelSim(DCMotor.getNEO(1), Constants.shooterGearRatio, Constants.kSimShooterInertia);
         this.leftencsim = RevEncoderSimWrapper.create(this.leftShooterMotor);
         this.rightencsim = RevEncoderSimWrapper.create(this.rightShooterMotor);
-        this.simLimeLight = new LimeLightSim(this.limeLight);
+        this.simLimeLight = new LimeLightSim();
         var hubpos = new Pose2d(7.940, 4.08, new Rotation2d());
         this.possim = new LimeLightPoseSim(simLimeLight, hubpos, Constants.limelightHeight, Constants.hubHeight,
                 Constants.azimuthAngle1);

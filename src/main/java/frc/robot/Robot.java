@@ -8,7 +8,6 @@ import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
@@ -20,7 +19,9 @@ import frc.robot.Auto.AutoCommand;
 import frc.robot.Climber.ToggleHooks;
 import frc.robot.Loader.AutoLoad;
 import frc.robot.Shooter.AutoAimingAndSpinningUp;
+import frc.robot.Util.LimeLight;
 import frc.robot.Util.RobotContainer;
+import frc.robot.Util.LimeLight.LedMode;
 
 public class Robot extends TimedRobot {
   protected RobotContainer robotContainer;
@@ -114,7 +115,7 @@ public class Robot extends TimedRobot {
   public void testInit() {
     CommandScheduler.getInstance().cancelAll();
     robotContainer.init();
-	NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
+    LimeLight.setLedMode(LedMode.ON);
     // new LowerHooks(robotContainer.getClimberSubsystem()).schedule();
     // new SensorHooksUp(robotContainer.getClimberMotorsSubsystem(), robotContainer.getClimberSubsystem()).schedule();
   }

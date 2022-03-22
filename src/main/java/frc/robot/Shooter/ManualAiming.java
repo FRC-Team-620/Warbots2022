@@ -3,11 +3,10 @@ package frc.robot.Shooter;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Util.LimelightV2;
+import frc.robot.Util.LimeLight;
+import frc.robot.Util.LimeLight.LedMode;
 
 public class ManualAiming extends CommandBase {
     LazySusanSubsystem lazySusanSubsystem;
@@ -15,7 +14,7 @@ public class ManualAiming extends CommandBase {
     RelativeEncoder lazySusanEnc;
     CANSparkMax lazySusanMotor;
     double inputOpLeft = 0;
-    protected NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+
     public ManualAiming(LazySusanSubsystem lazySusanSubsystem, XboxController operatorXbox) {
         this.lazySusanSubsystem = lazySusanSubsystem;
         this.operatorXbox = operatorXbox;
@@ -29,7 +28,7 @@ public class ManualAiming extends CommandBase {
         inputOpLeft = operatorXbox.getLeftX();
         double deadband = 0.07;
         if (Math.abs(inputOpLeft) > deadband) { // manual control case
-            LimelightV2.ledOff();
+            LimeLight.setLedMode(LedMode.OFF);
             //table.getEntry("ledMode").setNumber(1);//PROBLEM???
             // limelight.setLEDMode(LedMode.OFF);
             double speed = 0;

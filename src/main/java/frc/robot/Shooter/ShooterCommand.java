@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Util.LimeLight;
-import frc.robot.Util.LimelightV2;
+import frc.robot.Util.LimeLight.LedMode;
 
 public class ShooterCommand extends CommandBase {
     protected XboxController operatorXbox;
@@ -33,7 +33,6 @@ public class ShooterCommand extends CommandBase {
     // shooter
     protected double targetRpm, currentSpeed = shooterSubsystem.currentSpeed, acceleration, input, roundTo, currRPM, deltaTheta;
 
-    protected LimeLight limelight;
     public ShooterCommand(ShooterSubsystem shooterSubsystem, LazySusanSubsystem lazySusanSubsystem, XboxController operatorXbox, XboxController driverXbox) {
         // timer.start();
         // prevTime = timer.get();
@@ -49,15 +48,14 @@ public class ShooterCommand extends CommandBase {
         this.lazySusanSubsystem = lazySusanSubsystem;
         lazySusanMotor = lazySusanSubsystem.getLazySusanMotor();
         lazySusanEnc = lazySusanSubsystem.getLazySusanEncoder();
-        this.limelight = shooterSubsystem.limeLight;
         //autoOn = false;
     }
 
     @Override
     public void execute() {
-        boolean hasTarget = LimelightV2.targetFound();
-        double x = LimelightV2.tX();
-        double y = LimelightV2.tY();
+        boolean hasTarget = LimeLight.hasTarget();
+        double x = LimeLight.getTX();
+        double y = LimeLight.getTY();
         // boolean hasTarget = limelight.hasTarget();
         // double x = limelight.getOffsetX();
         // double y = limelight.getOffsetY();
@@ -92,9 +90,7 @@ public class ShooterCommand extends CommandBase {
         // || autoOn
         // System.out.println(lazySusanEnc.getPosition());
         if(Math.abs(operatorXbox.getLeftTriggerAxis()) > 0) { // limelight aim
-            LimelightV2.ledOn();
-            //table.getEntry("ledMode").setNumber(3);
-            // limelight.setLEDMode(LedMode.ON);
+            LimeLight.setLedMode(LedMode.ON);
             double speed =  -(x-Constants.leftBias)*Constants.diffConstLS; // this is speed
             // Making sure it's within the provided threshholds
             // if ((lazySusanEnc.getPosition() <= -Constants.turntableThresh && speeeeed < 0)
@@ -108,9 +104,7 @@ public class ShooterCommand extends CommandBase {
             // System.out.println("Negative X: " + -x);
             // System.out.println("Speed With Constant: " + -x*Constants.diffConstLS);
         } else if (Math.abs(inputOpRight) > 0) {
-            LimelightV2.ledOff();
-            //table.getEntry("ledMode").setNumber(1);
-            // limelight.setLEDMode(LedMode.OFF);
+            LimeLight.setLedMode(LedMode.OFF);
             double speed = -inputOpRight/1.4;
             System.out.println("JIWJF_" + lazySusanEnc.getPosition());
             if ((lazySusanEnc.getPosition() <= -Constants.turntableThresh && speed < 0)
@@ -123,7 +117,7 @@ public class ShooterCommand extends CommandBase {
             
 
         } else {
-            LimelightV2.ledOff();
+            LimeLight.setLedMode(LedMode.OFF);
             //table.getEntry("ledMode").setNumber(1);
             // limelight.setLEDMode(LedMode.OFF);
             lazySusanMotor.set(0);
