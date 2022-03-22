@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Auto.AutoCommand;
 import frc.robot.Climber.ToggleHooks;
 import frc.robot.Loader.AutoLoad;
@@ -69,7 +68,7 @@ public class Robot extends TimedRobot {
     autonomousCommand = new ParallelCommandGroup(
       new AutoCommand(robotContainer.getFiringPins(), robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer), 
       new AutoAimingAndSpinningUp(robotContainer.getShooterSubsystem(),  robotContainer.getLazySusanSubsystem(), true, robotContainer.getOperatorController()), 
-      new AutoLoad(robotContainer.getInnerIntake(), robotContainer.getIntakeArms(), robotContainer.getIntakeArmsMotor())
+      new AutoLoad(robotContainer.getIntake())
     );
 
 	robotContainer.getIntake().extendIntakeArmsSolenoid();

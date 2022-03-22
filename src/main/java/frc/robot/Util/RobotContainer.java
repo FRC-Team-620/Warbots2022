@@ -44,7 +44,6 @@ import frc.robot.Shooter.LowShotCommand;
 import frc.robot.Shooter.ManualAiming;
 import frc.robot.Shooter.ShooterCommand;
 import frc.robot.Shooter.ShooterSubsystem;
-import frc.robot.Shooter.TankDriveAutoAimAndSpinUp;
 
 /** Add your docs here. */
 public class RobotContainer {
@@ -98,9 +97,9 @@ public class RobotContainer {
         controls.climbSequenceButton.whenPressed(
                 new RaiseAndGrab(winch, climberHooks));
 
-        controls.tankDriveAimButton.whileActiveOnce(
-            new TankDriveAutoAimAndSpinUp(getShooterSubsystem(), getDriveTrain(), 
-                false, controls.getOperatorController()));
+        // controls.tankDriveAimButton.whileActiveOnce(
+        //     new TankDriveAutoAimAndSpinUp(getShooterSubsystem(), getDriveTrain(), 
+        //         false, controls.getOperatorController()));
 
         controls.lowerHooksButton.whenPressed(
                 new ToggleHooks(climberHooks));

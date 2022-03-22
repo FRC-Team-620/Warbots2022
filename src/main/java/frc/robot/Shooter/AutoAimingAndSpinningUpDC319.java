@@ -101,7 +101,7 @@ public class AutoAimingAndSpinningUpDC319 extends CommandBase {
         //System.out.println(shooterSubsystem.getTargetRPM());
         System.out.println("RPM: " + shooterSubsystem.getRPM());
         acceleration = Constants.diffConstShooter * (shooterSubsystem.getTargetRPM() - shooterSubsystem.getRPM());
-        shooterSubsystem.setShooterSpeedAndUpdate(shooterSubsystem.getCurrentSpeed() + acceleration);
+        shooterSubsystem.setSpeed(shooterSubsystem.getSpeed() + acceleration);
         if (!(isAuto) && shooterSubsystem.getTargetRPM() > (1-Constants.shooterVibrationTolerance)*shooterSubsystem.getRPM()
             && shooterSubsystem.getTargetRPM() < (1+Constants.shooterVibrationTolerance)*shooterSubsystem.getRPM()) {
             operatorXbox.setRumble(RumbleType.kLeftRumble, 0.5);
@@ -111,7 +111,7 @@ public class AutoAimingAndSpinningUpDC319 extends CommandBase {
             operatorXbox.setRumble(RumbleType.kRightRumble, 0);
         }
         
-        System.out.println("ShooterSpeed: " + shooterSubsystem.getCurrentSpeed() + acceleration);
+        System.out.println("ShooterSpeed: " + shooterSubsystem.getSpeed() + acceleration);
         //System.out.println("Frames: " + frames);
         
         // if (isAuto) {

@@ -91,6 +91,15 @@ public class ShooterSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Flywheel Left Setpoint", leftShooterPID.getSetpoint());
         //MathUtil.clamp(output,powerDecel ? -1: 0,1);
     }
+
+    public double getSpeed() {
+        return rightShooterMotor.get();
+    }
+
+    public void setSpeed(double speed) {
+        rightShooterMotor.set(speed);
+        leftShooterMotor.set(speed);
+    }
     
     public boolean atTargetRPM() {
         return leftShooterPID.atSetpoint() && rightShooterPID.atSetpoint();

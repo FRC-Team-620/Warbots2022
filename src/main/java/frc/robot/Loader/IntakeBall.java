@@ -1,8 +1,6 @@
 package frc.robot.Loader;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
 public class IntakeBall extends CommandBase {
     Intake intake;
@@ -23,6 +21,4 @@ public class IntakeBall extends CommandBase {
         intake.retractIntakeArmsSolenoid();
         intake.disableIntakeArmsMotor();
     }
-
-
 }
