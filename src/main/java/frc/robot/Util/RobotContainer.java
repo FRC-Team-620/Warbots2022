@@ -72,6 +72,7 @@ public class RobotContainer {
         initSubsystems();
         initControls();
         LimeLight.init();
+        ControlBoard.init();
     }
 
     private void initSubsystems() {
