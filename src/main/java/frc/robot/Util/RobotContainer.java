@@ -40,10 +40,13 @@ import frc.robot.Shooter.AutoAimingAndSpinningUp;
 import frc.robot.Shooter.DirectTurret;
 import frc.robot.Shooter.FiringPins;
 import frc.robot.Shooter.LazySusanSubsystem;
+import frc.robot.Shooter.LimelightSpinUp;
 import frc.robot.Shooter.LowShotCommand;
 import frc.robot.Shooter.ManualAiming;
 import frc.robot.Shooter.ShooterCommand;
 import frc.robot.Shooter.ShooterSubsystem;
+import frc.robot.Shooter.TankDriveAiming;
+import frc.robot.Shooter.TurretAiming;
 
 /** Add your docs here. */
 public class RobotContainer {
@@ -111,10 +114,19 @@ public class RobotContainer {
         // for both auto and tele
 
 
-        // JANK
         controls.aimTurretTrigger.whileActiveOnce(
-            new AutoAimingAndSpinningUp(getShooterSubsystem(), getLazySusanSubsystem(), 
-                false, controls.getOperatorController()));
+            new ParallelCommandGroup(
+                new LimelightSpinUp(this.getShooterSubsystem(), controls.getOperatorController()),
+                new TurretAiming(this.getLazySusanSubsystem())
+            ));
+
+        controls.tankDriveAimButton.whileActiveOnce(
+            new ParallelCommandGroup(
+                new LimelightSpinUp(this.getShooterSubsystem(), controls.getOperatorController()),
+                new TankDriveAiming(this.getDriveTrain())
+            ));
+            // new AutoAimingAndSpinningUp(getShooterSubsystem(), getLazySusanSubsystem(), 
+            //     false, controls.getOperatorController()));
 
 
 

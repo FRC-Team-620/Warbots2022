@@ -27,8 +27,13 @@ public class SetpointSpinUp extends CommandBase {
         // shooterSubsystem.setSpeed(shooterSubsystem.getCurrentSpeed() + acceleration);
         shooterSubsystem.setTargetRPM(setPoint);
         double rumble = 0;
-        if (shooterSubsystem.getRPM() > (1-Constants.shooterVibrationTolerance)*setPoint
-            && shooterSubsystem.getRPM() < (1+Constants.shooterVibrationTolerance)*setPoint) {
+        // if (shooterSubsystem.getRPM() > (1-Constants.shooterVibrationTolerance)*shooterSubsystem.getTargetRPM()
+        //     && shooterSubsystem.getRPM() < (1+Constants.shooterVibrationTolerance)*shooterSubsystem.getTargetRPM()) {
+        //     rumble = Constants.operatorRumble;
+        // }
+        if(ShooterMath.withinTolerance(shooterSubsystem.getRPM(), 
+            shooterSubsystem.getTargetRPM(), Constants.shooterVibrationTolerance)) {
+            
             rumble = Constants.operatorRumble;
         }
         operatorXbox.setRumble(RumbleType.kLeftRumble, rumble);

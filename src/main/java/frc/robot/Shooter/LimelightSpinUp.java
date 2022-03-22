@@ -31,8 +31,9 @@ public class LimelightSpinUp extends CommandBase {
         shooterSubsystem.setTargetRPM(targetRPM);
         
         double rumble = 0;
-        if (shooterSubsystem.getRPM() > (1-Constants.shooterVibrationTolerance)*targetRPM
-            && shooterSubsystem.getRPM() < (1+Constants.shooterVibrationTolerance)*targetRPM) {
+        if(ShooterMath.withinTolerance(shooterSubsystem.getRPM(), 
+            shooterSubsystem.getTargetRPM(), Constants.shooterVibrationTolerance)) {
+            
             rumble = Constants.operatorRumble;
         }
         operatorXbox.setRumble(RumbleType.kLeftRumble, rumble);
