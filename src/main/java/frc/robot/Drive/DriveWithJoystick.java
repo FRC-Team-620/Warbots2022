@@ -43,7 +43,8 @@ public class DriveWithJoystick extends CommandBase {
         double rotationInput = Math.pow(driverXbox.getLeftX(), ControlConstants.SQUARE_FACTOR);
 
         // Only apply the original sign if the factor is even
-        if (ControlConstants.SQUARE_FACTOR % 2 == 0) rotationInput *= Math.signum(driverXbox.getLeftX());
+        if(ControlConstants.SQUARE_FACTOR % 2 == 0) 
+            rotationInput *= Math.signum(driverXbox.getLeftX());
 
         double direction = rightTriggerInput > leftTriggerInput ? rightTriggerInput : -leftTriggerInput;
         double speed = direction * speedConstant;

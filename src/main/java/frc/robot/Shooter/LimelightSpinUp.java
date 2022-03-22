@@ -1,19 +1,16 @@
 package frc.robot.Shooter;
 
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.Controls.ControlBoard;
 import frc.robot.Util.LimeLight;
 import frc.robot.Util.LimeLight.LedMode;
 
 public class LimelightSpinUp extends CommandBase {
     protected ShooterSubsystem shooterSubsystem;
-    protected XboxController operatorXbox;
 
-    public LimelightSpinUp(ShooterSubsystem shooterSubsystem, XboxController operatorXbox) {
+    public LimelightSpinUp(ShooterSubsystem shooterSubsystem) {
         this.shooterSubsystem = shooterSubsystem;
-        this.operatorXbox = operatorXbox;
         addRequirements(shooterSubsystem);
     }
 
@@ -28,23 +25,22 @@ public class LimelightSpinUp extends CommandBase {
         double distance = ShooterMath.getDistanceInMeters(Constants.azimuthAngle1, y, Constants.limelightHeight, Constants.hubHeight);
         double targetRPM = ShooterMath.metersToRPM(distance);
     
-        shooterSubsystem.setTargetRPM(targetRPM);
+        this.shooterSubsystem.setTargetRPM(targetRPM);
         
-        double rumble = 0;
-        if(ShooterMath.withinTolerance(shooterSubsystem.getRPM(), 
-            shooterSubsystem.getTargetRPM(), Constants.shooterVibrationTolerance)) {
-            
-            rumble = Constants.operatorRumble;
-        }
-        operatorXbox.setRumble(RumbleType.kLeftRumble, rumble);
-        operatorXbox.setRumble(RumbleType.kRightRumble, rumble);
+        ControlBoard.setOperatorRumble(this.getWithinTolerance());
+    }
+
+    private boolean getWithinTolerance(){
+        return ShooterMath.withinTolerance(
+            this.shooterSubsystem.getRPM(), 
+            this.shooterSubsystem.getTargetRPM(), 
+            Constants.shooterVibrationTolerance);
     }
 
     @Override
     public void end(boolean interrupt) {
-        shooterSubsystem.stopMotors();
+        this.shooterSubsystem.stopMotors();
         LimeLight.setLedMode(LedMode.OFF);
-        operatorXbox.setRumble(RumbleType.kLeftRumble, 0);
-        operatorXbox.setRumble(RumbleType.kRightRumble, 0);
+        ControlBoard.setOperatorRumble(false);
     }
 }

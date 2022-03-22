@@ -59,7 +59,6 @@ public class RobotContainer {
     private LazySusanSubsystem turret;
     private ClimberSubsystem climberHooks;
     private ClimberMotorsSubsystem winch;
-    private ControlBoard controls;
 
     private DriveWithJoystick driveWithJoystick;
     private ShooterCommand shooterCommand;
@@ -86,43 +85,41 @@ public class RobotContainer {
     }
 
     private void initControls() {
-        controls = new ControlBoard();
-
         // operator
-        controls.raiseArmsButton.whenPressed(
+        ControlBoard.raiseArmsButton.whenPressed(
                 new RaisePistons(climberHooks));
 
-        controls.extendArmsButton.whenPressed(
+        ControlBoard.extendArmsButton.whenPressed(
                 new ParallelCommandGroup(
                         new ExtendArmsAndStow(winch, climberHooks, intake),
                         new DirectTurret(turret, shooter, Constants.stowedPosition)));
 
-        controls.climbSequenceButton.whenPressed(
+        ControlBoard.climbSequenceButton.whenPressed(
                 new RaiseAndGrab(winch, climberHooks));
 
         // controls.tankDriveAimButton.whileActiveOnce(
         //     new TankDriveAutoAimAndSpinUp(getShooterSubsystem(), getDriveTrain(), 
         //         false, controls.getOperatorController()));
 
-        controls.lowerHooksButton.whenPressed(
+        ControlBoard.lowerHooksButton.whenPressed(
                 new ToggleHooks(climberHooks));
 
-        controls.winchHoldButton.whenPressed(
+        ControlBoard.winchHoldButton.whenPressed(
                 new WinchHold(winch, winch.getWinchPosition(), Constants.holdTime));
 
         // TODO: here, now make a unified aiming/flywheel spinup command that we can use
         // for both auto and tele
 
 
-        controls.aimTurretTrigger.whileActiveOnce(
+        ControlBoard.aimTurretTrigger.whileActiveOnce(
             new ParallelCommandGroup(
-                new LimelightSpinUp(this.getShooterSubsystem(), controls.getOperatorController()),
+                new LimelightSpinUp(this.getShooterSubsystem()),
                 new TurretAiming(this.getLazySusanSubsystem())
             ));
 
-        controls.tankDriveAimButton.whileActiveOnce(
+        ControlBoard.tankDriveAimButton.whileActiveOnce(
             new ParallelCommandGroup(
-                new LimelightSpinUp(this.getShooterSubsystem(), controls.getOperatorController()),
+                new LimelightSpinUp(this.getShooterSubsystem()),
                 new TankDriveAiming(this.getDriveTrain())
             ));
             // new AutoAimingAndSpinningUp(getShooterSubsystem(), getLazySusanSubsystem(), 
@@ -130,15 +127,15 @@ public class RobotContainer {
 
 
 
-        controls.fireTurretTrigger.whenActive(
+        ControlBoard.fireTurretTrigger.whenActive(
         new ActivateFiringPins(getFiringPins()));
 
         //driver
-        controls.lowShotButton.whileActiveOnce(new LowShotCommand(shooter));
+        ControlBoard.lowShotButton.whileActiveOnce(new LowShotCommand(shooter));
 
-        controls.intakeButton.whileActiveOnce(new IntakeBall(intake));
+        ControlBoard.intakeButton.whileActiveOnce(new IntakeBall(intake));
 
-        controls.outakeButton.whileActiveOnce(new OuttakeBall(intake));
+        ControlBoard.outakeButton.whileActiveOnce(new OuttakeBall(intake));
 
         // controls.aimTurretTrigger.whenActive(
         // new AimTurretCommand();
@@ -158,7 +155,7 @@ public class RobotContainer {
         //         controls.getOperatorController());
         // drivetrain.setDefaultCommand(driveWithJoystick);
 
-        turret.setDefaultCommand(new ManualAiming(turret, controls.getOperatorController()));
+        turret.setDefaultCommand(new ManualAiming(turret, ControlBoard.getOperatorController()));
 
         //shooterCommand = new ShooterCommand(shooter, turret, controls.getOperatorController(),
                 //controls.getDriverController());
@@ -225,7 +222,7 @@ public class RobotContainer {
     }
 
     public XboxController getOperatorController() {
-        return controls.getOperatorController();
+        return ControlBoard.getOperatorController();
     }
 
     public ClimberMotorsSubsystem getClimberMotorsSubsystem() {
@@ -233,8 +230,8 @@ public class RobotContainer {
     }
 
     public void setTeleopDrive() {
-        driveWithJoystick = new DriveWithJoystick(drivetrain, controls.getDriverController(),
-                controls.getOperatorController());
+        driveWithJoystick = new DriveWithJoystick(drivetrain, ControlBoard.getDriverController(),
+            ControlBoard.getOperatorController());
         drivetrain.setDefaultCommand(driveWithJoystick);
     }
 

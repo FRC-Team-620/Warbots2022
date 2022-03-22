@@ -1,18 +1,20 @@
 package frc.robot.Controls;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants;
 
 public class ControlBoard {
 
     // driver
-    public JoystickButton intakeButton,
+    public static JoystickButton intakeButton,
             outakeButton;
 
     // operator
-    public JoystickButton extendArmsButton,
+    public static JoystickButton extendArmsButton,
             raiseArmsButton,
             climbSequenceButton,
             lowerHooksButton,
@@ -20,24 +22,22 @@ public class ControlBoard {
             lowShotButton,
             winchHoldButton;
 
-    public TriggerPressed aimTurretTrigger,
+    public static TriggerPressed aimTurretTrigger,
             fireTurretTrigger;
 
     // actual controllers
-    private XboxController driver,
-            operator;
+    private static XboxController driver, operator;
 
-    public ControlBoard() {
+    public static void init() {
         // controllers
         driver = new XboxController(0);
         operator = new XboxController(1);
 
-        initDriverControls();
-        initOperatorControls();
-
+        ControlBoard.initDriverControls();
+        ControlBoard.initOperatorControls();
     }
 
-    private void initDriverControls() {
+    private static void initDriverControls() {
         // driver controls
         intakeButton = new JoystickButton(driver, Button.kB.value);
         outakeButton = new JoystickButton(driver, Button.kA.value);
@@ -45,7 +45,7 @@ public class ControlBoard {
         winchHoldButton = new JoystickButton(driver, Button.kX.value);
     }
 
-    private void initOperatorControls() {
+    private static void initOperatorControls() {
         // operator controls
         extendArmsButton = new JoystickButton(operator, Button.kX.value);
         raiseArmsButton = new JoystickButton(operator, Button.kY.value);
@@ -57,16 +57,28 @@ public class ControlBoard {
     }
 
     // use these for now until the drive command is converted
-    public XboxController getDriverController() {
+    public static XboxController getDriverController() {
         return driver;
     }
 
-    public XboxController getOperatorController() {
+    public static XboxController getOperatorController() {
         return operator;
     }
 
+    public static void setDriverRumble(boolean onOff) {
+        double rumble = onOff ? Constants.driverRumble : 0;
+        driver.setRumble(RumbleType.kLeftRumble, rumble);
+        driver.setRumble(RumbleType.kRightRumble, rumble);
+    }
+
+    public static void setOperatorRumble(boolean onOff) {
+        double rumble = onOff ? Constants.operatorRumble : 0;
+        operator.setRumble(RumbleType.kLeftRumble, rumble);
+        operator.setRumble(RumbleType.kRightRumble, rumble);
+    }
+
     // use these once drive command is converted
-    public double driveSpeedControl(boolean squaredInput) {
+    public static double driveSpeedControl(boolean squaredInput) {
         double forward = driver.getRightTriggerAxis();
         double reverse = driver.getLeftTriggerAxis();
         double input = forward - reverse;
@@ -74,16 +86,15 @@ public class ControlBoard {
         return input * ControlConstants.DRIVE_SPEED_PERCENT;
     }
 
-    public double driveRotationcontrol(boolean squaredInput) {
+    public static double driveRotationcontrol(boolean squaredInput) {
         double input = driver.getRightX();
         input = squaredInput ? squareInput(input) : input;
         return input * ControlConstants.DRIVE_ROTATION_PERCENT;
     }
 
-    private double squareInput(double input) {
+    private static double squareInput(double input) {
         double negativePreserver = input > 0 ? 1 : -1;
         double squaredInput = Math.pow(input, ControlConstants.SQUARE_FACTOR);
         return negativePreserver * squaredInput;
     }
-
 }

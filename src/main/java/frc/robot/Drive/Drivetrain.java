@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.Constants;
 import frc.robot.Util.sim.NavxWrapper;
 import frc.robot.Util.sim.RevEncoderSimWrapper;
@@ -85,7 +86,8 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void setAllSpeeds(double speed) {
-        for (Motor motor : Motor.values()) this.setSpeed(motor, speed);
+        for(Motor motor : Motor.values()) 
+            this.setSpeed(motor, speed);
     }
 
     public void setSpeed(Motor motor, double speed) {
@@ -93,7 +95,8 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void setAllOpenLoopRampRates(double rampRate) {
-        for (Motor motor : Motor.values()) this.setOpenLoopRampRate(motor, rampRate);
+        for(Motor motor : Motor.values()) 
+            this.setOpenLoopRampRate(motor, rampRate);
     }
 
     public void setOpenLoopRampRate(Motor motor, double rampRate) {
@@ -101,7 +104,8 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void setAllIdleModes(IdleMode mode) {
-        for (Motor motor : Motor.values()) this.setIdleMode(motor, mode);
+        for(Motor motor : Motor.values()) 
+            this.setIdleMode(motor, mode);
     }
 
     public void setIdleMode(Motor motor, IdleMode mode) {
@@ -119,7 +123,8 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void setAllEncoderPos(double position) {
-        for (Motor motor : Motor.values()) this.setEncoderPos(motor, position);
+        for(Motor motor : Motor.values()) 
+            this.setEncoderPos(motor, position);
     }
 
     public void setEncoderPos(Motor motor, double position) {
@@ -156,7 +161,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public double getDrawnCurrentAmps() {
-        if (RobotBase.isSimulation()) {
+        if(RobotBase.isSimulation()) {
             return this.m_drivetrainSimulator.getCurrentDrawAmps();
         }
         return this.getMotor(Motor.RIGHT_BACK).getOutputCurrent() +
