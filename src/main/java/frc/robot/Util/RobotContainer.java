@@ -69,10 +69,10 @@ public class RobotContainer {
     public Field2d robotFieldWidget = new Field2d(); // TODO: include Robot odometry
 
     public RobotContainer() {
+        ControlBoard.init();
         initSubsystems();
         initControls();
         LimeLight.init();
-        ControlBoard.init();
     }
 
     private void initSubsystems() {
