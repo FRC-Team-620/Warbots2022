@@ -54,7 +54,7 @@ public class RobotContainer {
     // initialize subsystems
     private Drivetrain drivetrain;
     private Intake intake;
-    //private ShooterSubsystem shooter;
+    private ShooterSubsystem shooter;
     private FiringPins firingPins;
     private LazySusanSubsystem turret;
     private ClimberSubsystem climberHooks;
@@ -78,7 +78,7 @@ public class RobotContainer {
     private void initSubsystems() {
         drivetrain = new Drivetrain();
         intake = new Intake();
-        //shooter = new ShooterSubsystem();
+        shooter = new ShooterSubsystem();
         firingPins = new FiringPins();
         turret = new LazySusanSubsystem();
         climberHooks = new ClimberSubsystem();
@@ -93,7 +93,8 @@ public class RobotContainer {
         ControlBoard.extendArmsButton.whenPressed(
                 new ParallelCommandGroup(
                         new ExtendArmsAndStow(winch, climberHooks, intake),
-                        new DirectTurret(turret, shooter, Constants.stowedPosition)));
+                        new DirectTurret(turret, shooter, Constants.stowedPosition)
+                        ));
 
         ControlBoard.climbSequenceButton.whenPressed(
                 new RaiseAndGrab(winch, climberHooks));
@@ -198,9 +199,9 @@ public class RobotContainer {
         return drivetrain;
     }
 
-    // public ShooterSubsystem getShooterSubsystem() {
-    //     return shooter;
-    // }
+    public ShooterSubsystem getShooterSubsystem() {
+        return shooter;
+    }
 
     public TrajectorySelector getTrajectorySelector() {
         return trajectorySelector;
