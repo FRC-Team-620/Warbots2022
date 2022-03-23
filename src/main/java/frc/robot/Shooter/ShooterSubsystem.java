@@ -36,7 +36,7 @@ public class ShooterSubsystem extends SubsystemBase {
     //PIDs
     protected final PIDController leftShooterPID;
     protected final PIDController rightShooterPID;
-	private final double kP = 0.005,kI = 0.008;
+	private final double kP = 0.00025,kI = 0.0004;
 
     public ShooterSubsystem() {
         rightShooterMotor = new SimableCANSparkMax(Constants.rightShooterMotorID, MotorType.kBrushless);

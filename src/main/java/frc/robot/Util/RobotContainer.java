@@ -114,9 +114,9 @@ public class RobotContainer {
 
 
         ControlBoard.aimTurretTrigger.whileActiveOnce(
-            new ParallelCommandGroup(
-                new LimelightSpinUp(this.getShooterSubsystem()),
-                new TurretAiming(this.getLazySusanSubsystem())
+            new ParallelCommandGroup(   
+                new LimelightSpinUp(this.getShooterSubsystem())
+                //new TurretAiming(this.getLazySusanSubsystem())
             ));
 
         ControlBoard.tankDriveAimButton.whileActiveOnce(
