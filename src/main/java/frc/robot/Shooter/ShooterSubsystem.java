@@ -36,7 +36,8 @@ public class ShooterSubsystem extends SubsystemBase {
     //PIDs
     protected final PIDController leftShooterPID;
     protected final PIDController rightShooterPID;
-	private final double kP = 0.00025,kI = 0.0004;
+    // TODO: Tune PID loops more for lower RPMs
+	private final double kP = 0.00025, kI = 0.0004;
 
     public ShooterSubsystem() {
         rightShooterMotor = new SimableCANSparkMax(Constants.rightShooterMotorID, MotorType.kBrushless);
@@ -61,8 +62,8 @@ public class ShooterSubsystem extends SubsystemBase {
         
         leftShooterPID = new PIDController(kP, kI, 0);
         rightShooterPID = new PIDController(kP, kI, 0);
-        leftShooterPID.setTolerance(10, 3);
-        rightShooterPID.setTolerance(10, 3);
+        leftShooterPID.setTolerance(10, 10);
+        rightShooterPID.setTolerance(10, 10);
         SmartDashboard.putData(leftShooterPID);
         SmartDashboard.putData(rightShooterPID);
     }
@@ -75,12 +76,17 @@ public class ShooterSubsystem extends SubsystemBase {
         double leftOutput = leftShooterPID.calculate(leftShooterMotor.getEncoder().getVelocity());
         double rightOutput = rightShooterPID.calculate(rightShooterMotor.getEncoder().getVelocity());
         
-        leftShooterMotor.set(MathUtil.clamp(leftOutput,powerDecel ? -1: 0,1));
-        rightShooterMotor.set(MathUtil.clamp(rightOutput,powerDecel ? -1: 0,1));
+        leftShooterMotor.set(MathUtil.clamp(leftOutput, powerDecel || leftShooterPID.getSetpoint() <= 0 ? 0 : -1, 1));
+        rightShooterMotor.set(MathUtil.clamp(rightOutput, powerDecel || rightShooterPID.getSetpoint() <= 0 ? 0 : -1, 1));
 
+        // int x = 0;
+        // if (leftShooterPID.atSetpoint()) {
+        //     x = 5000;
+        // }
 
         SmartDashboard.putNumber("Flywheel Right RPM", rightShooterMotor.getEncoder().getVelocity());
         SmartDashboard.putNumber("Flywheel Left RPM", leftShooterMotor.getEncoder().getVelocity());
+        // SmartDashboard.putNumber("Flywheel Left atTarget", x);
         SmartDashboard.putNumber("Flywheel Right Setpoint", rightShooterPID.getSetpoint());
         SmartDashboard.putNumber("Flywheel Left Setpoint", leftShooterPID.getSetpoint());
         //MathUtil.clamp(output,powerDecel ? -1: 0,1);
