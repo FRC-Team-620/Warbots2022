@@ -24,18 +24,13 @@ public class DriveWithJoystick extends CommandBase {
         SmartDashboard.putNumber("speed", speedConstant);
         SmartDashboard.putNumber("rotation", rotationConstant);
         SmartDashboard.putNumber("openloopramprate", openLoopRampRateConstant);
-        drivetrain.setAllOpenLoopRampRates(openLoopRampRateConstant);
+        // drivetrain.setAllOpenLoopRampRates(openLoopRampRateConstant);
     }
 
     @Override
     public void execute() {
-        if (driverXbox.getBButton()) {
-            this.speedConstant = Constants.speedLow;
-            this.rotationConstant = Constants.rotationLow;
-        } else {
-            this.speedConstant = Constants.speedHigh;
-            this.rotationConstant = Constants.rotationHigh;
-        }
+        this.speedConstant = Constants.speedHigh;
+        this.rotationConstant = Constants.rotationHigh;
 
         // Xbox Controller Input
         double rightTriggerInput = Math.pow(driverXbox.getRightTriggerAxis(), 2); // Forwards
@@ -43,14 +38,14 @@ public class DriveWithJoystick extends CommandBase {
         double rotationInput = Math.pow(driverXbox.getLeftX(), ControlConstants.SQUARE_FACTOR);
 
         // Only apply the original sign if the factor is even
-        if(ControlConstants.SQUARE_FACTOR % 2 == 0) 
+        if (ControlConstants.SQUARE_FACTOR % 2 == 0)
             rotationInput *= Math.signum(driverXbox.getLeftX());
-
+            
         double direction = rightTriggerInput > leftTriggerInput ? rightTriggerInput : -leftTriggerInput;
         double speed = direction * speedConstant;
         double rotation = rotationConstant * rotationInput;
         
-        drivetrain.curvatureDrive(speed, rotation, true); // Always enable turning in place
+        drivetrain.curvatureInput(speed, rotation, true); // Always enable turning in place
     }
 
     @Override

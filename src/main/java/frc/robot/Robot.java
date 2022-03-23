@@ -51,7 +51,7 @@ public class Robot extends TimedRobot {
     // TODO: move to initializer in robotContainer
     new ToggleHooks(robotContainer.getClimberSubsystem()).schedule();
     robotContainer.getLazySusanSubsystem().getLazySusanEncoder().setPosition(0);
-    robotContainer.getDriveTrain().setAllIdleModes(IdleMode.kBrake);
+    robotContainer.getDriveTrain().setBrake(true);
     robotContainer.getClimberMotorsSubsystem().getWinchMotor().getEncoder().setPosition(0);
     // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(true);
     // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);
@@ -59,7 +59,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    robotContainer.getDriveTrain().setAllEncoderPos(0);
+    robotContainer.getDriveTrain().setEncoderPos(0);
 
     // TODO: move to autonomousCommand in separate file.
     robotContainer.getLazySusanSubsystem().setLazySusanPosition(0);
@@ -67,8 +67,8 @@ public class Robot extends TimedRobot {
     //new DirectTurretAuto(robotContainer.getLazySusanSubsystem(), // -1.5*
     //robotContainer.getShooterSubsystem(), 0),
     autonomousCommand = new ParallelCommandGroup(
-      new AutoCommand(robotContainer.getFiringPins(), robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer), 
-      new AutoAimingAndSpinningUp(robotContainer.getShooterSubsystem(),  robotContainer.getLazySusanSubsystem(), true, robotContainer.getOperatorController()), 
+     // new AutoCommand(robotContainer.getFiringPins(), robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer), 
+     // new AutoAimingAndSpinningUp(robotContainer.getShooterSubsystem(),  robotContainer.getLazySusanSubsystem(), true, robotContainer.getOperatorController()), 
       new AutoLoad(robotContainer.getIntake())
     );
 
@@ -104,10 +104,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-    robotContainer.getShooterSubsystem().setTargetRPM(0);
-    robotContainer.getDriveTrain().setAllIdleModes(IdleMode.kBrake);
-    robotContainer.getShooterSubsystem().setSpeed(0);
-    robotContainer.getShooterSubsystem().setTargetRPM(0);
+    //robotContainer.getShooterSubsystem().setTargetRPM(0);
+    robotContainer.getDriveTrain().setBrake(true);
+    //robotContainer.getShooterSubsystem().setSpeed(0);
+    //robotContainer.getShooterSubsystem().setTargetRPM(0);
     CommandScheduler.getInstance().cancelAll();
   }
 
@@ -129,33 +129,33 @@ public class Robot extends TimedRobot {
   /**
    * Simulation Code
    */
-  @Override
-  public void simulationPeriodic() {
-    // Here we calculate the battery voltage based on drawn current.
-    // As our robot draws more power from the battery its voltage drops.
-    // The estimated voltage is highly dependent on the battery's internal
-    // resistance.
-    double drawCurrent = robotContainer.getDriveTrain().getDrawnCurrentAmps(); //
-    // Current Seems to be too high look into
-    // later
-    drawCurrent += robotContainer.getShooterSubsystem().getDrawnCurrentAmps();
-    SmartDashboard.putNumber("Total Current", drawCurrent);
-    // BatterySim.calculateDefaultBatteryLoadedVoltage(currents)
-    double loadedVoltage = BatterySim.calculateDefaultBatteryLoadedVoltage(13,
-        0.02, drawCurrent);
-    SmartDashboard.putNumber("Robot Volts", loadedVoltage);
-    RoboRioSim.setVInVoltage(loadedVoltage);
+  // @Override
+  // public void simulationPeriodic() {
+  //   // Here we calculate the battery voltage based on drawn current.
+  //   // As our robot draws more power from the battery its voltage drops.
+  //   // The estimated voltage is highly dependent on the battery's internal
+  //   // resistance.
+  //   double drawCurrent = robotContainer.getDriveTrain().getDrawnCurrentAmps(); //
+  //   // Current Seems to be too high look into
+  //   // later
+  //   drawCurrent += robotContainer.getShooterSubsystem().getDrawnCurrentAmps();
+  //   SmartDashboard.putNumber("Total Current", drawCurrent);
+  //   // BatterySim.calculateDefaultBatteryLoadedVoltage(currents)
+  //   double loadedVoltage = BatterySim.calculateDefaultBatteryLoadedVoltage(13,
+  //       0.02, drawCurrent);
+  //   SmartDashboard.putNumber("Robot Volts", loadedVoltage);
+  //   RoboRioSim.setVInVoltage(loadedVoltage);
 
-    var robotpos = robotContainer.getDriveTrain().getPose();
-    robotContainer.robotFieldWidget.setRobotPose(robotpos);
-    var hubpos = new Pose2d(7.940, 4.08, new Rotation2d()); // Position of the hub
-    robotContainer.robotFieldWidget.getObject("hub").setPose(hubpos);
-    var tpos = new Pose2d(robotpos.getTranslation(),
-        robotpos.getRotation().plus(robotContainer.getLazySusanSubsystem().simTurrentRotation)); // Calculate Simulated
-                                                                                                 // turrent position
-    robotContainer.robotFieldWidget.getObject("Turret").setPose(tpos);
+  //   var robotpos = robotContainer.getDriveTrain().getPose();
+  //   robotContainer.robotFieldWidget.setRobotPose(robotpos);
+  //   var hubpos = new Pose2d(7.940, 4.08, new Rotation2d()); // Position of the hub
+  //   robotContainer.robotFieldWidget.getObject("hub").setPose(hubpos);
+  //   var tpos = new Pose2d(robotpos.getTranslation(),
+  //       robotpos.getRotation().plus(robotContainer.getLazySusanSubsystem().simTurrentRotation)); // Calculate Simulated
+  //                                                                                                // turrent position
+  //   robotContainer.robotFieldWidget.getObject("Turret").setPose(tpos);
 
-    robotContainer.getShooterSubsystem().possim.setPosition(tpos);
-    robotContainer.getShooterSubsystem().possim.update(Constants.kSimUpdateTime);
-  }
+  //   robotContainer.getShooterSubsystem().possim.setPosition(tpos);
+  //   robotContainer.getShooterSubsystem().possim.update(Constants.kSimUpdateTime);
+  // }
 }

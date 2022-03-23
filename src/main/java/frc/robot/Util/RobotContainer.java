@@ -69,7 +69,7 @@ public class RobotContainer {
     public Field2d robotFieldWidget = new Field2d(); // TODO: include Robot odometry
 
     public RobotContainer() {
-        ControlBoard.init();
+		ControlBoard.init();
         initSubsystems();
         initControls();
         LimeLight.init();
@@ -236,61 +236,61 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(driveWithJoystick);
     }
 
-    public Command getAutonomousCommand(Trajectory traj) {
-        // Create a voltage constraint to ensure we don't accelerate too fast
-        System.out.println("Auto Path Ran");
-        // var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
-        //         new SimpleMotorFeedforward(
-        //                 Constants.ksVolts,
-        //                 Constants.kvVoltSecondsPerMeter,
-        //                 Constants.kaVoltSecondsSquaredPerMeter),
-        //         Constants.kDriveKinematics,
-        //         5.02);
+    //public Command getAutonomousCommand(Trajectory traj) {
+    //    // Create a voltage constraint to ensure we don't accelerate too fast
+    //    System.out.println("Auto Path Ran");
+    //    // var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
+    //   //         new SimpleMotorFeedforward(
+    //    //                 Constants.ksVolts,
+    //   //                 Constants.kvVoltSecondsPerMeter,
+    //    //                 Constants.kaVoltSecondsSquaredPerMeter),
+    //    //         Constants.kDriveKinematics,
+    //    //         5.02);
 
-        // // Create config for trajectory
-        // TrajectoryConfig config = new TrajectoryConfig(
-        //         Constants.kMaxSpeedMetersPerSecond,
-        //         Constants.kMaxAccelerationMetersPerSecondSquared)
-        //         // Add kinematics to ensure max speed is actually obeyed
-        //         .setKinematics(Constants.kDriveKinematics)
-        //         // Apply the voltage constraint
-        //         .addConstraint(autoVoltageConstraint);
+    //    // // Create config for trajectory
+    //    // TrajectoryConfig config = new TrajectoryConfig(
+    //    //         Constants.kMaxSpeedMetersPerSecond,
+    //    //         Constants.kMaxAccelerationMetersPerSecondSquared)
+    //    //         // Add kinematics to ensure max speed is actually obeyed
+    //    //         .setKinematics(Constants.kDriveKinematics)
+    //    //         // Apply the voltage constraint
+    //    //         .addConstraint(autoVoltageConstraint);
 
-        // // An example trajectory to follow. All units in meters.
-        // Trajectory exampleTrajectory =
-        // TrajectoryGenerator.generateTrajectory(
-        // // Start at the origin facing the +X direction
-        // new Pose2d(0, 0, new Rotation2d(0)),
-        // // Pass through these two interior waypoints, making an 's' curve path
-        // List.of(new Translation2d(0.5, 0)),//, new Translation2d(2, -1)//1
-        // // End 3 meters straight ahead of where we started, facing forward
-        // new Pose2d(1, 0, new Rotation2d(0)),
-        // // Pass config
-        // config);
-        // Trajectory jsonTrajectory = trajectorySelector.getSelected();
-        Trajectory jsonTrajectory = traj;
+    //    // // An example trajectory to follow. All units in meters.
+    //    // Trajectory exampleTrajectory =
+    //    // TrajectoryGenerator.generateTrajectory(
+    //    // // Start at the origin facing the +X direction
+    //    // new Pose2d(0, 0, new Rotation2d(0)),
+    //    // // Pass through these two interior waypoints, making an 's' curve path
+    //    // List.of(new Translation2d(0.5, 0)),//, new Translation2d(2, -1)//1
+    //    // // End 3 meters straight ahead of where we started, facing forward
+    //    // new Pose2d(1, 0, new Rotation2d(0)),
+    //    // // Pass config
+    //    // config);
+    //    // Trajectory jsonTrajectory = trajectorySelector.getSelected();
+    //    Trajectory jsonTrajectory = traj;
 
-        RamseteCommand ramseteCommand = new RamseteCommand(
-                jsonTrajectory,
-                drivetrain::getPose,
-                new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta),
-                new SimpleMotorFeedforward(
-                        Constants.ksVolts,
-                        Constants.kvVoltSecondsPerMeter,
-                        Constants.kaVoltSecondsSquaredPerMeter),
-                Constants.kDriveKinematics,
-                drivetrain::getWheelSpeeds,
-                new PIDController(Constants.kPDriveVel, 0, 0),
-                new PIDController(Constants.kPDriveVel, 0, 0),
-                // RamseteCommand passes volts to the callback
-                drivetrain::tankDriveVolts,
-                drivetrain);
+    //    RamseteCommand ramseteCommand = new RamseteCommand(
+    //            jsonTrajectory,
+    //            drivetrain::getPose,
+    //            new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta),
+    //            new SimpleMotorFeedforward(
+    //                    Constants.ksVolts,
+    //                    Constants.kvVoltSecondsPerMeter,
+    //                    Constants.kaVoltSecondsSquaredPerMeter),
+    //           Constants.kDriveKinematics,
+    //            drivetrain::getWheelSpeeds,
+    //            new PIDController(Constants.kPDriveVel, 0, 0),
+    //            new PIDController(Constants.kPDriveVel, 0, 0),
+    //            // RamseteCommand passes volts to the callback
+    //            drivetrain::tankDriveVolts,
+    //           drivetrain);
 
-        // Reset odometry to the starting pose of the trajectory.
-        drivetrain.resetOdometry(jsonTrajectory.getInitialPose());
+    //    // Reset odometry to the starting pose of the trajectory.
+    //    drivetrain.resetOdometry(jsonTrajectory.getInitialPose());
 
-        // Run path following command, then stop at the end.
-        return ramseteCommand.andThen(() -> drivetrain.tankDriveVolts(0, 0));
-    }
+    //    // Run path following command, then stop at the end.
+    //    return ramseteCommand.andThen(() -> drivetrain.tankDriveVolts(0, 0));
+    //}
 
 }

@@ -23,6 +23,7 @@ public class TankDriveAiming extends CommandBase {
     public void execute() {
         double x = LimeLight.getTX();
         double speed = -(x-Constants.leftBias)*Constants.diffConstTankDriveAim;
+        System.out.println("Speed: " + speed);
 
         this.drivetrain.tankDriveSet(-speed, speed);
     }
