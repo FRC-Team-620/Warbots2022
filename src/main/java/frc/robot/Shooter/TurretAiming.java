@@ -22,7 +22,6 @@ public class TurretAiming extends CommandBase {
     public void execute() {
         double x = LimeLight.getTX();
         double speed = -(x-Constants.leftBias)*Constants.diffConstLS;
-
         if (!ShooterMath.inBounds(speed > 0, this.lazySusanSubsystem.getLazySusanPosition()))
             speed = 0;
         this.lazySusanSubsystem.setLazySusanSpeed(speed);

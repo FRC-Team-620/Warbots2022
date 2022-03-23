@@ -40,11 +40,11 @@ public class DriveWithJoystick extends CommandBase {
         // Only apply the original sign if the factor is even
         if (ControlConstants.SQUARE_FACTOR % 2 == 0)
             rotationInput *= Math.signum(driverXbox.getLeftX());
-
+            
         double direction = rightTriggerInput > leftTriggerInput ? rightTriggerInput : -leftTriggerInput;
         double speed = direction * speedConstant;
         double rotation = rotationConstant * rotationInput;
-
+        
         drivetrain.curvatureInput(speed, rotation, true); // Always enable turning in place
     }
 
