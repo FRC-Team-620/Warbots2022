@@ -22,7 +22,9 @@ public class LazySusanSubsystem extends SubsystemBase {
     protected SimableCANSparkMax lazySusan;
     protected RelativeEncoder encoder;
     private PIDController lazySusanPID;
-    private final double kP = 0.060000, kI = 0.003000, kD = 0;//KI0.00004
+    private Rotation2d turretRotation;
+    private final double countToDegreesFactor = 4;
+    private final double kP = 0.060000, kI = 0.003000, kD = 0;//KI0.00004 TODO: Tune PID Loop
     public final double lowLimit = -45, highLimit = 45;//Left 45.690002 Right -45.356651 AbsoluteMaxRange 90
     // private double turntableThresh = 35;
 
@@ -42,6 +44,7 @@ public class LazySusanSubsystem extends SubsystemBase {
         lazySusanPID.setTolerance(10);
         //lazySusanPID.setIntegratorRange(-10, 10);
 
+        turretRotation = new Rotation2d();
         SmartDashboard.putData(lazySusanPID);
     }
 
@@ -58,16 +61,39 @@ public class LazySusanSubsystem extends SubsystemBase {
             PIDOutput = MathUtil.clamp(PIDOutput, 0, 1);
         }
 
+        turretRotation = Rotation2d.fromDegrees(lazySusan.getEncoder().getPosition() * countToDegreesFactor);
+
 
         lazySusan.set(PIDOutput);
+
 
         SmartDashboard.putNumber("TurretPos", lazySusan.getEncoder().getPosition());
         SmartDashboard.putNumber("LazySusanMotorPercentage", lazySusan.get());
     }
 
-    public void setTurretPosition(double x) {
+    private void setTurretPosition(double x) {
         lazySusanPID.setSetpoint(MathUtil.clamp(x, lowLimit, highLimit));
     }
+
+    public Rotation2d getRotation() {
+        return turretRotation;
+    }
+
+    public double getSetpointDegrees() {
+        return lazySusanPID.getSetpoint() * countToDegreesFactor;
+    }
+
+
+
+    public void setTurretPositionDegrees(double degrees) {
+        this.setTurretPosition(degrees/countToDegreesFactor);
+    }
+
+
+    public void updateRotation(double encoderCounts) {
+
+    }
+
 
     public boolean atTurretPosition() {
         return lazySusanPID.atSetpoint();

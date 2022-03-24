@@ -48,6 +48,7 @@ import frc.robot.Shooter.ShooterCommand;
 import frc.robot.Shooter.ShooterSubsystem;
 import frc.robot.Shooter.TankDriveAiming;
 import frc.robot.Shooter.TurretAiming;
+import frc.robot.Shooter.TurretAimingPID;
 
 /** Add your docs here. */
 public class RobotContainer {
@@ -119,8 +120,9 @@ public class RobotContainer {
 
         ControlBoard.aimTurretTrigger.whileActiveOnce(
             new ParallelCommandGroup(   
-                new LimelightSpinUp(this.getShooterSubsystem())
+                //new LimelightSpinUp(this.getShooterSubsystem())
                 //new TurretAiming(this.getLazySusanSubsystem())
+                new TurretAimingPID(this.getLazySusanSubsystem())
             ));
 
         ControlBoard.tankDriveAimButton.whileActiveOnce(
