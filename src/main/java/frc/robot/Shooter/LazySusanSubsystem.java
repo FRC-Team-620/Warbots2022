@@ -6,6 +6,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SimableCANSparkMax;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -19,6 +21,9 @@ import frc.robot.Util.sim.RevEncoderSimWrapper;
 public class LazySusanSubsystem extends SubsystemBase {
     protected SimableCANSparkMax lazySusan;
     protected RelativeEncoder encoder;
+    private PIDController lazySusanPID;
+    private final double kP = 0.0004, kI = 0, kD = 0;
+    public final double lowLimit = 0, highLimit = 20;
     // private double turntableThresh = 35;
 
     public LazySusanSubsystem() {
@@ -31,14 +36,40 @@ public class LazySusanSubsystem extends SubsystemBase {
 
         lazySusan.setSmartCurrentLimit(35);
 
+        lazySusanPID = new PIDController(kP, kI, kD);
+        lazySusanPID.setTolerance(10);
+        lazySusanPID.setIntegratorRange(-10, 10);
+
+        SmartDashboard.putData(lazySusanPID);
     }
+
+    @Override
+    public void periodic() {
+        lazySusanPID.calculate(lazySusan.getEncoder().getPosition());
+
+        double lazySusanOutput = lazySusanPID.calculate(lazySusan.getEncoder().getPosition());
+
+        lazySusan.set(MathUtil.clamp(lazySusanOutput, -1, 1) * 0.2);
+
+        SmartDashboard.putNumber("TurretPos", lazySusan.getEncoder().getPosition());
+    }
+
+    public void setTurretPosition(double x) {
+        lazySusanPID.setSetpoint(MathUtil.clamp(x, lowLimit, highLimit));
+    }
+
+    public boolean atTurretPosition() {
+        return lazySusanPID.atSetpoint();
+    }
+
+
 
     public CANSparkMax getLazySusanMotor() {
         return lazySusan;
     }
 
     public void setLazySusanSpeed(double speed) {
-        lazySusan.set(speed);
+        //lazySusan.set(speed);
     }
     
     public RelativeEncoder getLazySusanEncoder() {
@@ -50,7 +81,7 @@ public class LazySusanSubsystem extends SubsystemBase {
     }
 
     public void setLazySusanPosition(double p) {
-        encoder.setPosition(p);
+        //encoder.setPosition(p);
     }
 
     public double getTicksPerMotorRotation() {
