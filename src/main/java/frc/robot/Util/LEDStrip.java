@@ -1,7 +1,5 @@
 package frc.robot.Util;
 
-import java.util.Arrays;
-
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color;
@@ -17,7 +15,7 @@ public class LEDStrip {
     protected AddressableLED lights;
     protected AddressableLEDBuffer buffer;
 
-    public LEDStrip(int size, int PWMPort) {
+    public LEDStrip(int numLights, int PWMPort) {
         this.PWMPort = PWMPort;
         // Must be a PWM header, not MXP or DIO
         this.lights = new AddressableLED(this.PWMPort);
@@ -25,7 +23,7 @@ public class LEDStrip {
         // Reuse buffer
         // Default to a length of 60, start empty output
         // Length is expensive to set, so only set it once, then just update data
-        this.buffer = new AddressableLEDBuffer(size);
+        this.buffer = new AddressableLEDBuffer(numLights);
         this.lights.setLength(this.buffer.getLength());
 
         // Set the data
@@ -33,10 +31,12 @@ public class LEDStrip {
         this.lights.start();
     }
 
+    // returns an RGB representation of the light at a given index of the 'AddressableLEDBuffer'
     public int[] colorAt(int idx) {
         return LEDStrip.colorToRGBArray(this.buffer.getLED(idx));
     }
 
+    // sets the entire 'LEDStrip' to a given color
     public void setSolidColor(int R, int G, int B) {
         for (int i = 0; i < this.buffer.getLength(); i++) {
             // Sets the specified LED to the RGB values for red
@@ -45,6 +45,7 @@ public class LEDStrip {
         this.lights.setData(this.buffer);
     }
 
+    // sets the entire 'LEDStrip' to a given color
     public void setSolidColor(int[] rgb) {
         if(rgb.length != 3)
             throw LEDStrip.RGB_FORMATTING_ERROR;
@@ -61,11 +62,16 @@ public class LEDStrip {
     //     this.lights.setData(this.buffer);
     // }
 
+    // sets the 'LEDStrip' to a gradient melding between the given colors
     public void setGradient(int[]... colors) {
         this.setGradient(0, colors);
     }
 
-    public void setGradient(int displacement, int[]... colors) {
+    // sets the 'LEDStrip' to a gradient melding between the given colors
+    // 'offset' refers to the offset from the start that the gradient begins at, 
+    // though it wraps around, so there will be no dead space.
+    // 'offset' is useful for looping colors (continuously update 'offset')
+    public void setGradient(int offset, int[]... colors) {
         int grad[][];
         int lightsPerGrad = this.buffer.getLength()/colors.length;
         int finalGradPos = lightsPerGrad*colors.length-1;
@@ -76,7 +82,7 @@ public class LEDStrip {
                 colors[(i+1)%colors.length], lightsPerGrad);
             for(int k = 0; k < lightsPerGrad; k++) {
                 int lightIdx = i*lightsPerGrad+k;
-                this.buffer.setRGB((lightIdx+displacement)%(finalGradPos+1), 
+                this.buffer.setRGB((lightIdx+offset)%(finalGradPos+1), 
                     grad[k][0], grad[k][1], grad[k][2]);
             }
         }
@@ -88,6 +94,8 @@ public class LEDStrip {
         this.lights.setData(this.buffer);
     }
 
+    // returns an array of RGB color arrays encoding the gradient between two given
+    // colors over a given number of 'steps' (the smoothness of the gradient)
     public static int[][] colorGradient(int[] startColor, int[] endColor, int steps) {
         if(startColor.length != 3 || endColor.length != 3)
             throw LEDStrip.RGB_FORMATTING_ERROR;
@@ -104,6 +112,7 @@ public class LEDStrip {
         return gradient;
     }
 
+    // converts a 'color' object into an array representation of an RGB
     public static int[] colorToRGBArray(Color c) {
         return new int[]{
             (int)(c.red*LEDStrip.MAX_RGB),
