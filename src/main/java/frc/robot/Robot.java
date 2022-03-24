@@ -28,6 +28,8 @@ public class Robot extends TimedRobot {
   protected RobotContainer robotContainer;
   protected Command autonomousCommand;
 
+  protected int LEDDisplacement = 0;
+
   @Override
   public void robotInit() {
     CommandScheduler.getInstance().cancelAll();
@@ -101,7 +103,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-
+  
   }
 
   @Override
@@ -118,6 +120,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
     robotContainer.init();
     LimeLight.setLedMode(LedMode.ON);
+
     // new LowerHooks(robotContainer.getClimberSubsystem()).schedule();
     // new SensorHooksUp(robotContainer.getClimberMotorsSubsystem(), robotContainer.getClimberSubsystem()).schedule();
   }
@@ -125,6 +128,17 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic() {
+    robotContainer.getLEDStrip().setGradient(
+      LEDDisplacement,
+      new int[]{255, 0, 0}, 
+      new int[]{255, 127, 0}, 
+      new int[]{255, 255, 0},
+      new int[]{0, 255, 0},
+      new int[]{0, 0, 255},
+      new int[]{75, 0, 130},
+      new int[]{148, 0, 211}
+    );
+    LEDDisplacement++;
   }
 
 

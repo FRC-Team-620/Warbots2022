@@ -79,6 +79,9 @@ public class AutoAimingAndSpinningUpDC319 extends CommandBase {
 
         double tempDist = ShooterMath.getDistanceInMeters(Constants.azimuthAngle1, y, Constants.limelightHeight, Constants.hubHeight);
         double tempRPM = ShooterMath.metersToRPM(tempDist);
+        // TODO: Use the below RPM value once the table is working
+        // double tempRPM = Constants.rpmMap.getInterpolated(y);
+
         // Making sure it's within the provided threshholds (important that you don't use absolute 
         // value -- don't obliterate the sign)
         if (!ShooterMath.inBounds(speed > 0, lazySusanEnc.getPosition())) {
