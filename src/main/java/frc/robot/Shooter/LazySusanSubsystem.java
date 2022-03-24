@@ -22,8 +22,8 @@ public class LazySusanSubsystem extends SubsystemBase {
     protected SimableCANSparkMax lazySusan;
     protected RelativeEncoder encoder;
     private PIDController lazySusanPID;
-    private final double kP = 0.0004, kI = 0, kD = 0;
-    public final double lowLimit = 0, highLimit = 20;
+    private final double kP = 0.060000, kI = 0.003000, kD = 0;//KI0.00004
+    public final double lowLimit = -45, highLimit = 45;//Left 45.690002 Right -45.356651 AbsoluteMaxRange 90
     // private double turntableThresh = 35;
 
     public LazySusanSubsystem() {
@@ -36,9 +36,11 @@ public class LazySusanSubsystem extends SubsystemBase {
 
         lazySusan.setSmartCurrentLimit(35);
 
+        //lazySusan.setInverted(true);
+
         lazySusanPID = new PIDController(kP, kI, kD);
         lazySusanPID.setTolerance(10);
-        lazySusanPID.setIntegratorRange(-10, 10);
+        //lazySusanPID.setIntegratorRange(-10, 10);
 
         SmartDashboard.putData(lazySusanPID);
     }
@@ -48,10 +50,19 @@ public class LazySusanSubsystem extends SubsystemBase {
         lazySusanPID.calculate(lazySusan.getEncoder().getPosition());
 
         double lazySusanOutput = lazySusanPID.calculate(lazySusan.getEncoder().getPosition());
+        double PIDOutput = MathUtil.clamp(lazySusanOutput, -1, 1);
+        if (lazySusan.getEncoder().getPosition() > highLimit) {
+            PIDOutput = MathUtil.clamp(PIDOutput, -1, 0);
+        }
+        if (lazySusan.getEncoder().getPosition() < lowLimit) {
+            PIDOutput = MathUtil.clamp(PIDOutput, 0, 1);
+        }
 
-        lazySusan.set(MathUtil.clamp(lazySusanOutput, -1, 1) * 0.2);
+
+        lazySusan.set(PIDOutput);
 
         SmartDashboard.putNumber("TurretPos", lazySusan.getEncoder().getPosition());
+        SmartDashboard.putNumber("LazySusanMotorPercentage", lazySusan.get());
     }
 
     public void setTurretPosition(double x) {
@@ -81,7 +92,7 @@ public class LazySusanSubsystem extends SubsystemBase {
     }
 
     public void setLazySusanPosition(double p) {
-        //encoder.setPosition(p);
+        encoder.setPosition(p);
     }
 
     public double getTicksPerMotorRotation() {

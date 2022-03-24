@@ -9,6 +9,7 @@ public class ManualAimingPID extends CommandBase {
     public ManualAimingPID(LazySusanSubsystem lazySusanSubsystem, XboxController operatorXbox) {
         this.lazySusanSubsystem = lazySusanSubsystem;
         this.operatorXbox = operatorXbox;
+        addRequirements(lazySusanSubsystem);
     }
 
     @Override

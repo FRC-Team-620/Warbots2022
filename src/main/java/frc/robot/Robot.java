@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Auto.AutoCommand;
 import frc.robot.Climber.ToggleHooks;
@@ -47,6 +48,7 @@ public class Robot extends TimedRobot {
       autonomousCommand.cancel();
     }
     robotContainer.setTeleopDrive();
+    new InstantCommand(robotContainer.getIntake()::extendIntakeArmsSolenoid).schedule();
     // robotContainer.getLoaderSubsystem().setIsClimbing(false);
     // TODO: move to initializer in robotContainer
     new ToggleHooks(robotContainer.getClimberSubsystem()).schedule();
