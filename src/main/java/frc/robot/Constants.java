@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import frc.robot.Util.InterpolatingDoubleMap;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -103,23 +104,29 @@ public final class Constants {
     public static final int currentLimit = 75;
     public static final double deadband = 0.05;
 
-    //climber
+    // Climber
     public static final double winchMinLimit = 0;
     public static final double winchMaxLimit = 100;
     public static final int pistonMaxFrames = 15;
 
-    // shooter
+    // Shooter
     public static final int minShooterRPM = 0;
     public static final int maxShooterRPM = 5500;
     public static final double shooterVibrationTolerance = 0.03;
     public static final double driverRumble = 0.5;
     public static final double operatorRumble = 0.5;
 
-    // lazysusan
+    // TODO: Calculate the correct values for this map
+    // This maps the LimeLight's Vertical Offset (tY) to RPM
+    public static final InterpolatingDoubleMap rpmMap = new InterpolatingDoubleMap() {{
+        put(0.0, 0.0);
+    }};
+
+    // LazySusan
     public static final int turntableThresh = 45;
     public static final double stowedPosition = 50;
 
-    // differential constants (very cool)
+    // Differential Constants (very cool)
     public static final double diffConstLS = 0.014;//0.012 0.014
     public static final double diffConstAutoLS = 0.040;
     public static final double diffConstShooter = 9 * Math.pow(10, -6);
