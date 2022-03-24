@@ -43,6 +43,7 @@ import frc.robot.Shooter.LazySusanSubsystem;
 import frc.robot.Shooter.LimelightSpinUp;
 import frc.robot.Shooter.LowShotCommand;
 import frc.robot.Shooter.ManualAiming;
+import frc.robot.Shooter.ManualAimingPID;
 import frc.robot.Shooter.ShooterCommand;
 import frc.robot.Shooter.ShooterSubsystem;
 import frc.robot.Shooter.TankDriveAiming;
@@ -157,7 +158,8 @@ public class RobotContainer {
         //         controls.getOperatorController());
         // drivetrain.setDefaultCommand(driveWithJoystick);
 
-        turret.setDefaultCommand(new ManualAiming(turret, ControlBoard.getOperatorController()));
+        //turret.setDefaultCommand(new ManualAiming(turret, ControlBoard.getOperatorController()));
+        turret.setDefaultCommand(new ManualAimingPID(turret, ControlBoard.getOperatorController()));
 
         //shooterCommand = new ShooterCommand(shooter, turret, controls.getOperatorController(),
                 //controls.getDriverController());
