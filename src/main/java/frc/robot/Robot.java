@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Auto.AutoCommand;
 import frc.robot.Climber.ToggleHooks;
 import frc.robot.Loader.AutoLoad;
-import frc.robot.Shooter.AutoAimingAndSpinningUp;
 import frc.robot.Util.LimeLight;
 import frc.robot.Util.RobotContainer;
 import frc.robot.Util.LimeLight.LedMode;
@@ -54,7 +53,7 @@ public class Robot extends TimedRobot {
     // robotContainer.getLoaderSubsystem().setIsClimbing(false);
     // TODO: move to initializer in robotContainer
     new ToggleHooks(robotContainer.getClimberSubsystem()).schedule();
-    robotContainer.getLazySusanSubsystem().getLazySusanEncoder().setPosition(0);
+    robotContainer.getLazySusanSubsystem().setEncoderPosition(0);
     robotContainer.getDriveTrain().setBrake(true);
     robotContainer.getClimberMotorsSubsystem().getWinchMotor().getEncoder().setPosition(0);
     // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(true);
@@ -66,7 +65,7 @@ public class Robot extends TimedRobot {
     robotContainer.getDriveTrain().setEncoderPos(0);
 
     // TODO: move to autonomousCommand in separate file.
-    robotContainer.getLazySusanSubsystem().setLazySusanPosition(0);
+    robotContainer.getLazySusanSubsystem().setEncoderPosition(0);
 	new ToggleHooks(robotContainer.getClimberSubsystem()).schedule();
     //new DirectTurretAuto(robotContainer.getLazySusanSubsystem(), // -1.5*
     //robotContainer.getShooterSubsystem(), 0),

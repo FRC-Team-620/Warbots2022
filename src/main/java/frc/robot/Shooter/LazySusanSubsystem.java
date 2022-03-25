@@ -99,25 +99,7 @@ public class LazySusanSubsystem extends SubsystemBase {
         return lazySusanPID.atSetpoint();
     }
 
-
-
-    public CANSparkMax getLazySusanMotor() {
-        return lazySusan;
-    }
-
-    public void setLazySusanSpeed(double speed) {
-        //lazySusan.set(speed);
-    }
-    
-    public RelativeEncoder getLazySusanEncoder() {
-        return encoder;
-    }
-
-    public double getLazySusanPosition() {
-        return encoder.getPosition();
-    }
-
-    public void setLazySusanPosition(double p) {
+    public void setEncoderPosition(double p) {
         encoder.setPosition(p);
     }
 
