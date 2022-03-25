@@ -1,5 +1,6 @@
 package frc.robot.Shooter;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Util.LimeLight;
@@ -24,6 +25,8 @@ public class TurretAimingPID extends CommandBase {
         if (LimeLight.hasTarget()) {
             lazySusanSubsystem.setTurretPositionDegrees(lazySusanSubsystem.getRotation().getDegrees() - x);
         }
+        SmartDashboard.putNumber("LimeLight Distance", ShooterMath.getDistanceInMeters(Constants.azimuthAngle1, LimeLight.getTY(), Constants.limelightHeight, Constants.hubHeight));
+        SmartDashboard.putNumber("LimeLight TY", LimeLight.getTY()); //TODO: Remove debug data
     }
 
     @Override
