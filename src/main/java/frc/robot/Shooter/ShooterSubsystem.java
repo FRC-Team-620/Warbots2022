@@ -38,6 +38,7 @@ public class ShooterSubsystem extends SubsystemBase {
     protected final PIDController rightShooterPID;
     // TODO: Tune PID loops more for lower RPMs
 	private final double kP = 0.00025, kI = 0.0004;
+    private double testRPM;
 
     public ShooterSubsystem() {
         rightShooterMotor = new SimableCANSparkMax(Constants.rightShooterMotorID, MotorType.kBrushless);
@@ -66,6 +67,7 @@ public class ShooterSubsystem extends SubsystemBase {
         rightShooterPID.setTolerance(10, 10);
         SmartDashboard.putData(leftShooterPID);
         SmartDashboard.putData(rightShooterPID);
+        SmartDashboard.putNumber("Test RPM: ", testRPM);
     }
 
     @Override
@@ -90,6 +92,10 @@ public class ShooterSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Flywheel Right Setpoint", rightShooterPID.getSetpoint());
         SmartDashboard.putNumber("Flywheel Left Setpoint", leftShooterPID.getSetpoint());
         //MathUtil.clamp(output,powerDecel ? -1: 0,1);
+    }
+
+    public double getTestRPM() {
+        return SmartDashboard.getNumber("Test RPM: ", 0);
     }
 
     public double getSpeed() {

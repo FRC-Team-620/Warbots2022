@@ -41,8 +41,10 @@ import frc.robot.Shooter.LazySusanSubsystem;
 import frc.robot.Shooter.LimelightSpinUp;
 import frc.robot.Shooter.LowShotCommand;
 import frc.robot.Shooter.ManualAimingPID;
+import frc.robot.Shooter.SetpointSpinUp;
 import frc.robot.Shooter.ShooterSubsystem;
 import frc.robot.Shooter.TankDriveAiming;
+import frc.robot.Shooter.TestSetpointSpinUp;
 import frc.robot.Shooter.TurretAimingPID;
 
 /** Add your docs here. */
@@ -116,7 +118,8 @@ public class RobotContainer {
             new ParallelCommandGroup(   
                 //new LimelightSpinUp(this.getShooterSubsystem())
                 //new TurretAiming(this.getLazySusanSubsystem())
-                new TurretAimingPID(this.getLazySusanSubsystem())
+                //new TurretAimingPID(this.getLazySusanSubsystem())
+                new TestSetpointSpinUp(this.getShooterSubsystem())
             ));
 
         ControlBoard.tankDriveAimButton.whileActiveOnce(
