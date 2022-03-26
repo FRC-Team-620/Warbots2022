@@ -54,10 +54,10 @@ public class LazySusanSubsystem extends SubsystemBase {
 
         double lazySusanOutput = lazySusanPID.calculate(lazySusan.getEncoder().getPosition());
         double PIDOutput = MathUtil.clamp(lazySusanOutput, -1, 1);
-        if (lazySusan.getEncoder().getPosition() > highLimit) {
+        if (lazySusan.getEncoder().getPosition() > highLimit+5) {
             PIDOutput = MathUtil.clamp(PIDOutput, -1, 0);
         }
-        if (lazySusan.getEncoder().getPosition() < lowLimit) {
+        if (lazySusan.getEncoder().getPosition() < lowLimit-5) {
             PIDOutput = MathUtil.clamp(PIDOutput, 0, 1);
         }
 

@@ -15,7 +15,7 @@ public class ManualAimingPID extends CommandBase {
 
     @Override
     public void execute() {
-        lazySusanSubsystem.setTurretPositionDegrees(lazySusanSubsystem.getSetpointDegrees() + maxSpeed * operatorXbox.getLeftX());
+        lazySusanSubsystem.setTurretPositionDegrees((lazySusanSubsystem.getSetpointDegrees() - maxSpeed * operatorXbox.getLeftX()));
         //lazySusanSubsystem.setTurretPosition(operatorXbox.getLeftX() * lazySusanSubsystem.highLimit);
     }
 
