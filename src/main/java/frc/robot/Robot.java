@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Auto.AutoCommand;
+import frc.robot.Auto.Routines.Taxi;
 import frc.robot.Climber.ToggleHooks;
 import frc.robot.Loader.AutoLoad;
 import frc.robot.Util.LimeLight;
@@ -62,20 +63,19 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    robotContainer.getDriveTrain().setEncoderPos(0);
+    // robotContainer.getDriveTrain().setEncoderPos(0);
 
     // TODO: move to autonomousCommand in separate file.
-    robotContainer.getLazySusanSubsystem().setEncoderPosition(0);
-	new ToggleHooks(robotContainer.getClimberSubsystem()).schedule();
+    // robotContainer.getLazySusanSubsystem().setEncoderPosition(0);
+	// new ToggleHooks(robotContainer.getClimberSubsystem()).schedule();
     //new DirectTurretAuto(robotContainer.getLazySusanSubsystem(), // -1.5*
     //robotContainer.getShooterSubsystem(), 0),
-    autonomousCommand = new ParallelCommandGroup(
-     // new AutoCommand(robotContainer.getFiringPins(), robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer), 
-     // new AutoAimingAndSpinningUp(robotContainer.getShooterSubsystem(),  robotContainer.getLazySusanSubsystem(), true, robotContainer.getOperatorController()), 
-      new AutoLoad(robotContainer.getIntake())
-    );
-
-	robotContainer.getIntake().extendIntakeArmsSolenoid();
+  //   autonomousCommand = new ParallelCommandGroup(
+  //     new AutoCommand(robotContainer.getFiringPins(), robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer), 
+  //     new AutoAimingAndSpinningUp(robotContainer.getShooterSubsystem(),  robotContainer.getLazySusanSubsystem(), true, robotContainer.getOperatorController()), 
+  //     new AutoLoad(robotContainer.getIntake())
+  //   );
+	// robotContainer.getIntake().extendIntakeArmsSolenoid();
 
     // autonomousCommand = new SequentialCommandGroup(
     //     new TurnDegrees(robotContainer.getDriveTrain(), 180),
@@ -94,7 +94,7 @@ public class Robot extends TimedRobot {
     // robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(),
     // robotContainer),
     // new AutoLoad(robotContainer.getLoaderSubsystem(), 1)));
-    
+    autonomousCommand = new Taxi(robotContainer.getDriveTrain());
     if (autonomousCommand != null) {
       autonomousCommand.schedule();
     }

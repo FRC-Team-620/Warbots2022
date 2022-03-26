@@ -47,6 +47,10 @@ public class Drivetrain extends SubsystemBase {
         //drive.tankDrive(leftSpeed, rightSpeed);
     }
 
+    public void arcadeDriveSet(double speed, double rotation) {
+        drive.arcadeDrive(speed, rotation);
+    }
+    
     // average the two encoders for this later
     public double getLeftSpeed() {
         return leftFrontEncoder.getVelocity();
