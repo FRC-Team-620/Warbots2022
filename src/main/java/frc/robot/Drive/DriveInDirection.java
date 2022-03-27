@@ -1,7 +1,5 @@
 package frc.robot.Drive;
 
-import com.revrobotics.CANSparkMax.IdleMode;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class DriveInDirection extends CommandBase {
