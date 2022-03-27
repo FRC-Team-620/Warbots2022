@@ -144,33 +144,33 @@ public class Robot extends TimedRobot {
   /**
    * Simulation Code
    */
-  // @Override
-  // public void simulationPeriodic() {
-  //   // Here we calculate the battery voltage based on drawn current.
-  //   // As our robot draws more power from the battery its voltage drops.
-  //   // The estimated voltage is highly dependent on the battery's internal
-  //   // resistance.
-  //   double drawCurrent = robotContainer.getDriveTrain().getDrawnCurrentAmps(); //
-  //   // Current Seems to be too high look into
-  //   // later
-  //   drawCurrent += robotContainer.getShooterSubsystem().getDrawnCurrentAmps();
-  //   SmartDashboard.putNumber("Total Current", drawCurrent);
-  //   // BatterySim.calculateDefaultBatteryLoadedVoltage(currents)
-  //   double loadedVoltage = BatterySim.calculateDefaultBatteryLoadedVoltage(13,
-  //       0.02, drawCurrent);
-  //   SmartDashboard.putNumber("Robot Volts", loadedVoltage);
-  //   RoboRioSim.setVInVoltage(loadedVoltage);
+  @Override
+  public void simulationPeriodic() {
+    // Here we calculate the battery voltage based on drawn current.
+    // As our robot draws more power from the battery its voltage drops.
+    // The estimated voltage is highly dependent on the battery's internal
+    // resistance.
+    double drawCurrent = robotContainer.getDriveTrain().getDrawnCurrentAmps(); //
+    // Current Seems to be too high look into
+    // later
+    drawCurrent += robotContainer.getShooterSubsystem().getDrawnCurrentAmps();
+    SmartDashboard.putNumber("Total Current", drawCurrent);
+    // BatterySim.calculateDefaultBatteryLoadedVoltage(currents)
+    double loadedVoltage = BatterySim.calculateDefaultBatteryLoadedVoltage(13,
+        0.02, drawCurrent);
+    SmartDashboard.putNumber("Robot Volts", loadedVoltage);
+    RoboRioSim.setVInVoltage(loadedVoltage);
 
-  //   var robotpos = robotContainer.getDriveTrain().getPose();
-  //   robotContainer.robotFieldWidget.setRobotPose(robotpos);
-  //   var hubpos = new Pose2d(7.940, 4.08, new Rotation2d()); // Position of the hub
-  //   robotContainer.robotFieldWidget.getObject("hub").setPose(hubpos);
-  //   var tpos = new Pose2d(robotpos.getTranslation(),
-  //       robotpos.getRotation().plus(robotContainer.getLazySusanSubsystem().simTurrentRotation)); // Calculate Simulated
-  //                                                                                                // turrent position
-  //   robotContainer.robotFieldWidget.getObject("Turret").setPose(tpos);
+    var robotpos = robotContainer.getDriveTrain().getPose();
+    robotContainer.robotFieldWidget.setRobotPose(robotpos);
+    var hubpos = new Pose2d(7.940, 4.08, new Rotation2d()); // Position of the hub
+    robotContainer.robotFieldWidget.getObject("hub").setPose(hubpos);
+    var tpos = new Pose2d(robotpos.getTranslation(),
+        robotpos.getRotation().plus(robotContainer.getLazySusanSubsystem().simTurrentRotation)); // Calculate Simulated
+                                                                                                 // turrent position
+    robotContainer.robotFieldWidget.getObject("Turret").setPose(tpos);
 
-  //   robotContainer.getShooterSubsystem().possim.setPosition(tpos);
-  //   robotContainer.getShooterSubsystem().possim.update(Constants.kSimUpdateTime);
-  // }
+    robotContainer.getShooterSubsystem().possim.setPosition(tpos);
+    robotContainer.getShooterSubsystem().possim.update(Constants.kSimUpdateTime);
+  }
 }
