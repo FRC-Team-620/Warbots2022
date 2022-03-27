@@ -15,14 +15,24 @@ public class InterpolatingDoubleMap extends TreeMap<Double, Double> {
 
     @Override
     public Double put(Double key, Double value) {
-        if (this.maxSize > 0 && this.maxSize <= this.size()) {
+        if (this.maxSize > 0 && this.maxSize <= this.size()) { // TODO: Document this behavior, throw an error or avaoid
+                                                               // it all together via a constructor.
             this.remove(this.firstKey());
         }
 
         return super.put(key, value);
     }
 
-    public Double getInterpolated(Double key) {
+    public Double put(double key, double value) {
+        return this.put(Double.valueOf(key), Double.valueOf(value));
+    }
+
+    public double getInterpolated(double key) {
+        return Double.valueOf(this.getInterpolated(Double.valueOf(key)));
+    }
+
+    private Double getInterpolated(Double key) {// TODO: Document or change Behavior when key outside of the table is
+                                                // used. (JavaDocs)
         Double value = this.get(key);
 
         if (value == null) {
@@ -35,7 +45,7 @@ public class InterpolatingDoubleMap extends TreeMap<Double, Double> {
                 return null;
             } else if (lowerKey == null) {
                 return this.get(upperKey);
-            } else if (upperKey == null) 
+            } else if (upperKey == null)
                 return this.get(lowerKey);
 
             // Get the various values for interpolation
@@ -44,6 +54,7 @@ public class InterpolatingDoubleMap extends TreeMap<Double, Double> {
             Double upperToLower = upperKey - lowerKey;
             Double inverse = keyToLower <= 0 || upperToLower <= 0 ? 0 : keyToLower / upperToLower;
             return (this.get(upperKey) - lowerValue) * inverse + lowerValue;
-        } else return value;
+        } else
+            return value;
     }
 }
