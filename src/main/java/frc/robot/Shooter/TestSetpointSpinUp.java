@@ -1,7 +1,5 @@
 package frc.robot.Shooter;
 
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class TestSetpointSpinUp extends CommandBase {

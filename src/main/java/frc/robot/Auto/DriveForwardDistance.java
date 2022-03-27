@@ -6,7 +6,6 @@ package frc.robot.Auto;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Drive.Drivetrain;
-import frc.robot.Drive.DriveForwardsEncoder;
 
 public class DriveForwardDistance extends CommandBase {
   Drivetrain drivetrain;
