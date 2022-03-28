@@ -119,7 +119,13 @@ public final class Constants {
     // TODO: Calculate the correct values for this map
     // This maps the LimeLight's Vertical Offset (tY) to RPM
     public static final InterpolatingDoubleMap rpmMap = new InterpolatingDoubleMap() {{
-        put(0.0, 0.0);
+        put(7.7, 2458.0);
+        put(-0.4, 2682.0);
+        put(-6.7, 2990.0);
+        put(-12.3, 3375.0);
+        put(-16.38, 3663.0);
+        put(-19.09, 3930.0);
+        put(-20.39, 4302.0);//TODO: Out of range warning on the lights/consule
     }};
 
     // LazySusan
