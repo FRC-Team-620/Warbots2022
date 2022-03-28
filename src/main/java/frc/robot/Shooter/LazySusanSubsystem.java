@@ -1,6 +1,5 @@
 package frc.robot.Shooter;
 
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
@@ -22,8 +21,10 @@ public class LazySusanSubsystem extends SubsystemBase {
     protected SimableCANSparkMax lazySusan;
     protected RelativeEncoder encoder;
     private PIDController lazySusanPID;
-    private final double kP = 0.0004, kI = 0, kD = 0;
-    public final double lowLimit = 0, highLimit = 20;
+    private Rotation2d turretRotation;
+    private final double countToDegreesFactor = 4;
+    private final double kP = 0.060000, kI = 0.003000, kD = 0;//KI0.00004 TODO: Tune PID Loop
+    public final double lowLimit = -45, highLimit = 45;//Left 45.690002 Right -45.356651 AbsoluteMaxRange 90
     // private double turntableThresh = 35;
 
     public LazySusanSubsystem() {
@@ -36,10 +37,13 @@ public class LazySusanSubsystem extends SubsystemBase {
 
         lazySusan.setSmartCurrentLimit(35);
 
+        //lazySusan.setInverted(true);
+
         lazySusanPID = new PIDController(kP, kI, kD);
         lazySusanPID.setTolerance(10);
-        lazySusanPID.setIntegratorRange(-10, 10);
+        //lazySusanPID.setIntegratorRange(-10, 10);
 
+        turretRotation = new Rotation2d();
         SmartDashboard.putData(lazySusanPID);
     }
 
@@ -48,40 +52,54 @@ public class LazySusanSubsystem extends SubsystemBase {
         lazySusanPID.calculate(lazySusan.getEncoder().getPosition());
 
         double lazySusanOutput = lazySusanPID.calculate(lazySusan.getEncoder().getPosition());
+        double PIDOutput = MathUtil.clamp(lazySusanOutput, -1, 1);
+        if (lazySusan.getEncoder().getPosition() > highLimit+5) {
+            PIDOutput = MathUtil.clamp(PIDOutput, -1, 0);
+        }
+        if (lazySusan.getEncoder().getPosition() < lowLimit-5) {
+            PIDOutput = MathUtil.clamp(PIDOutput, 0, 1);
+        }
 
-        lazySusan.set(MathUtil.clamp(lazySusanOutput, -1, 1) * 0.2);
+        turretRotation = Rotation2d.fromDegrees(lazySusan.getEncoder().getPosition() * countToDegreesFactor);
+
+
+        lazySusan.set(PIDOutput);
+
 
         SmartDashboard.putNumber("TurretPos", lazySusan.getEncoder().getPosition());
+        SmartDashboard.putNumber("LazySusanMotorPercentage", lazySusan.get());
     }
 
-    public void setTurretPosition(double x) {
+    private void setTurretPosition(double x) {
         lazySusanPID.setSetpoint(MathUtil.clamp(x, lowLimit, highLimit));
     }
+
+    public Rotation2d getRotation() {
+        return turretRotation;
+    }
+
+    public double getSetpointDegrees() {
+        return lazySusanPID.getSetpoint() * countToDegreesFactor;
+    }
+
+
+
+    public void setTurretPositionDegrees(double degrees) {
+        this.setTurretPosition(degrees/countToDegreesFactor);
+    }
+
+
+    public void updateRotation(double encoderCounts) {
+
+    }
+
 
     public boolean atTurretPosition() {
         return lazySusanPID.atSetpoint();
     }
 
-
-
-    public CANSparkMax getLazySusanMotor() {
-        return lazySusan;
-    }
-
-    public void setLazySusanSpeed(double speed) {
-        //lazySusan.set(speed);
-    }
-    
-    public RelativeEncoder getLazySusanEncoder() {
-        return encoder;
-    }
-
-    public double getLazySusanPosition() {
-        return encoder.getPosition();
-    }
-
-    public void setLazySusanPosition(double p) {
-        //encoder.setPosition(p);
+    public void setEncoderPosition(double p) {
+        encoder.setPosition(p);
     }
 
     public double getTicksPerMotorRotation() {

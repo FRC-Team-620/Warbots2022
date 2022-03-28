@@ -8,26 +8,20 @@
 
 package frc.robot.Util;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.Climber.ClimberMotorsSubsystem;
 import frc.robot.Climber.ClimberSubsystem;
 import frc.robot.Climber.ExtendArmsAndStow;
-import frc.robot.Climber.ToggleHooks;
 import frc.robot.Climber.RaiseAndGrab;
 import frc.robot.Climber.RaisePistons;
+import frc.robot.Climber.ToggleHooks;
 import frc.robot.Climber.WinchHold;
 import frc.robot.Controls.ControlBoard;
 import frc.robot.Drive.DriveWithJoystick;
@@ -36,18 +30,15 @@ import frc.robot.Loader.Intake;
 import frc.robot.Loader.IntakeBall;
 import frc.robot.Loader.OuttakeBall;
 import frc.robot.Shooter.ActivateFiringPins;
-import frc.robot.Shooter.AutoAimingAndSpinningUp;
-import frc.robot.Shooter.DirectTurret;
 import frc.robot.Shooter.FiringPins;
 import frc.robot.Shooter.LazySusanSubsystem;
 import frc.robot.Shooter.LimelightSpinUp;
 import frc.robot.Shooter.LowShotCommand;
-import frc.robot.Shooter.ManualAiming;
 import frc.robot.Shooter.ManualAimingPID;
-import frc.robot.Shooter.ShooterCommand;
 import frc.robot.Shooter.ShooterSubsystem;
 import frc.robot.Shooter.TankDriveAiming;
-import frc.robot.Shooter.TurretAiming;
+import frc.robot.Shooter.TestSetpointSpinUp;
+import frc.robot.Shooter.TurretAimingPID;
 
 /** Add your docs here. */
 public class RobotContainer {
@@ -64,7 +55,6 @@ public class RobotContainer {
     private ClimberMotorsSubsystem winch;
 
     private DriveWithJoystick driveWithJoystick;
-    private ShooterCommand shooterCommand;
 
     // TODO: *sighs emoji*
     TrajectorySelector trajectorySelector = new TrajectorySelector(
@@ -96,8 +86,8 @@ public class RobotContainer {
 
         ControlBoard.extendArmsButton.whenPressed(
                 new ParallelCommandGroup(
-                        new ExtendArmsAndStow(winch, climberHooks, intake),
-                        new DirectTurret(turret, shooter, Constants.stowedPosition)
+                        new ExtendArmsAndStow(winch, climberHooks, intake)
+                        //new DirectTurret(turret, shooter, Constants.stowedPosition)
                         ));
 
         ControlBoard.climbSequenceButton.whenPressed(
@@ -119,8 +109,10 @@ public class RobotContainer {
 
         ControlBoard.aimTurretTrigger.whileActiveOnce(
             new ParallelCommandGroup(   
-                new LimelightSpinUp(this.getShooterSubsystem())
+                //new LimelightSpinUp(this.getShooterSubsystem())
                 //new TurretAiming(this.getLazySusanSubsystem())
+                new TurretAimingPID(this.getLazySusanSubsystem()),
+                new TestSetpointSpinUp(this.getShooterSubsystem())
             ));
 
         ControlBoard.tankDriveAimButton.whileActiveOnce(
@@ -220,10 +212,6 @@ public class RobotContainer {
     // public LoaderCommand getLoaderCommand() {
     //     return loaderCommand;
     // }
-
-    public ShooterCommand getShooterCommand() {
-        return shooterCommand;
-    }
 
     public Intake getIntake() {
         return intake;

@@ -62,6 +62,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+  	/*
     robotContainer.getDriveTrain().setEncoderPos(0);
 
     // TODO: move to autonomousCommand in separate file.
@@ -76,7 +77,7 @@ public class Robot extends TimedRobot {
     );
 
 	robotContainer.getIntake().extendIntakeArmsSolenoid();
-
+	*/
     // autonomousCommand = new SequentialCommandGroup(
     //     new TurnDegrees(robotContainer.getDriveTrain(), 180),
     //     new TurnDegrees(robotContainer.getDriveTrain(), -180),
@@ -119,7 +120,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
     robotContainer.init();
     LimeLight.setLedMode(LedMode.ON);
-
+	robotContainer.getLazySusanSubsystem().setEncoderPosition(0);
     // new LowerHooks(robotContainer.getClimberSubsystem()).schedule();
     // new SensorHooksUp(robotContainer.getClimberMotorsSubsystem(), robotContainer.getClimberSubsystem()).schedule();
   }
@@ -127,6 +128,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic() {
+  	/*
     robotContainer.getLEDStrip().setGradient(LEDDisplacement,
       LEDStrip.RED, 
       LEDStrip.ORANGE, 
@@ -137,6 +139,7 @@ public class Robot extends TimedRobot {
       LEDStrip.MAGENTA
     );
     LEDDisplacement++;
+    */
   }
 
 
