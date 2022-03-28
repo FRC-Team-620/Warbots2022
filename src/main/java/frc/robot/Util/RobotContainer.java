@@ -74,7 +74,7 @@ public class RobotContainer {
         intake = new Intake();
         shooter = new ShooterSubsystem();
         firingPins = new FiringPins();
-        turret = new LazySusanSubsystem();
+        turret = new LazySusanSubsystem(drivetrain::getPose);
         climberHooks = new ClimberSubsystem();
         winch = new ClimberMotorsSubsystem();
     }
