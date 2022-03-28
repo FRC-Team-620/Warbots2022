@@ -9,7 +9,7 @@ public final class ShooterMath {
 
     public static double metersToRPM(double meters) {
         double distanceInFeet = Constants.metersToFeet * meters;
-        return 117.3708 * distanceInFeet + 1750;
+        return 163.0311615 * distanceInFeet + 1735.835694;
     }
 
     public static long roundUpToNearestMultiple(double input, int step) {
