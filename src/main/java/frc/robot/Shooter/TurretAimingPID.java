@@ -2,6 +2,7 @@ package frc.robot.Shooter;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.Constants;
 import frc.robot.Util.LimeLight;
 import frc.robot.Util.LimeLight.LedMode;
