@@ -38,6 +38,7 @@ import frc.robot.Shooter.ManualAimingPID;
 import frc.robot.Shooter.ShooterSubsystem;
 import frc.robot.Shooter.TankDriveAiming;
 import frc.robot.Shooter.TestSetpointSpinUp;
+import frc.robot.Shooter.TurretAimingPID;
 
 /** Add your docs here. */
 public class RobotContainer {
@@ -110,7 +111,7 @@ public class RobotContainer {
             new ParallelCommandGroup(   
                 //new LimelightSpinUp(this.getShooterSubsystem())
                 //new TurretAiming(this.getLazySusanSubsystem())
-                new TurretAimingPID(this.getLazySusanSubsystem())
+                new TurretAimingPID(this.getLazySusanSubsystem()),
                 new TestSetpointSpinUp(this.getShooterSubsystem())
             ));
 

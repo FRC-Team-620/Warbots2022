@@ -3,58 +3,68 @@ package frc.robot.Util;
 import java.util.TreeMap;
 
 public class InterpolatingDoubleMap extends TreeMap<Double, Double> {
-    private final int maxSize;
-
-    public InterpolatingDoubleMap(int maxSize) {
-        this.maxSize = maxSize;
+    /** 
+     * Determines whether the specified key is between the 
+     * lowest and highest keys in a non-empty tree map
+     * 
+     * @param key The key to check against
+     * @return    Whether the key is inside the bounds
+     */
+    public boolean isKeyInBounds(Double key) {
+        return !this.isEmpty() && key >= this.firstKey() && key <= this.lastKey();
     }
 
-    public InterpolatingDoubleMap() {
-        this(0);
+    /** 
+     * Calculates the interpolated value of the specified 
+     * key and returns the closest value if out of 
+     * bounds or null if the tree map is empty
+     * 
+     * @param key The key to interpolate from
+     * @return    The interpolated value from the key
+     */
+    public Double getInterpolated(Double key) {
+        return this.getInterpolated(key, null);
     }
 
-    @Override
-    public Double put(Double key, Double value) {
-        if (this.maxSize > 0 && this.maxSize <= this.size()) { // TODO: Document this behavior, throw an error or avaoid
-                                                               // it all together via a constructor.
-            this.remove(this.firstKey());
-        }
-
-        return super.put(key, value);
-    }
-
-    public Double put(double key, double value) {
-        return this.put(Double.valueOf(key), Double.valueOf(value));
-    }
-
-    public double getInterpolated(double key) {
-        return Double.valueOf(this.getInterpolated(Double.valueOf(key)));
-    }
-
-    private Double getInterpolated(Double key) {// TODO: Document or change Behavior when key outside of the table is
-                                                // used. (JavaDocs)
-        Double value = this.get(key);
-
-        if (value == null) {
+    /** 
+     * Calculates the interpolated value of the specified
+     * key and returns the default value if out of bounds
+     * 
+     * @param key          The key to interpolate from
+     * @param defaultValue The value to return if out of bounds
+     * @return             The interpolated value from the key
+     */
+    public Double getInterpolated(Double key, Double defaultValue) {
+        // Return the default value if the specified key is out of bounds
+        if (defaultValue != null && !this.isKeyInBounds(key))
+            return defaultValue;
+        // Return the associated value if a matching key happens to exist
+        else if (this.containsKey(key))
+            return this.get(key);
+        else {
             // Get upper and lower keys for interpolation
             Double lowerKey = this.floorKey(key);
             Double upperKey = this.ceilingKey(key);
 
             // Return the nearest data point if at tree edge
             if (lowerKey == null && upperKey == null) {
+                // Return null if tree is empty
                 return null;
             } else if (lowerKey == null) {
+                // Return lowest value if key is below the minimum limit
                 return this.get(upperKey);
             } else if (upperKey == null)
+                // Return highest value if key is above the maximum limit
                 return this.get(lowerKey);
 
             // Get the various values for interpolation
             Double lowerValue = this.get(lowerKey);
             Double keyToLower = key - lowerKey;
             Double upperToLower = upperKey - lowerKey;
+
+            // Verify that undefined and unwanted values are not produced in division
             Double inverse = keyToLower <= 0 || upperToLower <= 0 ? 0 : keyToLower / upperToLower;
             return (this.get(upperKey) - lowerValue) * inverse + lowerValue;
-        } else
-            return value;
+        }
     }
 }
