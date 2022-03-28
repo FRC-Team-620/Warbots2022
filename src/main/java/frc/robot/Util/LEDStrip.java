@@ -6,10 +6,23 @@ import edu.wpi.first.wpilibj.util.Color;
 
 public class LEDStrip {
 
-    protected static final Error RGB_FORMATTING_ERROR = 
-        new Error("RGB color inputs must be of length 3.");
+    protected static final IncorrectRGBFormattingException RGB_FORMATTING_EXCEPTION = 
+        new IncorrectRGBFormattingException();
 
     protected static final int MAX_RGB = 255;
+
+    public static final int[] 
+        RED = new int[]{255, 0, 0},
+        ORANGE = new int[]{255, 127, 0},
+        YELLOW = new int[]{255, 255, 0},
+        GREEN = new int[]{0, 255, 0},
+        CYAN = new int[]{0, 255, 255},
+        BLUE = new int[]{0, 0, 255},
+        PURPLE = new int[]{75, 0, 130},
+        MAGENTA = new int[]{255, 0, 255},
+        WHITE = new int[]{255, 255, 255},
+        GRAY = new int[]{127, 127, 127},
+        OFF = new int[]{0, 0, 0};
 
     protected int PWMPort;
     protected AddressableLED lights;
@@ -46,9 +59,9 @@ public class LEDStrip {
     }
 
     // sets the entire 'LEDStrip' to a given color
-    public void setSolidColor(int[] rgb) {
+    public void setSolidColor(int[] rgb) throws IncorrectRGBFormattingException {
         if(rgb.length != 3)
-            throw LEDStrip.RGB_FORMATTING_ERROR;
+            throw LEDStrip.RGB_FORMATTING_EXCEPTION;
         this.setSolidColor(rgb[0], rgb[1], rgb[2]);
     }
 
@@ -63,7 +76,7 @@ public class LEDStrip {
     // }
 
     // sets the 'LEDStrip' to a gradient melding between the given colors
-    public void setGradient(int[]... colors) {
+    public void setGradient(int[]... colors) throws IncorrectRGBFormattingException {
         this.setGradient(0, colors);
     }
 
@@ -71,13 +84,13 @@ public class LEDStrip {
     // 'offset' refers to the offset from the start that the gradient begins at, 
     // though it wraps around, so there will be no dead space.
     // 'offset' is useful for looping colors (continuously update 'offset')
-    public void setGradient(int offset, int[]... colors) {
+    public void setGradient(int offset, int[]... colors) throws IncorrectRGBFormattingException {
         int grad[][];
         int lightsPerGrad = this.buffer.getLength()/colors.length;
         int finalGradPos = lightsPerGrad*colors.length-1;
         for(int i = 0; i < colors.length; i++) {
             if(colors[i].length != 3)
-                throw LEDStrip.RGB_FORMATTING_ERROR;
+                throw LEDStrip.RGB_FORMATTING_EXCEPTION;
             grad = LEDStrip.colorGradient(colors[i], 
                 colors[(i+1)%colors.length], lightsPerGrad);
             for(int k = 0; k < lightsPerGrad; k++) {
@@ -96,9 +109,9 @@ public class LEDStrip {
 
     // returns an array of RGB color arrays encoding the gradient between two given
     // colors over a given number of 'steps' (the smoothness of the gradient)
-    public static int[][] colorGradient(int[] startColor, int[] endColor, int steps) {
+    public static int[][] colorGradient(int[] startColor, int[] endColor, int steps) throws IncorrectRGBFormattingException {
         if(startColor.length != 3 || endColor.length != 3)
-            throw LEDStrip.RGB_FORMATTING_ERROR;
+            throw LEDStrip.RGB_FORMATTING_EXCEPTION;
         int gradient[][] = new int[steps][3], color[];
         double proportion;
         
@@ -122,8 +135,8 @@ public class LEDStrip {
     }
 }
 
-// class IncorrectRGBFormattingError extends Error {
-//     public IncorrectRGBFormattingError() {
-//         super("RGB color inputs must be of length 3.");
-//     }
-// }
+class IncorrectRGBFormattingException extends Exception {
+    public IncorrectRGBFormattingException() {
+        super("RGB color inputs must be of length 3.");
+    }
+}
