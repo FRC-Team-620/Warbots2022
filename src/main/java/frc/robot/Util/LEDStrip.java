@@ -6,23 +6,23 @@ import edu.wpi.first.wpilibj.util.Color;
 
 public class LEDStrip {
 
-    protected static final IncorrectRGBFormattingException RGB_FORMATTING_EXCEPTION = 
-        new IncorrectRGBFormattingException();
+    // protected static final IncorrectRGBFormattingException RGB_FORMATTING_EXCEPTION = 
+    //     new IncorrectRGBFormattingException();
 
-    protected static final int MAX_RGB = 255;
+    // protected static final int MAX_RGB = 255;
 
-    public static final int[] 
-        RED = new int[]{255, 0, 0},
-        ORANGE = new int[]{255, 127, 0},
-        YELLOW = new int[]{255, 255, 0},
-        GREEN = new int[]{0, 255, 0},
-        CYAN = new int[]{0, 255, 255},
-        BLUE = new int[]{0, 0, 255},
-        PURPLE = new int[]{75, 0, 130},
-        MAGENTA = new int[]{255, 0, 255},
-        WHITE = new int[]{255, 255, 255},
-        GRAY = new int[]{127, 127, 127},
-        OFF = new int[]{0, 0, 0};
+    // public static final Color
+    //     RED = new Color(255, 0, 0),
+    //     ORANGE = new Color(255, 127, 0),
+    //     YELLOW = new Color(255, 255, 0),
+    //     GREEN = new Color(0, 255, 0),
+    //     CYAN = new Color(0, 255, 255),
+    //     BLUE = new Color(0, 0, 255),
+    //     PURPLE = new Color(75, 0, 130),
+    //     MAGENTA = new Color(255, 0, 255),
+    //     WHITE = new Color(255, 255, 255),
+    //     GRAY = new Color(127, 127, 127),
+    //     OFF = new Color(0, 0, 0);
 
     protected int PWMPort;
     protected AddressableLED lights;
@@ -45,25 +45,25 @@ public class LEDStrip {
     }
 
     // returns an RGB representation of the light at a given index of the 'AddressableLEDBuffer'
-    public int[] colorAt(int idx) {
-        return LEDStrip.colorToRGBArray(this.buffer.getLED(idx));
+    public Color colorAt(int idx) {
+        return this.buffer.getLED(idx);
     }
 
     // sets the entire 'LEDStrip' to a given color
-    public void setSolidColor(int R, int G, int B) {
+    public void setSolidColor(Color c) {
         for (int i = 0; i < this.buffer.getLength(); i++) {
             // Sets the specified LED to the RGB values for red
-            this.buffer.setRGB(i, R, G, B);
+            this.buffer.setLED(i, c);
         }
         this.lights.setData(this.buffer);
     }
 
-    // sets the entire 'LEDStrip' to a given color
-    public void setSolidColor(int[] rgb) throws IncorrectRGBFormattingException {
-        if(rgb.length != 3)
-            throw LEDStrip.RGB_FORMATTING_EXCEPTION;
-        this.setSolidColor(rgb[0], rgb[1], rgb[2]);
-    }
+    // // sets the entire 'LEDStrip' to a given color
+    // public void setSolidColor(int[] rgb) throws IncorrectRGBFormattingException {
+    //     if(rgb.length != 3)
+    //         throw LEDStrip.RGB_FORMATTING_EXCEPTION;
+    //     this.setSolidColor(rgb[0], rgb[1], rgb[2]);
+    // }
 
     // public void setGradient(int[] startColor, int[] endColor) {
     //     if(startColor.length != 3 || endColor.length != 3)
@@ -76,7 +76,7 @@ public class LEDStrip {
     // }
 
     // sets the 'LEDStrip' to a gradient melding between the given colors
-    public void setGradient(int[]... colors) throws IncorrectRGBFormattingException {
+    public void setGradient(Color... colors) {
         this.setGradient(0, colors);
     }
 
@@ -84,55 +84,56 @@ public class LEDStrip {
     // 'offset' refers to the offset from the start that the gradient begins at, 
     // though it wraps around, so there will be no dead space.
     // 'offset' is useful for looping colors (continuously update 'offset')
-    public void setGradient(int offset, int[]... colors) throws IncorrectRGBFormattingException {
-        int grad[][];
+    public void setGradient(int offset, Color... colors) {
+        Color grad[];
         int lightsPerGrad = this.buffer.getLength()/colors.length;
         int finalGradPos = lightsPerGrad*colors.length-1;
         for(int i = 0; i < colors.length; i++) {
-            if(colors[i].length != 3)
-                throw LEDStrip.RGB_FORMATTING_EXCEPTION;
+            // if(colors[i].length != 3)
+            //     throw LEDStrip.RGB_FORMATTING_EXCEPTION;
             grad = LEDStrip.colorGradient(colors[i], 
                 colors[(i+1)%colors.length], lightsPerGrad);
             for(int k = 0; k < lightsPerGrad; k++) {
                 int lightIdx = i*lightsPerGrad+k;
-                this.buffer.setRGB((lightIdx+offset)%(finalGradPos+1), 
-                    grad[k][0], grad[k][1], grad[k][2]);
+                this.buffer.setLED((lightIdx+offset)%(finalGradPos+1), grad[k]);
             }
         }
         // correcting error resulting from integer division
-        int[] finalColor = this.colorAt(finalGradPos);
+        Color finalColor = this.colorAt(finalGradPos);
         for(int i = finalGradPos; i < this.buffer.getLength(); i++)
-            this.buffer.setRGB(i, finalColor[0], finalColor[1], finalColor[2]);
+            this.buffer.setLED(i, finalColor);
         // setting the data
         this.lights.setData(this.buffer);
     }
 
     // returns an array of RGB color arrays encoding the gradient between two given
     // colors over a given number of 'steps' (the smoothness of the gradient)
-    public static int[][] colorGradient(int[] startColor, int[] endColor, int steps) throws IncorrectRGBFormattingException {
-        if(startColor.length != 3 || endColor.length != 3)
-            throw LEDStrip.RGB_FORMATTING_EXCEPTION;
-        int gradient[][] = new int[steps][3], color[];
+    public static Color[] colorGradient(Color startColor, Color endColor, int steps) {
+        Color gradient[] = new Color[steps], color;
         double proportion;
         
         for(int i = 0; i < gradient.length; i++) {
             proportion = (double)i/(gradient.length-1);
-            color = new int[3];
-            for(int k = 0; k < color.length; k++)
-                color[k] = (int)(proportion*(endColor[k]-startColor[k])+startColor[k]);
+            color = new Color(
+                proportion*(endColor.red-startColor.red)+startColor.red,
+                proportion*(endColor.green-startColor.green)+startColor.green,
+                proportion*(endColor.blue-startColor.blue)+startColor.blue
+            );
+            // for(int k = 0; k < color.length; k++)
+            //     color[k] = (int)(proportion*(endColor[k]-startColor[k])+startColor[k]);
             gradient[i] = color;
         }
         return gradient;
     }
 
-    // converts a 'color' object into an array representation of an RGB
-    public static int[] colorToRGBArray(Color c) {
-        return new int[]{
-            (int)(c.red*LEDStrip.MAX_RGB),
-            (int)(c.green*LEDStrip.MAX_RGB),
-            (int)(c.blue*LEDStrip.MAX_RGB)
-        };
-    }
+    // // converts a 'color' object into an array representation of an RGB
+    // public static int[] colorToRGBArray(Color c) {
+    //     return new int[]{
+    //         (int)(c.red*LEDStrip.MAX_RGB),
+    //         (int)(c.green*LEDStrip.MAX_RGB),
+    //         (int)(c.blue*LEDStrip.MAX_RGB)
+    //     };
+    // }
 }
 
 class IncorrectRGBFormattingException extends Exception {
