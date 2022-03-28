@@ -7,9 +7,22 @@ import edu.wpi.first.wpilibj.util.Color;
 public class LEDStrip {
 
     protected static final Error RGB_FORMATTING_ERROR = 
-        new Error("RGB color inputs must be of length 3.");
+        new IncorrectRGBFormattingError();
 
     protected static final int MAX_RGB = 255;
+
+    public static final int[] 
+        RED = new int[]{255, 0, 0},
+        ORANGE = new int[]{255, 127, 0},
+        YELLOW = new int[]{255, 255, 0},
+        GREEN = new int[]{0, 255, 0},
+        CYAN = new int[]{0, 255, 255},
+        BLUE = new int[]{0, 0, 255},
+        PURPLE = new int[]{75, 0, 130},
+        MAGENTA = new int[]{255, 0, 255},
+        WHITE = new int[]{255, 255, 255},
+        GRAY = new int[]{127, 127, 127},
+        OFF = new int[]{0, 0, 0};
 
     protected int PWMPort;
     protected AddressableLED lights;
@@ -122,8 +135,8 @@ public class LEDStrip {
     }
 }
 
-// class IncorrectRGBFormattingError extends Error {
-//     public IncorrectRGBFormattingError() {
-//         super("RGB color inputs must be of length 3.");
-//     }
-// }
+class IncorrectRGBFormattingError extends Error {
+    public IncorrectRGBFormattingError() {
+        super("RGB color inputs must be of length 3.");
+    }
+}
