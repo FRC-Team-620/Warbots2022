@@ -2,11 +2,15 @@ package frc.robot.Shooter;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import java.util.function.Supplier;
+
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SimableCANSparkMax;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -22,12 +26,17 @@ public class LazySusanSubsystem extends SubsystemBase {
     protected RelativeEncoder encoder;
     private PIDController lazySusanPID;
     private Rotation2d turretRotation;
+    private double desiredRotation;
+    private final Supplier<Pose2d> robotBase;
+    private boolean isGyroLocking;
     private final double countToDegreesFactor = 4;
     private final double kP = 0.060000, kI = 0.003000, kD = 0;//KI0.00004 TODO: Tune PID Loop
     public final double lowLimit = -45, highLimit = 45;//Left 45.690002 Right -45.356651 AbsoluteMaxRange 90
     // private double turntableThresh = 35;
 
-    public LazySusanSubsystem() {
+    public LazySusanSubsystem(Supplier<Pose2d> robotBase) {
+        this.isGyroLocking = false;
+        this.robotBase = robotBase;
         lazySusan = new SimableCANSparkMax(Constants.lazySusanID, MotorType.kBrushless);
 
         lazySusan.restoreFactoryDefaults();
@@ -49,10 +58,22 @@ public class LazySusanSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        
+        turretRotation = Rotation2d.fromDegrees(lazySusan.getEncoder().getPosition() * countToDegreesFactor);
+
+        if (isGyroLocking) {
+            Rotation2d stablizedLocation = turretRotation.minus(robotBase.get().getRotation());
+            lazySusanPID.setSetpoint(MathUtil.clamp(stablizedLocation.getDegrees(), lowLimit, highLimit));
+        } else {
+            lazySusanPID.setSetpoint(MathUtil.clamp(desiredRotation, lowLimit, highLimit));
+        }
+
+        
         lazySusanPID.calculate(lazySusan.getEncoder().getPosition());
 
         double lazySusanOutput = lazySusanPID.calculate(lazySusan.getEncoder().getPosition());
         double PIDOutput = MathUtil.clamp(lazySusanOutput, -1, 1);
+        
         if (lazySusan.getEncoder().getPosition() > highLimit+5) {
             PIDOutput = MathUtil.clamp(PIDOutput, -1, 0);
         }
@@ -60,28 +81,43 @@ public class LazySusanSubsystem extends SubsystemBase {
             PIDOutput = MathUtil.clamp(PIDOutput, 0, 1);
         }
 
-        turretRotation = Rotation2d.fromDegrees(lazySusan.getEncoder().getPosition() * countToDegreesFactor);
-
-
         lazySusan.set(PIDOutput);
 
 
         SmartDashboard.putNumber("TurretPos", lazySusan.getEncoder().getPosition());
         SmartDashboard.putNumber("LazySusanMotorPercentage", lazySusan.get());
+
+        
+
+        
+
     }
 
     private void setTurretPosition(double x) {
-        lazySusanPID.setSetpoint(MathUtil.clamp(x, lowLimit, highLimit));
+        desiredRotation = x;
     }
+
+    public boolean getIsGyroLocking() {
+        return isGyroLocking;
+    }
+
+    public void setIsGyroLocking(boolean iGL) {
+        isGyroLocking = iGL;
+    }
+
+
 
     public Rotation2d getRotation() {
         return turretRotation;
     }
 
-    public double getSetpointDegrees() {
+    public double getDesiredDegrees() {
+        return desiredRotation;
+    }
+    
+    public double getRawSetpoint() {
         return lazySusanPID.getSetpoint() * countToDegreesFactor;
     }
-
 
 
     public void setTurretPositionDegrees(double degrees) {
