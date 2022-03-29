@@ -26,7 +26,7 @@ public class LazySusanSubsystem extends SubsystemBase {
     protected RelativeEncoder encoder;
     private PIDController lazySusanPID;
     private Rotation2d turretRotation;
-    private double desiredRotation;
+    private Rotation2d desiredRotation;
     private final Supplier<Pose2d> robotBase;
     private boolean isGyroLocking;
     private final double countToDegreesFactor = 4;
@@ -53,6 +53,7 @@ public class LazySusanSubsystem extends SubsystemBase {
         //lazySusanPID.setIntegratorRange(-10, 10);
 
         turretRotation = new Rotation2d();
+        desiredRotation = turretRotation;
         SmartDashboard.putData(lazySusanPID);
     }
 
@@ -63,10 +64,10 @@ public class LazySusanSubsystem extends SubsystemBase {
 
         if (isGyroLocking) {
             
-            Rotation2d stablizedLocation = Rotation2d.fromDegrees(desiredRotation).minus(robotBase.get().getRotation());
+            Rotation2d stablizedLocation = desiredRotation.minus(robotBase.get().getRotation());
             lazySusanPID.setSetpoint(MathUtil.clamp(stablizedLocation.getDegrees()/countToDegreesFactor, lowLimit, highLimit));
         } else {
-            lazySusanPID.setSetpoint(MathUtil.clamp(desiredRotation/countToDegreesFactor, lowLimit, highLimit));
+            lazySusanPID.setSetpoint(MathUtil.clamp(desiredRotation.getDegrees()/countToDegreesFactor, lowLimit, highLimit));
         }
 
         
@@ -112,7 +113,7 @@ public class LazySusanSubsystem extends SubsystemBase {
         return turretRotation;
     }
 
-    public double getDesiredDegrees() {
+    public Rotation2d getDesiredDegrees() {
         return desiredRotation;
     }
     
@@ -121,8 +122,8 @@ public class LazySusanSubsystem extends SubsystemBase {
     }
 
 
-    public void setTurretPositionDegrees(double degrees) {
-        desiredRotation = MathUtil.clamp(degrees, lowLimit, highLimit);
+    public void setTurretPositionDegrees(Rotation2d rot) {
+        desiredRotation =rot;
         // this.setTurretPosition(degrees/countToDegreesFactor);
     }
 

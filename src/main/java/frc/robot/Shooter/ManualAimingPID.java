@@ -1,5 +1,6 @@
 package frc.robot.Shooter;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -15,7 +16,7 @@ public class ManualAimingPID extends CommandBase {
 
     @Override
     public void execute() {
-        lazySusanSubsystem.setTurretPositionDegrees((lazySusanSubsystem.getDesiredDegrees() - maxSpeed * operatorXbox.getLeftX()));
+        lazySusanSubsystem.setTurretPositionDegrees((lazySusanSubsystem.getDesiredDegrees().minus(Rotation2d.fromDegrees(maxSpeed * operatorXbox.getLeftX()))));
         //lazySusanSubsystem.setTurretPosition(operatorXbox.getLeftX() * lazySusanSubsystem.highLimit);
     }
 
