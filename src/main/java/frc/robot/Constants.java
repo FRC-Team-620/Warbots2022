@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.net.PortUnreachableException;
+
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
@@ -115,6 +117,9 @@ public final class Constants {
     public static final double shooterVibrationTolerance = 0.03;
     public static final double driverRumble = 0.5;
     public static final double operatorRumble = 0.5;
+
+    //Lazy susan
+    public static final int calSwitchID = 0;
 
     // TODO: Calculate the correct values for this map
     // This maps the LimeLight's Vertical Offset (tY) to RPM
