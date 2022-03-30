@@ -31,11 +31,11 @@ public class LazySusanSubsystem extends SubsystemBase {
     private Rotation2d desiredRotation;
     private final Supplier<Pose2d> robotBase;
     private boolean isGyroLocking;
-    private final double countToDegreesFactor = (1/12) * (22/156) * 360;
+    private final double countToDegreesFactor = (1.0/12.0) * (22.0/156.0) * 360.0;
     private double modSpeed = 1;
     private final double kP = 0.060000, kI = 0.003000, kD = 0;//KI0.00004 TODO: Tune PID Loop
     private boolean isCal;
-    public final double lowLimit = -180 / countToDegreesFactor, highLimit = 180 / countToDegreesFactor;//Left 45.690002 Right -45.356651 AbsoluteMaxRange 90
+    public final double lowLimit = -180.0 / countToDegreesFactor, highLimit = 180.0 / countToDegreesFactor;//Left 45.690002 Right -45.356651 AbsoluteMaxRange 90
     // private double turntableThresh = 35;
 
     public LazySusanSubsystem(Supplier<Pose2d> robotBase) {
