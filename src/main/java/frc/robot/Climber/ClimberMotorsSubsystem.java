@@ -39,7 +39,7 @@ public class ClimberMotorsSubsystem extends SubsystemBase {
         rightClimberMotor.setIdleMode(mode);
 
         leftClimberMotor.follow(rightClimberMotor, true);
-        climberSensor = new DigitalInput(9);
+        climberSensor = new DigitalInput(Constants.climberSensorID);
 
     }
 

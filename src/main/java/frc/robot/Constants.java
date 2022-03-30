@@ -119,7 +119,10 @@ public final class Constants {
     public static final double operatorRumble = 0.5;
 
     //Lazy susan
-    public static final int calSwitchID = 0;
+    public static final int calSwitchID = 9;
+
+    //Climber
+    public static final int climberSensorID = 8;
 
     // TODO: Calculate the correct values for this map
     // This maps the LimeLight's Vertical Offset (tY) to RPM
