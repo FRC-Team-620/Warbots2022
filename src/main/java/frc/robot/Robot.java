@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Auto.AutoCommand;
 import frc.robot.Climber.ToggleHooks;
 import frc.robot.Loader.AutoLoad;
+import frc.robot.Shooter.ZeroTurnTable;
 // import frc.robot.Shooter.AutoAimingAndSpinningUp;
 import frc.robot.Util.LEDStrip;
 import frc.robot.Util.LimeLight;
@@ -50,6 +51,9 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
+    }
+    if (!robotContainer.getLazySusanSubsystem().getIsCal()) {
+      new ZeroTurnTable(robotContainer.getLazySusanSubsystem()).schedule();
     }
     robotContainer.setTeleopDrive();
     // robotContainer.getLoaderSubsystem().setIsClimbing(false);
@@ -97,7 +101,7 @@ public class Robot extends TimedRobot {
     // robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(),
     // robotContainer),
     // new AutoLoad(robotContainer.getLoaderSubsystem(), 1)));
-    
+    autonomousCommand = new AutoCommand(robotContainer.getFiringPins(), robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer);
     if (autonomousCommand != null) {
       autonomousCommand.schedule();
     }
