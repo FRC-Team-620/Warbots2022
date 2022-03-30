@@ -52,9 +52,9 @@ public class Robot extends TimedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
-    if (!robotContainer.getLazySusanSubsystem().getIsCal()) {
-      new ZeroTurnTable(robotContainer.getLazySusanSubsystem()).schedule();
-    }
+    // if (!robotContainer.getLazySusanSubsystem().getIsCal()) {
+    //   new ZeroTurnTable(robotContainer.getLazySusanSubsystem()).schedule();
+    // }
     robotContainer.setTeleopDrive();
     // robotContainer.getLoaderSubsystem().setIsClimbing(false);
     // TODO: move to initializer in robotContainer
