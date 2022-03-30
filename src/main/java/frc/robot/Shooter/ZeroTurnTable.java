@@ -21,20 +21,20 @@ public class ZeroTurnTable extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return lazySusanSubsystem.calSwitch.get() || lazySusanSubsystem.atTurretPosition();
+        System.out.println( lazySusanSubsystem.atTurretPosition()); //lazySusanSubsystem.calSwitch.get() ||
+        return  lazySusanSubsystem.atTurretPosition() || lazySusanSubsystem.islimitSwitchPressed();
         // return true;
     }
 
     @Override
     public void end(boolean interrupted) {
-        lazySusanSubsystem.setTurretPositionDegrees(lazySusanSubsystem.getRotation());
+        // lazySusanSubsystem.setTurretPositionDegrees(lazySusanSubsystem.getRotation());
+        lazySusanSubsystem.stop();
         lazySusanSubsystem.setModSpeed(1);
-        // if (!interrupted) {
-        //     lazySusanSubsystem.setHomePosition();
-        // }
+        if (!interrupted) {
+            lazySusanSubsystem.setHomePosition();
+        }
     }
-    
-
 
     @Override
     public void execute() {

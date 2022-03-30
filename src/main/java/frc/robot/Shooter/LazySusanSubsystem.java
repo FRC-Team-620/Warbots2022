@@ -43,7 +43,7 @@ public class LazySusanSubsystem extends SubsystemBase {
     // private double turntableThresh = 35;
 
     public LazySusanSubsystem(Supplier<Pose2d> robotBase) {
-        this.isGyroLocking = true;
+        this.isGyroLocking = false;
         this.robotBase = robotBase;
         lazySusan = new SimableCANSparkMax(Constants.lazySusanID, MotorType.kBrushless);
         this.calSwitch = new DigitalInput(Constants.calSwitchID);
@@ -57,7 +57,7 @@ public class LazySusanSubsystem extends SubsystemBase {
         // lazySusan.setInverted(true);
 
         lazySusanPID = new PIDController(kP, kI, kD);
-        lazySusanPID.setTolerance(10);
+        lazySusanPID.setTolerance(1);
         // lazySusanPID.setIntegratorRange(-10, 10);
 
         turretRotation = new Rotation2d();
@@ -100,9 +100,6 @@ public class LazySusanSubsystem extends SubsystemBase {
 
     }
 
-    // private void setTurretPosition(double x) {
-    // desiredRotation = x;
-    // }
 
     public double getModSpeed() {
         return modSpeed;
@@ -145,28 +142,28 @@ public class LazySusanSubsystem extends SubsystemBase {
         // this.setTurretPosition(degrees/countToDegreesFactor);
     }
 
-    public void updateRotation(double encoderCounts) {
-
-    }
-
     public boolean atTurretPosition() {
         return lazySusanPID.atSetpoint();
     }
 
     public void setEncoderPosition(double p) {
         encoder.setPosition(p);
+        stop();
+    }
+    public void stop(){
+        lazySusanPID.reset();
+        lazySusanPID.setSetpoint(encoder.getPosition());
     }
 
     public void setHomePosition() {
         setIsGyroLocking(false);
         double limitPos = -45;
         setEncoderPosition(limitPos);
-        setTurretPositionDegrees(Rotation2d.fromDegrees(limitPos * countToDegreesFactor));
+        stop();
         setIsCal(true);
     }
-
-    public double getTicksPerMotorRotation() {
-        return encoder.getCountsPerRevolution();
+    public boolean islimitSwitchPressed(){
+        return !calSwitch.get();
     }
 
     public double getDrawnCurrentAmps() {
