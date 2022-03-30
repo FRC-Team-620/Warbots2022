@@ -43,8 +43,6 @@ import frc.robot.Shooter.TurretAimingPID;
 /** Add your docs here. */
 public class RobotContainer {
 
-    LEDStrip lights;
-
     // initialize subsystems
     private Drivetrain drivetrain;
     private Intake intake;
@@ -66,7 +64,6 @@ public class RobotContainer {
         initSubsystems();
         initControls();
         LimeLight.init();
-        lights = new LEDStrip(65, 9);
     }
 
     private void initSubsystems() {
@@ -183,11 +180,6 @@ public class RobotContainer {
      *
      * @return the command to run in autonomous
      */
-
-    public LEDStrip getLEDStrip() {
-        return this.lights;
-    }
-
 
     public ClimberSubsystem getClimberSubsystem() {
         return climberHooks;

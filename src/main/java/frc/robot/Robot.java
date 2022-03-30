@@ -21,7 +21,7 @@ import frc.robot.Climber.ToggleHooks;
 import frc.robot.Loader.AutoLoad;
 import frc.robot.Shooter.ZeroTurnTable;
 // import frc.robot.Shooter.AutoAimingAndSpinningUp;
-import frc.robot.Util.LEDStrip;
+import frc.robot.Util.LEDManager;
 import frc.robot.Util.LimeLight;
 import frc.robot.Util.RobotContainer;
 import frc.robot.Util.LimeLight.LedMode;
@@ -134,18 +134,16 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic() {
-    /*
-    robotContainer.getLEDStrip().setGradient(LEDDisplacement,
-      Color.kRed, 
-      Color.kOrange, 
-      Color.kYellow,
-      Color.kGreen,
-      Color.kBlue,
-      Color.kPurple,
-      Color.kMagenta
-    );
-    LEDDisplacement++;
-    */
+    // LEDManager.STRIP0.setGradient(LEDDisplacement,
+    //   Color.kRed, 
+    //   Color.kOrange, 
+    //   Color.kYellow,
+    //   Color.kGreen,
+    //   Color.kBlue,
+    //   Color.kPurple,
+    //   Color.kMagenta
+    // );
+    // LEDDisplacement++;
   }
 
 
