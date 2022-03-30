@@ -136,8 +136,8 @@ public class LEDStrip {
     // }
 }
 
-class IncorrectRGBFormattingException extends Exception {
-    public IncorrectRGBFormattingException() {
-        super("RGB color inputs must be of length 3.");
-    }
-}
+// class IncorrectRGBFormattingException extends Exception {
+//     public IncorrectRGBFormattingException() {
+//         super("RGB color inputs must be of length 3.");
+//     }
+// }
