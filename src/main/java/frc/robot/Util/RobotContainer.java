@@ -108,8 +108,7 @@ public class RobotContainer {
             new ParallelCommandGroup(   
                 //new LimelightSpinUp(this.getShooterSubsystem())
                 //new TurretAiming(this.getLazySusanSubsystem())
-                new TurretAimingPID(this.getLazySusanSubsystem()),
-                new TestSetpointSpinUp(this.getShooterSubsystem())
+                //new TurretAimingPID(this.getLazySusanSubsystem())
             ));
 
         ControlBoard.tankDriveAimButton.whileActiveOnce(

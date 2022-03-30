@@ -21,10 +21,11 @@ import frc.robot.Climber.ToggleHooks;
 import frc.robot.Loader.AutoLoad;
 import frc.robot.Shooter.ZeroTurnTable;
 // import frc.robot.Shooter.AutoAimingAndSpinningUp;
-import frc.robot.Util.LEDManager;
+//import frc.robot.Util.LEDManager;
 import frc.robot.Util.LimeLight;
 import frc.robot.Util.RobotContainer;
 import frc.robot.Util.LimeLight.LedMode;
+import frc.robot.Climber.ToggleHooks;
 
 public class Robot extends TimedRobot {
   protected RobotContainer robotContainer;
@@ -56,6 +57,7 @@ public class Robot extends TimedRobot {
     //   new ZeroTurnTable(robotContainer.getLazySusanSubsystem()).schedule();
     // }
     robotContainer.setTeleopDrive();
+    //robotContainer.getShooterSubsystem().
     // robotContainer.getLoaderSubsystem().setIsClimbing(false);
     // TODO: move to initializer in robotContainer
     new ToggleHooks(robotContainer.getClimberSubsystem()).schedule();

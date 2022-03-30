@@ -159,7 +159,7 @@ public class LazySusanSubsystem extends SubsystemBase {
 
     public void setHomePosition() {
         setIsGyroLocking(false);
-        double limitPos = -45;
+        double limitPos = -45;//-45
         setEncoderPosition(limitPos);
         setTurretPositionDegrees(Rotation2d.fromDegrees(limitPos * countToDegreesFactor));
         setIsCal(true);
