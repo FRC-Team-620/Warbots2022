@@ -1,16 +1,13 @@
 package frc.robot.Shooter;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 
 public class ZeroTurnTable extends CommandBase {
     LazySusanSubsystem lazySusanSubsystem;
-    DigitalInput calSwitch;
     Rotation2d targetRotation;
     public ZeroTurnTable(LazySusanSubsystem lazySusanSubsystem) {
-        calSwitch = new DigitalInput(Constants.calSwitchID);
+        // calSwitch = new DigitalInput(Constants.calSwitchID);
         this.lazySusanSubsystem = lazySusanSubsystem;
     }
 
@@ -24,16 +21,17 @@ public class ZeroTurnTable extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return calSwitch.get() || lazySusanSubsystem.atTurretPosition();
+        return lazySusanSubsystem.calSwitch.get() || lazySusanSubsystem.atTurretPosition();
+        // return true;
     }
 
     @Override
     public void end(boolean interrupted) {
         lazySusanSubsystem.setTurretPositionDegrees(lazySusanSubsystem.getRotation());
         lazySusanSubsystem.setModSpeed(1);
-        if (!interrupted) {
-            lazySusanSubsystem.setHomePosition();
-        }
+        // if (!interrupted) {
+        //     lazySusanSubsystem.setHomePosition();
+        // }
     }
     
 
