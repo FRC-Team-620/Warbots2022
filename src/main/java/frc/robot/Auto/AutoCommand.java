@@ -26,7 +26,7 @@ public class AutoCommand extends SequentialCommandGroup {
         this.robotContainer = rC;
         // addRequirements(loaderSubsystem, shooterSubsystem, lazySusanSubsystem);
             addCommands(
-            new ConditionalCommand(null, new ZeroTurnTable(lazySusanSubsystem), lazySusanSubsystem::getIsCal),
+            new ConditionalCommand(new WaitCommand(0), new ZeroTurnTable(lazySusanSubsystem), lazySusanSubsystem::getIsCal),
             new Taxi(robotContainer.getDriveTrain())
             );
         

@@ -41,6 +41,7 @@ public class Robot extends TimedRobot {
     robotContainer.getLazySusanSubsystem().setIsGyroLocking(true);
     // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(true);
     // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);
+    
   }
 
   @Override
@@ -53,10 +54,15 @@ public class Robot extends TimedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
+    
     // if (!robotContainer.getLazySusanSubsystem().getIsCal()) {
+    //   System.out.println("Zeroed");
     //   new ZeroTurnTable(robotContainer.getLazySusanSubsystem()).schedule();
+    // } else {
+    //   System.out.println("Already zeroed");
     // }
     robotContainer.setTeleopDrive();
+    //robotContainer.getLazySusanSubsystem().setIsGyroLocking(true);
     //robotContainer.getShooterSubsystem().
     // robotContainer.getLoaderSubsystem().setIsClimbing(false);
     // TODO: move to initializer in robotContainer
@@ -128,7 +134,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
     robotContainer.init();
     LimeLight.setLedMode(LedMode.ON);
-	robotContainer.getLazySusanSubsystem().setEncoderPosition(0);
+	  //robotContainer.getLazySusanSubsystem().setEncoderPosition(0);
     // new LowerHooks(robotContainer.getClimberSubsystem()).schedule();
     // new SensorHooksUp(robotContainer.getClimberMotorsSubsystem(), robotContainer.getClimberSubsystem()).schedule();
   }

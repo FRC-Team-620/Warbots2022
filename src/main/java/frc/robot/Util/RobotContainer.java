@@ -39,6 +39,7 @@ import frc.robot.Shooter.ShooterSubsystem;
 import frc.robot.Shooter.TankDriveAiming;
 import frc.robot.Shooter.TestSetpointSpinUp;
 import frc.robot.Shooter.TurretAimingPID;
+import frc.robot.Shooter.ZeroTurnTable;
 
 /** Add your docs here. */
 public class RobotContainer {
@@ -74,6 +75,7 @@ public class RobotContainer {
         turret = new LazySusanSubsystem(drivetrain::getPose);
         climberHooks = new ClimberSubsystem();
         winch = new ClimberMotorsSubsystem();
+        SmartDashboard.putData(new ZeroTurnTable(turret));
     }
 
     private void initControls() {
@@ -106,9 +108,9 @@ public class RobotContainer {
 
         ControlBoard.aimTurretTrigger.whileActiveOnce(
             new ParallelCommandGroup(   
-                //new LimelightSpinUp(this.getShooterSubsystem())
+                new LimelightSpinUp(this.getShooterSubsystem()),
                 //new TurretAiming(this.getLazySusanSubsystem())
-                //new TurretAimingPID(this.getLazySusanSubsystem())
+                new TurretAimingPID(this.getLazySusanSubsystem())
             ));
 
         ControlBoard.tankDriveAimButton.whileActiveOnce(
