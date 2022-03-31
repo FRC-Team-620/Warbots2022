@@ -4,6 +4,7 @@
 
 package frc.robot.Auto;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Drive.Drivetrain;
 
@@ -11,6 +12,8 @@ public class DriveForwardDistance extends CommandBase {
   Drivetrain drivetrain;
   private double distance;
   private double autoSpeed = 0.5;
+
+  private Pose2d initPose;
 
   // protected final PIDController leftPID;
   // protected final PIDController rightPID;
@@ -24,6 +27,11 @@ public class DriveForwardDistance extends CommandBase {
     addRequirements(drivetrain);
   }
 
+  @Override
+  public void initialize() {
+    initPose = this.drivetrain.getPose();
+  }
+
   // // Called when the command is initially scheduled.
   // @Override
   // public void initialize() {}
@@ -35,16 +43,21 @@ public class DriveForwardDistance extends CommandBase {
   }
 
   public boolean withinBounds() {
-    if (averageDistance() > distance) {
+    if (this.getDisplacement() > distance) {
       return true;
     }
     return false;
   }
 
-  public double averageDistance() {
-    return (drivetrain.getLeftPosition() + drivetrain.getRightPosition()) / 2;
-
+  private double getDisplacement() {
+    return this.initPose.getTranslation().getDistance(this.drivetrain.getPose().getTranslation());
   }
+
+
+
+  // public double averageDistance() {
+  //   return (drivetrain.getLeftPosition() + drivetrain.getRightPosition()) / 2;
+  // }
 
   // // Called once the command ends or is interrupted.
   // @Override

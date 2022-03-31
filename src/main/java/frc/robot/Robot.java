@@ -11,12 +11,17 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Auto.AutoCommand;
+import frc.robot.Auto.Routines.OneBall;
+import frc.robot.Auto.Routines.Taxi;
+import frc.robot.Auto.Routines.TwoBalls;
 import frc.robot.Climber.ToggleHooks;
 import frc.robot.Loader.AutoLoad;
 import frc.robot.Shooter.ZeroTurnTable;
@@ -31,6 +36,9 @@ public class Robot extends TimedRobot {
   protected RobotContainer robotContainer;
   protected Command autonomousCommand;
 
+  protected SendableChooser<CommandBase> autoSelector = new SendableChooser<CommandBase>();
+  
+
   protected int LEDDisplacement = 0;
 
   @Override
@@ -41,7 +49,14 @@ public class Robot extends TimedRobot {
     robotContainer.getLazySusanSubsystem().setIsGyroLocking(true);
     // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(true);
     // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);
-    
+
+    autoSelector.setDefaultOption("Taxi", new TwoBalls(robotContainer.getDriveTrain(), robotContainer.getLazySusanSubsystem(), 
+      robotContainer.getShooterSubsystem(), robotContainer.getFiringPins(), robotContainer.getIntake()));
+    autoSelector.addOption("One-ball", new OneBall(robotContainer.getDriveTrain(), robotContainer.getLazySusanSubsystem(), 
+      robotContainer.getShooterSubsystem(), robotContainer.getFiringPins()));
+    autoSelector.addOption("Two-Ball", new Taxi(robotContainer.getDriveTrain()));
+
+    SmartDashboard.putData(autoSelector);
   }
 
   @Override
@@ -109,6 +124,7 @@ public class Robot extends TimedRobot {
     // robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(),
     // robotContainer),
     // new AutoLoad(robotContainer.getLoaderSubsystem(), 1)));
+
     autonomousCommand = new AutoCommand(robotContainer.getFiringPins(), robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer);
     if (autonomousCommand != null) {
       autonomousCommand.schedule();

@@ -31,6 +31,7 @@
       "/LiveWindow/LoaderSubsystem": "Subsystem",
       "/LiveWindow/ShooterSubsystem": "Subsystem",
       "/LiveWindow/Ungrouped/DifferentialDrive[1]": "DifferentialDrive",
+      "/LiveWindow/Ungrouped/DigitalInput[8]": "Digital Input",
       "/LiveWindow/Ungrouped/DigitalInput[9]": "Digital Input",
       "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
@@ -43,37 +44,13 @@
       "/SmartDashboard/PIDController[3]": "PIDController",
       "/SmartDashboard/SendableChooser[0]": "String Chooser",
       "/SmartDashboard/SendableChooser[1]": "String Chooser",
+      "/SmartDashboard/ZeroTurnTable": "Command",
       "/SmartDashboard/driver": "String Chooser",
       "/SmartDashboard/leftShooterPID: ": "PIDController",
       "/SmartDashboard/rightShooterPID: ": "PIDController"
     },
     "windows": {
-      "/LiveWindow/Drivetrain": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/LiveWindow/LazySusanSubsystem": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/LiveWindow/LoaderSubsystem": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/LiveWindow/ShooterSubsystem": {
-        "window": {
-          "visible": true
-        }
-      },
       "/LiveWindow/Ungrouped/DifferentialDrive[1]": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/LiveWindow/Ungrouped/PIDController[1]": {
         "window": {
           "visible": true
         }
@@ -83,18 +60,11 @@
           "visible": true
         }
       },
-      "/LiveWindow/Ungrouped/navX-Sensor[1]": {
-        "window": {
-          "visible": true
-        }
-      },
       "/SmartDashboard/Field": {
         "Turret": {
-          "image": "C:\\Users\\m10653\\git\\Warbots2022\\img\\shooter.png",
           "length": 5.0,
           "width": 5.0
         },
-        "image": "C:\\Users\\m10653\\git\\Warbots2022\\img\\2022-field.png",
         "traj": {
           "arrowSize": 5,
           "arrows": false,
@@ -107,17 +77,7 @@
           "visible": true
         }
       },
-      "/SmartDashboard/PIDController[1]": {
-        "window": {
-          "visible": true
-        }
-      },
       "/SmartDashboard/SendableChooser[0]": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/driver": {
         "window": {
           "visible": true
         }
@@ -190,7 +150,7 @@
     "Plot <1>": {
       "plots": [
         {
-          "height": 127,
+          "height": -16,
           "series": [
             {
               "color": [
@@ -204,7 +164,7 @@
           ]
         },
         {
-          "height": 127,
+          "height": -16,
           "series": [
             {
               "color": [
@@ -217,7 +177,10 @@
             }
           ]
         }
-      ]
+      ],
+      "window": {
+        "visible": false
+      }
     },
     "Plot <2>": {
       "plots": [
@@ -252,7 +215,7 @@
     "Plot <3>": {
       "plots": [
         {
-          "height": 338,
+          "height": -18,
           "series": [
             {
               "color": [
@@ -274,7 +237,10 @@
             }
           ]
         }
-      ]
+      ],
+      "window": {
+        "visible": false
+      }
     }
   }
 }
