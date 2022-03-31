@@ -33,11 +33,10 @@ class LEDStrip {
 
     public LEDStrip(int numLights, int PWMPort) {
         this.PWMPort = PWMPort;
-        // Must be a PWM header, not MXP or DIO
+        // Must be a PWM header
         this.lights = new AddressableLED(this.PWMPort);
 
         // Reuse buffer
-        // Default to a length of 60, start empty output
         // Length is expensive to set, so only set it once, then just update data
         this.buffer = new AddressableLEDBuffer(numLights);
         this.lights.setLength(this.buffer.getLength());

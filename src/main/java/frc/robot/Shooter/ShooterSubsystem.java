@@ -11,6 +11,7 @@ import com.revrobotics.SimableCANSparkMax;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -37,6 +38,8 @@ public class ShooterSubsystem extends SubsystemBase {
     //PIDs
     protected final PIDController leftShooterPID;
     protected final PIDController rightShooterPID;
+    // Feedforward
+    protected final SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(1, 1, 1); //TODO: SysID characterize 
     // TODO: Tune PID loops more for lower RPMs
 	private final double kP = 0.00025, kI = 0.0004;
     private double testRPM;
@@ -78,15 +81,16 @@ public class ShooterSubsystem extends SubsystemBase {
         // Debug Force both Pid loops to same setpoint; //TODO: Prob need to remove
         rightShooterPID.setSetpoint(leftShooterPID.getSetpoint());
 
-
         leftShooterPID.calculate(leftShooterMotor.getEncoder().getVelocity());
         rightShooterPID.calculate(rightShooterMotor.getEncoder().getVelocity());
 
-        double leftOutput = leftShooterPID.calculate(leftShooterMotor.getEncoder().getVelocity());
-        double rightOutput = rightShooterPID.calculate(rightShooterMotor.getEncoder().getVelocity());
+        double leftOutputVoltage = leftShooterPID.calculate(leftShooterMotor.getEncoder().getVelocity()) + 
+            feedForward.calculate(leftShooterPID.getSetpoint());
+        double rightOutputVoltage = rightShooterPID.calculate(rightShooterMotor.getEncoder().getVelocity()) + 
+            feedForward.calculate(rightShooterPID.getSetpoint());;
         
-        leftShooterMotor.set(MathUtil.clamp(leftOutput, powerDecel || leftShooterPID.getSetpoint() <= 0 ? 0 : -1, 1));
-        rightShooterMotor.set(MathUtil.clamp(rightOutput, powerDecel || rightShooterPID.getSetpoint() <= 0 ? 0 : -1, 1));
+        leftShooterMotor.setVoltage(MathUtil.clamp(leftOutput, powerDecel || leftShooterPID.getSetpoint() <= 0 ? 0 : -13, 13));
+        rightShooterMotor.setVoltage(MathUtil.clamp(rightOutput, powerDecel || rightShooterPID.getSetpoint() <= 0 ? 0 : -13, 13));
 
         // int x = 0;
         // if (leftShooterPID.atSetpoint()) {
