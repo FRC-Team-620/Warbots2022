@@ -33,6 +33,7 @@ public class LazySusanSubsystem extends SubsystemBase {
     private double modSpeed = 1;
     private final double kP = 0.060000, kI = 0.003000, kD = 0;// KI0.00004 TODO: Tune PID Loop
     private boolean isCal;
+    //private boolean isDisabled;
     public DigitalInput calSwitch;
     public final double lowLimit = -180.0 / countToDegreesFactor, highLimit = 180.0 / countToDegreesFactor;// Left
                                                                                                            // 45.690002
@@ -63,6 +64,7 @@ public class LazySusanSubsystem extends SubsystemBase {
         turretRotation = new Rotation2d();
         desiredRotation = turretRotation;
         isCal = false;
+        //isDisabled =
         SmartDashboard.putData(lazySusanPID);
     }
 
@@ -93,10 +95,10 @@ public class LazySusanSubsystem extends SubsystemBase {
         }
 
         lazySusan.set(PIDOutput * modSpeed);
-
         SmartDashboard.putNumber("TurretPos", lazySusan.getEncoder().getPosition());
         SmartDashboard.putNumber("LazySusanMotorPercentage", lazySusan.get());
         SmartDashboard.putBoolean("LazySusanSwitchTriggered", isCal);
+        SmartDashboard.putBoolean("SwitchHit", islimitSwitchPressed());
 
     }
 
@@ -157,7 +159,7 @@ public class LazySusanSubsystem extends SubsystemBase {
 
     public void setHomePosition() {
         setIsGyroLocking(false);
-        double limitPos = -45;//-45
+        double limitPos = 38.8;//-45
         setEncoderPosition(limitPos);
         stop();
         setIsCal(true);

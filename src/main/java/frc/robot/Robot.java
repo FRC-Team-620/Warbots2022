@@ -41,6 +41,7 @@ public class Robot extends TimedRobot {
     robotContainer.getLazySusanSubsystem().setIsGyroLocking(true);
     // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(true);
     // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);
+    
   }
 
   @Override
@@ -53,8 +54,12 @@ public class Robot extends TimedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
+    
     // if (!robotContainer.getLazySusanSubsystem().getIsCal()) {
+    //   System.out.println("Zeroed");
     //   new ZeroTurnTable(robotContainer.getLazySusanSubsystem()).schedule();
+    // } else {
+    //   System.out.println("Already zeroed");
     // }
     robotContainer.setTeleopDrive();
     //robotContainer.getShooterSubsystem().
