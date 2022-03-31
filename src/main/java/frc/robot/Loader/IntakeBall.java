@@ -16,6 +16,16 @@ public class IntakeBall extends CommandBase {
     }
 
     @Override
+    public void execute() {
+        // intake.enableInnerIntakeMotor();
+        // if(**has ball** (we still need to implement the color sensor)) {
+        //     if(**intake pistons NOT resting**) {
+        //         intake.disableInnerIntakeMotor();
+        //     }
+        // }
+    }
+
+    @Override
     public void end(boolean interrupted) {
         intake.disableInnerIntakeMotor();
         intake.retractIntakeArmsSolenoid();

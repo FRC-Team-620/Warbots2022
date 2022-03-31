@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import frc.robot.Constants;
 
 public class LimeLight {
     private static NetworkTable limelightTable;
@@ -68,5 +69,14 @@ public class LimeLight {
 
     public static boolean hasTarget() {
         return tvEntry.getDouble(0) == 1;
+    }
+
+    // In meters
+    public static double getDistance() {
+        return (Constants.hubHeight-Constants.limelightHeight)/Math.tan(Math.toRadians(Constants.azimuthAngle1+getTY()));
+    }
+
+    public static boolean inRange() {
+        return getDistance() < Constants.maxShootingDistance;
     }
 }

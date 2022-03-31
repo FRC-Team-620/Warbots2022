@@ -1,10 +1,14 @@
 package frc.robot.Loader;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ColorMatch;
+import com.revrobotics.ColorMatchResult;
+import com.revrobotics.ColorSensorV3;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -12,6 +16,7 @@ public class Intake extends SubsystemBase {
     protected CANSparkMax innerIntakeMotor;
     protected Solenoid intakeArmsSolenoid;
     protected CANSparkMax intakeArmsMotor;
+    
     // protected boolean isClimbing;
     public Intake() {
         innerIntakeMotor = new CANSparkMax(Constants.intakeMotorID, MotorType.kBrushless);
@@ -27,8 +32,7 @@ public class Intake extends SubsystemBase {
         intakeArmsMotor.restoreFactoryDefaults();
         intakeArmsMotor.setInverted(true);
 
-        intakeArmsMotor.setSmartCurrentLimit(35);
-        
+        intakeArmsMotor.setSmartCurrentLimit(35);        
     }
     public void enableInnerIntakeMotor() {
         innerIntakeMotor.set(1);
