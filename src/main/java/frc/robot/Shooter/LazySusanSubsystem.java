@@ -44,7 +44,7 @@ public class LazySusanSubsystem extends SubsystemBase {
     // private double turntableThresh = 35;
 
     public LazySusanSubsystem(Supplier<Pose2d> robotBase) {
-        this.isGyroLocking = false;
+        this.isGyroLocking = true;
         this.robotBase = robotBase;
         lazySusan = new SimableCANSparkMax(Constants.lazySusanID, MotorType.kBrushless);
         this.calSwitch = new DigitalInput(Constants.calSwitchID);
@@ -70,7 +70,6 @@ public class LazySusanSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-
         turretRotation = Rotation2d.fromDegrees(lazySusan.getEncoder().getPosition() * countToDegreesFactor);
 
         if (isGyroLocking) {

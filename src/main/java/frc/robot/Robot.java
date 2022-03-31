@@ -62,6 +62,7 @@ public class Robot extends TimedRobot {
     //   System.out.println("Already zeroed");
     // }
     robotContainer.setTeleopDrive();
+    //robotContainer.getLazySusanSubsystem().setIsGyroLocking(true);
     //robotContainer.getShooterSubsystem().
     // robotContainer.getLoaderSubsystem().setIsClimbing(false);
     // TODO: move to initializer in robotContainer
