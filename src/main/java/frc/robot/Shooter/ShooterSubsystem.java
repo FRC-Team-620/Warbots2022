@@ -42,7 +42,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private final double kS = -0.07488, kV = 0.12385, kA = 0.020886;
     protected final SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(kS, kV, kA); //TODO: SysID characterize 
     // TODO: Tune PID loops more for lower RPMs
-	private final double kP = 0, kI = 0;//0.00025 0.0004
+	private final double kP = 0.000112, kI = 0.000001, kD = 0.000001;//0.00025 0.0004
     private double testRPM;
 
     public ShooterSubsystem() {
@@ -66,8 +66,8 @@ public class ShooterSubsystem extends SubsystemBase {
         // rightShooterMotor.setInverted(true);
         leftShooterMotor.setInverted(true);
         
-        leftShooterPID = new PIDController(kP, kI, 0);
-        rightShooterPID = new PIDController(kP, kI, 0);
+        leftShooterPID = new PIDController(kP, kI, kD);
+        rightShooterPID = new PIDController(kP, kI, kD);
         leftShooterPID.setTolerance(10, 10);
         rightShooterPID.setTolerance(10, 10);
         SmartDashboard.putData(leftShooterPID);
