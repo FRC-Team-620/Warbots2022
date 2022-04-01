@@ -86,9 +86,9 @@ public class ShooterSubsystem extends SubsystemBase {
         rightShooterPID.calculate(rightShooterMotor.getEncoder().getVelocity());
 
         double leftOutputVoltage = leftShooterPID.calculate(leftShooterMotor.getEncoder().getVelocity()) + 
-            feedForward.calculate(leftShooterPID.getSetpoint());
+            feedForward.calculate(leftShooterPID.getSetpoint()/60);
         double rightOutputVoltage = rightShooterPID.calculate(rightShooterMotor.getEncoder().getVelocity()) + 
-            feedForward.calculate(rightShooterPID.getSetpoint());;
+            feedForward.calculate(rightShooterPID.getSetpoint()/60);
         
         leftShooterMotor.setVoltage(MathUtil.clamp(leftOutputVoltage, powerDecel || leftShooterPID.getSetpoint() <= 0 ? 0 : -13, 13));
         rightShooterMotor.setVoltage(MathUtil.clamp(rightOutputVoltage, powerDecel || rightShooterPID.getSetpoint() <= 0 ? 0 : -13, 13));
