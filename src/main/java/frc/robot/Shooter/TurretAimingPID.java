@@ -20,6 +20,7 @@ public class TurretAimingPID extends CommandBase {
     protected LazySusanSubsystem lazySusanSubsystem;
     protected Field2d robotFieldWidget;
     protected Supplier<Pose2d> robotbase;
+    protected Pose2d prevHubPosition = null;
 
     public TurretAimingPID(LazySusanSubsystem lazySusanSubsystem, Field2d robotFieldWidget, Supplier<Pose2d> robotbase) {
         this.lazySusanSubsystem = lazySusanSubsystem;
@@ -35,30 +36,46 @@ public class TurretAimingPID extends CommandBase {
 
     @Override
     public void execute() {
-        double x = LimeLight.getTX(), 
-            distance = ShooterMath.getDistanceInMeters(Constants.azimuthAngle1, LimeLight.getTY(), Constants.limelightHeight, Constants.hubHeight);
+        double x = LimeLight.getTX();
         if (LimeLight.hasTarget()) {
             boolean inRange = LimeLight.inRange();
             lazySusanSubsystem.setTurretPositionDegrees(lazySusanSubsystem.getRotation().minus(Rotation2d.fromDegrees(x)));
             ControlBoard.setOperatorRumble(!inRange);
             ControlBoard.setDriverRumble(!inRange);
+
+            this.prevHubPosition = this.calculateHubPosition(this.getLocalPose());
         } else {
             ControlBoard.setOperatorRumble(true);
             ControlBoard.setDriverRumble(true);
+
+            if(this.prevHubPosition != null) {
+                Pose2d robotPosition = this.getLocalPose();
+                double dX = calculateHubDeltaX(robotPosition, this.prevHubPosition);
+                lazySusanSubsystem.setTurretPositionDegrees(lazySusanSubsystem.getRotation().minus(Rotation2d.fromDegrees(dX)));
+            }
         }
-        SmartDashboard.putNumber("LimeLight Distance", distance);
+        // SmartDashboard.putNumber("LimeLight Distance", distance);
         SmartDashboard.putNumber("LimeLight TY", LimeLight.getTY()); //TODO: Remove debug data
 
-
-        Pose2d pose = new Pose2d(this.robotbase.get().getTranslation(),  robotbase.get().getRotation().plus(lazySusanSubsystem.getRotation()));
-        Pose2d hubPosition = pose.transformBy(new Transform2d(new Translation2d(0, 0), Rotation2d.fromDegrees(-LimeLight.getTX()))).transformBy(
-            new Transform2d(new Translation2d(distance, 0), Rotation2d.fromDegrees(0)));
-        this.robotFieldWidget.getObject("hub-target").setPose(hubPosition);
-
-        Rotation2d deltaAngle = pose.minus(hubPosition).getRotation();
-        SmartDashboard.putNumber("Test rotation", deltaAngle.getDegrees());
+        // SmartDashboard.putNumber("Test rotation", calculateHubDeltaX(robotPosition, hubPosition));
 
         // asdf.robotFieldWidget.getObject("hub-target").setPose(testpos);;
+    }
+
+    public Pose2d getLocalPose() {
+        return new Pose2d(this.robotbase.get().getTranslation(),  robotbase.get().getRotation().plus(lazySusanSubsystem.getRotation()));
+    }
+
+    public Pose2d calculateHubPosition(Pose2d robotPose) {
+        double distance = ShooterMath.getDistanceInMeters(Constants.azimuthAngle1, LimeLight.getTY(), Constants.limelightHeight, Constants.hubHeight);
+        Pose2d hubPosition = robotPose.transformBy(new Transform2d(new Translation2d(0, 0), Rotation2d.fromDegrees(-LimeLight.getTX()))).transformBy(
+            new Transform2d(new Translation2d(distance, 0), Rotation2d.fromDegrees(0)));
+        this.robotFieldWidget.getObject("hub-target").setPose(hubPosition);
+        return hubPosition;
+    }
+
+    public double calculateHubDeltaX(Pose2d robotPose, Pose2d hubPosition) {
+        return robotPose.minus(hubPosition).getRotation().getDegrees();
     }
 
     @Override
