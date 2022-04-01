@@ -108,9 +108,10 @@ public class RobotContainer {
 
         ControlBoard.aimTurretTrigger.whileActiveOnce(
             new ParallelCommandGroup(   
-                new LimelightSpinUp(this.getShooterSubsystem()),
-                //new TurretAiming(this.getLazySusanSubsystem())
-                new TurretAimingPID(this.getLazySusanSubsystem())
+                // new LimelightSpinUp(this.getShooterSubsystem()),
+                // //new TurretAiming(this.getLazySusanSubsystem())
+                // new TurretAimingPID(this.getLazySusanSubsystem()),
+                new ManualAimingPID(this.getLazySusanSubsystem(), this.getOperatorController())
             ));
 
         ControlBoard.tankDriveAimButton.whileActiveOnce(
@@ -152,7 +153,9 @@ public class RobotContainer {
         // drivetrain.setDefaultCommand(driveWithJoystick);
 
         //turret.setDefaultCommand(new ManualAiming(turret, ControlBoard.getOperatorController()));
-        turret.setDefaultCommand(new ManualAimingPID(turret, ControlBoard.getOperatorController()));
+        //TODO: setup turret
+        turret.setDefaultCommand(new TurretAimingPID(turret));
+        shooter.setDefaultCommand(new LimelightSpinUp(shooter));
 
         //shooterCommand = new ShooterCommand(shooter, turret, controls.getOperatorController(),
                 //controls.getDriverController());
