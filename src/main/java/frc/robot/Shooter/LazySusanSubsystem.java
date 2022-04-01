@@ -121,6 +121,10 @@ public class LazySusanSubsystem extends SubsystemBase {
     public boolean getIsCal() {
         return isCal;
     }
+    
+    public boolean getCalSensorState() {
+        return calSwitch.get();
+    }
 
     public void setIsCal(boolean iS) {
         isCal = iS;

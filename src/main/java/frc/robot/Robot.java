@@ -149,7 +149,7 @@ public class Robot extends TimedRobot {
   public void testInit() {
     CommandScheduler.getInstance().cancelAll();
     robotContainer.init();
-    LimeLight.setLedMode(LedMode.ON);
+    //LimeLight.setLedMode(LedMode.ON);
 	  //robotContainer.getLazySusanSubsystem().setEncoderPosition(0);
     // new LowerHooks(robotContainer.getClimberSubsystem()).schedule();
     // new SensorHooksUp(robotContainer.getClimberMotorsSubsystem(), robotContainer.getClimberSubsystem()).schedule();
@@ -158,6 +158,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic() {
+    //System.out.println("Cal State:" + robotContainer.getLazySusanSubsystem().getCalSensorState());
     // LEDManager.STRIP0.setGradient(LEDDisplacement,
     //   Color.kRed, 
     //   Color.kOrange, 
