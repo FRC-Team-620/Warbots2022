@@ -39,9 +39,10 @@ public class ShooterSubsystem extends SubsystemBase {
     protected final PIDController leftShooterPID;
     protected final PIDController rightShooterPID;
     // Feedforward
-    protected final SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(1, 1, 1); //TODO: SysID characterize 
+    private final double kS = -0.07488, kV = 0.12385, kA = 0.020886;
+    protected final SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(kS, kV, kA); //TODO: SysID characterize 
     // TODO: Tune PID loops more for lower RPMs
-	private final double kP = 0.00025, kI = 0.0004;
+	private final double kP = 0, kI = 0;//0.00025 0.0004
     private double testRPM;
 
     public ShooterSubsystem() {
