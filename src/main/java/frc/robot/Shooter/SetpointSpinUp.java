@@ -9,19 +9,19 @@ import frc.robot.Util.LimeLight.LedMode;
 
 public class SetpointSpinUp extends CommandBase {
     protected ShooterSubsystem shooterSubsystem;
-    protected double setPoint;
+    protected double offsetY;
     private Timer timer;
 
-    public SetpointSpinUp(ShooterSubsystem shooterSubsystem, double setPoint) {
+    public SetpointSpinUp(ShooterSubsystem shooterSubsystem, double offsetY) {
 
         this.shooterSubsystem = shooterSubsystem;
-        this.setPoint = setPoint;
+        this.offsetY = offsetY;
         addRequirements(shooterSubsystem);
     }
 
     @Override
     public void execute() {
-        shooterSubsystem.setTargetRPM(setPoint);
+        shooterSubsystem.setTargetRPM(Constants.rpmMap.getInterpolated(offsetY));
         ControlBoard.setOperatorRumble(getWithinTolerance());
     }
 
