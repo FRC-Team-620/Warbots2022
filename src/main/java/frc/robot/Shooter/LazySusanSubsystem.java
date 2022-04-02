@@ -29,9 +29,9 @@ public class LazySusanSubsystem extends SubsystemBase {
     private Rotation2d desiredRotation;
     private final Supplier<Pose2d> robotBase;
     private boolean isGyroLocking;
-    private final double countToDegreesFactor = (1.0 / 12.0) * (22.0 / 156.0) * 360.0;
+    private final double countToDegreesFactor = (1.0 / 15.0) * (22.0 / 156.0) * 360.0;
     private double modSpeed = 1;
-    private final double kP = 0.060000, kI = 0.003000, kD = 0;// KI0.00004 TODO: Tune PID Loop
+    private final double kP = 0.060000, kI = 0, kD = 0;// KI0.00004 kP = 0.060000, kI = 0.003000,  TODO: Tune PID Loop
     private boolean isCal;
     //private boolean isDisabled;
     public DigitalInput calSwitch;
@@ -44,7 +44,7 @@ public class LazySusanSubsystem extends SubsystemBase {
     // private double turntableThresh = 35;
 
     public LazySusanSubsystem(Supplier<Pose2d> robotBase) {
-        this.isGyroLocking = true;
+        this.isGyroLocking = false;
         this.robotBase = robotBase;
         lazySusan = new SimableCANSparkMax(Constants.lazySusanID, MotorType.kBrushless);
         this.calSwitch = new DigitalInput(Constants.calSwitchID);
@@ -98,9 +98,14 @@ public class LazySusanSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("LazySusanMotorPercentage", lazySusan.get());
         SmartDashboard.putBoolean("LazySusanSwitchTriggered", isCal);
         SmartDashboard.putBoolean("SwitchHit", islimitSwitchPressed());
+        SmartDashboard.putNumber("DesiredRotation: ", desiredRotation.getDegrees());
+        SmartDashboard.putNumber("TurretRotation: ", turretRotation.getDegrees());
 
     }
 
+    public double getEncoderPosition() {
+        return lazySusan.getEncoder().getPosition();
+    }
 
     public double getModSpeed() {
         return modSpeed;

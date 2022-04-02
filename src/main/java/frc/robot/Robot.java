@@ -24,6 +24,7 @@ import frc.robot.Auto.Routines.Taxi;
 import frc.robot.Auto.Routines.TwoBalls;
 import frc.robot.Climber.ToggleHooks;
 import frc.robot.Loader.AutoLoad;
+import frc.robot.Shooter.LazySusanSubsystem;
 import frc.robot.Shooter.ZeroTurnTable;
 // import frc.robot.Shooter.AutoAimingAndSpinningUp;
 //import frc.robot.Util.LEDManager;
@@ -46,9 +47,9 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
     robotContainer = new RobotContainer();
     robotContainer.init();// TODO: make these happen on RobotContainer instantiation
-    robotContainer.getLazySusanSubsystem().setIsGyroLocking(true);
     // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(true);
     // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);
+    robotContainer.getLazySusanSubsystem().setEncoderPosition(0);
 
     autoSelector.setDefaultOption("Taxi", new TwoBalls(robotContainer.getDriveTrain(), robotContainer.getLazySusanSubsystem(), 
       robotContainer.getShooterSubsystem(), robotContainer.getFiringPins(), robotContainer.getIntake()));
@@ -82,15 +83,25 @@ public class Robot extends TimedRobot {
     // robotContainer.getLoaderSubsystem().setIsClimbing(false);
     // TODO: move to initializer in robotContainer
     new ToggleHooks(robotContainer.getClimberSubsystem()).schedule();
-    robotContainer.getLazySusanSubsystem().setEncoderPosition(0);
+    //robotContainer.getLazySusanSubsystem().setEncoderPosition(0);
     robotContainer.getDriveTrain().setBrake(true);
     robotContainer.getClimberMotorsSubsystem().getWinchMotor().getEncoder().setPosition(0);
     // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(true);
     // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);
+    //robotContainer.getLazySusanSubsystem().setEncoderPosition(robotContainer.getLazySusanSubsystem().getEncoderPosition() + 4);
   }
 
   @Override
+  public void teleopExit() {
+    //robotContainer.getLazySusanSubsystem().setEncoderPosition(robotContainer.getLazySusanSubsystem().getEncoderPosition() - 4);
+  }
+  @Override
   public void autonomousInit() {
+    robotContainer.getLazySusanSubsystem().setTurretPositionDegrees(Rotation2d.fromDegrees(179.5));
+    //robotContainer.getLazySusanSubsystem().setEncoderPosition(robotContainer.getLazySusanSubsystem().getEncoderPosition() + 4);
+
+
+
   	/*
     robotContainer.getDriveTrain().setEncoderPos(0);
 
@@ -124,11 +135,17 @@ public class Robot extends TimedRobot {
     // robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(),
     // robotContainer),
     // new AutoLoad(robotContainer.getLoaderSubsystem(), 1)));
-
+    //autoSelector.getSelected();
     autonomousCommand = new AutoCommand(robotContainer.getFiringPins(), robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer);
     if (autonomousCommand != null) {
       autonomousCommand.schedule();
     }
+  }
+
+  @Override
+  public void autonomousExit() {
+    robotContainer.getLazySusanSubsystem().setTurretPositionDegrees(Rotation2d.fromDegrees(0));
+    //robotContainer.getLazySusanSubsystem().setEncoderPosition(robotContainer.getLazySusanSubsystem().getEncoderPosition() - 4);
   }
 
   @Override

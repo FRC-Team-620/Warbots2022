@@ -32,7 +32,7 @@ public class ZeroTurnTable extends CommandBase {
         lazySusanSubsystem.stop();
         lazySusanSubsystem.setModSpeed(1);
         if (!interrupted) {
-            lazySusanSubsystem.setHomePosition();
+            //lazySusanSubsystem.setHomePosition();
         }
     }
 
