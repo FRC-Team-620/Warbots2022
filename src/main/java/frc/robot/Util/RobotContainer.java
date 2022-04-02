@@ -152,7 +152,7 @@ public class RobotContainer {
         // drivetrain.setDefaultCommand(driveWithJoystick);
 
         //turret.setDefaultCommand(new ManualAiming(turret, ControlBoard.getOperatorController()));
-        turret.setDefaultCommand(new ManualAimingPID(turret, ControlBoard.getOperatorController()));
+        // turret.setDefaultCommand(new ManualAimingPID(turret, ControlBoard.getOperatorController()));
 
         //shooterCommand = new ShooterCommand(shooter, turret, controls.getOperatorController(),
                 //controls.getDriverController());
