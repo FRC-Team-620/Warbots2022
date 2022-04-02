@@ -18,7 +18,6 @@ public class ExtendArmsAndStow extends SequentialCommandGroup {
         // loaderSubsystem.setIsClimbing(true);
         
         addCommands(
-            new ExtendBumperPistons(this.climberSubsystem),
             new RaisePistons(this.climberSubsystem, 0.1), // Bump the arms up slightly
             new WinchExtend(this.climberMotorsSubsystem, this.intake, Constants.winchMaxLimit / 2.0),
             new LowerPistons(this.climberSubsystem, 0.1),

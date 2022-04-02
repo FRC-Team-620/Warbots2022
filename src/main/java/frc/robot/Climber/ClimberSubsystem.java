@@ -9,15 +9,12 @@ public class ClimberSubsystem extends SubsystemBase {
     // protected final RelativeEncoder encoder;
     protected final Solenoid hangingSolenoid;
     protected final Solenoid armsSolenoid;
-    protected final Solenoid bumperSolenoid;
     
 
     public ClimberSubsystem() {
 
         hangingSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 2);
         armsSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 1);
-        bumperSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 4);
-        
 
     }
 
@@ -33,9 +30,9 @@ public class ClimberSubsystem extends SubsystemBase {
     public Solenoid getArmsSolenoid() {
         return armsSolenoid;
     }
-    public Solenoid getBumperSolenoid() {
-        return bumperSolenoid;
-    }
+    // public Solenoid getBumperSolenoid() {
+    //     return bumperSolenoid;
+    // }
     
 
 
@@ -45,8 +42,8 @@ public class ClimberSubsystem extends SubsystemBase {
     public void setArmsSolenoid(boolean b) {
         this.getArmsSolenoid().set(b);
     }
-    public void setBumperSolenoid(boolean b) {
-        this.getBumperSolenoid().set(b);
-    }
+    // public void setBumperSolenoid(boolean b) {
+    //     this.getBumperSolenoid().set(b);
+    // }
 
 }

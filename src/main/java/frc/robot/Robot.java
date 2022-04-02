@@ -46,7 +46,6 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
     robotContainer = new RobotContainer();
     robotContainer.init();// TODO: make these happen on RobotContainer instantiation
-    robotContainer.getLazySusanSubsystem().setIsGyroLocking(true);
     // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(true);
     // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);
 
