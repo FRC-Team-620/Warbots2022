@@ -31,6 +31,7 @@ public class TurretAimingPID extends CommandBase {
 
     @Override
     public void initialize() {
+        this.lazySusanSubsystem.setIsGyroLocking(false);
         LimeLight.setLedMode(LedMode.ON);
     }
 
@@ -49,8 +50,7 @@ public class TurretAimingPID extends CommandBase {
             ControlBoard.setDriverRumble(true);
 
             if(this.prevHubPosition != null) {
-                Pose2d robotPosition = this.getLocalPose();
-                double dX = calculateHubDeltaX(robotPosition, this.prevHubPosition);
+                double dX = calculateHubDeltaX(this.robotbase.get(), this.prevHubPosition);
                 lazySusanSubsystem.setTurretPositionDegrees(lazySusanSubsystem.getRotation().minus(Rotation2d.fromDegrees(dX)));
             }
         }
@@ -74,8 +74,13 @@ public class TurretAimingPID extends CommandBase {
         return hubPosition;
     }
 
-    public double calculateHubDeltaX(Pose2d robotPose, Pose2d hubPosition) {
-        return robotPose.minus(hubPosition).getRotation().getDegrees();
+    public double calculateHubDeltaX(Pose2d robotPose, Pose2d hubPose) {
+        Pose2d relativePosition = robotPose.relativeTo(hubPose);
+        this.robotFieldWidget.getObject("relative-robot-pos").setPose(relativePosition);
+        double degreeAngle = Math.toDegrees(Math.atan2(relativePosition.getY(), relativePosition.getX()));
+        SmartDashboard.putNumber("Relative angle--", degreeAngle);
+        return degreeAngle;
+        // return robotPose.minus(hubPosition).getRotation().getDegrees();
     }
 
     @Override
