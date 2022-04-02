@@ -24,12 +24,15 @@ public class LimelightSpinUp extends CommandBase {
         double y = LimeLight.getTY();
         // double distance = ShooterMath.getDistanceInMeters(Constants.azimuthAngle1, y, Constants.limelightHeight, Constants.hubHeight);
         // double targetRPM = ShooterMath.metersToRPM(distance);
+        boolean hasTargetAndInRange = LimeLight.hasTarget() && Constants.rpmMap.isKeyInBounds(y);
+
+        ControlBoard.setOperatorLowFreqRumble(!hasTargetAndInRange);
         
         // TODO: Use the below RPM value once the table is working
         double targetRPM = Constants.rpmMap.getInterpolated(y);
-
-        this.shooterSubsystem.setTargetRPM(targetRPM);
-        ControlBoard.setOperatorRumble(this.getWithinTolerance());
+        if(LimeLight.hasTarget())
+            this.shooterSubsystem.setTargetRPM(targetRPM);
+        ControlBoard.setOperatorHighFreqRumble(!(hasTargetAndInRange && this.getWithinTolerance()));
     }
 
     private boolean getWithinTolerance(){
