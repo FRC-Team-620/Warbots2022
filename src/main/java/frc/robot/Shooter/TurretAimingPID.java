@@ -28,13 +28,7 @@ public class TurretAimingPID extends CommandBase {
     public void execute() {
         double x = LimeLight.getTX();
         if (LimeLight.hasTarget()) {
-            boolean inRange = LimeLight.inRange();
             lazySusanSubsystem.setTurretPositionDegrees(lazySusanSubsystem.getRotation().minus(Rotation2d.fromDegrees(x)));
-            ControlBoard.setOperatorRumble(!inRange);
-            ControlBoard.setDriverRumble(!inRange);
-        } else {
-            ControlBoard.setOperatorRumble(true);
-            ControlBoard.setDriverRumble(true);
         }
         SmartDashboard.putNumber("LimeLight Distance", ShooterMath.getDistanceInMeters(Constants.azimuthAngle1, LimeLight.getTY(), Constants.limelightHeight, Constants.hubHeight));
         SmartDashboard.putNumber("LimeLight TY", LimeLight.getTY()); //TODO: Remove debug data

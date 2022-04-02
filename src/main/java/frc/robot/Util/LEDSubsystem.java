@@ -3,26 +3,36 @@ package frc.robot.Util;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public enum LEDManager {
-
-    STRIP0(33, 9);
-
-    private LEDStrip strip;
-    private LEDManager(int LEDCount, int PWMPort) {
-        this.strip = new LEDStrip(LEDCount, PWMPort);
-    }
-
-    public void set(Color c) {
-        this.strip.setSolidColor(c);
-    }
-    public void setGradient(Color... colors) {
-        this.strip.setGradient(colors);
-    }
-    public void setGradient(int offset, Color... colors) {
-        this.strip.setGradient(offset, colors);
-    }
+public class LEDSubsystem extends SubsystemBase {
     
+    public enum LEDManager {
+
+        STRIP0(33, 9);
+
+        private LEDStrip strip;
+        private LEDManager(int LEDCount, int PWMPort) {
+            this.strip = new LEDStrip(LEDCount, PWMPort);
+        }
+
+        public void set(Color c) {
+            this.strip.setSolidColor(c);
+        }
+        public void setGradient(Color... colors) {
+            this.strip.setGradient(colors);
+        }
+        public void setGradient(int offset, Color... colors) {
+            this.strip.setGradient(offset, colors);
+        }
+        
+    }
+
+    public LEDSubsystem() {        
+
+    }
 }
 
 class LEDStrip {

@@ -24,25 +24,36 @@ public class LimelightSpinUp extends CommandBase {
         double y = LimeLight.getTY();
         // double distance = ShooterMath.getDistanceInMeters(Constants.azimuthAngle1, y, Constants.limelightHeight, Constants.hubHeight);
         // double targetRPM = ShooterMath.metersToRPM(distance);
-        
+
         // TODO: Use the below RPM value once the table is working
         double targetRPM = Constants.rpmMap.getInterpolated(y);
 
+        if (LimeLight.hasTarget()) {
+            boolean inRange = LimeLight.inRange();
+            ControlBoard.setOperatorRumble(!inRange);
+            ControlBoard.setDriverRumble(!inRange);
+        } else {
+            ControlBoard.setOperatorRumble(true);
+            ControlBoard.setDriverRumble(true);
+        }
+
         this.shooterSubsystem.setTargetRPM(targetRPM);
-        ControlBoard.setOperatorRumble(this.getWithinTolerance());
+        // ControlBoard.setOperatorRumble(this.getWithinTolerance());
     }
 
-    private boolean getWithinTolerance(){
-        return ShooterMath.withinTolerance(
-            this.shooterSubsystem.getRPM(), 
-            this.shooterSubsystem.getTargetRPM(), 
-            Constants.shooterVibrationTolerance);
-    }
+    // private boolean getWithinTolerance(){
+    //     return ShooterMath.withinTolerance(
+    //         this.shooterSubsystem.getRPM(), 
+    //         this.shooterSubsystem.getTargetRPM(), 
+    //         Constants.shooterVibrationTolerance);
+    // }
 
     @Override
     public void end(boolean interrupt) {
         this.shooterSubsystem.stopMotors();
         LimeLight.setLedMode(LedMode.OFF);
         ControlBoard.setOperatorRumble(false);
+        ControlBoard.setDriverRumble(false);
+        // ControlBoard.setOperatorRumble(false);
     }
 }
