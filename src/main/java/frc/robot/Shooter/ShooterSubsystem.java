@@ -42,7 +42,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private final double kS = -0.07488, kV = 0.12385, kA = 0.020886;
     protected final SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(kS, kV, kA); //TODO: SysID characterize 
     // TODO: Tune PID loops more for lower RPMs
-	private final double kP = 0.000112, kI = 0.000001, kD = 0.000001;//0.00025 0.0004
+	private final double kP = 0.000001, kI = 0.003500, kD = 0.010000;//0.00025 0.0004
     private double testRPM;
 
     public ShooterSubsystem() {
@@ -93,14 +93,19 @@ public class ShooterSubsystem extends SubsystemBase {
         leftShooterMotor.setVoltage(MathUtil.clamp(leftOutputVoltage, powerDecel || leftShooterPID.getSetpoint() <= 0 ? 0 : -13, 13));
         rightShooterMotor.setVoltage(MathUtil.clamp(rightOutputVoltage, powerDecel || rightShooterPID.getSetpoint() <= 0 ? 0 : -13, 13));
 
-        // int x = 0;
-        // if (leftShooterPID.atSetpoint()) {
-        //     x = 5000;
-        // }
+        int Lx = 0;
+        if (leftShooterPID.atSetpoint()) {
+            Lx = 5000;
+        }
+        int Rx = 0;
+        if (rightShooterPID.atSetpoint()) {
+            Rx = 5000;
+        }
 
         SmartDashboard.putNumber("Flywheel Right RPM", rightShooterMotor.getEncoder().getVelocity());
         SmartDashboard.putNumber("Flywheel Left RPM", leftShooterMotor.getEncoder().getVelocity());
-        // SmartDashboard.putNumber("Flywheel Left atTarget", x);
+        SmartDashboard.putNumber("Flywheel Left atTarget", Lx);
+        SmartDashboard.putNumber("Flywheel Right atTarget", Rx);
         SmartDashboard.putNumber("Flywheel Right Setpoint", rightShooterPID.getSetpoint());
         SmartDashboard.putNumber("Flywheel Left Setpoint", leftShooterPID.getSetpoint());
         //MathUtil.clamp(output,powerDecel ? -1: 0,1);
