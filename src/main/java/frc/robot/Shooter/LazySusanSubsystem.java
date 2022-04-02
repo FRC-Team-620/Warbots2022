@@ -103,6 +103,9 @@ public class LazySusanSubsystem extends SubsystemBase {
 
     }
 
+    public double getEncoderPosition() {
+        return lazySusan.getEncoder().getPosition();
+    }
 
     public double getModSpeed() {
         return modSpeed;
