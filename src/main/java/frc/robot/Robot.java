@@ -97,6 +97,7 @@ public class Robot extends TimedRobot {
   }
   @Override
   public void autonomousInit() {
+    LimeLight.setLedMode(LedMode.ON);
     robotContainer.getLazySusanSubsystem().setTurretPositionDegrees(Rotation2d.fromDegrees(179.5));
     //robotContainer.getLazySusanSubsystem().setEncoderPosition(robotContainer.getLazySusanSubsystem().getEncoderPosition() + 4);
 
@@ -144,6 +145,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousExit() {
+    LimeLight.setLedMode(LedMode.OFF);
     robotContainer.getLazySusanSubsystem().setTurretPositionDegrees(Rotation2d.fromDegrees(0));
     //robotContainer.getLazySusanSubsystem().setEncoderPosition(robotContainer.getLazySusanSubsystem().getEncoderPosition() - 4);
   }
