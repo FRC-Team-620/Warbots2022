@@ -43,7 +43,11 @@ public class TurretAimingPID extends CommandBase {
             boolean inRange = LimeLight.inRange();
             ControlBoard.setOperatorRumble(!inRange);
             ControlBoard.setDriverRumble(!inRange);
-            lazySusanSubsystem.setTurretPositionDegrees(lazySusanSubsystem.getRotation().minus(Rotation2d.fromDegrees(x)));
+            if(this.lazySusanSubsystem.getIsGyroLocking()) {
+                lazySusanSubsystem.setTurretPositionDegrees(this.robotbase.get().getRotation().plus(lazySusanSubsystem.getRotation()).minus(Rotation2d.fromDegrees(x)));
+            } else {
+                lazySusanSubsystem.setTurretPositionDegrees(lazySusanSubsystem.getRotation().minus(Rotation2d.fromDegrees(x)));
+            }
             // lazySusanSubsystem.setTurretPositionDegrees(robotbase.get().getRotation().minus(Rotation2d.fromDegrees(x)));
             this.prevHubPosition = this.calculateHubPosition(this.getLocalPose());
         } else {
