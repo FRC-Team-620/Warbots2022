@@ -5,6 +5,7 @@
 package frc.robot.Auto.Routines;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Auto.DriveForwardDistance;
 import frc.robot.Drive.Drivetrain;
 import frc.robot.Shooter.ActivateFiringPins;
@@ -34,6 +35,7 @@ public class OneBall extends SequentialCommandGroup {
     addCommands(
       new DriveForwardDistance(drivetrain, oneBallDistanceMeters),
       // new SetpointSpinUp(shooterSubsystem, LimeLight.getTY()),
+      new WaitCommand(1),
       new LimelightSpinUp(shooterSubsystem),
       //new InstantCommand(() -> shooterSubsystem.setTargetRPM(LimeLight.getTY()), shooterSubsystem),
       new ActivateFiringPins(firingPins)
