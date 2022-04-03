@@ -6,6 +6,7 @@ package frc.robot.Auto.Routines;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Auto.DriveForwardDistance;
 import frc.robot.Drive.Drivetrain;
 import frc.robot.Loader.AutoLoad;
@@ -45,7 +46,7 @@ public class TwoBalls extends SequentialCommandGroup {
         new SequentialCommandGroup(
           new DriveForwardDistance(drivetrain, twoBallsDistanceMeters),
           new ActivateFiringPins(firingPins),
-          new WaitFrames(150),
+          new WaitCommand(5),
           new ActivateFiringPins(firingPins)
         )
       )
