@@ -45,6 +45,7 @@ public class TwoBalls extends SequentialCommandGroup {
         new LimelightSpinUp(shooterSubsystem),
         new SequentialCommandGroup(
           new DriveForwardDistance(drivetrain, twoBallsDistanceMeters),
+          new WaitCommand(1),
           new ActivateFiringPins(firingPins),
           new WaitCommand(5),
           new ActivateFiringPins(firingPins)
