@@ -26,8 +26,8 @@ public class LimeLightPoseSim {
         var yangle = Math.toDegrees(Math.atan2(height, target.getTranslation().getDistance(pos.getTranslation())) - Math.toRadians( this.angle));
         var deltap = target.minus(pos);
         var xangle = Math.toDegrees(Math.atan2(deltap.getY(), deltap.getX()));
-        SmartDashboard.putNumber("X angle",xangle);
-        SmartDashboard.putNumber("Y Angle",yangle);
+        SmartDashboard.putNumber("PosSim/X angle",xangle);
+        SmartDashboard.putNumber("PosSim/Y Angle",yangle);
         var xclamp = MathUtil.clamp(xangle, -29.8, 29.8);
         var yclamp = MathUtil.clamp(yangle, -24.85, 24.85);
         try {

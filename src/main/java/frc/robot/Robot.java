@@ -48,7 +48,7 @@ public class Robot extends TimedRobot {
     autoSelector.addOption("One-ball", new OneBall(robotContainer.getDriveTrain(), robotContainer.getLazySusanSubsystem(), 
       robotContainer.getShooterSubsystem(), robotContainer.getFiringPins()));
     autoSelector.addOption("Two-Ball", new Taxi(robotContainer.getDriveTrain()));
-
+    autoSelector.addOption("AutoCommand", new AutoCommand(robotContainer.getFiringPins(), robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer));
     SmartDashboard.putData(autoSelector);
   }
 
@@ -129,11 +129,11 @@ public class Robot extends TimedRobot {
     // robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(),
     // robotContainer),
     // new AutoLoad(robotContainer.getLoaderSubsystem(), 1)));
-    //autoSelector.getSelected();
-    autonomousCommand = new AutoCommand(robotContainer.getFiringPins(), robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer);
-    if (autonomousCommand != null) {
-      autonomousCommand.schedule();
-    }
+    autoSelector.getSelected().schedule();
+    // autonomousCommand = new AutoCommand(robotContainer.getFiringPins(), robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer);
+    // if (autonomousCommand != null) {
+    //   autonomousCommand.schedule();
+    // }
   }
 
   @Override
@@ -197,11 +197,11 @@ public class Robot extends TimedRobot {
     // Current Seems to be too high look into
     // later
     drawCurrent += robotContainer.getShooterSubsystem().getDrawnCurrentAmps();
-    SmartDashboard.putNumber("Total Current", drawCurrent);
+    SmartDashboard.putNumber("Robot/Total Current", drawCurrent);
     // BatterySim.calculateDefaultBatteryLoadedVoltage(currents)
     double loadedVoltage = BatterySim.calculateDefaultBatteryLoadedVoltage(13,
         0.02, drawCurrent);
-    SmartDashboard.putNumber("Robot Volts", loadedVoltage);
+    SmartDashboard.putNumber("Robot/Robot Volts", loadedVoltage);
     RoboRioSim.setVInVoltage(loadedVoltage);
 
     var robotpos = robotContainer.getDriveTrain().getPose();

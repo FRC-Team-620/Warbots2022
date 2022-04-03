@@ -65,7 +65,7 @@ public class LazySusanSubsystem extends SubsystemBase {
         desiredRotation = turretRotation;
         isCal = false;
         //isDisabled =
-        SmartDashboard.putData(lazySusanPID);
+        SmartDashboard.putData("Turret/PIDControler[12]",lazySusanPID);
     }
 
     @Override
@@ -94,12 +94,13 @@ public class LazySusanSubsystem extends SubsystemBase {
         }
 
         lazySusan.set(PIDOutput * modSpeed);
-        SmartDashboard.putNumber("TurretPos", lazySusan.getEncoder().getPosition());
-        SmartDashboard.putNumber("LazySusanMotorPercentage", lazySusan.get());
-        SmartDashboard.putBoolean("LazySusanSwitchTriggered", isCal);
-        SmartDashboard.putBoolean("SwitchHit", islimitSwitchPressed());
-        SmartDashboard.putNumber("DesiredRotation: ", desiredRotation.getDegrees());
-        SmartDashboard.putNumber("TurretRotation: ", turretRotation.getDegrees());
+        SmartDashboard.putNumber("Turret/Raw Encoder", lazySusan.getEncoder().getPosition());
+        SmartDashboard.putNumber("Turret/Motor Percentage", lazySusan.get());
+        SmartDashboard.putBoolean("Turret/Is Calibrated", isCal);
+        SmartDashboard.putBoolean("Turret/Calibration Switch", islimitSwitchPressed());
+        SmartDashboard.putNumber("Turret/Desired Rotation", desiredRotation.getDegrees());
+        SmartDashboard.putNumber("Turret/Rotation Degrees", turretRotation.getDegrees());
+        SmartDashboard.putBoolean("Turret/GryoLocking", isGyroLocking);
 
     }
 
@@ -210,8 +211,8 @@ public class LazySusanSubsystem extends SubsystemBase {
         simEncoder.setVelocity(simlazySusan.getAngularVelocityRPM());
         simEncoder.setDistance(simlazySusan.getAngularPositionRotations() * 180);
         // TODO: Remove magic number 5 that represents the first gear reduction
-        SmartDashboard.putNumber("Turntable Velocity", encoder.getVelocity());
-        SmartDashboard.putNumber("Turntable ticks", encoder.getPosition());
-        SmartDashboard.putNumber("Turntable Set", this.lazySusanPID.getSetpoint());
+        SmartDashboard.putNumber("Turret/Velocity", encoder.getVelocity());
+        SmartDashboard.putNumber("Turret/ticks", encoder.getPosition());
+        SmartDashboard.putNumber("Turret/Setpoint", this.lazySusanPID.getSetpoint());
     }
 }
