@@ -40,14 +40,17 @@ public class TwoBalls extends SequentialCommandGroup {
     this.intake = intake;
     addCommands(
       new ParallelCommandGroup(
-        new DriveForwardDistance(drivetrain, twoBallsDistanceMeters),
-        new AutoLoad(intake)
-        ),
+        new AutoLoad(intake),
+        new LimelightSpinUp(shooterSubsystem),
+        new SequentialCommandGroup(
+          new DriveForwardDistance(drivetrain, twoBallsDistanceMeters),
+          new ActivateFiringPins(firingPins),
+          new WaitFrames(150),
+          new ActivateFiringPins(firingPins)
+        )
+      )
       // new SetpointSpinUp(shooterSubsystem, LimeLight.getTY()),
-      new LimelightSpinUp(shooterSubsystem),      
-      new ActivateFiringPins(firingPins),
-      new WaitFrames(150),
-      new ActivateFiringPins(firingPins)
-      );
+      
+    );
   }
 }

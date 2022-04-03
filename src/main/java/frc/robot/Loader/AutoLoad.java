@@ -34,6 +34,6 @@ public class AutoLoad extends CommandBase{
 
     @Override
     public boolean isFinished() {
-        return frames > 150;
+        return frames > 750;
     }
 }
