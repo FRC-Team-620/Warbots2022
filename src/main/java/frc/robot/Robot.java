@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import com.revrobotics.CANSparkMax.IdleMode;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -13,25 +11,19 @@ import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Auto.AutoCommand;
 import frc.robot.Auto.Routines.OneBall;
 import frc.robot.Auto.Routines.Taxi;
 import frc.robot.Auto.Routines.TwoBalls;
 import frc.robot.Climber.ToggleHooks;
-import frc.robot.Loader.AutoLoad;
-import frc.robot.Shooter.LazySusanSubsystem;
-import frc.robot.Shooter.ZeroTurnTable;
 // import frc.robot.Shooter.AutoAimingAndSpinningUp;
 //import frc.robot.Util.LEDManager;
 import frc.robot.Util.LimeLight;
-import frc.robot.Util.RobotContainer;
 import frc.robot.Util.LimeLight.LedMode;
-import frc.robot.Climber.ToggleHooks;
+import frc.robot.Util.RobotContainer;
 
 public class Robot extends TimedRobot {
   protected RobotContainer robotContainer;
@@ -90,7 +82,7 @@ public class Robot extends TimedRobot {
     // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);
     //robotContainer.getLazySusanSubsystem().setEncoderPosition(robotContainer.getLazySusanSubsystem().getEncoderPosition() + 4);
   }
-
+  
   @Override
   public void teleopExit() {
     robotContainer.getLazySusanSubsystem().setIsGyroLocking(false);

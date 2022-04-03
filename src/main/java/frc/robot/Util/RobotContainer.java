@@ -37,7 +37,6 @@ import frc.robot.Shooter.LowShotCommand;
 import frc.robot.Shooter.ManualAimingPID;
 import frc.robot.Shooter.ShooterSubsystem;
 import frc.robot.Shooter.TankDriveAiming;
-import frc.robot.Shooter.TestSetpointSpinUp;
 import frc.robot.Shooter.TurretAimingPID;
 import frc.robot.Shooter.ZeroTurnTable;
 

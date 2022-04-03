@@ -2,7 +2,6 @@ package frc.robot.Shooter;
 
 import java.text.DecimalFormat;
 import java.util.List;
-import java.util.function.Supplier;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;

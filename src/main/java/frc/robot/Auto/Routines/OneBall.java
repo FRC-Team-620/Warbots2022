@@ -4,19 +4,14 @@
 
 package frc.robot.Auto.Routines;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants;
 import frc.robot.Auto.DriveForwardDistance;
 import frc.robot.Drive.Drivetrain;
 import frc.robot.Shooter.ActivateFiringPins;
 import frc.robot.Shooter.FiringPins;
 import frc.robot.Shooter.LazySusanSubsystem;
 import frc.robot.Shooter.LimelightSpinUp;
-import frc.robot.Shooter.SetpointSpinUp;
-import frc.robot.Shooter.ShooterMath;
 import frc.robot.Shooter.ShooterSubsystem;
-import frc.robot.Util.LimeLight;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
