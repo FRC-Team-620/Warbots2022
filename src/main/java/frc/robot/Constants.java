@@ -114,8 +114,10 @@ public final class Constants {
     public static final int maxShooterRPM = 5500;
     public static final double maxShootingDistance = 4.0;
     public static final double shooterVibrationTolerance = 0.03;
-    public static final double driverRumble = 0.5;
-    public static final double operatorRumble = 0.5;
+    public static final double driverRumbleLowFreq = 0.5;
+    public static final double driverRumbleHighFreq = 0.5;
+    public static final double operatorRumbleLowFreq = 0.3;
+    public static final double operatorRumbleHighFreq = 0.9;
 
     //Lazy susan
     public static final int calSwitchID = 9;
