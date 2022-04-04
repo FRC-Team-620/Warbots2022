@@ -129,11 +129,10 @@ public class Robot extends TimedRobot {
     // robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(),
     // robotContainer),
     // new AutoLoad(robotContainer.getLoaderSubsystem(), 1)));
-    autoSelector.getSelected().schedule();
-    // autonomousCommand = new AutoCommand(robotContainer.getFiringPins(), robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer);
-    // if (autonomousCommand != null) {
-    //   autonomousCommand.schedule();
-    // }
+    autonomousCommand = autoSelector.getSelected();
+    if (autonomousCommand != null) {
+      autonomousCommand.schedule();
+    }
   }
 
   @Override
