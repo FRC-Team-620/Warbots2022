@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import com.revrobotics.CANSparkMax.IdleMode;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -13,25 +11,19 @@ import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Auto.AutoCommand;
 import frc.robot.Auto.Routines.OneBall;
 import frc.robot.Auto.Routines.Taxi;
 import frc.robot.Auto.Routines.TwoBalls;
 import frc.robot.Climber.ToggleHooks;
-import frc.robot.Loader.AutoLoad;
-import frc.robot.Shooter.LazySusanSubsystem;
-import frc.robot.Shooter.ZeroTurnTable;
 // import frc.robot.Shooter.AutoAimingAndSpinningUp;
 //import frc.robot.Util.LEDManager;
 import frc.robot.Util.LimeLight;
-import frc.robot.Util.RobotContainer;
 import frc.robot.Util.LimeLight.LedMode;
-import frc.robot.Climber.ToggleHooks;
+import frc.robot.Util.RobotContainer;
 
 public class Robot extends TimedRobot {
   protected RobotContainer robotContainer;
@@ -51,12 +43,12 @@ public class Robot extends TimedRobot {
     // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);
     robotContainer.getLazySusanSubsystem().setEncoderPosition(0);
 
-    autoSelector.setDefaultOption("Taxi", new TwoBalls(robotContainer.getDriveTrain(), robotContainer.getLazySusanSubsystem(), 
+    autoSelector.setDefaultOption("Two-Ball", new TwoBalls(robotContainer.getDriveTrain(), robotContainer.getLazySusanSubsystem(), 
       robotContainer.getShooterSubsystem(), robotContainer.getFiringPins(), robotContainer.getIntake()));
     autoSelector.addOption("One-ball", new OneBall(robotContainer.getDriveTrain(), robotContainer.getLazySusanSubsystem(), 
       robotContainer.getShooterSubsystem(), robotContainer.getFiringPins()));
-    autoSelector.addOption("Two-Ball", new Taxi(robotContainer.getDriveTrain()));
-
+    autoSelector.addOption("Taxi", new Taxi(robotContainer.getDriveTrain()));
+    autoSelector.addOption("AutoCommand", new AutoCommand(robotContainer.getFiringPins(), robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer));
     SmartDashboard.putData(autoSelector);
   }
 
@@ -78,7 +70,7 @@ public class Robot extends TimedRobot {
     //   System.out.println("Already zeroed");
     // }
     robotContainer.setTeleopDrive();
-    //robotContainer.getLazySusanSubsystem().setIsGyroLocking(true);
+    robotContainer.getLazySusanSubsystem().setIsGyroLocking(true);
     //robotContainer.getShooterSubsystem().
     // robotContainer.getLoaderSubsystem().setIsClimbing(false);
     // TODO: move to initializer in robotContainer
@@ -90,13 +82,15 @@ public class Robot extends TimedRobot {
     // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);
     //robotContainer.getLazySusanSubsystem().setEncoderPosition(robotContainer.getLazySusanSubsystem().getEncoderPosition() + 4);
   }
-
+  
   @Override
   public void teleopExit() {
+    robotContainer.getLazySusanSubsystem().setIsGyroLocking(false);
     //robotContainer.getLazySusanSubsystem().setEncoderPosition(robotContainer.getLazySusanSubsystem().getEncoderPosition() - 4);
   }
   @Override
   public void autonomousInit() {
+    LimeLight.setLedMode(LedMode.ON);
     robotContainer.getLazySusanSubsystem().setTurretPositionDegrees(Rotation2d.fromDegrees(179.5));
     //robotContainer.getLazySusanSubsystem().setEncoderPosition(robotContainer.getLazySusanSubsystem().getEncoderPosition() + 4);
 
@@ -135,15 +129,16 @@ public class Robot extends TimedRobot {
     // robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(),
     // robotContainer),
     // new AutoLoad(robotContainer.getLoaderSubsystem(), 1)));
-    //autoSelector.getSelected();
-    autonomousCommand = new AutoCommand(robotContainer.getFiringPins(), robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer);
-    if (autonomousCommand != null) {
-      autonomousCommand.schedule();
-    }
+    autoSelector.getSelected().schedule();
+    // autonomousCommand = new AutoCommand(robotContainer.getFiringPins(), robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer);
+    // if (autonomousCommand != null) {
+    //   autonomousCommand.schedule();
+    // }
   }
 
   @Override
   public void autonomousExit() {
+    LimeLight.setLedMode(LedMode.OFF);
     robotContainer.getLazySusanSubsystem().setTurretPositionDegrees(Rotation2d.fromDegrees(0));
     //robotContainer.getLazySusanSubsystem().setEncoderPosition(robotContainer.getLazySusanSubsystem().getEncoderPosition() - 4);
   }
@@ -202,11 +197,11 @@ public class Robot extends TimedRobot {
     // Current Seems to be too high look into
     // later
     drawCurrent += robotContainer.getShooterSubsystem().getDrawnCurrentAmps();
-    SmartDashboard.putNumber("Total Current", drawCurrent);
+    SmartDashboard.putNumber("Robot/Total Current", drawCurrent);
     // BatterySim.calculateDefaultBatteryLoadedVoltage(currents)
     double loadedVoltage = BatterySim.calculateDefaultBatteryLoadedVoltage(13,
         0.02, drawCurrent);
-    SmartDashboard.putNumber("Robot Volts", loadedVoltage);
+    SmartDashboard.putNumber("Robot/Robot Volts", loadedVoltage);
     RoboRioSim.setVInVoltage(loadedVoltage);
 
     var robotpos = robotContainer.getDriveTrain().getPose();

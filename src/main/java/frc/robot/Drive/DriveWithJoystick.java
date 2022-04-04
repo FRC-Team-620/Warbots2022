@@ -21,9 +21,9 @@ public class DriveWithJoystick extends CommandBase {
         this.driverXbox = driverXbox;
         this.operatorXbox = operatorXbox;
 
-        SmartDashboard.putNumber("speed", speedConstant);
-        SmartDashboard.putNumber("rotation", rotationConstant);
-        SmartDashboard.putNumber("openloopramprate", openLoopRampRateConstant);
+        SmartDashboard.putNumber("DriveWithJoystick/speed", speedConstant);
+        SmartDashboard.putNumber("DriveWithJoystick/rotation", rotationConstant);
+        SmartDashboard.putNumber("DriveWithJoystick/openloopramprate", openLoopRampRateConstant);
         // drivetrain.setAllOpenLoopRampRates(openLoopRampRateConstant);
     }
 

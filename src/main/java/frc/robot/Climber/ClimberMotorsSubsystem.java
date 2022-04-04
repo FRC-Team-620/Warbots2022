@@ -90,9 +90,9 @@ public class ClimberMotorsSubsystem extends SubsystemBase {
         // m_elevatorSim.update(0.020);
         var rots = (simClimber.getPositionMeters()/Units.feetToMeters(5.5))* (Constants.winchMaxLimit+1);
         simeEncoder.setDistance(rots); //TODO convert to rotations :/
-        SmartDashboard.putNumber("Climber Position", encoder.getPosition());
-        SmartDashboard.putNumber("Climber Motor set", rightClimberMotor.get());
-        SmartDashboard.putNumber("Climber testpos", simClimber.getPositionMeters());
+        SmartDashboard.putNumber("Climber/Position", encoder.getPosition());
+        SmartDashboard.putNumber("Climber/Motor set", rightClimberMotor.get());
+        SmartDashboard.putNumber("Climber/testpos", simClimber.getPositionMeters());
         // SmartDashboard.putNumber("Turntable Set", lazySusan.get());
         // simeEncoder.setVelocity(simClimber.getVelocityMetersPerSecond());
 

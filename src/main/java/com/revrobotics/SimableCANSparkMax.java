@@ -174,7 +174,13 @@ public class SimableCANSparkMax extends CANSparkMax
 
     //////////////////////////////////////////////////
     // Base class hijacking
-
+    @Override
+    public void setVoltage(double outputVolts) {
+        super.setVoltage(outputVolts);
+        if(RobotBase.isSimulation()){
+            this.set(outputVolts/RobotController.getInputVoltage());
+        }
+    }
     @Override
     public REVLibError follow(final CANSparkMax leader)
     {

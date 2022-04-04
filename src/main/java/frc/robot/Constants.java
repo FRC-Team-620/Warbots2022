@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import java.net.PortUnreachableException;
-
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;

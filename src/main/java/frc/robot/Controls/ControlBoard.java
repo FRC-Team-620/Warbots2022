@@ -66,14 +66,32 @@ public class ControlBoard {
     }
 
     public static void setDriverRumble(boolean onOff) {
-        double rumble = onOff ? Constants.driverRumble : 0;
+        setDriverLowFreqRumble(onOff);
+        setDriverHighFreqRumble(onOff);
+    }
+
+    public static void setDriverLowFreqRumble(boolean onOff) {
+        double rumble = onOff ? Constants.operatorRumble : 0;
         driver.setRumble(RumbleType.kLeftRumble, rumble);
+    }
+
+    public static void setDriverHighFreqRumble(boolean onOff) {
+        double rumble = onOff ? Constants.operatorRumble : 0;
         driver.setRumble(RumbleType.kRightRumble, rumble);
     }
 
     public static void setOperatorRumble(boolean onOff) {
+        setOperatorLowFreqRumble(onOff);
+        setOperatorHighFreqRumble(onOff);
+    }
+
+    public static void setOperatorLowFreqRumble(boolean onOff) {
         double rumble = onOff ? Constants.operatorRumble : 0;
         operator.setRumble(RumbleType.kLeftRumble, rumble);
+    }
+
+    public static void setOperatorHighFreqRumble(boolean onOff) {
+        double rumble = onOff ? Constants.operatorRumble : 0;
         operator.setRumble(RumbleType.kRightRumble, rumble);
     }
 

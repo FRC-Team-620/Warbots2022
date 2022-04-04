@@ -2,7 +2,6 @@ package frc.robot.Shooter;
 
 import java.text.DecimalFormat;
 import java.util.List;
-import java.util.function.Supplier;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -70,9 +69,11 @@ public class ShooterSubsystem extends SubsystemBase {
         rightShooterPID = new PIDController(kP, kI, kD);
         leftShooterPID.setTolerance(10, 10);
         rightShooterPID.setTolerance(10, 10);
-        SmartDashboard.putData(leftShooterPID);
-        SmartDashboard.putData(rightShooterPID);
-        SmartDashboard.putNumber("Test RPM: ", testRPM);
+        // SmartDashboard.putData(leftShooterPID);
+        SmartDashboard.putData("Flywheel/Left/PIDControler[10]", leftShooterPID);
+        SmartDashboard.putData("Flywheel/Right/PIDControler[11]", rightShooterPID);
+        // SmartDashboard.putData(rightShooterPID);
+        SmartDashboard.putNumber("Flywheel/Test RPM: ", testRPM);
     }
 
     @Override
@@ -102,17 +103,17 @@ public class ShooterSubsystem extends SubsystemBase {
             Rx = 5000;
         }
 
-        SmartDashboard.putNumber("Flywheel Right RPM", rightShooterMotor.getEncoder().getVelocity());
-        SmartDashboard.putNumber("Flywheel Left RPM", leftShooterMotor.getEncoder().getVelocity());
-        SmartDashboard.putNumber("Flywheel Left atTarget", Lx);
-        SmartDashboard.putNumber("Flywheel Right atTarget", Rx);
-        SmartDashboard.putNumber("Flywheel Right Setpoint", rightShooterPID.getSetpoint());
-        SmartDashboard.putNumber("Flywheel Left Setpoint", leftShooterPID.getSetpoint());
+        SmartDashboard.putNumber("Flywheel/Right RPM", rightShooterMotor.getEncoder().getVelocity());
+        SmartDashboard.putNumber("Flywheel/Left RPM", leftShooterMotor.getEncoder().getVelocity());
+        SmartDashboard.putNumber("Flywheel/Left atTarget", Lx);
+        SmartDashboard.putNumber("Flywheel/Right atTarget", Rx);
+        SmartDashboard.putNumber("Flywheel/Right Setpoint", rightShooterPID.getSetpoint());
+        SmartDashboard.putNumber("Flywheel/Left Setpoint", leftShooterPID.getSetpoint());
         //MathUtil.clamp(output,powerDecel ? -1: 0,1);
     }
 
     public double getTestRPM() {
-        return SmartDashboard.getNumber("Test RPM: ", 0);
+        return SmartDashboard.getNumber("Flywheel/Test RPM: ", 0);
     }
 
     public double getSpeed() {
