@@ -81,7 +81,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
 
         // Debug Force both Pid loops to same setpoint; //TODO: Prob need to remove
-        rightShooterPID.setSetpoint(leftShooterPID.getSetpoint());
+        //rightShooterPID.setSetpoint(leftShooterPID.getSetpoint());
 
         leftShooterPID.calculate(leftShooterMotor.getEncoder().getVelocity());
         rightShooterPID.calculate(rightShooterMotor.getEncoder().getVelocity());
