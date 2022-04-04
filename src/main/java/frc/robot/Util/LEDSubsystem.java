@@ -1,15 +1,16 @@
 package frc.robot.Util;
 
 import edu.wpi.first.wpilibj.util.Color;
+
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LEDSubsystem extends SubsystemBase {
     
-    public enum LEDManager {
+    public static enum LEDManager {
 
-        STRIP0(33, 9);
+        STRIP0(65, 9);
 
         private LEDStrip strip;
         private LEDManager(int LEDCount, int PWMPort) {
@@ -18,6 +19,12 @@ public class LEDSubsystem extends SubsystemBase {
 
         public void set(Color c) {
             this.strip.setSolidColor(c);
+        }
+        public void setColorBlocks(int[] lengths, Color... colors) {
+            this.strip.setColorBlocks(lengths, colors);
+        }
+        public void setColorBlocks(int offset, int[] lengths, Color... colors) {
+            this.strip.setColorBlocks(offset, lengths, colors);
         }
         public void setGradient(Color... colors) {
             this.strip.setGradient(colors);
@@ -92,6 +99,20 @@ class LEDStrip {
             this.buffer.setLED(i, finalColor);
         // setting the data
         this.lights.setData(this.buffer);
+    }
+
+    public void setColorBlocks(int[] lengths, Color... colors) {
+        this.setColorBlocks(0, lengths, colors);
+    }
+
+    public void setColorBlocks(int offset, int[] lengths, Color... colors) {
+        int idx = 0, bufferSize = this.buffer.getLength();
+        for(int i = 0; idx < bufferSize; i++) {
+            for(int k = 0; k < lengths[i%lengths.length] && idx+k < bufferSize; k++)
+                this.buffer.setLED((idx+k+offset)%bufferSize, colors[i%colors.length]);
+            idx += lengths[i%lengths.length];
+        }
+        this.lights.setData(this.buffer);        
     }
 
     // returns an array of RGB color arrays encoding the gradient between two given
