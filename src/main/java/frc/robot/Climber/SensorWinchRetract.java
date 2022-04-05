@@ -49,6 +49,7 @@ public class SensorWinchRetract extends CommandBase {
   public void end(boolean interrupted) {
       this.climberMotorsSubsystem.setWinchSpeed(0);
       this.climberMotorsSubsystem.getWinchEncoder().setPosition(0);
+      System.out.println("Ran winch");
   }
 
   @Override

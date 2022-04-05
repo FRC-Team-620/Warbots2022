@@ -121,6 +121,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void setSpeed(double speed) {
+        System.out.println("Shooter Motor Speed Set");
         rightShooterMotor.set(speed);
         leftShooterMotor.set(speed);
     }
@@ -162,6 +163,7 @@ public class ShooterSubsystem extends SubsystemBase {
     //}
 
     public void setTargetRPM(double tRPM) {
+        System.out.println("Shooter Motor Target RPM Set");
         leftShooterPID.setSetpoint(tRPM);
         rightShooterPID.setSetpoint(tRPM);
     }

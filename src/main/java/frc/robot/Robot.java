@@ -55,6 +55,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
   	CommandScheduler.getInstance().run();
+    // System.out.println(robotContainer.getIntake().getIntakeSwitch());
+    //System.out.println(robotContainer.getClimberMotorsSubsystem().getClimberSensor());
   }
 
   @Override

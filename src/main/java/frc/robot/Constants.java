@@ -125,6 +125,9 @@ public final class Constants {
     //Climber
     public static final int climberSensorID = 8;
 
+    //intake
+    public static final int intakeSwitchID = 7;
+
     // TODO: Calculate the correct values for this map
     // This maps the LimeLight's Vertical Offset (tY) to RPM
     public static final InterpolatingDoubleMap rpmMap = new InterpolatingDoubleMap() {{

@@ -12,6 +12,7 @@ import frc.robot.Auto.DriveForwardDistance;
 import frc.robot.Drive.Drivetrain;
 import frc.robot.Loader.AutoLoad;
 import frc.robot.Loader.Intake;
+import frc.robot.Loader.SmartInnerIntake;
 import frc.robot.Shooter.ActivateFiringPins;
 import frc.robot.Shooter.FiringPins;
 import frc.robot.Shooter.LazySusanSubsystem;
@@ -42,15 +43,17 @@ public class TwoBalls extends SequentialCommandGroup {
     this.intake = intake;
     addCommands(
       new ParallelCommandGroup(
-        //new AutoLoad(intake),
+        new AutoLoad(intake),
         new LimelightSpinUp(shooterSubsystem),
         new SequentialCommandGroup(
           new DriveForwardDistance(drivetrain, twoBallsDistanceMeters),
           new WaitCommand(3),
           new ActivateFiringPins(firingPins),
+          new WaitCommand(1),
           new ParallelCommandGroup(
-            new WaitCommand(5),
-            new InstantCommand(intake::enableInnerIntakeMotor)
+            new WaitCommand(3),
+            new SmartInnerIntake(intake)
+            //new InstantCommand(intake::enableInnerIntakeMotor)
           ),
           new WaitCommand(1),
           new ActivateFiringPins(firingPins)
