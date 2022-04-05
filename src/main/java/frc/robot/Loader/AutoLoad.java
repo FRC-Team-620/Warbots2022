@@ -20,7 +20,7 @@ public class AutoLoad extends CommandBase{
     public void initialize() {
         this.frames = 0;
         //System.out.println("Loader was turned on");
-        intake.enableInnerIntakeMotor();
+        //intake.enableInnerIntakeMotor();
         intake.enableIntakeArmsMotor();
         intake.extendIntakeArmsSolenoid();
     }

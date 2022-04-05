@@ -4,6 +4,7 @@
 
 package frc.robot.Auto.Routines;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -41,16 +42,21 @@ public class TwoBalls extends SequentialCommandGroup {
     this.intake = intake;
     addCommands(
       new ParallelCommandGroup(
-        new AutoLoad(intake),
+        //new AutoLoad(intake),
         new LimelightSpinUp(shooterSubsystem),
         new SequentialCommandGroup(
           new DriveForwardDistance(drivetrain, twoBallsDistanceMeters),
           new WaitCommand(3),
           new ActivateFiringPins(firingPins),
-          new WaitCommand(5),
+          new ParallelCommandGroup(
+            new WaitCommand(5),
+            new InstantCommand(intake::enableInnerIntakeMotor)
+          ),
+          new WaitCommand(1),
           new ActivateFiringPins(firingPins)
         )
-      )
+      ), 
+      new InstantCommand(intake::disableInnerIntakeMotor)
       // new SetpointSpinUp(shooterSubsystem, LimeLight.getTY()),
       
     );
