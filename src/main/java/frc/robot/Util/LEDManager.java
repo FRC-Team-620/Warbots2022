@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 
 public enum LEDManager {
 
-    STRIP0(33, 9);
+    STRIP0(65, 9);
 
     private LEDStrip strip;
     private LEDManager(int LEDCount, int PWMPort) {

@@ -29,6 +29,7 @@ import frc.robot.Drive.Drivetrain;
 import frc.robot.Loader.Intake;
 import frc.robot.Loader.IntakeBall;
 import frc.robot.Loader.OuttakeBall;
+import frc.robot.Loader.SmartIntake;
 import frc.robot.Shooter.ActivateFiringPins;
 import frc.robot.Shooter.FiringPins;
 import frc.robot.Shooter.LazySusanSubsystem;
@@ -128,7 +129,8 @@ public class RobotContainer {
         //driver
         ControlBoard.lowShotButton.whileActiveOnce(new LowShotCommand(shooter));
 
-        ControlBoard.intakeButton.whileActiveOnce(new IntakeBall(intake));
+        // ControlBoard.intakeButton.whileActiveOnce(new IntakeBall(intake));
+        ControlBoard.intakeButton.whileActiveOnce(new SmartIntake(intake, firingPins));
 
         ControlBoard.outakeButton.whileActiveOnce(new OuttakeBall(intake));
 

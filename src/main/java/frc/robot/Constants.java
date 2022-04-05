@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.I2C;
 import frc.robot.Util.InterpolatingDoubleMap;
 
 /**
@@ -127,6 +128,8 @@ public final class Constants {
 
     //intake
     public static final int intakeSwitchID = 7;
+    public static final I2C.Port i2cColorSensorPort = I2C.Port.kMXP;
+    public static final int minColorSensorProximity = 1000; // Increases with proximity
 
     // TODO: Calculate the correct values for this map
     // This maps the LimeLight's Vertical Offset (tY) to RPM
