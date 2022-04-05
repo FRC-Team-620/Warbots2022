@@ -62,6 +62,7 @@ public class Robot extends TimedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
+    robotContainer.getIntake().disableInnerIntakeMotor();
     
     // if (!robotContainer.getLazySusanSubsystem().getIsCal()) {
     //   System.out.println("Zeroed");
