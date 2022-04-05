@@ -114,8 +114,8 @@ public final class Constants {
     public static final int maxShooterRPM = 5500;
     public static final double maxShootingDistance = 4.0;
     public static final double shooterVibrationTolerance = 0.03;
-    public static final double driverRumbleLowFreq = 0.5;
-    public static final double driverRumbleHighFreq = 0.5;
+    public static final double driverRumbleLowFreq = 1.0;
+    public static final double driverRumbleHighFreq = 0.1;
     public static final double operatorRumbleLowFreq = 1.0;
     public static final double operatorRumbleHighFreq = 0.1;
 

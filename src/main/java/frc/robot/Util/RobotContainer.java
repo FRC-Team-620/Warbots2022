@@ -203,6 +203,10 @@ public class RobotContainer {
         return trajectorySelector;
     }
 
+    public Field2d getField2d() {
+        return robotFieldWidget;
+    }
+
     // public LoaderCommand getLoaderCommand() {
     //     return loaderCommand;
     // }

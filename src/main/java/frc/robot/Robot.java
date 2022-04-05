@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
     robotContainer.getLazySusanSubsystem().setEncoderPosition(0);
 
     autoSelector.setDefaultOption("Two-Ball", new TwoBalls(robotContainer.getDriveTrain(), robotContainer.getLazySusanSubsystem(), 
-      robotContainer.getShooterSubsystem(), robotContainer.getFiringPins(), robotContainer.getIntake()));
+      robotContainer.getShooterSubsystem(), robotContainer.getFiringPins(), robotContainer.getIntake(), robotContainer.getField2d()));
     autoSelector.addOption("One-ball", new OneBall(robotContainer.getDriveTrain(), robotContainer.getLazySusanSubsystem(), 
       robotContainer.getShooterSubsystem(), robotContainer.getFiringPins()));
     autoSelector.addOption("Taxi", new Taxi(robotContainer.getDriveTrain()));
@@ -141,7 +141,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousExit() {
     LimeLight.setLedMode(LedMode.OFF);
-    robotContainer.getLazySusanSubsystem().setTurretPositionDegrees(Rotation2d.fromDegrees(0));
+    //robotContainer.getLazySusanSubsystem().setTurretPositionDegrees(Rotation2d.fromDegrees(0));
     //robotContainer.getLazySusanSubsystem().setEncoderPosition(robotContainer.getLazySusanSubsystem().getEncoderPosition() - 4);
   }
 

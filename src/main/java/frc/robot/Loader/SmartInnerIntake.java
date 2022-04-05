@@ -8,6 +8,8 @@ public class SmartInnerIntake extends CommandBase {
     protected Intake intake;
     protected FiringPins firingPins;
     protected ShooterSubsystem shooterSubsystem;
+    protected boolean pastValue;
+    protected boolean pastPastValue;
     public SmartInnerIntake(Intake intake) {   
         this.intake = intake;
     }
@@ -26,7 +28,14 @@ public class SmartInnerIntake extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return intake.getIntakeSwitch();
+        boolean currentValue = intake.getIntakeSwitch();
+        if (currentValue == false && pastValue && pastPastValue) {
+            return true;
+        } else {
+            pastPastValue = pastValue;
+            pastValue = currentValue;
+            return false;
+        }
     }
 
     @Override

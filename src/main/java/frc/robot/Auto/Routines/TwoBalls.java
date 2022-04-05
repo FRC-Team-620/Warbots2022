@@ -4,6 +4,7 @@
 
 package frc.robot.Auto.Routines;
 
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -18,7 +19,7 @@ import frc.robot.Shooter.FiringPins;
 import frc.robot.Shooter.LazySusanSubsystem;
 import frc.robot.Shooter.LimelightSpinUp;
 import frc.robot.Shooter.ShooterSubsystem;
-import frc.robot.Util.WaitFrames;
+import frc.robot.Shooter.TankDriveAiming;
 
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -33,7 +34,7 @@ public class TwoBalls extends SequentialCommandGroup {
     Intake intake;
 
     private double twoBallsDistanceMeters = 2;
-  public TwoBalls(Drivetrain drivetrain, LazySusanSubsystem lazySusanSubsystem, ShooterSubsystem shooterSubsystem, FiringPins firingPins, Intake intake) {
+  public TwoBalls(Drivetrain drivetrain, LazySusanSubsystem lazySusanSubsystem, ShooterSubsystem shooterSubsystem, FiringPins firingPins, Intake intake, Field2d field2d) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     this.drivetrain = drivetrain;
@@ -44,19 +45,23 @@ public class TwoBalls extends SequentialCommandGroup {
     addCommands(
       new ParallelCommandGroup(
         new AutoLoad(intake),
-        new LimelightSpinUp(shooterSubsystem),
+        // new TurretAimingPID(lazySusanSubsystem, field2d, drivetrain::getPose),
         new SequentialCommandGroup(
           new DriveForwardDistance(drivetrain, twoBallsDistanceMeters),
           new WaitCommand(3),
-          new ActivateFiringPins(firingPins),
-          new WaitCommand(1),
           new ParallelCommandGroup(
-            new WaitCommand(3),
-            new SmartInnerIntake(intake)
-            //new InstantCommand(intake::enableInnerIntakeMotor)
-          ),
-          new WaitCommand(1),
-          new ActivateFiringPins(firingPins)
+            new TankDriveAiming(drivetrain),
+            new LimelightSpinUp(shooterSubsystem),
+            new SequentialCommandGroup(
+              new WaitCommand(3),
+              new ActivateFiringPins(firingPins),
+              new WaitCommand(1),
+              new InstantCommand(intake::enableInnerIntakeMotor),
+                //new InstantCommand(intake::enableInnerIntakeMotor)
+              new WaitCommand(2),
+              new ActivateFiringPins(firingPins)
+            )
+          )
         )
       ), 
       new InstantCommand(intake::disableInnerIntakeMotor)
