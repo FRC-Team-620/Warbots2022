@@ -1,9 +1,10 @@
 package frc.robot.Util;
 
+import java.util.function.Consumer;
+
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LEDSubsystem extends SubsystemBase {
@@ -34,6 +35,21 @@ public class LEDSubsystem extends SubsystemBase {
         }
         
     }
+
+    public static class LEDAnimation {
+        private double accumulation, speed;
+        private Consumer<Integer> animation;
+        public LEDAnimation(double speed, Consumer<Integer> animation) {
+            this.accumulation = 0.0;
+            this.speed = speed;
+            this.animation = animation;
+        }
+        public void step() {
+            this.animation.accept((int)this.accumulation);
+            this.accumulation += this.speed;
+        }
+    }
+
     public LEDSubsystem() { }
 }
 
