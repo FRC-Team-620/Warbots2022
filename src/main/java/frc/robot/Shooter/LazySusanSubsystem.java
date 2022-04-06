@@ -29,7 +29,7 @@ public class LazySusanSubsystem extends SubsystemBase {
     private Rotation2d desiredRotation;
     private final Supplier<Pose2d> robotBase;
     private boolean isGyroLocking;
-    private final double countToDegreesFactor = (1.0 / 15.0) * (20.0 / 156.0) * 360.0; // Turntable output gear changed from 22T to 20T
+    private final double countToDegreesFactor = (1.0 / 25.0) * (20.0 / 156.0) * 360.0; // Turntable output gear changed from 22T to 20T
     private double modSpeed = 1;
     private final double kP = 0.060000, kI = 0, kD = 0;// KI0.00004 kP = 0.060000, kI = 0.003000,  TODO: Tune PID Loop
     private boolean isCal;

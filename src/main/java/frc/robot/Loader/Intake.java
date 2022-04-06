@@ -14,7 +14,7 @@ public class Intake extends SubsystemBase {
     protected Solenoid intakeArmsSolenoid;
     protected CANSparkMax intakeArmsMotor;
     protected DigitalInput intakeSwitch;
-    
+
     // protected boolean isClimbing;
     public Intake() {
         innerIntakeMotor = new CANSparkMax(Constants.intakeMotorID, MotorType.kBrushless);
@@ -22,7 +22,7 @@ public class Intake extends SubsystemBase {
         innerIntakeMotor.setInverted(true);
 
         innerIntakeMotor.setSmartCurrentLimit(35);
-        
+
         intakeArmsSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 3);
         intakeArmsSolenoid.set(false);
 
@@ -30,16 +30,23 @@ public class Intake extends SubsystemBase {
         intakeArmsMotor.restoreFactoryDefaults();
         intakeArmsMotor.setInverted(true);
 
-        intakeArmsMotor.setSmartCurrentLimit(35);  
-        
+        intakeArmsMotor.setSmartCurrentLimit(35);
+
         intakeSwitch = new DigitalInput(Constants.intakeSwitchID);
     }
+
     public void enableInnerIntakeMotor() {
         innerIntakeMotor.set(1);
     }
+
+    public void innerIntakeLowSpeed() {
+        innerIntakeMotor.set(0.5);
+    }
+
     public void reverseInnerIntakeMotor() {
         innerIntakeMotor.set(-1);
     }
+
     public void disableInnerIntakeMotor() {
         innerIntakeMotor.set(0);
     }
@@ -47,7 +54,7 @@ public class Intake extends SubsystemBase {
     public void extendIntakeArmsSolenoid() {
         intakeArmsSolenoid.set(true);
     }
-    
+
     public void retractIntakeArmsSolenoid() {
         intakeArmsSolenoid.set(false);
     }
@@ -55,12 +62,15 @@ public class Intake extends SubsystemBase {
     public void enableIntakeArmsMotor() {
         intakeArmsMotor.set(-0.6);
     }
+
     public void disableIntakeArmsMotor() {
         intakeArmsMotor.set(0);
     }
+
     public void reverseIntakeArmsMotor() {
         intakeArmsMotor.set(0.6);
     }
+
     public double extendedIntakeArmsSpeed() {
         return intakeArmsMotor.get();
     }
