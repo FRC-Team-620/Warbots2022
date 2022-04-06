@@ -144,8 +144,10 @@ public final class Constants {
     }};
 
     // LazySusan
-    public static final int turntableThresh = 45;
-    public static final double stowedPosition = 50;
+    public static final int turntableThresh = 45; // This is in encoder ticks
+    // The below is in absolute degrees relative to the turntable
+    // To be within frame perimeter, the turret must face backwards
+    public static final double stowedDegrees = 180;
 
     // Differential Constants (very cool)
     public static final double diffConstLS = 0.014;//0.012 0.014
