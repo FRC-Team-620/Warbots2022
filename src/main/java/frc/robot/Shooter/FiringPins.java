@@ -42,6 +42,12 @@ public class FiringPins extends SubsystemBase {
         //m_colorMatcher.addColorMatch(kYellowTarget); 
     }
 
+    @Override
+    public void periodic() {
+        Color detected = this.detectedColor();
+        System.out.println("(" + detected.red + ", " + detected.green + ", " + detected.blue + ")");
+    }
+
     public Color detectedColor() {
         return m_colorSensor.getColor();
     }

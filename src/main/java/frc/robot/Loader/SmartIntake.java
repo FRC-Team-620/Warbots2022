@@ -11,27 +11,43 @@ public class SmartIntake extends CommandBase {
     protected Intake intake;
     protected FiringPins firingPins;
 
-    protected LEDAnimation noBallsAnim = new LEDAnimation(1, n -> LEDManager.STRIP0.setGradient(n, 
+    protected LEDAnimation noBallsAnim = LEDManager.STRIP0.gradientAnimation(1, 
         Color.kRed,
         Color.kOrangeRed,
         Color.kOrange
-    ));
-    protected LEDAnimation oneBallAnim = new LEDAnimation(1, n -> LEDManager.STRIP0.setGradient(n,
-        Color.kGreen, 
+    );
+    protected LEDAnimation oneBallAnim = LEDManager.STRIP0.gradientAnimation(1, 
+        Color.kGreen,
         Color.kYellowGreen,
         Color.kGreen
-    ));
-    protected LEDAnimation twoBallsAnim = new LEDAnimation(1, n -> LEDManager.STRIP0.setGradient(n,
+    );
+    protected LEDAnimation twoBallsAnim = LEDManager.STRIP0.gradientAnimation(1, 
         Color.kBlue,
         Color.kBlueViolet,
         Color.kCyan
-    ));
+    );
+
+    // protected LEDAnimation noBallsAnim = new LEDAnimation(1, n -> LEDManager.STRIP0.setGradient(n, 
+    //     Color.kRed,
+    //     Color.kOrangeRed,
+    //     Color.kOrange
+    // ));
+    // protected LEDAnimation oneBallAnim = new LEDAnimation(1, n -> LEDManager.STRIP0.setGradient(n,
+    //     Color.kGreen, 
+    //     Color.kYellowGreen,
+    //     Color.kGreen
+    // ));
+    // protected LEDAnimation twoBallsAnim = new LEDAnimation(1, n -> LEDManager.STRIP0.setGradient(n,
+    //     Color.kBlue,
+    //     Color.kBlueViolet,
+    //     Color.kCyan
+    // ));
 
     // protected ShooterSubsystem shooterSubsystem;
     public SmartIntake(Intake intake, FiringPins firingPins, LEDSubsystem ledSubsystem) {   
         this.intake = intake;
         this.firingPins = firingPins;
-        addRequirements(this.intake, this.firingPins, ledSubsystem);
+        // addRequirements(this.intake, this.firingPins, ledSubsystem);
         // this.shooterSubsystem = shooterSubsystem;
     }
 
