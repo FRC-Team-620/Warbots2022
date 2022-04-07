@@ -21,7 +21,7 @@ public class Intake extends SubsystemBase {
         innerIntakeMotor.restoreFactoryDefaults();
         innerIntakeMotor.setInverted(true);
 
-        innerIntakeMotor.setSmartCurrentLimit(35);
+        innerIntakeMotor.setSmartCurrentLimit(20);
         
         intakeArmsSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 3);
         intakeArmsSolenoid.set(false);
@@ -30,7 +30,7 @@ public class Intake extends SubsystemBase {
         intakeArmsMotor.restoreFactoryDefaults();
         intakeArmsMotor.setInverted(true);
 
-        intakeArmsMotor.setSmartCurrentLimit(35);  
+        intakeArmsMotor.setSmartCurrentLimit(20);  
         
         intakeSwitch = new DigitalInput(Constants.intakeSwitchID);
     }
