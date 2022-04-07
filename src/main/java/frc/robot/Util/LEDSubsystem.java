@@ -79,7 +79,7 @@ public class LEDSubsystem extends SubsystemBase {
         }
 
         public LEDAnimation gradientAnimation(double speed, Color... colors) {
-            return new LEDAnimation(speed, n -> this.setGradient(colors));
+            return new LEDAnimation(speed, n -> this.setGradient(n, colors));
         }
 
         public LEDAnimation colorBlockAnimation(double speed, int[] lengthPattern, Color... colors) {
