@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
     // }
     robotContainer.setTeleopDrive();
 
-    robotContainer.getLazySusanSubsystem().setIsGyroLocking(true);//TODO: SET TO FALSE LATER
+    //robotContainer.getLazySusanSubsystem().setIsGyroLocking(true);//TODO: SET TO FALSE LATER
 
     //robotContainer.getShooterSubsystem().
     // robotContainer.getLoaderSubsystem().setIsClimbing(false);

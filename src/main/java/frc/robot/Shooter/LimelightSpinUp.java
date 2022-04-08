@@ -31,7 +31,7 @@ public class LimelightSpinUp extends CommandBase {
         // TODO: Use the below RPM value once the table is working
         double targetRPM = Constants.rpmMap.getInterpolated(y);
         if(LimeLight.hasTarget())
-            this.shooterSubsystem.setTargetRPM(targetRPM);
+            this.shooterSubsystem.setTargetRPM(targetRPM+200);//+100
         ControlBoard.setOperatorLowFreqRumble(hasTargetAndInRange && this.getWithinTolerance());
     }
 
