@@ -32,12 +32,12 @@ public class LazySusanSubsystem extends SubsystemBase {
     private final double countsToDegreesFactor = (1.0 / 25.0) * (20.0 / 156.0) * 360.0;
     private final double stowedCounts = Constants.stowedDegrees / countsToDegreesFactor;
     private double modSpeed = 1;
-    private final double kP = 0.060000, kI = 0, kD = 0;// KI0.00004 kP = 0.060000, kI = 0.003000,  TODO: Tune PID Loop
+    private final double kP = 0.060000, kI = 0.000000, kD = 0;// KI0.00004 kP = 0.060000, kI = 0.003000,  TODO: Tune PID Loop
     private boolean isCal;
     //private boolean isDisabled;
     public DigitalInput calSwitch;
-    public final double lowLimitCounts = -180.0 / countsToDegreesFactor;
-    public final double highLimitCounts = 180.0 / countsToDegreesFactor;
+    public final double lowLimitCounts = -175.0 / countsToDegreesFactor;
+    public final double highLimitCounts = 185.0 / countsToDegreesFactor;
     // Left 45.690002, Right -45.356651, AbsoluteMaxRange 90
     // private double turntableThresh = 35;
 
@@ -52,6 +52,7 @@ public class LazySusanSubsystem extends SubsystemBase {
         IdleMode mode = IdleMode.kBrake; // brakes
         this.motor.setIdleMode(mode);
         this.motor.setSmartCurrentLimit(18);
+        this.isGyroLocking = false;
 
         // lazySusan.setInverted(true);
 
@@ -71,11 +72,11 @@ public class LazySusanSubsystem extends SubsystemBase {
         double degrees = isGyroLocking ? desiredRotation.minus(robotBasePose.get().getRotation()).getDegrees() : desiredRotation.getDegrees();
 
         lazySusanPID.setSetpoint(MathUtil.clamp(degrees / countsToDegreesFactor, lowLimitCounts, highLimitCounts));
-
+        // System.out.println("highLimit " + degrees + " " + encoder.getPosition() + " " + highLimitCounts);
         double pidOutput = MathUtil.clamp(lazySusanPID.calculate(encoder.getPosition()), -1, 1);
 
         // TODO: Use degrees and not encoder counts for thresholds
-        if (encoder.getPosition() > highLimitCounts + 5) {
+        if (encoder.getPosition() > highLimitCounts + 5) { // + 5 / countsToDegreesFactor
             pidOutput = MathUtil.clamp(pidOutput, -1, 0);
         }
 
@@ -112,7 +113,7 @@ public class LazySusanSubsystem extends SubsystemBase {
 
     public void setIsGyroLocking(boolean isGyroLocking) {
         // TODO: Fix gyro locking problems (turning randomly?)
-        // this.isGyroLocking = isGyroLocking;
+        this.isGyroLocking = isGyroLocking;
     }
 
     public boolean getIsCal() {

@@ -45,7 +45,7 @@ public class Intake extends SubsystemBase {
     }
     
     public void retractIntakeArmsSolenoid() {
-        //intakeArmsSolenoid.set(false);
+        intakeArmsSolenoid.set(false);
     }
 
     public void enableIntakeArmsMotor() {

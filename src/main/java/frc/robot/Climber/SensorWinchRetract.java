@@ -53,8 +53,7 @@ public class SensorWinchRetract extends CommandBase {
 
   @Override
   public boolean isFinished() {//climberSubsystem.getWinchMotor().getEncoder().getPosition() <= -counts
-      System.out.println("Climber Sensor Hitting: " + climberMotorsSubsystem.getClimberSensor());
+      // System.out.println("Climber Sensor Hitting: " + climberMotorsSubsystem.getClimberSensor());
       return climberMotorsSubsystem.hitRearLimitSwitch() || timer.hasElapsed(5);
   }
 }
-

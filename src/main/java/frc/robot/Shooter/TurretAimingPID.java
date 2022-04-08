@@ -34,7 +34,6 @@ public class TurretAimingPID extends CommandBase {
 
     @Override
     public void execute() {
-
         double x = LimeLight.getTX();
         if (LimeLight.hasTarget()) {
             if(this.lazySusanSubsystem.getIsGyroLocking()) {
@@ -44,12 +43,9 @@ public class TurretAimingPID extends CommandBase {
             }
             // lazySusanSubsystem.setTurretPositionDegrees(robotbase.get().getRotation().minus(Rotation2d.fromDegrees(x)));
             this.prevHubPosition = this.calculateHubPosition(this.getLocalPose());
-        } else {
-
-            if (this.prevHubPosition != null) {
-                double dX = calculateHubDeltaX(this.robotbase.get(), this.prevHubPosition);
-                lazySusanSubsystem.setTurretPositionDegrees(Rotation2d.fromDegrees(dX));
-            }
+        } else if (this.prevHubPosition != null) {
+            double dX = calculateHubDeltaX(this.robotbase.get(), this.prevHubPosition);
+            lazySusanSubsystem.setTurretPositionDegrees(Rotation2d.fromDegrees(dX));
         }
         // SmartDashboard.putNumber("LimeLight Distance", distance);
         SmartDashboard.putNumber("LimeLight TY", LimeLight.getTY()); // TODO: Remove debug data

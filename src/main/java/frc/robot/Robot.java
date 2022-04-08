@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
     // }
     robotContainer.setTeleopDrive();
 
-    robotContainer.getLazySusanSubsystem().setIsGyroLocking(true);
+    robotContainer.getLazySusanSubsystem().setIsGyroLocking(true);//TODO: SET TO FALSE LATER
 
     //robotContainer.getShooterSubsystem().
     // robotContainer.getLoaderSubsystem().setIsClimbing(false);
@@ -147,7 +147,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-  
+    SmartDashboard.putBoolean("Rear Limit Switch", robotContainer.getClimberMotorsSubsystem().hitRearLimitSwitch());
   }
 
   @Override
