@@ -2,22 +2,47 @@ package frc.robot.Util.LEDs;
 
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Loader.Intake;
+import frc.robot.Shooter.FiringPins;
 import frc.robot.Util.LEDs.LEDSubsystem.LEDAnimation;
+import frc.robot.Util.LEDs.LEDSubsystem.LEDManager;
 
 public class LEDIdleCommand extends CommandBase {
-    protected int frames = 0;
-    protected LEDAnimation idleAnimation = 
-        LEDSubsystem.LEDManager.STRIP0.colorBlocksAnimation(0.05, new int[]{2, 1, 2}, 
-            Color.kRed,
-            Color.kWhite
-        );
+    protected Intake intake;
+    protected FiringPins firingPins;
 
-    public LEDIdleCommand(LEDSubsystem ledSubsystem) {
+    protected LEDAnimation noBallsAnim = LEDManager.STRIP0.gradientAnimation(1, 
+        Color.kRed,
+        Color.kOrangeRed,
+        Color.kOrange
+    );
+    protected LEDAnimation oneBallAnim = LEDManager.STRIP0.gradientAnimation(1, 
+        Color.kGreen,
+        Color.kYellowGreen,
+        Color.kYellow
+    );
+    protected LEDAnimation twoBallsAnim = LEDManager.STRIP0.gradientAnimation(1, 
+        Color.kBlue,
+        Color.kBlueViolet,
+        Color.kPurple
+    );
+
+    public LEDIdleCommand(LEDSubsystem ledSubsystem, Intake intake, FiringPins firingPins) {
+        this.intake = intake;
+        this.firingPins = firingPins;
         addRequirements(ledSubsystem);
     }
 
     @Override
     public void execute() {
-        this.idleAnimation.step();
+        if(this.firingPins.hasColor()) { 
+            if(this.intake.getIntakeSwitch()) { // TWO balls
+                this.twoBallsAnim.step();
+            } else { // ONE ball
+                this.oneBallAnim.step();
+            }
+        } else { // NO balls
+            this.noBallsAnim.step();
+        }
     }
 }

@@ -163,7 +163,8 @@ public class RobotContainer {
         // turret.setDefaultCommand(new TurretAimingPID(turret));
         // shooter.setDefaultCommand(new LimelightSpinUp(shooter));
 
-        this.ledSubsystem.setDefaultCommand(new LEDIdleCommand(this.ledSubsystem));
+        this.ledSubsystem.setDefaultCommand(
+            new LEDIdleCommand(this.ledSubsystem, this.intake, this.firingPins));
 
         //shooterCommand = new ShooterCommand(shooter, turret, controls.getOperatorController(),
                 //controls.getDriverController());
