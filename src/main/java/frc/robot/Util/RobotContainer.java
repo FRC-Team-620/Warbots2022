@@ -30,6 +30,7 @@ import frc.robot.Drive.Drivetrain;
 import frc.robot.Loader.Intake;
 import frc.robot.Loader.IntakeBall;
 import frc.robot.Loader.OuttakeBall;
+import frc.robot.Loader.SmartIntake;
 import frc.robot.Shooter.ActivateFiringPins;
 import frc.robot.Shooter.FiringPins;
 import frc.robot.Shooter.LazySusanSubsystem;
@@ -40,6 +41,8 @@ import frc.robot.Shooter.ShooterSubsystem;
 import frc.robot.Shooter.TankDriveAiming;
 import frc.robot.Shooter.TurretAimingPID;
 import frc.robot.Shooter.ZeroTurnTable;
+import frc.robot.Util.LEDs.LEDIdleCommand;
+import frc.robot.Util.LEDs.LEDSubsystem;
 
 /** Add your docs here. */
 public class RobotContainer {
@@ -52,6 +55,7 @@ public class RobotContainer {
     private LazySusanSubsystem turret;
     private ClimberSubsystem climberHooks;
     private ClimberMotorsSubsystem winch;
+    private LEDSubsystem ledSubsystem;
 
     private DriveWithJoystick driveWithJoystick;
 
@@ -133,7 +137,8 @@ public class RobotContainer {
         //driver
         ControlBoard.lowShotButton.whileActiveOnce(new LowShotCommand(shooter));
 
-        ControlBoard.intakeButton.whileActiveOnce(new IntakeBall(intake));
+        //ControlBoard.intakeButton.whileActiveOnce(new IntakeBall(intake));
+        ControlBoard.intakeButton.whileActiveOnce(new SmartIntake(this.intake, this.firingPins));
 
         ControlBoard.outakeButton.whileActiveOnce(new OuttakeBall(intake));
 
@@ -159,6 +164,9 @@ public class RobotContainer {
         //TODO: setup turret
         // turret.setDefaultCommand(new TurretAimingPID(turret));
         // shooter.setDefaultCommand(new LimelightSpinUp(shooter));
+
+        this.ledSubsystem.setDefaultCommand(
+            new LEDIdleCommand(this.ledSubsystem, this.intake, this.firingPins));
 
         //shooterCommand = new ShooterCommand(shooter, turret, controls.getOperatorController(),
                 //controls.getDriverController());

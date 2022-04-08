@@ -129,7 +129,7 @@ public final class Constants {
     //intake
     public static final int intakeSwitchID = 7;
     public static final I2C.Port i2cColorSensorPort = I2C.Port.kMXP;
-    public static final int minColorSensorProximity = 1000; // Increases with proximity
+    public static final int minColorSensorProximity = 100; // Increases with proximity
 
     // TODO: Calculate the correct values for this map
     // This maps the LimeLight's Vertical Offset (tY) to RPM
