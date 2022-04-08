@@ -39,6 +39,9 @@ public class Intake extends SubsystemBase {
     public void disableInnerIntakeMotor() {
         innerIntakeMotor.set(0);
     }
+    public void setInnerIntakeMotor(double speed) {
+        this.innerIntakeMotor.set(speed);
+    }
 
     public void extendIntakeArmsSolenoid() {
         intakeArmsSolenoid.set(true);
