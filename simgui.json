@@ -31,6 +31,7 @@
       "/LiveWindow/LoaderSubsystem": "Subsystem",
       "/LiveWindow/ShooterSubsystem": "Subsystem",
       "/LiveWindow/Ungrouped/DifferentialDrive[1]": "DifferentialDrive",
+      "/LiveWindow/Ungrouped/DigitalInput[7]": "Digital Input",
       "/LiveWindow/Ungrouped/DigitalInput[8]": "Digital Input",
       "/LiveWindow/Ungrouped/DigitalInput[9]": "Digital Input",
       "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
@@ -46,7 +47,7 @@
       "/SmartDashboard/PIDController[3]": "PIDController",
       "/SmartDashboard/SendableChooser[0]": "String Chooser",
       "/SmartDashboard/SendableChooser[1]": "String Chooser",
-      "/SmartDashboard/Turret/PIDControler[12]": "PIDController",
+      "/SmartDashboard/Turret/PIDController[12]": "PIDController",
       "/SmartDashboard/ZeroTurnTable": "Command",
       "/SmartDashboard/driver": "String Chooser",
       "/SmartDashboard/leftShooterPID: ": "PIDController",
@@ -119,6 +120,9 @@
       "Flywheel": {
         "open": true
       },
+      "Turret": {
+        "open": true
+      },
       "open": true
     }
   },
@@ -126,7 +130,7 @@
     "Plot <0>": {
       "plots": [
         {
-          "height": 382,
+          "height": -6,
           "series": [
             {
               "color": [

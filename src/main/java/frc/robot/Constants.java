@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.I2C;
 import frc.robot.Util.InterpolatingDoubleMap;
 
 /**
@@ -114,8 +115,8 @@ public final class Constants {
     public static final int maxShooterRPM = 5500;
     public static final double maxShootingDistance = 4.0;
     public static final double shooterVibrationTolerance = 0.03;
-    public static final double driverRumbleLowFreq = 0.5;
-    public static final double driverRumbleHighFreq = 0.5;
+    public static final double driverRumbleLowFreq = 1.0;
+    public static final double driverRumbleHighFreq = 0.1;
     public static final double operatorRumbleLowFreq = 1.0;
     public static final double operatorRumbleHighFreq = 0.1;
 
@@ -124,6 +125,11 @@ public final class Constants {
 
     //Climber
     public static final int climberSensorID = 8;
+
+    //intake
+    public static final int intakeSwitchID = 7;
+    public static final I2C.Port i2cColorSensorPort = I2C.Port.kMXP;
+    public static final int minColorSensorProximity = 1000; // Increases with proximity
 
     // TODO: Calculate the correct values for this map
     // This maps the LimeLight's Vertical Offset (tY) to RPM
@@ -138,8 +144,10 @@ public final class Constants {
     }};
 
     // LazySusan
-    public static final int turntableThresh = 45;
-    public static final double stowedPosition = 50;
+    public static final int turntableThresh = 45; // This is in encoder ticks
+    // The below is in absolute degrees relative to the turntable
+    // To be within frame perimeter, the turret must face backwards
+    public static final double stowedDegrees = 179;
 
     // Differential Constants (very cool)
     public static final double diffConstLS = 0.014;//0.012 0.014
