@@ -27,7 +27,11 @@ public class LEDIdleCommand extends CommandBase {
     //     Color.kPurple
     // );
 
-    protected LEDAnimation noBallsAnim = LEDManager.STRIP0.solidColorAnimation(Color.kBlack);
+    protected LEDAnimation noBallsAnim = LEDManager.STRIP0.gradientAnimation(1, 
+        Color.kRed,
+        Color.kOrangeRed,
+        Color.kOrange
+    );
     protected LEDAnimation twoBallsAnim = LEDManager.STRIP0.gradientAnimation(1, 
         Color.kBlue,
         Color.kBlueViolet,
