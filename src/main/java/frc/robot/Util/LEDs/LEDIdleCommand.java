@@ -11,20 +11,31 @@ public class LEDIdleCommand extends CommandBase {
     protected Intake intake;
     protected FiringPins firingPins;
 
-    protected LEDAnimation noBallsAnim = LEDManager.STRIP0.gradientAnimation(1, 
-        Color.kRed,
-        Color.kOrangeRed,
-        Color.kOrange
-    );
-    protected LEDAnimation oneBallAnim = LEDManager.STRIP0.gradientAnimation(1, 
-        Color.kGreen,
-        Color.kYellowGreen,
-        Color.kYellow
-    );
+    // protected LEDAnimation noBallsAnim = LEDManager.STRIP0.gradientAnimation(1, 
+    //     Color.kRed,
+    //     Color.kOrangeRed,
+    //     Color.kOrange
+    // );
+    // protected LEDAnimation oneBallAnim = LEDManager.STRIP0.gradientAnimation(1, 
+    //     Color.kGreen,
+    //     Color.kYellowGreen,
+    //     Color.kYellow
+    // );
+    // protected LEDAnimation twoBallsAnim = LEDManager.STRIP0.gradientAnimation(1, 
+    //     Color.kBlue,
+    //     Color.kBlueViolet,
+    //     Color.kPurple
+    // );
+
+    protected LEDAnimation noBallsAnim = LEDManager.STRIP0.solidColorAnimation(Color.kBlack);
     protected LEDAnimation twoBallsAnim = LEDManager.STRIP0.gradientAnimation(1, 
         Color.kBlue,
         Color.kBlueViolet,
         Color.kPurple
+    );
+    protected LEDAnimation oneBallAnim = LEDAnimation.transposeBlinking(0.1, 
+        twoBallsAnim, 
+        noBallsAnim
     );
 
     public LEDIdleCommand(LEDSubsystem ledSubsystem, Intake intake, FiringPins firingPins) {

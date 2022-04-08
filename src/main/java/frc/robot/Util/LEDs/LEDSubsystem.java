@@ -24,6 +24,12 @@ public class LEDSubsystem extends SubsystemBase {
         public LEDAnimation gradientAnimation(double speed, Color... colors) {
             return this.strip.gradientAnimation(speed, colors);
         }
+        public LEDAnimation blinkingAnimation(double speed, Color... colors) {
+            return this.strip.blinkingAnimation(speed, colors);
+        }
+        public LEDAnimation solidColorAnimation(Color color) {
+            return this.strip.solidColorAnimation(color);
+        }
 
         public void set(Color c) {
             this.strip.setSolidColor(c);
@@ -55,6 +61,9 @@ public class LEDSubsystem extends SubsystemBase {
             this.animation.accept((int)this.accumulation);
             this.accumulation += this.speed;
         }
+        public static LEDAnimation transposeBlinking(double speed, LEDAnimation... animations) {
+            return new LEDAnimation(speed, n -> animations[n%animations.length].step());
+        }
     }
 
     private static class LEDStrip {
@@ -84,6 +93,14 @@ public class LEDSubsystem extends SubsystemBase {
 
         public LEDAnimation colorBlockAnimation(double speed, int[] lengthPattern, Color... colors) {
             return new LEDAnimation(speed, n -> this.setColorBlocks(n, lengthPattern, colors));
+        }
+
+        public LEDAnimation blinkingAnimation(double speed, Color... colors) {
+            return new LEDAnimation(speed, n -> this.setSolidColor(colors[n%colors.length]));
+        }
+
+        public LEDAnimation solidColorAnimation(Color color) {
+            return new LEDAnimation(0, n -> this.setSolidColor(color));
         }
     
         // returns an RGB representation of the light at a given index of the 'AddressableLEDBuffer'
