@@ -40,6 +40,8 @@ import frc.robot.Shooter.ShooterSubsystem;
 import frc.robot.Shooter.TankDriveAiming;
 import frc.robot.Shooter.TurretAimingPID;
 import frc.robot.Shooter.ZeroTurnTable;
+import frc.robot.Util.LEDs.LEDIdleCommand;
+import frc.robot.Util.LEDs.LEDSubsystem;
 
 /** Add your docs here. */
 public class RobotContainer {
@@ -52,6 +54,7 @@ public class RobotContainer {
     private LazySusanSubsystem turret;
     private ClimberSubsystem climberHooks;
     private ClimberMotorsSubsystem winch;
+    private LEDSubsystem ledSubsystem;
 
     private DriveWithJoystick driveWithJoystick;
 
@@ -159,6 +162,8 @@ public class RobotContainer {
         //TODO: setup turret
         // turret.setDefaultCommand(new TurretAimingPID(turret));
         // shooter.setDefaultCommand(new LimelightSpinUp(shooter));
+
+        this.ledSubsystem.setDefaultCommand(new LEDIdleCommand(this.ledSubsystem));
 
         //shooterCommand = new ShooterCommand(shooter, turret, controls.getOperatorController(),
                 //controls.getDriverController());
