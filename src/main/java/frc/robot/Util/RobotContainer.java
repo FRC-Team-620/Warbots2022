@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Constants;
 import frc.robot.Robot;
@@ -120,7 +121,11 @@ public class RobotContainer {
             // new AutoAimingAndSpinningUp(getShooterSubsystem(), getLazySusanSubsystem(), 
             //     false, controls.getOperatorController()));
 
-
+        ControlBoard.toggleGyroButton.whenPressed(
+            new InstantCommand(() -> this.getLazySusanSubsystem().setIsGyroLocking(
+                !this.getLazySusanSubsystem().getIsGyroLocking()
+            ))
+        );
 
         ControlBoard.fireTurretTrigger.whenActive(
         new ActivateFiringPins(getFiringPins()));

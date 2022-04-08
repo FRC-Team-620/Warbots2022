@@ -21,8 +21,7 @@ public class ClimberMotorsSubsystem extends SubsystemBase {
     protected final SimableCANSparkMax leftClimberMotor, rightClimberMotor;
     protected final RelativeEncoder encoder;
     protected final SparkMaxLimitSwitch rearLimit;
-    protected final DigitalInput climberSensor;
-
+    protected final DigitalInput climberSensor; // Proximity sensor
 
     public ClimberMotorsSubsystem() {
 
@@ -40,9 +39,14 @@ public class ClimberMotorsSubsystem extends SubsystemBase {
 
         leftClimberMotor.follow(rightClimberMotor, true);
         climberSensor = new DigitalInput(Constants.climberSensorID);
-
+        
+        SmartDashboard.putBoolean("Rear Limit Switch", hitRearLimitSwitch());
     }
 
+    @Override
+    public void periodic(){
+        System.out.println(hitRearLimitSwitch());
+    }
     public boolean getClimberSensor() {
         return climberSensor.get();
     }

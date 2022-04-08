@@ -41,7 +41,7 @@ public class Robot extends TimedRobot {
     robotContainer.init();// TODO: make these happen on RobotContainer instantiation
     // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(true);
     // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);
-    robotContainer.getLazySusanSubsystem().setEncoderPosition(0);
+    // robotContainer.getLazySusanSubsystem().setEncoderPosition(0);
 
     autoSelector.setDefaultOption("Two-Ball", new TwoBalls(robotContainer.getDriveTrain(), robotContainer.getLazySusanSubsystem(), 
       robotContainer.getShooterSubsystem(), robotContainer.getFiringPins(), robotContainer.getIntake()));
@@ -71,7 +71,9 @@ public class Robot extends TimedRobot {
     //   System.out.println("Already zeroed");
     // }
     robotContainer.setTeleopDrive();
-    robotContainer.getLazySusanSubsystem().setIsGyroLocking(true);
+
+    robotContainer.getLazySusanSubsystem().setIsGyroLocking(true);//TODO: SET TO FALSE LATER
+
     //robotContainer.getShooterSubsystem().
     // robotContainer.getLoaderSubsystem().setIsClimbing(false);
     // TODO: move to initializer in robotContainer
@@ -145,7 +147,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-  
+    SmartDashboard.putBoolean("Rear Limit Switch", robotContainer.getClimberMotorsSubsystem().hitRearLimitSwitch());
   }
 
   @Override

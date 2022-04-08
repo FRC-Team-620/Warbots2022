@@ -22,108 +22,98 @@ import frc.robot.Constants;
 import frc.robot.Util.sim.RevEncoderSimWrapper;
 
 public class LazySusanSubsystem extends SubsystemBase {
-    protected SimableCANSparkMax lazySusan;
-    protected RelativeEncoder encoder;
+    private final SimableCANSparkMax motor;
+    private final RelativeEncoder encoder;
     private PIDController lazySusanPID;
     private Rotation2d turretRotation;
     private Rotation2d desiredRotation;
-    private final Supplier<Pose2d> robotBase;
+    private final Supplier<Pose2d> robotBasePose;
     private boolean isGyroLocking;
-    private final double countToDegreesFactor = (1.0 / 15.0) * (20.0 / 156.0) * 360.0; // Turntable output gear changed from 22T to 20T
+    private final double countsToDegreesFactor = (1.0 / 25.0) * (20.0 / 156.0) * 360.0;
+    private final double stowedCounts = Constants.stowedDegrees / countsToDegreesFactor;
     private double modSpeed = 1;
-    private final double kP = 0.060000, kI = 0, kD = 0;// KI0.00004 kP = 0.060000, kI = 0.003000,  TODO: Tune PID Loop
+    private final double kP = 0.060000, kI = 0.000000, kD = 0;// KI0.00004 kP = 0.060000, kI = 0.003000,  TODO: Tune PID Loop
     private boolean isCal;
     //private boolean isDisabled;
     public DigitalInput calSwitch;
-    public final double lowLimit = -180.0 / countToDegreesFactor, highLimit = 180.0 / countToDegreesFactor;// Left
-                                                                                                           // 45.690002
-                                                                                                           // Right
-                                                                                                           // -45.356651
-                                                                                                           // AbsoluteMaxRange
-                                                                                                           // 90
+    public final double lowLimitCounts = -175.0 / countsToDegreesFactor;
+    public final double highLimitCounts = 185.0 / countsToDegreesFactor;
+    // Left 45.690002, Right -45.356651, AbsoluteMaxRange 90
     // private double turntableThresh = 35;
 
-    public LazySusanSubsystem(Supplier<Pose2d> robotBase) {
+    public LazySusanSubsystem(Supplier<Pose2d> robotBasePose) {
         this.isGyroLocking = false;
-        this.robotBase = robotBase;
-        lazySusan = new SimableCANSparkMax(Constants.lazySusanID, MotorType.kBrushless);
+        this.robotBasePose = robotBasePose;
+        this.motor = new SimableCANSparkMax(Constants.lazySusanID, MotorType.kBrushless);
         this.calSwitch = new DigitalInput(Constants.calSwitchID);
-        lazySusan.restoreFactoryDefaults();
-        encoder = lazySusan.getEncoder();
-        encoder.setPosition(0);
+        this.motor.restoreFactoryDefaults();
+        this.encoder = this.motor.getEncoder();
+        this.encoder.setPosition(stowedCounts);
         IdleMode mode = IdleMode.kBrake; // brakes
-        lazySusan.setIdleMode(mode);
-
-
-        lazySusan.setSmartCurrentLimit(35);
+        this.motor.setIdleMode(mode);
+        this.motor.setSmartCurrentLimit(18);
+        this.isGyroLocking = false;
 
         // lazySusan.setInverted(true);
 
         lazySusanPID = new PIDController(kP, kI, kD);
         lazySusanPID.setTolerance(1);
         // lazySusanPID.setIntegratorRange(-10, 10);
-
-        turretRotation = new Rotation2d();
-        desiredRotation = turretRotation;
+        
+        turretRotation = desiredRotation = Rotation2d.fromDegrees(Constants.stowedDegrees);
         isCal = false;
         //isDisabled =
-        SmartDashboard.putData("Turret/PIDControler[12]",lazySusanPID);
+        SmartDashboard.putData("Turret/PIDController[12]", lazySusanPID);
     }
 
     @Override
     public void periodic() {
-        turretRotation = Rotation2d.fromDegrees(lazySusan.getEncoder().getPosition() * countToDegreesFactor);
+        this.turretRotation = Rotation2d.fromDegrees(encoder.getPosition() * countsToDegreesFactor);
+        double degrees = isGyroLocking ? desiredRotation.minus(robotBasePose.get().getRotation()).getDegrees() : desiredRotation.getDegrees();
 
-        if (isGyroLocking) {
-            Rotation2d stablizedLocation = desiredRotation.minus(robotBase.get().getRotation());
-            lazySusanPID.setSetpoint(
-                    MathUtil.clamp(stablizedLocation.getDegrees() / countToDegreesFactor, lowLimit, highLimit));
-        } else {
-            lazySusanPID.setSetpoint(
-                    MathUtil.clamp(desiredRotation.getDegrees() / countToDegreesFactor, lowLimit, highLimit));
+        lazySusanPID.setSetpoint(MathUtil.clamp(degrees / countsToDegreesFactor, lowLimitCounts, highLimitCounts));
+        // System.out.println("highLimit " + degrees + " " + encoder.getPosition() + " " + highLimitCounts);
+        double pidOutput = MathUtil.clamp(lazySusanPID.calculate(encoder.getPosition()), -1, 1);
+
+        // TODO: Use degrees and not encoder counts for thresholds
+        if (encoder.getPosition() > highLimitCounts + 5) { // + 5 / countsToDegreesFactor
+            pidOutput = MathUtil.clamp(pidOutput, -1, 0);
         }
 
-        lazySusanPID.calculate(lazySusan.getEncoder().getPosition());
-
-        double lazySusanOutput = lazySusanPID.calculate(lazySusan.getEncoder().getPosition());
-        double PIDOutput = MathUtil.clamp(lazySusanOutput, -1, 1);
-
-        if (lazySusan.getEncoder().getPosition() > highLimit + 5) {
-            PIDOutput = MathUtil.clamp(PIDOutput, -1, 0);
-        }
-        if (lazySusan.getEncoder().getPosition() < lowLimit - 5) {
-            PIDOutput = MathUtil.clamp(PIDOutput, 0, 1);
+        if (encoder.getPosition() < lowLimitCounts - 5) {
+            pidOutput = MathUtil.clamp(pidOutput, 0, 1);
         }
 
-        lazySusan.set(PIDOutput * modSpeed);
-        SmartDashboard.putNumber("Turret/Raw Encoder", lazySusan.getEncoder().getPosition());
-        SmartDashboard.putNumber("Turret/Motor Percentage", lazySusan.get());
+        motor.set(pidOutput * modSpeed);
+
+        SmartDashboard.putNumber("Turret/Raw Encoder", encoder.getPosition());
+        SmartDashboard.putNumber("Turret/Motor Percentage", motor.get());
         SmartDashboard.putBoolean("Turret/Is Calibrated", isCal);
         SmartDashboard.putBoolean("Turret/Calibration Switch", islimitSwitchPressed());
         SmartDashboard.putNumber("Turret/Desired Rotation", desiredRotation.getDegrees());
         SmartDashboard.putNumber("Turret/Rotation Degrees", turretRotation.getDegrees());
-        SmartDashboard.putBoolean("Turret/GryoLocking", isGyroLocking);
-
+        SmartDashboard.putBoolean("Turret/Is Gyro Locking", isGyroLocking);
     }
 
     public double getEncoderPosition() {
-        return lazySusan.getEncoder().getPosition();
+        return encoder.getPosition();
     }
 
     public double getModSpeed() {
         return modSpeed;
     }
 
-    public void setModSpeed(double mS) {
-        modSpeed = mS;
+    public void setModSpeed(double modSpeed) {
+        this.modSpeed = modSpeed;
     }
 
     public boolean getIsGyroLocking() {
         return isGyroLocking;
     }
 
-    public void setIsGyroLocking(boolean iGL) {
-        isGyroLocking = iGL;
+    public void setIsGyroLocking(boolean isGyroLocking) {
+        // TODO: Fix gyro locking problems (turning randomly?)
+        this.isGyroLocking = isGyroLocking;
     }
 
     public boolean getIsCal() {
@@ -134,8 +124,8 @@ public class LazySusanSubsystem extends SubsystemBase {
         return calSwitch.get();
     }
 
-    public void setIsCal(boolean iS) {
-        isCal = iS;
+    public void setIsCal(boolean isCal) {
+        this.isCal = isCal;
     }
 
     public Rotation2d getRotation() {
@@ -147,7 +137,7 @@ public class LazySusanSubsystem extends SubsystemBase {
     }
 
     public double getRawSetpoint() {
-        return lazySusanPID.getSetpoint() * countToDegreesFactor;
+        return lazySusanPID.getSetpoint() * countsToDegreesFactor;
     }
 
     public void setTurretPositionDegrees(Rotation2d rot) {
@@ -163,7 +153,8 @@ public class LazySusanSubsystem extends SubsystemBase {
         encoder.setPosition(p);
         stop();
     }
-    public void stop(){
+
+    public void stop() {
         lazySusanPID.reset();
         lazySusanPID.setSetpoint(encoder.getPosition());
     }
@@ -175,6 +166,7 @@ public class LazySusanSubsystem extends SubsystemBase {
         stop();
         setIsCal(true);
     }
+
     public boolean islimitSwitchPressed(){
         return !calSwitch.get();
     }
@@ -183,7 +175,7 @@ public class LazySusanSubsystem extends SubsystemBase {
         if (RobotBase.isSimulation()) {
             return this.simlazySusan.getCurrentDrawAmps();
         }
-        return this.lazySusan.getOutputCurrent();
+        return this.motor.getOutputCurrent();
     }
 
     /**
@@ -198,7 +190,7 @@ public class LazySusanSubsystem extends SubsystemBase {
         simTurrentRotation = new Rotation2d();
         simlazySusan = new DCMotorSim(DCMotor.getNeo550(1), Constants.kSimTurntableGearRatio,
                 Constants.kSimTurntableInertia); // TODO: add gear ratio
-        simEncoder = RevEncoderSimWrapper.create(this.lazySusan);
+        simEncoder = RevEncoderSimWrapper.create(this.motor);
     }
 
     @Override
@@ -208,7 +200,7 @@ public class LazySusanSubsystem extends SubsystemBase {
             simInit = true;
         }
         simTurrentRotation = turretRotation;
-        simlazySusan.setInputVoltage(lazySusan.get() * RobotController.getInputVoltage());
+        simlazySusan.setInputVoltage(motor.get() * RobotController.getInputVoltage());
         simlazySusan.update(Constants.kSimUpdateTime);
         simEncoder.setVelocity(simlazySusan.getAngularVelocityRPM());
         simEncoder.setDistance(simlazySusan.getAngularPositionRotations() * 180);
