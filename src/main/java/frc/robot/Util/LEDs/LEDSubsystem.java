@@ -99,6 +99,26 @@ public class LEDSubsystem extends SubsystemBase {
             return new LEDAnimation(speed, n -> this.setSolidColor(colors[n%colors.length]));
         }
 
+        // public LEDAnimation fadeAnimation(double speed, int steps, Color... colors) {
+        //     return new LEDAnimation(speed, n -> {
+        //         Color gradient[] = new Color[steps];
+        //         n%=(2*gradient.length);
+        //         this.setSolidColor(gradient[gradient.length+(n/2-gradient.length)]);
+        //         // double proportion;
+                
+        //         // for(int i = 0; i < gradient.length; i++) {
+        //         //     proportion = (double)i/(gradient.length-1);
+        //         //     color = new Color(
+        //         //         proportion*(endColor.red-startColor.red)+startColor.red,
+        //         //         proportion*(endColor.green-startColor.green)+startColor.green,
+        //         //         proportion*(endColor.blue-startColor.blue)+startColor.blue
+        //         //     );
+        //         //     gradient[i] = color;
+        //         // }
+        //         // return gradient;
+        //     });
+        // }
+
         public LEDAnimation solidColorAnimation(Color color) {
             return new LEDAnimation(0, n -> this.setSolidColor(color));
         }

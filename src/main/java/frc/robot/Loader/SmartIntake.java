@@ -31,7 +31,7 @@ public class SmartIntake extends CommandBase {
             } else { // ONE ball
                 this.intake.setInnerIntakeMotor(0.5);
             }
-        }
+        } else {} // NO balls (add code here if needed)
     }
 
     @Override

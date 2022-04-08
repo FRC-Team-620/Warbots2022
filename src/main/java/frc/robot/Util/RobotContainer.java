@@ -79,6 +79,7 @@ public class RobotContainer {
         turret = new LazySusanSubsystem(drivetrain::getPose);
         climberHooks = new ClimberSubsystem();
         winch = new ClimberMotorsSubsystem();
+        ledSubsystem = new LEDSubsystem();
         SmartDashboard.putData(new ZeroTurnTable(turret));
     }
 

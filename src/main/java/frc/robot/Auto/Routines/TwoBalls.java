@@ -42,7 +42,7 @@ public class TwoBalls extends SequentialCommandGroup {
     this.intake = intake;
     addCommands(
       new ParallelCommandGroup(
-        //new AutoLoad(intake),
+        new AutoLoad(intake),
         new LimelightSpinUp(shooterSubsystem),
         new SequentialCommandGroup(
           new DriveForwardDistance(drivetrain, twoBallsDistanceMeters),
