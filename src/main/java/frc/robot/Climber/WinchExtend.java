@@ -32,13 +32,12 @@ public class WinchExtend extends CommandBase {
     public void execute() {
         frameCount++;
 
-        if (frameCount > Constants.frameCountUntilFloat) intake.floatIntakeArms();
-
         System.out.println("Winch is winding");
     }
 
     @Override
     public void end(boolean interrupted) {
+        intake.floatIntakeArms();
         System.out.println("EXITING");
         this.climberMotorsSubsystem.setWinchSpeed(0);
     }

@@ -54,14 +54,14 @@ public class Intake extends SubsystemBase {
 
     //implementing 836's idea
     public void extendIntakeArms() {
-        intakeArmsVirtualSolenoidA.set(false);
-        intakeArmsVirtualSolenoidB.set(false);
+        intakeArmsVirtualSolenoidA.set(true);
+        intakeArmsVirtualSolenoidB.set(true);
     }
     
     //implementing 836's idea
     public void retractIntakeArms() {
-        intakeArmsVirtualSolenoidA.set(true);
-        intakeArmsVirtualSolenoidB.set(true);    
+        intakeArmsVirtualSolenoidA.set(false);
+        intakeArmsVirtualSolenoidB.set(false);    
     }
 
     //implementing 836's idea
