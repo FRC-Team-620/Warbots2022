@@ -11,14 +11,14 @@ public class OuttakeBall extends CommandBase {
     @Override
     public void initialize() {
         intake.reverseInnerIntakeMotor();
-        intake.retractIntakeArmsSolenoid();
+        intake.retractIntakeArms();
         intake.disableIntakeArmsMotor();
     }
 
     @Override
     public void end(boolean interrupted) {
         intake.disableInnerIntakeMotor();
-        intake.retractIntakeArmsSolenoid();
+        intake.retractIntakeArms();
         intake.disableIntakeArmsMotor();
     }
 

@@ -17,8 +17,6 @@ import frc.robot.Shooter.FiringPins;
 import frc.robot.Shooter.LazySusanSubsystem;
 import frc.robot.Shooter.LimelightSpinUp;
 import frc.robot.Shooter.ShooterSubsystem;
-import frc.robot.Util.WaitFrames;
-
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -42,7 +40,7 @@ public class TwoBalls extends SequentialCommandGroup {
     this.intake = intake;
     addCommands(
       new ParallelCommandGroup(
-        //new AutoLoad(intake),
+        new AutoLoad(intake),
         new LimelightSpinUp(shooterSubsystem),
         new SequentialCommandGroup(
           new DriveForwardDistance(drivetrain, twoBallsDistanceMeters),
