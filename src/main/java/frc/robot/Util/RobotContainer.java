@@ -8,6 +8,8 @@
 
 package frc.robot.Util;
 
+import java.util.ResourceBundle.Control;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
@@ -134,6 +136,15 @@ public class RobotContainer {
 
         ControlBoard.fireTurretTrigger.whenActive(
         new ActivateFiringPins(getFiringPins()));
+
+        // ControlBoard.reverseShooterWheelsButton.whileActiveOnce(
+        //     new InstantCommand(() -> {
+        //         this.shooter.isBackward = true;
+        //         this.shooter.setTargetRPM(-Constants.lowPoweredShotRPM);
+        //         this.shooter.setSpeed(-1);
+        //     }));
+        // ControlBoard.reverseShooterWheelsButton.whenReleased(
+        //     new InstantCommand(this.shooter::stopMotors));
 
         //driver
         ControlBoard.lowShotButton.whileActiveOnce(new LowShotCommand(shooter));

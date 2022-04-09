@@ -33,6 +33,8 @@ public class ShooterSubsystem extends SubsystemBase {
     public double targetRpm;
     public double currentSpeed = 0;
     private boolean powerDecel = true;
+    // public boolean isBackward = false;
+    private double offsetSpeed = 150;
 
     //PIDs
     protected final PIDController leftShooterPID;
@@ -90,6 +92,10 @@ public class ShooterSubsystem extends SubsystemBase {
             feedForward.calculate(leftShooterPID.getSetpoint()/60);
         double rightOutputVoltage = rightShooterPID.calculate(rightShooterMotor.getEncoder().getVelocity()) + 
             feedForward.calculate(rightShooterPID.getSetpoint()/60);
+
+        //leftShooterMotor.setVoltage(MathUtil.clamp(leftOutputVoltage, powerDecel || leftShooterPID.getSetpoint() <= 0 && !this.isBackward ? 0 : -13, 13));
+        //rightShooterMotor.setVoltage(MathUtil.clamp(rightOutputVoltage, powerDecel || rightShooterPID.getSetpoint() <= 0 && !this.isBackward ? 0 : -13, 13));
+
         
         leftShooterMotor.setVoltage(MathUtil.clamp(leftOutputVoltage, powerDecel || leftShooterPID.getSetpoint() <= 0 ? 0 : -13, 13));
         rightShooterMotor.setVoltage(MathUtil.clamp(rightOutputVoltage, powerDecel || rightShooterPID.getSetpoint() <= 0 ? 0 : -13, 13));
@@ -124,6 +130,15 @@ public class ShooterSubsystem extends SubsystemBase {
         rightShooterMotor.set(speed);
         leftShooterMotor.set(speed);
     }
+
+    public double getOffsetSpeed() {
+        return offsetSpeed;
+    }
+
+    public void setOffsetSpeed(double offsetSpeed) {
+        this.offsetSpeed = offsetSpeed;
+    }
+
     
     public boolean atTargetRPM() {
         return leftShooterPID.atSetpoint() && rightShooterPID.atSetpoint();

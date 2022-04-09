@@ -108,6 +108,7 @@ public class LEDSubsystem extends SubsystemBase {
 
         public LEDAnimation fadeAnimation(double speed, int steps, Color c1, Color c2) {
             return new LEDAnimation(speed, n -> {
+                n %= 2*steps;
                 int i = -Math.abs(n-steps)+steps;
                 double proportion = (double)i/steps;
                 this.setSolidColor(new Color(

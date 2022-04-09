@@ -21,7 +21,8 @@ public class ControlBoard {
             tankDriveAimButton,
             lowShotButton,
             winchHoldButton,
-            toggleGyroButton;
+            toggleGyroButton,
+            reverseShooterWheelsButton;
 
     public static TriggerPressed aimTurretTrigger,
             fireTurretTrigger;
@@ -56,6 +57,7 @@ public class ControlBoard {
         aimTurretTrigger = new TriggerPressed(operator, Axis.kLeftTrigger.value);
         fireTurretTrigger = new TriggerPressed(operator, Axis.kRightTrigger.value);
         toggleGyroButton = new JoystickButton(operator, Button.kBack.value);
+        reverseShooterWheelsButton = new JoystickButton(operator, Button.kRightBumper.value);
     }
 
     // use these for now until the drive command is converted

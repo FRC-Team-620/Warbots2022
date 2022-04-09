@@ -65,6 +65,7 @@ public class Robot extends TimedRobot {
       autonomousCommand.cancel();
     }
     robotContainer.getIntake().disableInnerIntakeMotor();
+    robotContainer.getShooterSubsystem().setOffsetSpeed(150);
     
     // if (!robotContainer.getLazySusanSubsystem().getIsCal()) {
     //   System.out.println("Zeroed");
@@ -98,6 +99,7 @@ public class Robot extends TimedRobot {
     LimeLight.setLedMode(LedMode.ON);
     robotContainer.getLazySusanSubsystem().setTurretPositionDegrees(Rotation2d.fromDegrees(179.999));
     //robotContainer.getLazySusanSubsystem().setEncoderPosition(robotContainer.getLazySusanSubsystem().getEncoderPosition() + 4);
+    robotContainer.getShooterSubsystem().setOffsetSpeed(75);
 
 
 
