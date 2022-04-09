@@ -137,14 +137,10 @@ public class RobotContainer {
         ControlBoard.fireTurretTrigger.whenActive(
         new ActivateFiringPins(getFiringPins()));
 
-        // ControlBoard.reverseShooterWheelsButton.whileActiveOnce(
-        //     new InstantCommand(() -> {
-        //         this.shooter.isBackward = true;
-        //         this.shooter.setTargetRPM(-Constants.lowPoweredShotRPM);
-        //         this.shooter.setSpeed(-1);
-        //     }));
-        // ControlBoard.reverseShooterWheelsButton.whenReleased(
-        //     new InstantCommand(this.shooter::stopMotors));
+        ControlBoard.reverseShooterWheelsButton.whileActiveOnce(
+            new InstantCommand(() -> this.shooter.setSpeed(-1)));
+        ControlBoard.reverseShooterWheelsButton.whenReleased(
+            new InstantCommand(this.shooter::stopMotors));
 
         //driver
         ControlBoard.lowShotButton.whileActiveOnce(new LowShotCommand(shooter));

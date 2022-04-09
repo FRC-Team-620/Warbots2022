@@ -17,7 +17,6 @@ public class LimelightSpinUp extends CommandBase {
     @Override
     public void initialize() {
         LimeLight.setLedMode(LedMode.ON);
-        // this.shooterSubsystem.isBackward = false;
     }
 
     @Override
