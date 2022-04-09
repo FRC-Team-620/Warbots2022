@@ -11,7 +11,8 @@ public class LEDIdleCommand extends CommandBase {
     protected Intake intake;
     protected FiringPins firingPins;
 
-    protected LEDAnimation noBallsAnim = LEDManager.STRIP0.gradientAnimation(1, 
+    protected LEDAnimation noBallsAnim = LEDManager.STRIP0.fadeAnimation(1,
+        30, 
         Color.kWhite,
         Color.kBlack
     );

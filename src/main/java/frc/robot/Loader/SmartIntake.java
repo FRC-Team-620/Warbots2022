@@ -20,7 +20,7 @@ public class SmartIntake extends CommandBase {
     @Override
     public void initialize() {
         frameCount = 0;
-        //intake.enableInnerIntakeMotor();
+        // intake.enableInnerIntakeMotor();
         this.intake.extendIntakeArms();
         this.intake.enableIntakeArmsMotor();
     }
@@ -28,14 +28,15 @@ public class SmartIntake extends CommandBase {
     @Override
     public void execute() {
         frameCount++;
-        if (frameCount > Constants.frameCountUntilFloat) intake.floatIntakeArms();
+        if(frameCount > Constants.frameCountUntilFloat) 
+            intake.floatIntakeArms();
 
         this.intake.enableInnerIntakeMotor();
         if(this.firingPins.hasColor()) { 
             if(this.intake.getIntakeSwitch()) { // TWO balls
                 this.intake.disableInnerIntakeMotor();
             } else { // ONE ball
-                this.intake.setInnerIntakeMotor(0.5);
+                this.intake.setInnerIntakeMotor(0.9);
             }
         } else {} // NO balls (add code here if needed)
     }

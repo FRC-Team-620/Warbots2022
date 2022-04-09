@@ -8,6 +8,13 @@
       "type": "java",
       "name": "Launch LEDSubsystem",
       "request": "launch",
+      "mainClass": "frc.robot.Util.LEDs.LEDSubsystem",
+      "projectName": "Warbot2022"
+    },
+    {
+      "type": "java",
+      "name": "Launch LEDSubsystem",
+      "request": "launch",
       "mainClass": "frc.robot.Util.LEDSubsystem",
       "projectName": "Warbot2022"
     },

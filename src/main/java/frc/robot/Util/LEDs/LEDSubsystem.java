@@ -30,6 +30,9 @@ public class LEDSubsystem extends SubsystemBase {
         public LEDAnimation solidColorAnimation(Color color) {
             return this.strip.solidColorAnimation(color);
         }
+        public LEDAnimation fadeAnimation(double speed, int steps, Color c1, Color c2) {
+            return this.strip.fadeAnimation(speed, steps, c1, c2);
+        }
 
         public void set(Color c) {
             this.strip.setSolidColor(c);
@@ -99,28 +102,20 @@ public class LEDSubsystem extends SubsystemBase {
             return new LEDAnimation(speed, n -> this.setSolidColor(colors[n%colors.length]));
         }
 
-        // public LEDAnimation fadeAnimation(double speed, int steps, Color... colors) {
-        //     return new LEDAnimation(speed, n -> {
-        //         Color gradient[] = new Color[steps];
-        //         n%=(2*gradient.length);
-        //         this.setSolidColor(gradient[gradient.length+(n/2-gradient.length)]);
-        //         // double proportion;
-                
-        //         // for(int i = 0; i < gradient.length; i++) {
-        //         //     proportion = (double)i/(gradient.length-1);
-        //         //     color = new Color(
-        //         //         proportion*(endColor.red-startColor.red)+startColor.red,
-        //         //         proportion*(endColor.green-startColor.green)+startColor.green,
-        //         //         proportion*(endColor.blue-startColor.blue)+startColor.blue
-        //         //     );
-        //         //     gradient[i] = color;
-        //         // }
-        //         // return gradient;
-        //     });
-        // }
-
         public LEDAnimation solidColorAnimation(Color color) {
             return new LEDAnimation(0, n -> this.setSolidColor(color));
+        }
+
+        public LEDAnimation fadeAnimation(double speed, int steps, Color c1, Color c2) {
+            return new LEDAnimation(speed, n -> {
+                int i = -Math.abs(n-steps)+steps;
+                double proportion = (double)i/steps;
+                this.setSolidColor(new Color(
+                    proportion*(c2.red-c1.red)+c1.red,
+                    proportion*(c2.green-c1.green)+c1.green,
+                    proportion*(c2.blue-c1.blue)+c1.blue
+                ));
+            });
         }
     
         // returns an RGB representation of the light at a given index of the 'AddressableLEDBuffer'
