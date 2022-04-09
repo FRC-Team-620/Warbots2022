@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Auto.AutoCommand;
+import frc.robot.Auto.Routines.ExtakeBall;
 import frc.robot.Auto.Routines.OneBall;
 import frc.robot.Auto.Routines.Taxi;
 import frc.robot.Auto.Routines.TwoBalls;
@@ -45,9 +46,10 @@ public class Robot extends TimedRobot {
 
     autoSelector.setDefaultOption("Two-Ball", new TwoBalls(robotContainer.getDriveTrain(), robotContainer.getLazySusanSubsystem(), 
       robotContainer.getShooterSubsystem(), robotContainer.getFiringPins(), robotContainer.getIntake()));
-    autoSelector.addOption("One-ball", new OneBall(robotContainer.getDriveTrain(), robotContainer.getLazySusanSubsystem(), 
+    autoSelector.addOption("One-Ball", new OneBall(robotContainer.getDriveTrain(), robotContainer.getLazySusanSubsystem(), 
       robotContainer.getShooterSubsystem(), robotContainer.getFiringPins()));
     autoSelector.addOption("Taxi", new Taxi(robotContainer.getDriveTrain()));
+    autoSelector.addOption("Extake-Ball", new ExtakeBall(robotContainer.getIntake()));
     autoSelector.addOption("AutoCommand", new AutoCommand(robotContainer.getFiringPins(), robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer));
     SmartDashboard.putData(autoSelector);
   }
