@@ -1,6 +1,7 @@
 package frc.robot.Loader;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 
 public class AutoLoad extends CommandBase{
     protected Intake intake;
@@ -14,6 +15,7 @@ public class AutoLoad extends CommandBase{
     @Override
     public void execute() {
         frames++;
+        if (frames > Constants.frameCountUntilFloat) intake.floatIntakeArms();
     }
 
     @Override
@@ -22,14 +24,14 @@ public class AutoLoad extends CommandBase{
         //System.out.println("Loader was turned on");
         //intake.enableInnerIntakeMotor();
         intake.enableIntakeArmsMotor();
-        intake.extendIntakeArmsSolenoid();
+        intake.extendIntakeArms();
     }
     
     @Override
     public void end(boolean interrupt) {
         intake.disableInnerIntakeMotor();
         intake.disableIntakeArmsMotor();
-        intake.retractIntakeArmsSolenoid();
+        intake.retractIntakeArms();
     }
 
     @Override

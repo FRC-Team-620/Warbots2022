@@ -8,6 +8,7 @@ public class WinchExtend extends CommandBase {
     protected ClimberMotorsSubsystem climberMotorsSubsystem;
     protected Intake intake;
     protected double deltaCounts, targetCounts;
+    int frameCount = 0;
 
     public WinchExtend(ClimberMotorsSubsystem climberMotorsSubsystem, Intake intake, double deltaCounts) {
         addRequirements(climberMotorsSubsystem);
@@ -18,7 +19,8 @@ public class WinchExtend extends CommandBase {
 
     @Override
     public void initialize() {
-        this.intake.extendIntakeArmsSolenoid();
+        frameCount = 0;
+        this.intake.extendIntakeArms();
         System.out.println("Current: " + this.climberMotorsSubsystem.getWinchPosition());
         this.targetCounts = this.climberMotorsSubsystem.getWinchPosition() + this.deltaCounts;
         // System.out.println("Winch begins wind down");
@@ -28,6 +30,10 @@ public class WinchExtend extends CommandBase {
 
     @Override
     public void execute() {
+        frameCount++;
+
+        if (frameCount > Constants.frameCountUntilFloat) intake.floatIntakeArms();
+
         System.out.println("Winch is winding");
     }
 
