@@ -13,8 +13,8 @@ public class LEDIdleCommand extends CommandBase {
 
     protected LEDAnimation noBallsAnim = LEDManager.STRIP0.fadeAnimation(1,
         30, 
-        Color.kWhite,
-        Color.kBlack
+        Color.kYellow,
+        Color.kWhite
     );
     protected LEDAnimation oneBallAnim = LEDManager.STRIP0.gradientAnimation(1, 
         Color.kRed,
