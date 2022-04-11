@@ -67,6 +67,8 @@ public class ShooterSubsystem extends SubsystemBase {
         //leftShooterMotor.follow(rightShooterMotor, true);
         // rightShooterMotor.setInverted(true);
         leftShooterMotor.setInverted(true);
+
+        isBackward = false;
         
         leftShooterPID = new PIDController(kP, kI, kD);
         rightShooterPID = new PIDController(kP, kI, kD);
@@ -81,7 +83,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (!isBackward) {
+        
             // Debug Force both Pid loops to same setpoint; //TODO: Prob need to remove
             //rightShooterPID.setSetpoint(leftShooterPID.getSetpoint());
 
@@ -92,9 +94,13 @@ public class ShooterSubsystem extends SubsystemBase {
                 feedForward.calculate(leftShooterPID.getSetpoint()/60);
             double rightOutputVoltage = rightShooterPID.calculate(rightShooterMotor.getEncoder().getVelocity()) + 
                 feedForward.calculate(rightShooterPID.getSetpoint()/60);
-
-            leftShooterMotor.setVoltage(MathUtil.clamp(leftOutputVoltage, powerDecel || leftShooterPID.getSetpoint() <= 0 ? 0 : -13, 13));
-            rightShooterMotor.setVoltage(MathUtil.clamp(rightOutputVoltage, powerDecel || rightShooterPID.getSetpoint() <= 0 ? 0 : -13, 13));
+            if (!isBackward) {
+                leftShooterMotor.setVoltage(MathUtil.clamp(leftOutputVoltage, powerDecel || leftShooterPID.getSetpoint() <= 0 ? 0 : -13, 13));
+                rightShooterMotor.setVoltage(MathUtil.clamp(rightOutputVoltage, powerDecel || rightShooterPID.getSetpoint() <= 0 ? 0 : -13, 13));
+            } else {
+                leftShooterMotor.set(-1);
+                rightShooterMotor.set(-1);
+            }
 
             SmartDashboard.putNumber("Flywheel/Right RPM", rightShooterMotor.getEncoder().getVelocity());
             SmartDashboard.putNumber("Flywheel/Left RPM", leftShooterMotor.getEncoder().getVelocity());
@@ -102,7 +108,7 @@ public class ShooterSubsystem extends SubsystemBase {
             SmartDashboard.putNumber("Flywheel/Right atTarget", rightShooterPID.atSetpoint() ? 5000 : 0);
             SmartDashboard.putNumber("Flywheel/Right Setpoint", rightShooterPID.getSetpoint());
             SmartDashboard.putNumber("Flywheel/Left Setpoint", leftShooterPID.getSetpoint());
-        }
+        
         //MathUtil.clamp(output,powerDecel ? -1: 0,1);
     }
 
@@ -172,6 +178,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public double getTargetRPM() {
         return rightShooterPID.getSetpoint();
+    }
+
+    public void setIsBackwards(boolean iS) {
+        isBackward = iS;
     }
 
     //public void setShooterSpeedAndUpdate(double speed) {
