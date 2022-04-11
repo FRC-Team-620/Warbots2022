@@ -30,14 +30,13 @@ public class LazySusanSubsystem extends SubsystemBase {
     private final Supplier<Pose2d> robotBasePose;
     private boolean isGyroLocking;
     private final double countsToDegreesFactor = (1.0 / 25.0) * (20.0 / 156.0) * 360.0;
-    private final double stowedCounts = Constants.stowedDegrees / countsToDegreesFactor;
     private double modSpeed = 1;
-    private final double kP = 0.060000, kI = 0.000000, kD = 0;// KI0.00004 kP = 0.060000, kI = 0.003000,  TODO: Tune PID Loop
+    private final double kP = 0.000060, kI = 0.000000, kD = 0;// KI0.00004 kP = 0.060000, kI = 0.003000,  TODO: Tune PID Loop
     private boolean isCal;
     //private boolean isDisabled;
     public DigitalInput calSwitch;
-    public final double lowLimitCounts = -175.0 / countsToDegreesFactor;
-    public final double highLimitCounts = 185.0 / countsToDegreesFactor;
+    public final double lowLimitDegrees = -175.0;
+    public final double highLimitDegrees = 185.0;
     // Left 45.690002, Right -45.356651, AbsoluteMaxRange 90
     // private double turntableThresh = 35;
 
@@ -48,14 +47,14 @@ public class LazySusanSubsystem extends SubsystemBase {
         this.calSwitch = new DigitalInput(Constants.calSwitchID);
         this.motor.restoreFactoryDefaults();
         this.encoder = this.motor.getEncoder();
-        this.encoder.setPosition(stowedCounts);
+        encoder.setPositionConversionFactor(countsToDegreesFactor);
+        this.encoder.setPosition(Constants.stowedDegrees);
         IdleMode mode = IdleMode.kBrake; // brakes
         this.motor.setIdleMode(mode);
         this.motor.setSmartCurrentLimit(18);
         this.isGyroLocking = false;
 
         // lazySusan.setInverted(true);
-
         lazySusanPID = new PIDController(kP, kI, kD);
         lazySusanPID.setTolerance(1);
         // lazySusanPID.setIntegratorRange(-10, 10);
@@ -68,19 +67,18 @@ public class LazySusanSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        this.turretRotation = Rotation2d.fromDegrees(encoder.getPosition() * countsToDegreesFactor);
+        this.turretRotation = Rotation2d.fromDegrees(encoder.getPosition());
         double degrees = isGyroLocking ? desiredRotation.minus(robotBasePose.get().getRotation()).getDegrees() : desiredRotation.getDegrees();
 
-        lazySusanPID.setSetpoint(MathUtil.clamp(degrees / countsToDegreesFactor, lowLimitCounts, highLimitCounts));
+        lazySusanPID.setSetpoint(MathUtil.clamp(degrees, lowLimitDegrees, highLimitDegrees));
         // System.out.println("highLimit " + degrees + " " + encoder.getPosition() + " " + highLimitCounts);
         double pidOutput = MathUtil.clamp(lazySusanPID.calculate(encoder.getPosition()), -1, 1);
 
-        // TODO: Use degrees and not encoder counts for thresholds
-        if (encoder.getPosition() > highLimitCounts + 5) { // + 5 / countsToDegreesFactor
+        if (encoder.getPosition() > highLimitDegrees + 5) { // + 5 / countsToDegreesFactor
             pidOutput = MathUtil.clamp(pidOutput, -1, 0);
         }
 
-        if (encoder.getPosition() < lowLimitCounts - 5) {
+        if (encoder.getPosition() < lowLimitDegrees - 5) {
             pidOutput = MathUtil.clamp(pidOutput, 0, 1);
         }
 
@@ -137,7 +135,7 @@ public class LazySusanSubsystem extends SubsystemBase {
     }
 
     public double getRawSetpoint() {
-        return lazySusanPID.getSetpoint() * countsToDegreesFactor;
+        return lazySusanPID.getSetpoint();
     }
 
     public void setTurretPositionDegrees(Rotation2d rot) {
