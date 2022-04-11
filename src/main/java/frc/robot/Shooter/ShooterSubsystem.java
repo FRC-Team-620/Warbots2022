@@ -98,8 +98,8 @@ public class ShooterSubsystem extends SubsystemBase {
                 leftShooterMotor.setVoltage(MathUtil.clamp(leftOutputVoltage, powerDecel || leftShooterPID.getSetpoint() <= 0 ? 0 : -13, 13));
                 rightShooterMotor.setVoltage(MathUtil.clamp(rightOutputVoltage, powerDecel || rightShooterPID.getSetpoint() <= 0 ? 0 : -13, 13));
             } else {
-                leftShooterMotor.set(-1);
-                rightShooterMotor.set(-1);
+                leftShooterMotor.setVoltage(-13);
+                rightShooterMotor.setVoltage(-13);
             }
 
             SmartDashboard.putNumber("Flywheel/Right RPM", rightShooterMotor.getEncoder().getVelocity());
