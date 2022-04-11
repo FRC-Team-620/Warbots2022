@@ -26,9 +26,9 @@ public class FiringPins extends SubsystemBase {
 
     private final ColorMatch m_colorMatcher = new ColorMatch();
 
-    private final Color kBlueTarget = new Color(0.143, 0.427, 0.429);
+    private final Color kBlueTarget = new Color(0.15, 0.4, 0.45);
     //private final Color kGreenTarget = new Color(0.197, 0.561, 0.240);
-    private final Color kRedTarget = new Color(0.561, 0.232, 0.114);
+    private final Color kRedTarget = new Color(0.5, 0.36, 0.14);
     //private final Color kYellowTarget = new Color(0.361, 0.524, 0.113);
     
     public FiringPins() {
@@ -46,8 +46,8 @@ public class FiringPins extends SubsystemBase {
     public void periodic() {
         Color detected = this.detectedColor();
         System.out.println("(" + detected.red + ", " + detected.green + ", " + detected.blue + ")");
+        System.out.println(this.m_colorSensor.getProximity());
     }
-
     public Color detectedColor() {
         return m_colorSensor.getColor();
     }

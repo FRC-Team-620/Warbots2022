@@ -31,8 +31,9 @@ public class ShooterSubsystem extends SubsystemBase {
     protected final RelativeEncoder rightEncoder;
     protected final DecimalFormat decFormat = new DecimalFormat("#.#");
     public double targetRpm;
-    public double currentSpeed = 0;
+    private boolean isBackward;
     private boolean powerDecel = true;
+    private double offsetSpeed = 150;
 
     //PIDs
     protected final PIDController leftShooterPID;
@@ -43,6 +44,8 @@ public class ShooterSubsystem extends SubsystemBase {
     // TODO: Tune PID loops more for lower RPMs
 	private final double kP = 0.000001, kI = 0.003500, kD = 0.010000;//0.00025 0.0004
     private double testRPM;
+
+    // When setting any non-speed value, make sure to set the isBackwards boolean!
 
     public ShooterSubsystem() {
         rightShooterMotor = new SimableCANSparkMax(Constants.rightShooterMotorID, MotorType.kBrushless);
@@ -78,37 +81,28 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if (!isBackward) {
+            // Debug Force both Pid loops to same setpoint; //TODO: Prob need to remove
+            //rightShooterPID.setSetpoint(leftShooterPID.getSetpoint());
 
+            leftShooterPID.calculate(leftShooterMotor.getEncoder().getVelocity());
+            rightShooterPID.calculate(rightShooterMotor.getEncoder().getVelocity());
 
-        // Debug Force both Pid loops to same setpoint; //TODO: Prob need to remove
-        //rightShooterPID.setSetpoint(leftShooterPID.getSetpoint());
+            double leftOutputVoltage = leftShooterPID.calculate(leftShooterMotor.getEncoder().getVelocity()) + 
+                feedForward.calculate(leftShooterPID.getSetpoint()/60);
+            double rightOutputVoltage = rightShooterPID.calculate(rightShooterMotor.getEncoder().getVelocity()) + 
+                feedForward.calculate(rightShooterPID.getSetpoint()/60);
 
-        leftShooterPID.calculate(leftShooterMotor.getEncoder().getVelocity());
-        rightShooterPID.calculate(rightShooterMotor.getEncoder().getVelocity());
+            leftShooterMotor.setVoltage(MathUtil.clamp(leftOutputVoltage, powerDecel || leftShooterPID.getSetpoint() <= 0 ? 0 : -13, 13));
+            rightShooterMotor.setVoltage(MathUtil.clamp(rightOutputVoltage, powerDecel || rightShooterPID.getSetpoint() <= 0 ? 0 : -13, 13));
 
-        double leftOutputVoltage = leftShooterPID.calculate(leftShooterMotor.getEncoder().getVelocity()) + 
-            feedForward.calculate(leftShooterPID.getSetpoint()/60);
-        double rightOutputVoltage = rightShooterPID.calculate(rightShooterMotor.getEncoder().getVelocity()) + 
-            feedForward.calculate(rightShooterPID.getSetpoint()/60);
-        
-        leftShooterMotor.setVoltage(MathUtil.clamp(leftOutputVoltage, powerDecel || leftShooterPID.getSetpoint() <= 0 ? 0 : -13, 13));
-        rightShooterMotor.setVoltage(MathUtil.clamp(rightOutputVoltage, powerDecel || rightShooterPID.getSetpoint() <= 0 ? 0 : -13, 13));
-
-        int Lx = 0;
-        if (leftShooterPID.atSetpoint()) {
-            Lx = 5000;
+            SmartDashboard.putNumber("Flywheel/Right RPM", rightShooterMotor.getEncoder().getVelocity());
+            SmartDashboard.putNumber("Flywheel/Left RPM", leftShooterMotor.getEncoder().getVelocity());
+            SmartDashboard.putNumber("Flywheel/Left atTarget", leftShooterPID.atSetpoint() ? 5000 : 0);
+            SmartDashboard.putNumber("Flywheel/Right atTarget", rightShooterPID.atSetpoint() ? 5000 : 0);
+            SmartDashboard.putNumber("Flywheel/Right Setpoint", rightShooterPID.getSetpoint());
+            SmartDashboard.putNumber("Flywheel/Left Setpoint", leftShooterPID.getSetpoint());
         }
-        int Rx = 0;
-        if (rightShooterPID.atSetpoint()) {
-            Rx = 5000;
-        }
-
-        SmartDashboard.putNumber("Flywheel/Right RPM", rightShooterMotor.getEncoder().getVelocity());
-        SmartDashboard.putNumber("Flywheel/Left RPM", leftShooterMotor.getEncoder().getVelocity());
-        SmartDashboard.putNumber("Flywheel/Left atTarget", Lx);
-        SmartDashboard.putNumber("Flywheel/Right atTarget", Rx);
-        SmartDashboard.putNumber("Flywheel/Right Setpoint", rightShooterPID.getSetpoint());
-        SmartDashboard.putNumber("Flywheel/Left Setpoint", leftShooterPID.getSetpoint());
         //MathUtil.clamp(output,powerDecel ? -1: 0,1);
     }
 
@@ -121,9 +115,17 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void setSpeed(double speed) {
-        System.out.println("Shooter Motor Speed Set");
+        this.isBackward = speed < 0;
         rightShooterMotor.set(speed);
         leftShooterMotor.set(speed);
+    }
+
+    public double getOffsetSpeed() {
+        return offsetSpeed;
+    }
+
+    public void setOffsetSpeed(double offsetSpeed) {
+        this.offsetSpeed = offsetSpeed;
     }
     
     public boolean atTargetRPM() {
@@ -163,7 +165,7 @@ public class ShooterSubsystem extends SubsystemBase {
     //}
 
     public void setTargetRPM(double tRPM) {
-        System.out.println("Shooter Motor Target RPM Set");
+        this.isBackward = false;
         leftShooterPID.setSetpoint(tRPM);
         rightShooterPID.setSetpoint(tRPM);
     }

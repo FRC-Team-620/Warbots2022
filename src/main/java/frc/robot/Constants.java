@@ -66,7 +66,7 @@ public final class Constants {
     // public static final double kEncoderDistancePerPulse = 0.0359;//0.00136
     // //TODO: Not used Remove?
 
-    public static final double speedHigh = 0.7;
+    public static final double speedHigh = 0.85;
     public static final double speedLow = 0.35;
     public static final double rotationHigh = -0.60;
     public static final double rotationLow = -0.30;
@@ -129,7 +129,8 @@ public final class Constants {
     //intake
     public static final int intakeSwitchID = 7;
     public static final I2C.Port i2cColorSensorPort = I2C.Port.kMXP;
-    public static final int minColorSensorProximity = 1000; // Increases with proximity
+    public static final int minColorSensorProximity = 100; // Increases with proximity
+    public static final int frameCountUntilFloat = 50;
 
     // TODO: Calculate the correct values for this map
     // This maps the LimeLight's Vertical Offset (tY) to RPM
@@ -144,8 +145,10 @@ public final class Constants {
     }};
 
     // LazySusan
-    public static final int turntableThresh = 45;
-    public static final double stowedPosition = 50;
+    public static final int turntableThresh = 45; // This is in encoder ticks
+    // The below is in absolute degrees relative to the turntable
+    // To be within frame perimeter, the turret must face backwards
+    public static final double stowedDegrees = 179;
 
     // Differential Constants (very cool)
     public static final double diffConstLS = 0.014;//0.012 0.014

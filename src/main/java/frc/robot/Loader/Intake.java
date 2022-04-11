@@ -1,6 +1,7 @@
 package frc.robot.Loader;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -11,7 +12,8 @@ import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
     protected CANSparkMax innerIntakeMotor;
-    protected Solenoid intakeArmsSolenoid;
+    protected Solenoid intakeArmsVirtualSolenoidA;
+    protected Solenoid intakeArmsVirtualSolenoidB;
     protected CANSparkMax intakeArmsMotor;
     protected DigitalInput intakeSwitch;
     
@@ -20,11 +22,14 @@ public class Intake extends SubsystemBase {
         innerIntakeMotor = new CANSparkMax(Constants.intakeMotorID, MotorType.kBrushless);
         innerIntakeMotor.restoreFactoryDefaults();
         innerIntakeMotor.setInverted(true);
+        innerIntakeMotor.setIdleMode(IdleMode.kBrake);
 
         innerIntakeMotor.setSmartCurrentLimit(35);
         
-        intakeArmsSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 3);
-        intakeArmsSolenoid.set(false);
+        intakeArmsVirtualSolenoidA = new Solenoid(PneumaticsModuleType.CTREPCM, 3);
+        intakeArmsVirtualSolenoidB = new Solenoid(PneumaticsModuleType.CTREPCM, 4);
+        intakeArmsVirtualSolenoidA.set(false);
+        intakeArmsVirtualSolenoidB.set(false);
 
         intakeArmsMotor = new CANSparkMax(Constants.intakeArmsMotorID, MotorType.kBrushless);
         intakeArmsMotor.restoreFactoryDefaults();
@@ -43,14 +48,28 @@ public class Intake extends SubsystemBase {
     public void disableInnerIntakeMotor() {
         innerIntakeMotor.set(0);
     }
+    public void setInnerIntakeMotor(double speed) {
+        this.innerIntakeMotor.set(speed);
+    }
 
-    public void extendIntakeArmsSolenoid() {
-        intakeArmsSolenoid.set(true);
+    //implementing 836's idea
+    public void extendIntakeArms() {
+        intakeArmsVirtualSolenoidA.set(true);
+        intakeArmsVirtualSolenoidB.set(true);
     }
     
-    public void retractIntakeArmsSolenoid() {
-        intakeArmsSolenoid.set(false);
+    //implementing 836's idea
+    public void retractIntakeArms() {
+        intakeArmsVirtualSolenoidA.set(false);
+        intakeArmsVirtualSolenoidB.set(false);    
     }
+
+    //implementing 836's idea
+    public void floatIntakeArms() {
+        intakeArmsVirtualSolenoidA.set(false);
+        intakeArmsVirtualSolenoidB.set(true);    
+    }
+
 
     public void enableIntakeArmsMotor() {
         intakeArmsMotor.set(-0.6);

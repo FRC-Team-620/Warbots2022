@@ -27,16 +27,12 @@ public class LimelightSpinUp extends CommandBase {
         boolean hasTargetAndInRange = LimeLight.hasTarget() && Constants.rpmMap.isKeyInBounds(y);
 
         ControlBoard.setOperatorHighFreqRumble(hasTargetAndInRange);
-        ControlBoard.setDriverHighFreqRumble(hasTargetAndInRange);
         
         // TODO: Use the below RPM value once the table is working
         double targetRPM = Constants.rpmMap.getInterpolated(y);
         if(LimeLight.hasTarget())
-            this.shooterSubsystem.setTargetRPM(targetRPM);
-        boolean goodToShoot = hasTargetAndInRange && this.getWithinTolerance();
-        ControlBoard.setOperatorLowFreqRumble(goodToShoot);
-        ControlBoard.setDriverLowFreqRumble(goodToShoot);
-        
+            this.shooterSubsystem.setTargetRPM(targetRPM+shooterSubsystem.getOffsetSpeed());//+100
+        ControlBoard.setOperatorLowFreqRumble(hasTargetAndInRange && this.getWithinTolerance());
     }
 
     private boolean getWithinTolerance(){
@@ -51,6 +47,5 @@ public class LimelightSpinUp extends CommandBase {
         this.shooterSubsystem.stopMotors();
         LimeLight.setLedMode(LedMode.OFF);
         ControlBoard.setOperatorRumble(false);
-        ControlBoard.setDriverRumble(false);
     }
 }

@@ -118,6 +118,12 @@ public class Drivetrain extends SubsystemBase {
         frontRightMotor.setInverted(false);
         frontLeftMotor.setInverted(true);
 
+        int currentLimit = 60;
+        frontLeftMotor.setSmartCurrentLimit(currentLimit);
+        frontRightMotor.setSmartCurrentLimit(currentLimit);
+        rearLeftMotor.setSmartCurrentLimit(currentLimit);
+        rearRightMotor.setSmartCurrentLimit(currentLimit);
+
         frontRightMotor.setOpenLoopRampRate(DriveConstants.driveRampRate);
         frontLeftMotor.setOpenLoopRampRate(DriveConstants.driveRampRate);
 

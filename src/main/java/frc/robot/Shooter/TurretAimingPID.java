@@ -34,22 +34,18 @@ public class TurretAimingPID extends CommandBase {
 
     @Override
     public void execute() {
-
         double x = LimeLight.getTX();
         if (LimeLight.hasTarget()) {
             if(this.lazySusanSubsystem.getIsGyroLocking()) {
-                lazySusanSubsystem.setTurretPositionDegrees(this.robotbase.get().getRotation().plus(lazySusanSubsystem.getRotation()).minus(Rotation2d.fromDegrees(x)));
+                lazySusanSubsystem.setTurretPositionDegrees((this.robotbase.get().getRotation().plus(lazySusanSubsystem.getRotation()).minus(Rotation2d.fromDegrees(x)).plus(Rotation2d.fromDegrees(3.5))));
             } else {
-                lazySusanSubsystem.setTurretPositionDegrees(lazySusanSubsystem.getRotation().minus(Rotation2d.fromDegrees(x)));
+                lazySusanSubsystem.setTurretPositionDegrees((lazySusanSubsystem.getRotation().minus(Rotation2d.fromDegrees(x))).plus(Rotation2d.fromDegrees(3.5)));
             }
             // lazySusanSubsystem.setTurretPositionDegrees(robotbase.get().getRotation().minus(Rotation2d.fromDegrees(x)));
             this.prevHubPosition = this.calculateHubPosition(this.getLocalPose());
-        } else {
-
-            if (this.prevHubPosition != null) {
-                double dX = calculateHubDeltaX(this.robotbase.get(), this.prevHubPosition);
-                lazySusanSubsystem.setTurretPositionDegrees(Rotation2d.fromDegrees(dX));
-            }
+        } else if (this.prevHubPosition != null) {
+            double dX = calculateHubDeltaX(this.robotbase.get(), this.prevHubPosition);
+            lazySusanSubsystem.setTurretPositionDegrees(Rotation2d.fromDegrees(dX));
         }
         // SmartDashboard.putNumber("LimeLight Distance", distance);
         SmartDashboard.putNumber("LimeLight TY", LimeLight.getTY()); // TODO: Remove debug data

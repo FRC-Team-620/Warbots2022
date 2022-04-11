@@ -8,19 +8,43 @@
 
 package frc.robot.Util;
 
+import java.util.ResourceBundle.Control;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Constants;
 import frc.robot.Robot;
-import frc.robot.Climber.*;
-import frc.robot.Controls.*;
-import frc.robot.Drive.*;
-import frc.robot.Loader.*;
-import frc.robot.Shooter.*;
+import frc.robot.Climber.ClimberMotorsSubsystem;
+import frc.robot.Climber.ClimberSubsystem;
+import frc.robot.Climber.ExtendArmsAndStow;
+import frc.robot.Climber.RaiseAndGrab;
+import frc.robot.Climber.RaisePistons;
+import frc.robot.Climber.ToggleHooks;
+import frc.robot.Climber.WinchHold;
+import frc.robot.Controls.ControlBoard;
+import frc.robot.Drive.DriveWithJoystick;
+import frc.robot.Drive.Drivetrain;
+import frc.robot.Loader.Intake;
+import frc.robot.Loader.IntakeBall;
+import frc.robot.Loader.OuttakeBall;
+import frc.robot.Loader.SmartIntake;
+import frc.robot.Shooter.ActivateFiringPins;
+import frc.robot.Shooter.FiringPins;
+import frc.robot.Shooter.LazySusanSubsystem;
+import frc.robot.Shooter.LimelightSpinUp;
+import frc.robot.Shooter.LowShotCommand;
+import frc.robot.Shooter.ManualAimingPID;
+import frc.robot.Shooter.ShooterSubsystem;
+import frc.robot.Shooter.TankDriveAiming;
+import frc.robot.Shooter.TurretAimingPID;
+import frc.robot.Shooter.ZeroTurnTable;
+import frc.robot.Util.LEDs.LEDIdleCommand;
+import frc.robot.Util.LEDs.LEDSubsystem;
 
 /** Add your docs here. */
 public class RobotContainer {
@@ -57,6 +81,7 @@ public class RobotContainer {
         turret = new LazySusanSubsystem(drivetrain::getPose);
         climberHooks = new ClimberSubsystem();
         winch = new ClimberMotorsSubsystem();
+        ledSubsystem = new LEDSubsystem();
         SmartDashboard.putData(new ZeroTurnTable(turret));
     }
 
@@ -103,16 +128,25 @@ public class RobotContainer {
             // new AutoAimingAndSpinningUp(getShooterSubsystem(), getLazySusanSubsystem(), 
             //     false, controls.getOperatorController()));
 
-
+        ControlBoard.toggleGyroButton.whenPressed(
+            new InstantCommand(() -> this.getLazySusanSubsystem().setIsGyroLocking(
+                !this.getLazySusanSubsystem().getIsGyroLocking()
+            ))
+        );
 
         ControlBoard.fireTurretTrigger.whenActive(
         new ActivateFiringPins(getFiringPins()));
 
+        ControlBoard.reverseShooterWheelsButton.whileActiveOnce(
+            new InstantCommand(() -> this.shooter.setSpeed(-1)));
+        ControlBoard.reverseShooterWheelsButton.whenReleased(
+            new InstantCommand(this.shooter::stopMotors));
+
         //driver
         ControlBoard.lowShotButton.whileActiveOnce(new LowShotCommand(shooter));
 
-        // ControlBoard.intakeButton.whileActiveOnce(new IntakeBall(intake));
-        ControlBoard.intakeButton.whileActiveOnce(new SmartIntake(intake, firingPins, ledSubsystem));
+        //ControlBoard.intakeButton.whileActiveOnce(new IntakeBall(intake));
+        ControlBoard.intakeButton.whileActiveOnce(new SmartIntake(this.intake, this.firingPins));
 
         ControlBoard.outakeButton.whileActiveOnce(new OuttakeBall(intake));
 
@@ -138,6 +172,9 @@ public class RobotContainer {
         //TODO: setup turret
         // turret.setDefaultCommand(new TurretAimingPID(turret));
         // shooter.setDefaultCommand(new LimelightSpinUp(shooter));
+
+        this.ledSubsystem.setDefaultCommand(
+            new LEDIdleCommand(this.ledSubsystem, this.intake, this.firingPins));
 
         //shooterCommand = new ShooterCommand(shooter, turret, controls.getOperatorController(),
                 //controls.getDriverController());
@@ -185,10 +222,6 @@ public class RobotContainer {
 
     public TrajectorySelector getTrajectorySelector() {
         return trajectorySelector;
-    }
-
-    public Field2d getField2d() {
-        return robotFieldWidget;
     }
 
     // public LoaderCommand getLoaderCommand() {

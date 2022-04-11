@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Auto.AutoCommand;
+import frc.robot.Auto.Routines.ExtakeBall;
 import frc.robot.Auto.Routines.OneBall;
 import frc.robot.Auto.Routines.Taxi;
 import frc.robot.Auto.Routines.TwoBalls;
@@ -41,13 +42,14 @@ public class Robot extends TimedRobot {
     robotContainer.init();// TODO: make these happen on RobotContainer instantiation
     // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(true);
     // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);
-    robotContainer.getLazySusanSubsystem().setEncoderPosition(0);
+    // robotContainer.getLazySusanSubsystem().setEncoderPosition(0);
 
     autoSelector.setDefaultOption("Two-Ball", new TwoBalls(robotContainer.getDriveTrain(), robotContainer.getLazySusanSubsystem(), 
-      robotContainer.getShooterSubsystem(), robotContainer.getFiringPins(), robotContainer.getIntake(), robotContainer.getField2d()));
-    autoSelector.addOption("One-ball", new OneBall(robotContainer.getDriveTrain(), robotContainer.getLazySusanSubsystem(), 
+      robotContainer.getShooterSubsystem(), robotContainer.getFiringPins(), robotContainer.getIntake()));
+    autoSelector.addOption("One-Ball", new OneBall(robotContainer.getDriveTrain(), robotContainer.getLazySusanSubsystem(), 
       robotContainer.getShooterSubsystem(), robotContainer.getFiringPins()));
     autoSelector.addOption("Taxi", new Taxi(robotContainer.getDriveTrain()));
+    autoSelector.addOption("Extake-Ball", new ExtakeBall(robotContainer.getIntake()));
     autoSelector.addOption("AutoCommand", new AutoCommand(robotContainer.getFiringPins(), robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer));
     SmartDashboard.putData(autoSelector);
   }
@@ -55,8 +57,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
   	CommandScheduler.getInstance().run();
-    // System.out.println(robotContainer.getIntake().getIntakeSwitch());
-    //System.out.println(robotContainer.getClimberMotorsSubsystem().getClimberSensor());
   }
 
   @Override
@@ -65,6 +65,7 @@ public class Robot extends TimedRobot {
       autonomousCommand.cancel();
     }
     robotContainer.getIntake().disableInnerIntakeMotor();
+    robotContainer.getShooterSubsystem().setOffsetSpeed(150);
     
     // if (!robotContainer.getLazySusanSubsystem().getIsCal()) {
     //   System.out.println("Zeroed");
@@ -73,7 +74,9 @@ public class Robot extends TimedRobot {
     //   System.out.println("Already zeroed");
     // }
     robotContainer.setTeleopDrive();
-    robotContainer.getLazySusanSubsystem().setIsGyroLocking(true);
+
+    //robotContainer.getLazySusanSubsystem().setIsGyroLocking(true);//TODO: SET TO FALSE LATER
+
     //robotContainer.getShooterSubsystem().
     // robotContainer.getLoaderSubsystem().setIsClimbing(false);
     // TODO: move to initializer in robotContainer
@@ -96,6 +99,7 @@ public class Robot extends TimedRobot {
     LimeLight.setLedMode(LedMode.ON);
     robotContainer.getLazySusanSubsystem().setTurretPositionDegrees(Rotation2d.fromDegrees(179.999));
     //robotContainer.getLazySusanSubsystem().setEncoderPosition(robotContainer.getLazySusanSubsystem().getEncoderPosition() + 4);
+    robotContainer.getShooterSubsystem().setOffsetSpeed(75);
 
 
 
@@ -141,13 +145,13 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousExit() {
     LimeLight.setLedMode(LedMode.OFF);
-    //robotContainer.getLazySusanSubsystem().setTurretPositionDegrees(Rotation2d.fromDegrees(0));
+    robotContainer.getLazySusanSubsystem().setTurretPositionDegrees(Rotation2d.fromDegrees(0));
     //robotContainer.getLazySusanSubsystem().setEncoderPosition(robotContainer.getLazySusanSubsystem().getEncoderPosition() - 4);
   }
 
   @Override
   public void teleopPeriodic() {
-  
+    SmartDashboard.putBoolean("Rear Limit Switch", robotContainer.getClimberMotorsSubsystem().hitRearLimitSwitch());
   }
 
   @Override

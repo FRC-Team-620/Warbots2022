@@ -21,16 +21,15 @@ public class ClimberMotorsSubsystem extends SubsystemBase {
     protected final SimableCANSparkMax leftClimberMotor, rightClimberMotor;
     protected final RelativeEncoder encoder;
     protected final SparkMaxLimitSwitch rearLimit;
-    protected final DigitalInput climberSensor;
-
+    protected final DigitalInput climberSensor; // Proximity sensor
 
     public ClimberMotorsSubsystem() {
 
         leftClimberMotor = new SimableCANSparkMax(Constants.leftClimberMotorID, MotorType.kBrushless);
         rightClimberMotor = new SimableCANSparkMax(Constants.rightClimberMotorID, MotorType.kBrushless);
-        encoder = rightClimberMotor.getEncoder();
+        encoder = leftClimberMotor.getEncoder();
         // rightClimberMotor.limi
-        rearLimit = rightClimberMotor.getReverseLimitSwitch(Type.kNormallyOpen);
+        rearLimit = leftClimberMotor.getReverseLimitSwitch(Type.kNormallyOpen);
         leftClimberMotor.restoreFactoryDefaults();
         rightClimberMotor.restoreFactoryDefaults();
 
@@ -38,21 +37,25 @@ public class ClimberMotorsSubsystem extends SubsystemBase {
         leftClimberMotor.setIdleMode(mode);
         rightClimberMotor.setIdleMode(mode);
 
-        leftClimberMotor.follow(rightClimberMotor, true);
+        rightClimberMotor.follow(leftClimberMotor, true);
         climberSensor = new DigitalInput(Constants.climberSensorID);
-
     }
 
+    @Override
+    public void periodic(){
+        System.out.println(hitRearLimitSwitch());
+        SmartDashboard.putBoolean("Rear Limit Switch", hitRearLimitSwitch());
+    }
     public boolean getClimberSensor() {
         return climberSensor.get();
     }
     
     public void setWinchSpeed(double winchSpeed) {
-        rightClimberMotor.set(winchSpeed);
+        leftClimberMotor.set(winchSpeed);
     }
 
     public CANSparkMax getWinchMotor() {
-        return rightClimberMotor;
+        return leftClimberMotor;
     }
     public RelativeEncoder getWinchEncoder() {
         return encoder;
