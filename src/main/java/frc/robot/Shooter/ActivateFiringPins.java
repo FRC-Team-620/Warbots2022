@@ -1,30 +1,37 @@
 package frc.robot.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Loader.Intake;
 
 public class ActivateFiringPins extends CommandBase {
-    protected FiringPins firingPins;
-    protected int frames = 0;
-    public ActivateFiringPins(FiringPins firingPins) {
+    private FiringPins firingPins;
+    private Intake intake;
+    private int frames;
+
+    public ActivateFiringPins(FiringPins firingPins, Intake intake) {
         //addRequirements(loaderSubsystem);
         this.firingPins = firingPins;
-    }
-
-    @Override
-    public void execute() {
-        frames++;
+        this.intake = intake;
     }
 
     @Override
     public void initialize() {
         this.frames = 0;
         System.out.println("Ball was shot");
-        firingPins.extendFiringPinsSolenoid();
+        this.intake.enableInnerIntakeMotor();
+    }
+
+    @Override
+    public void execute() {
+        // The below value needs to be tuned to be as fast as possible
+        if (++this.frames >= 20) // Update the frame count and check it
+            this.firingPins.extendFiringPinsSolenoid();
     }
 
     @Override
     public void end(boolean interrupted) {
-        firingPins.retractFiringPinsSolenoid();
+        this.intake.disableInnerIntakeMotor();;
+        this.firingPins.retractFiringPinsSolenoid();
     }
 
     @Override

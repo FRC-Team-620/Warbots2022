@@ -16,7 +16,7 @@ public class LimeLight {
     private static NetworkTableEntry tyEntry; // Vertical offset to target
     private static NetworkTableEntry tvEntry; // Whether a target is found
     private static NetworkTableEntry ledModeEntry; // The state of the front-facing lights
-    private static NetworkTableEntry streamEntry; // The display mode of the camera
+    // private static NetworkTableEntry streamEntry; // The display mode of the camera
 
     public enum LedMode {
         OFF(1), ON(3);
@@ -46,8 +46,8 @@ public class LimeLight {
         tyEntry = limelightTable.getEntry("ty");
         tvEntry = limelightTable.getEntry("tv");
         ledModeEntry = limelightTable.getEntry("ledMode");
-        streamEntry = limelightTable.getEntry("stream");
-        //streamEntry.setDouble(2); // Puts the LimeLight in secondary picture-in-picture mode
+        // streamEntry = limelightTable.getEntry("stream");
+        // streamEntry.setDouble(2); // Puts the LimeLight in secondary picture-in-picture mode
         setLedMode(LedMode.OFF); // Ensure that the LimeLight starts in off mode
     }
 

@@ -5,9 +5,9 @@ import frc.robot.Constants;
 import frc.robot.Shooter.FiringPins;
 
 public class SmartIntake extends CommandBase {
-    protected Intake intake;
-    protected FiringPins firingPins;
-    int frameCount = 0;
+    private Intake intake;
+    private FiringPins firingPins;
+    private int frames = 0;
 
     // protected ShooterSubsystem shooterSubsystem;
     public SmartIntake(Intake intake, FiringPins firingPins) {   
@@ -19,25 +19,26 @@ public class SmartIntake extends CommandBase {
 
     @Override
     public void initialize() {
-        frameCount = 0;
+        frames = 0;
         // intake.enableInnerIntakeMotor();
         this.intake.extendIntakeArms();
         this.intake.enableIntakeArmsMotor();
+        this.intake.enableInnerIntakeMotor();
     }
 
     @Override
     public void execute() {
-        frameCount++;
-        if(frameCount > Constants.frameCountUntilFloat) 
+        if (++this.frames > Constants.frameCountUntilFloat) 
             intake.floatIntakeArms();
-
-        this.intake.enableInnerIntakeMotor();
-        if(this.firingPins.hasColor()) { 
-            if(this.intake.getIntakeSwitch()) { // TWO balls
-                this.intake.disableInnerIntakeMotor();
-            } else { // ONE ball
-                this.intake.setInnerIntakeMotor(0.9);
-            }
+        
+        // if(this.firingPins.hasColor()) { 
+        //     if(this.intake.getIntakeSwitch()) { // TWO balls
+        //         this.intake.disableInnerIntakeMotor();
+        //     } else { // ONE ball
+        //         this.intake.setInnerIntakeMotor(0.9);
+        //     }
+        if (this.intake.getIntakeSwitch()) {
+            this.intake.disableInnerIntakeMotor();
         } else {} // NO balls (add code here if needed)
     }
 
@@ -48,4 +49,3 @@ public class SmartIntake extends CommandBase {
         this.intake.disableIntakeArmsMotor();
     }
 }
-

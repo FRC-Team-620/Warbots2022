@@ -135,7 +135,7 @@ public class RobotContainer {
         );
 
         ControlBoard.fireTurretTrigger.whenActive(
-        new ActivateFiringPins(getFiringPins()));
+        new ActivateFiringPins(getFiringPins(), getIntake()));
 
         ControlBoard.reverseShooterWheelsButton.whenPressed(
             new InstantCommand(() -> this.shooter.setIsBackwards(true)));
