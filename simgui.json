@@ -27,6 +27,7 @@
       "/LiveWindow/Drivetrain": "Subsystem",
       "/LiveWindow/FiringPins": "Subsystem",
       "/LiveWindow/Intake": "Subsystem",
+      "/LiveWindow/LEDSubsystem": "Subsystem",
       "/LiveWindow/LazySusanSubsystem": "Subsystem",
       "/LiveWindow/LoaderSubsystem": "Subsystem",
       "/LiveWindow/ShooterSubsystem": "Subsystem",

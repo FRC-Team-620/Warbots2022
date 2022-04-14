@@ -8,7 +8,7 @@ import frc.robot.Util.RobotMath;
 public class ManualAimingPID extends CommandBase {
     private LazySusanSubsystem lazySusanSubsystem;
     private XboxController operatorXbox;
-    private final double maxSpeed = 3; 
+    private final double maxSpeed = 4; 
     public ManualAimingPID(LazySusanSubsystem lazySusanSubsystem, XboxController operatorXbox) {
         this.lazySusanSubsystem = lazySusanSubsystem;
         this.operatorXbox = operatorXbox;
