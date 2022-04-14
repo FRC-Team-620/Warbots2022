@@ -31,7 +31,7 @@ public class LazySusanSubsystem extends SubsystemBase {
     private boolean isGyroLocking;
     private final double countsToDegreesFactor = (1.0 / 25.0) * (20.0 / 156.0) * 360.0;
     private double modSpeed = 1;
-    private final double kP = 0.050000, kI = 0.000700, kD = 0;// KI0.00004 kP = 0.060000, kI = 0.003000,  TODO: Tune PID Loop
+    private final double kP = 0.008000, kI = 0.001700, kD = 0;// KI0.00004 kP = 0.060000, kI = 0.003000,  TODO: Tune PID Loop
     private boolean isCal;
     //private boolean isDisabled;
     public DigitalInput calSwitch;
@@ -71,10 +71,9 @@ public class LazySusanSubsystem extends SubsystemBase {
         double degrees = isGyroLocking ? desiredRotation.minus(robotBasePose.get().getRotation()).getDegrees() : desiredRotation.getDegrees();
 
         lazySusanPID.setSetpoint(MathUtil.clamp(degrees, lowLimitDegrees, highLimitDegrees));
-        // System.out.println("highLimit " + degrees + " " + encoder.getPosition() + " " + highLimitCounts);
         double pidOutput = MathUtil.clamp(lazySusanPID.calculate(encoder.getPosition()), -1, 1);
 
-        if (encoder.getPosition() > highLimitDegrees + 5) { // + 5 / countsToDegreesFactor
+        if (encoder.getPosition() > highLimitDegrees + 5) {
             pidOutput = MathUtil.clamp(pidOutput, -1, 0);
         }
 
