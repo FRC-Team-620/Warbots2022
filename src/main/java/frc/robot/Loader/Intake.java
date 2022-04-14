@@ -54,31 +54,31 @@ public class Intake extends SubsystemBase {
 
     //implementing 836's idea
     public void extendIntakeArms() {
-        intakeArmsVirtualSolenoidA.set(true);
-        intakeArmsVirtualSolenoidB.set(true);
+        //intakeArmsVirtualSolenoidA.set(true);
+        //intakeArmsVirtualSolenoidB.set(true);
     }
     
     //implementing 836's idea
     public void retractIntakeArms() {
-        intakeArmsVirtualSolenoidA.set(false);
-        intakeArmsVirtualSolenoidB.set(false);    
+        //intakeArmsVirtualSolenoidA.set(false);
+        //intakeArmsVirtualSolenoidB.set(false);    
     }
 
     //implementing 836's idea
     public void floatIntakeArms() {
-        intakeArmsVirtualSolenoidA.set(false);
-        intakeArmsVirtualSolenoidB.set(true);    
+        //intakeArmsVirtualSolenoidA.set(false);
+        //intakeArmsVirtualSolenoidB.set(true);    
     }
 
 
     public void enableIntakeArmsMotor() {
-        intakeArmsMotor.set(-0.6);
+        //intakeArmsMotor.set(-0.6);
     }
     public void disableIntakeArmsMotor() {
-        intakeArmsMotor.set(0);
+        //intakeArmsMotor.set(0);
     }
     public void reverseIntakeArmsMotor() {
-        intakeArmsMotor.set(0.6);
+        //intakeArmsMotor.set(0.6);
     }
     public double extendedIntakeArmsSpeed() {
         return intakeArmsMotor.get();

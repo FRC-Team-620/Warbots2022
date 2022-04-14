@@ -24,7 +24,7 @@ public class ActivateFiringPins extends CommandBase {
     @Override
     public void execute() {
         // The below value needs to be tuned to be as fast as possible
-        if (++this.frames >= 20) // Update the frame count and check it
+        if (++this.frames >= 15)
             this.firingPins.extendFiringPinsSolenoid();
     }
 
