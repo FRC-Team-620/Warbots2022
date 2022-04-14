@@ -9,7 +9,7 @@ public class ActivateFiringPins extends CommandBase {
     private int frames;
 
     public ActivateFiringPins(FiringPins firingPins, Intake intake) {
-        //addRequirements(loaderSubsystem);
+        addRequirements(intake);
         this.firingPins = firingPins;
         this.intake = intake;
     }

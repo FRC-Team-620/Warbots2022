@@ -7,9 +7,11 @@ package frc.robot.Auto;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Drive.Drivetrain;
+import frc.robot.Loader.Intake;
 
 public class DriveForwardDistance extends CommandBase {
   Drivetrain drivetrain;
+  Intake intake;
   private double distance;
   private double autoSpeed = 0.5;
 
@@ -18,10 +20,11 @@ public class DriveForwardDistance extends CommandBase {
   // protected final PIDController leftPID;
   // protected final PIDController rightPID;
   /** Creates a new DriveForwardDIstance. */
-  public DriveForwardDistance(Drivetrain drivetrain, double distance) {
+  public DriveForwardDistance(Drivetrain drivetrain, double distance, Intake intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drivetrain = drivetrain;
     this.distance = distance;
+    this.intake = intake;
     // leftShooterPID = new PIDController(kP, kI, 0);
     // rightShooterPID = new PIDController(kP, kI, 0);
     addRequirements(drivetrain);
@@ -66,7 +69,7 @@ public class DriveForwardDistance extends CommandBase {
   // // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return withinBounds();
+    return withinBounds() || this.intake.getIntakeSwitch();
   }
 
   @Override

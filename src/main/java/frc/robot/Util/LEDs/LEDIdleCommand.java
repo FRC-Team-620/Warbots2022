@@ -50,12 +50,12 @@ public class LEDIdleCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if(this.firingPins.hasColor()) { 
-            if(this.intake.getIntakeSwitch()) { // TWO balls
-                this.twoBallsAnim.step();
-            } else { // ONE ball
-                this.oneBallAnim.step();
-            }
+        // if(this.firingPins.hasColor()) { 
+        if(this.intake.getIntakeSwitch()) { // TWO balls
+            this.oneBallAnim.step();
+            // } else { // ONE ball
+            //     this.oneBallAnim.step();
+            // }
         } else { // NO balls
             this.noBallsAnim.step();
         }

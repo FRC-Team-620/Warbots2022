@@ -48,7 +48,7 @@ public class Robot extends TimedRobot {
       robotContainer.getShooterSubsystem(), robotContainer.getFiringPins(), robotContainer.getIntake()));
     autoSelector.addOption("One-Ball", new OneBall(robotContainer.getDriveTrain(), robotContainer.getLazySusanSubsystem(), 
       robotContainer.getShooterSubsystem(), robotContainer.getFiringPins(), robotContainer.getIntake()));
-    autoSelector.addOption("Taxi", new Taxi(robotContainer.getDriveTrain()));
+    autoSelector.addOption("Taxi", new Taxi(robotContainer.getDriveTrain(), robotContainer.getIntake()));
     autoSelector.addOption("Extake-Ball", new ExtakeBall(robotContainer.getIntake()));
     autoSelector.addOption("AutoCommand", new AutoCommand(robotContainer.getFiringPins(), 
       robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer));
