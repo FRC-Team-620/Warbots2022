@@ -147,6 +147,17 @@ public class ShooterSubsystem extends SubsystemBase {
         return (rightEncoder.getVelocity() + leftEncoder.getVelocity())/2;
     }
 
+    public double getLeftRPM() {
+        return leftEncoder.getVelocity();
+    }
+    public double getRightRPM() {
+        return rightEncoder.getVelocity();
+    }
+
+    public double getSetpoint() {
+        return leftShooterPID.getSetpoint();
+    }
+
     public void stopMotors() {
 		setTargetRPM(0);
         // shooterMotors.stopMotor();
