@@ -35,8 +35,9 @@ public class LazySusanSubsystem extends SubsystemBase {
     private boolean isCal;
     //private boolean isDisabled;
     public DigitalInput calSwitch;
-    public final double lowLimitDegrees = -175.0;
-    public final double highLimitDegrees = 185.0;
+    private final double lowLimitDegrees = -175.0;
+    private final double highLimitDegrees = 185.0;
+    private final double errorMargin = 2;
     // Left 45.690002, Right -45.356651, AbsoluteMaxRange 90
     // private double turntableThresh = 35;
 
@@ -81,7 +82,12 @@ public class LazySusanSubsystem extends SubsystemBase {
             pidOutput = MathUtil.clamp(pidOutput, 0, 1);
         }
 
-        motor.set(pidOutput * modSpeed);
+        // motor.set(pidOutput * modSpeed);
+
+        motor.set(
+            Math.abs(degrees - this.turretRotation.getDegrees()) < this.errorMargin ? 0 : pidOutput * modSpeed
+        );
+        System.out.println("FNIEGOIN: " + Math.abs(degrees - this.turretRotation.getDegrees()));
 
         SmartDashboard.putNumber("Turret/Raw Encoder", encoder.getPosition());
         SmartDashboard.putNumber("Turret/Motor Percentage", motor.get());
