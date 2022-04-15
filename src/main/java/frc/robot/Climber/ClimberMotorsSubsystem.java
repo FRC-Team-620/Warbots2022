@@ -43,7 +43,7 @@ public class ClimberMotorsSubsystem extends SubsystemBase {
 
     @Override
     public void periodic(){
-        System.out.println(hitRearLimitSwitch());
+        // System.out.println(hitRearLimitSwitch());
         SmartDashboard.putBoolean("Rear Limit Switch", hitRearLimitSwitch());
     }
     public boolean getClimberSensor() {

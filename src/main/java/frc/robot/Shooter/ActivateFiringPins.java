@@ -9,7 +9,7 @@ public class ActivateFiringPins extends CommandBase {
     private int frames;
 
     public ActivateFiringPins(FiringPins firingPins, Intake intake) {
-        //addRequirements(loaderSubsystem);
+        addRequirements(intake);
         this.firingPins = firingPins;
         this.intake = intake;
     }
@@ -23,19 +23,19 @@ public class ActivateFiringPins extends CommandBase {
 
     @Override
     public void execute() {
-        // The below value needs to be tuned to be as fast as possible
-        if (++this.frames >= 15)
+        if (++this.frames == 15) {
+            this.intake.disableInnerIntakeMotor();
             this.firingPins.extendFiringPinsSolenoid();
+        }
     }
 
     @Override
     public void end(boolean interrupted) {
-        this.intake.disableInnerIntakeMotor();;
         this.firingPins.retractFiringPinsSolenoid();
     }
 
     @Override
     public boolean isFinished() {
-        return frames >= 80;
+        return frames >= 60;
     }
 }

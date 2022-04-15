@@ -18,7 +18,7 @@ public class OneBall extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new DriveForwardDistance(drivetrain, oneBallDistanceMeters),
+      new DriveForwardDistance(drivetrain, oneBallDistanceMeters, intake),
       // new SetpointSpinUp(shooterSubsystem, LimeLight.getTY()),
       new WaitCommand(1),
       new LimelightSpinUp(shooterSubsystem),

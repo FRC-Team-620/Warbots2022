@@ -10,7 +10,13 @@ package frc.robot.Util;
 
 import java.util.ResourceBundle.Control;
 
+import javax.sound.midi.Sequence;
+import javax.xml.crypto.Data;
+
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -72,6 +78,9 @@ public class RobotContainer {
         initSubsystems();
         initControls();
         LimeLight.init();
+        DataLogManager.start();
+        DriverStation.startDataLog(DataLogManager.getLog());
+        // DriverStation.datal
     }
 
     private void initSubsystems() {
@@ -136,7 +145,10 @@ public class RobotContainer {
         );
 
         ControlBoard.fireTurretTrigger.whenActive(
-        new ActivateFiringPins(getFiringPins(), getIntake()));
+            new ParallelCommandGroup(  
+            new ActivateFiringPins(getFiringPins(), getIntake()),
+            new InstantCommand(this::logShot)
+        ));
 
         ControlBoard.reverseShooterWheelsButton.whenPressed(
             new InstantCommand(() -> this.shooter.setIsBackwards(true)));
@@ -169,8 +181,8 @@ public class RobotContainer {
         //         controls.getOperatorController());
         // drivetrain.setDefaultCommand(driveWithJoystick);
 
-        //turret.setDefaultCommand(new ManualAimingPID(turret, ControlBoard.getOperatorController()));
-        turret.setDefaultCommand(new MoveTurretToPos(turret));
+        turret.setDefaultCommand(new ManualAimingPID(turret, ControlBoard.getOperatorController()));
+        //turret.setDefaultCommand(new MoveTurretToPos(turret));
         //TODO: setup turret
         // turret.setDefaultCommand(new TurretAimingPID(turret));
         // shooter.setDefaultCommand(new LimelightSpinUp(shooter));
@@ -205,6 +217,9 @@ public class RobotContainer {
      *
      * @return the command to run in autonomous
      */
+    public void logShot() {
+        DataLogManager.log("LeftRPM: " + this.getShooterSubsystem().getLeftRPM() + " RightRPM: " + this.getShooterSubsystem().getRightRPM() + " RPMSetpoint: " + this.getShooterSubsystem().getSetpoint() + " AtSetpoint: " + this.getShooterSubsystem().atTargetRPM() + " X LimeLight: " + LimeLight.getTX() + " Y LimeLight: " + LimeLight.getTY() + " EventName: " + DriverStation.getEventName() + " MatchNumber: " + DriverStation.getMatchNumber() + " MatchTime: " + DriverStation.getMatchTime());
+    }
 
     public ClimberSubsystem getClimberSubsystem() {
         return climberHooks;

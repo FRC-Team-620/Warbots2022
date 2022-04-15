@@ -22,7 +22,7 @@ public class AutoLoad extends CommandBase{
     public void initialize() {
         this.frames = 0;
         //System.out.println("Loader was turned on");
-        //intake.enableInnerIntakeMotor();
+        intake.enableInnerIntakeMotor();
         intake.enableIntakeArmsMotor();
         intake.extendIntakeArms();
     }
@@ -36,6 +36,6 @@ public class AutoLoad extends CommandBase{
 
     @Override
     public boolean isFinished() {
-        return frames > 750;
+        return this.intake.getIntakeSwitch() || this.frames > 60;
     }
 }
