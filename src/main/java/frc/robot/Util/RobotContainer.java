@@ -78,6 +78,9 @@ public class RobotContainer {
         initSubsystems();
         initControls();
         LimeLight.init();
+        DataLogManager.start();
+        DriverStation.startDataLog(DataLogManager.getLog());
+        // DriverStation.datal
     }
 
     private void initSubsystems() {
@@ -215,12 +218,7 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public void logShot() {
-        //DataLog shotLog = new DataLog(Filesystem.getOperatingDirectory().getAbsolutePath())
-        //shotLog.appendString(0, "LeftRPM: " + this.getShooterSubsystem().getLeftRPM() + " RightRPM: " + this.getShooterSubsystem().getRightRPM() + " RPMSetpoint: " + this.getShooterSubsystem().getSetpoint() + " AtSetpoint: " + this.getShooterSubsystem().atTargetRPM() + " X LimeLight: " + LimeLight.getTX() + " Y LimeLight: " + LimeLight.getTY() + " EventName: " + DriverStation.getEventName() + " MatchNumber: " + DriverStation.getMatchNumber() + " MatchTime: " + DriverStation.getMatchTime(), 0);
-        //DriverStation.;
         DataLogManager.log("LeftRPM: " + this.getShooterSubsystem().getLeftRPM() + " RightRPM: " + this.getShooterSubsystem().getRightRPM() + " RPMSetpoint: " + this.getShooterSubsystem().getSetpoint() + " AtSetpoint: " + this.getShooterSubsystem().atTargetRPM() + " X LimeLight: " + LimeLight.getTX() + " Y LimeLight: " + LimeLight.getTY() + " EventName: " + DriverStation.getEventName() + " MatchNumber: " + DriverStation.getMatchNumber() + " MatchTime: " + DriverStation.getMatchTime());
-        //DataLogManager.getLog().appendString(0, "LeftRPM: " + this.getShooterSubsystem().getLeftRPM() + " RightRPM: " + this.getShooterSubsystem().getRightRPM() + " RPMSetpoint: " + this.getShooterSubsystem().getSetpoint() + " AtSetpoint: " + this.getShooterSubsystem().atTargetRPM() + " X LimeLight: " + LimeLight.getTX() + " Y LimeLight: " + LimeLight.getTY() + " EventName: " + DriverStation.getEventName() + " MatchNumber: " + DriverStation.getMatchNumber() + " MatchTime: " + DriverStation.getMatchTime(), 0);
-        //shotLog.appendString(0, "LeftRPM: " + this.getShooterSubsystem().getLeftRPM() + " RightRPM: " + this.getShooterSubsystem().getRightRPM() + " RPMSetpoint: " + this.getShooterSubsystem().getSetpoint() + " AtSetpoint: " + this.getShooterSubsystem().atTargetRPM() + " X LimeLight: " + LimeLight.getTX() + " Y LimeLight: " + LimeLight.getTY() + " EventName: " + DriverStation.getEventName() + " MatchNumber: " + DriverStation.getMatchNumber() + " MatchTime: " + DriverStation.getMatchTime(), 0);
     }
 
     public ClimberSubsystem getClimberSubsystem() {

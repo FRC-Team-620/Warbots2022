@@ -171,8 +171,8 @@ public final class Constants {
     public static final double ksimDrivekALinear = 0.2;
     public static final double ksimDrivekVAngular = 1.5;
     public static final double kSimDrivekAAngular = 0.3;
-    public static final double kSimShooterInertia = 0.5*Units.lbsToKilograms(1.5)*Math.pow(Units.inchesToMeters(4),2); //1/2*M*R^2 
-    public static final double kSimTurntableInertia = 0.5*Units.lbsToKilograms(5)*Math.pow(Units.inchesToMeters(6),2); //TODO: switch to ring formula vs disk
+    public static final double kSimShooterInertia = 0.5*Units.lbsToKilograms(1.5)*Math.pow(Units.inchesToMeters(4/2),2); //1/2*M*R^2 
+    public static final double kSimTurntableInertia = 0.5*Units.lbsToKilograms(0.1)*Math.pow(Units.inchesToMeters(3),2); //TODO: switch to ring formula vs disk
     public static final double kSimTurntableGearRatio = 500.0;//5*(156.0/16.0);
     public static final double kSimUpdateTime = 0.02;
     public static final double kSimRobotWeight = Units.lbsToKilograms(120);

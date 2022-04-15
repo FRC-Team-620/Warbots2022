@@ -87,7 +87,7 @@ public class LazySusanSubsystem extends SubsystemBase {
         motor.set(
             Math.abs(degrees - this.turretRotation.getDegrees()) < this.errorMargin ? 0 : pidOutput * modSpeed
         );
-        System.out.println("FNIEGOIN: " + Math.abs(degrees - this.turretRotation.getDegrees()));
+        // System.out.println("FNIEGOIN: " + Math.abs(degrees - this.turretRotation.getDegrees()));
 
         SmartDashboard.putNumber("Turret/Raw Encoder", encoder.getPosition());
         SmartDashboard.putNumber("Turret/Motor Percentage", motor.get());
@@ -191,7 +191,7 @@ public class LazySusanSubsystem extends SubsystemBase {
 
     private void initSim() {
         simTurrentRotation = new Rotation2d();
-        simlazySusan = new DCMotorSim(DCMotor.getNeo550(1), Constants.kSimTurntableGearRatio,
+        simlazySusan = new DCMotorSim(DCMotor.getNeo550(1),(1.0) /((1.0 / 25.0) * (20.0 / 156.0)),
                 Constants.kSimTurntableInertia); // TODO: add gear ratio
         simEncoder = RevEncoderSimWrapper.create(this.motor);
     }
@@ -206,7 +206,7 @@ public class LazySusanSubsystem extends SubsystemBase {
         simlazySusan.setInputVoltage(motor.get() * RobotController.getInputVoltage());
         simlazySusan.update(Constants.kSimUpdateTime);
         simEncoder.setVelocity(simlazySusan.getAngularVelocityRPM());
-        simEncoder.setDistance(simlazySusan.getAngularPositionRotations() * 180);
+        simEncoder.setDistance(simlazySusan.getAngularPositionRotations()*360);
         // TODO: Remove magic number 5 that represents the first gear reduction
         SmartDashboard.putNumber("Turret/Velocity", encoder.getVelocity());
         SmartDashboard.putNumber("Turret/ticks", encoder.getPosition());
