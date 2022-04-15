@@ -49,7 +49,7 @@ public class LazySusanSubsystem extends SubsystemBase {
         this.motor.restoreFactoryDefaults();
         this.encoder = this.motor.getEncoder();
         encoder.setPositionConversionFactor(countsToDegreesFactor);
-        //this.encoder.setPosition(Constants.stowedDegrees);
+        this.encoder.setPosition(Constants.stowedDegrees);
         IdleMode mode = IdleMode.kBrake; // brakes
         this.motor.setIdleMode(mode);
         this.motor.setSmartCurrentLimit(18);
@@ -58,9 +58,10 @@ public class LazySusanSubsystem extends SubsystemBase {
         // lazySusan.setInverted(true);
         lazySusanPID = new PIDController(kP, kI, kD);
         lazySusanPID.setTolerance(1);
-        // lazySusanPID.setIntegratorRange(-10, 10);
+        lazySusanPID.setIntegratorRange(-10, 10);
         //TODO: FIX THIS BEFORE WHENEVER
-        //turretRotation = desiredRotation = Rotation2d.fromDegrees(Constants.stowedDegrees);
+        //turretRotation = desiredRotation = Rotation2d.fromDegrees(0);
+        turretRotation = desiredRotation = Rotation2d.fromDegrees(Constants.stowedDegrees);
         isCal = false;
         //isDisabled =
         SmartDashboard.putData("Turret/PIDController[12]", lazySusanPID);
