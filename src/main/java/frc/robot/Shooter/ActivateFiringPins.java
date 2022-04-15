@@ -23,9 +23,10 @@ public class ActivateFiringPins extends CommandBase {
 
     @Override
     public void execute() {
-        if (++this.frames == 15)
+        if (++this.frames == 15) {
             this.intake.disableInnerIntakeMotor();
             this.firingPins.extendFiringPinsSolenoid();
+        }
     }
 
     @Override

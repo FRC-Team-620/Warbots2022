@@ -10,19 +10,19 @@ import frc.robot.Util.RobotContainer;
 public class AutoCommand extends SequentialCommandGroup {
     FiringPins firingPins;
     ShooterSubsystem shooterSubsystem;
-    LazySusanSubsystem lazySusanSubsystem;
+    //LazySusanSubsystem lazySusanSubsystem;
     RobotContainer robotContainer;
     
-    public AutoCommand(FiringPins fP, ShooterSubsystem sS, LazySusanSubsystem lSS, RobotContainer rC) {
+    public AutoCommand(FiringPins fP, ShooterSubsystem sS, RobotContainer rC) {
         this.firingPins = fP;
         this.shooterSubsystem = sS;
-        this.lazySusanSubsystem = lSS;
+        //this.lazySusanSubsystem = lSS;
         this.robotContainer = rC;
         // addRequirements(loaderSubsystem, shooterSubsystem, lazySusanSubsystem);
             addCommands(
             //new Taxi(robotContainer.getDriveTrain())
             //new OneBall(robotContainer.getDriveTrain(), lazySusanSubsystem, shooterSubsystem, firingPins)
-            new TwoBalls(robotContainer.getDriveTrain(), lazySusanSubsystem, shooterSubsystem, firingPins, robotContainer.getIntake())
+            new TwoBalls(robotContainer.getDriveTrain(), shooterSubsystem, firingPins, robotContainer.getIntake())
             //new ConditionalCommand(new WaitCommand(0), new ZeroTurnTable(lazySusanSubsystem), lazySusanSubsystem::getIsCal),
             
             );
