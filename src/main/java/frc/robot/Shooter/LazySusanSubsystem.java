@@ -159,6 +159,7 @@ public class LazySusanSubsystem extends SubsystemBase {
     public void stop() {
         lazySusanPID.reset();
         lazySusanPID.setSetpoint(encoder.getPosition());
+        this.setTurretPositionDegrees(Rotation2d.fromDegrees(this.encoder.getPosition()));
     }
 
     public void setHomePosition() {

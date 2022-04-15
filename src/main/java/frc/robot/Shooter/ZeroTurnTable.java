@@ -36,8 +36,10 @@ public class ZeroTurnTable extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         // lazySusanSubsystem.setTurretPositionDegrees(lazySusanSubsystem.getRotation());
-        lazySusanSubsystem.stop();
-        lazySusanSubsystem.setModSpeed(1);
+        
+        // lazySusanSubsystem.stop();
+        // lazySusanSubsystem.setModSpeed(1);
+
         // if (!interrupted) {
         //     lazySusanSubsystem.setHomePosition();
         // }
