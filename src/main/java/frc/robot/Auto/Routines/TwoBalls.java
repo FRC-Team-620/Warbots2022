@@ -32,10 +32,7 @@ public class TwoBalls extends SequentialCommandGroup {
           // ),
           new DriveForwardDistance(drivetrain, firstShotDistance, intake),
           // new DriveForwardDistance(drivetrain, twoBallsDistanceMeters),
-          new ParallelCommandGroup(
-            new WaitCommand(2),
-            new TankDriveAiming(drivetrain)
-          ),
+          new TankDriveAiming(drivetrain, 30),
           new ActivateFiringPins(firingPins, intake),
           new ParallelCommandGroup(
             new AutoLoad(intake),
@@ -46,10 +43,7 @@ public class TwoBalls extends SequentialCommandGroup {
           //   new InstantCommand(intake::enableInnerIntakeMotor)
           // ),
           new DriveBackwardDistance(drivetrain, twoBallsDistanceMeters),
-          new ParallelCommandGroup(
-            new WaitCommand(2),
-            new TankDriveAiming(drivetrain)
-          ),
+          new TankDriveAiming(drivetrain),
           new ActivateFiringPins(firingPins, intake)
         )
       ) 
