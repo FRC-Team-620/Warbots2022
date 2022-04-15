@@ -59,8 +59,6 @@ public class LazySusanSubsystem extends SubsystemBase {
         lazySusanPID = new PIDController(kP, kI, kD);
         lazySusanPID.setTolerance(1);
         lazySusanPID.setIntegratorRange(-10, 10);
-        //TODO: FIX THIS BEFORE WHENEVER
-        //turretRotation = desiredRotation = Rotation2d.fromDegrees(0);
         turretRotation = desiredRotation = Rotation2d.fromDegrees(Constants.stowedDegrees);
         isCal = false;
         //isDisabled =
@@ -165,7 +163,7 @@ public class LazySusanSubsystem extends SubsystemBase {
 
     public void setHomePosition() {
         setIsGyroLocking(false);
-        double limitPos = 10;//-45
+        double limitPos = 205.5;//-45
         setEncoderPosition(limitPos);
         setTurretPositionDegrees(Rotation2d.fromDegrees(limitPos));
         turretRotation = Rotation2d.fromDegrees(limitPos);
