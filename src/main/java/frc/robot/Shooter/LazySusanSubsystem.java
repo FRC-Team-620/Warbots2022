@@ -2,6 +2,8 @@ package frc.robot.Shooter;
 
 import java.util.function.Supplier;
 
+import javax.swing.UIDefaults.LazyInputMap;
+
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
@@ -159,23 +161,25 @@ public class LazySusanSubsystem extends SubsystemBase {
 
     public void setEncoderPosition(double p) {
         encoder.setPosition(p);
-        stop();
     }
 
     public void stop() {
         lazySusanPID.reset();
         lazySusanPID.setSetpoint(encoder.getPosition());
-        // this.setTurretPositionDegrees(Rotation2d.fromDegrees(this.encoder.getPosition()));
+        this.setTurretPositionDegrees(this.encoder.getPosition());
     }
 
     public void setHomePosition() {
         setIsGyroLocking(false);
-        double limitPos = 205.5;//-45
+        double limitPos = 205.5;//-45 205.5
         setEncoderPosition(limitPos);
-        desiredRotation = limitPos;
+        lazySusanPID.reset();
+        lazySusanPID.setSetpoint(limitPos);
+        System.out.println("lazySusanPID: " + lazySusanPID.getSetpoint());
+        this.setTurretPositionDegrees(limitPos);
         // setTurretPositionDegrees(Rotation2d.fromDegrees(limitPos));
         // turretRotation = Rotation2d.fromDegrees(limitPos);
-        stop();
+        //stop();
         setIsCal(true);
     }
 

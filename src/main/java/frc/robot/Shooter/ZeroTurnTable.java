@@ -15,7 +15,7 @@ public class ZeroTurnTable extends CommandBase {
 
     @Override
     public void initialize() {
-        targetRotation = lazySusanSubsystem.getRotation().minus(Rotation2d.fromDegrees(20));
+        targetRotation = lazySusanSubsystem.getRotation().plus(Rotation2d.fromDegrees(20));
         lazySusanSubsystem.setModSpeed(0.8);
         lazySusanSubsystem.setTurretPosition(targetRotation);
         lazySusanSubsystem.setIsCal(false);
@@ -25,7 +25,9 @@ public class ZeroTurnTable extends CommandBase {
     public boolean isFinished() {
         // System.out.println( lazySusanSubsystem.atTurretPosition()); //lazySusanSubsystem.calSwitch.get() ||
         // System.out.println(lazySusanSubsystem.islimitSwitchPressed());
-        if(lazySusanSubsystem.atTurretPosition()) {
+        if(lazySusanSubsystem.atTurretPosition() || lazySusanSubsystem.islimitSwitchPressed()) {
+            if(lazySusanSubsystem.islimitSwitchPressed())
+                lazySusanSubsystem.setHomePosition();
             // if(lazySusanSubsystem.getRotation().getDegrees() < 100) {
             //     //lazySusanSubsystem.setIsCal(true);
             //     lazySusanSubsystem.setHomePosition();
@@ -41,7 +43,7 @@ public class ZeroTurnTable extends CommandBase {
         // lazySusanSubsystem.setTurretPositionDegrees(lazySusanSubsystem.getRotation());
         
         // lazySusanSubsystem.stop();
-        // lazySusanSubsystem.setModSpeed(1);
+        lazySusanSubsystem.setModSpeed(1);
 
         // System.out.println("\n\n\n\t\tOHGOEHGOHWROGHROWGOOBRNBOBN\n\n\n");
 
