@@ -25,12 +25,12 @@ public class ZeroTurnTable extends CommandBase {
     public boolean isFinished() {
         // System.out.println( lazySusanSubsystem.atTurretPosition()); //lazySusanSubsystem.calSwitch.get() ||
         // System.out.println(lazySusanSubsystem.islimitSwitchPressed());
-        if(lazySusanSubsystem.atTurretPosition() || lazySusanSubsystem.islimitSwitchPressed()) {
-            if(lazySusanSubsystem.islimitSwitchPressed()) {
-                //lazySusanSubsystem.setIsCal(true);
-                lazySusanSubsystem.setHomePosition();
-            }
-            // return true;
+        if(lazySusanSubsystem.atTurretPosition()) {
+            // if(lazySusanSubsystem.getRotation().getDegrees() < 100) {
+            //     //lazySusanSubsystem.setIsCal(true);
+            //     lazySusanSubsystem.setHomePosition();
+            // }
+            return true;
         }
         return false;
         // return true;
