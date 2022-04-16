@@ -35,8 +35,8 @@ public class LazySusanSubsystem extends SubsystemBase {
     private boolean isCal;
     //private boolean isDisabled;
     public DigitalInput calSwitch;
-    private final double lowLimitDegrees = -175.0;
-    private final double highLimitDegrees = 185.0;
+    private final double lowLimitDegrees = -220;
+    private final double highLimitDegrees = 220;
     private final double errorMargin = 2;
     // Left 45.690002, Right -45.356651, AbsoluteMaxRange 90
     // private double turntableThresh = 35;
@@ -190,6 +190,9 @@ public class LazySusanSubsystem extends SubsystemBase {
     private RevEncoderSimWrapper simEncoder;
     public Rotation2d simTurrentRotation;
     private boolean simInit = false;
+    private double simlastpos = 0;
+    private double simoffset = 0;
+
 
     private void initSim() {
         simTurrentRotation = new Rotation2d();
@@ -208,10 +211,17 @@ public class LazySusanSubsystem extends SubsystemBase {
         simlazySusan.setInputVoltage(motor.get() * RobotController.getInputVoltage());
         simlazySusan.update(Constants.kSimUpdateTime);
         simEncoder.setVelocity(simlazySusan.getAngularVelocityRPM());
-        simEncoder.setDistance(simlazySusan.getAngularPositionRotations()*360);
+        if(simEncoder.getPosition() != simlastpos){
+            System.out.println(simEncoder.getPosition() + " "  + simlastpos);
+            simoffset = (simlazySusan.getAngularPositionRotations()*360)-simEncoder.getPosition();
+            System.out.println("Encoder Position changed" + simoffset);
+        }
+       
+        simEncoder.setDistance((simlazySusan.getAngularPositionRotations()*360)-simoffset);
         // TODO: Remove magic number 5 that represents the first gear reduction
+        simlastpos = simEncoder.getPosition();
         SmartDashboard.putNumber("Turret/Velocity", encoder.getVelocity());
-        SmartDashboard.putNumber("Turret/ticks", encoder.getPosition());
+        SmartDashboard.putNumber("Turret/ticks", simlazySusan.getAngularPositionRotations()*360);
         SmartDashboard.putNumber("Turret/Setpoint", this.lazySusanPID.getSetpoint());
     }
 }
