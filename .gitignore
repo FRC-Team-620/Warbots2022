@@ -165,3 +165,4 @@ simgui.json
 
 # Merge bak files
 *.bak
+*.wpilog
