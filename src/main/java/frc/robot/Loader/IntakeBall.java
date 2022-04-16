@@ -23,7 +23,8 @@ public class IntakeBall extends CommandBase {
     public void execute() {
         frameCount++;
 
-        if (frameCount > Constants.frameCountUntilFloat) intake.floatIntakeArms();
+        if (frameCount > Constants.frameCountUntilFloat) 
+            intake.floatIntakeArms();
 
         // intake.enableInnerIntakeMotor();
         // if(**has ball** (we still need to implement the color sensor)) {
