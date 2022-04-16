@@ -22,6 +22,7 @@ import frc.robot.Auto.Routines.OneBall;
 import frc.robot.Auto.Routines.Taxi;
 import frc.robot.Auto.Routines.TwoBalls;
 import frc.robot.Climber.ToggleHooks;
+import frc.robot.Shooter.ZeroTurnTable;
 // import frc.robot.Shooter.AutoAimingAndSpinningUp;
 //import frc.robot.Util.LEDManager;
 import frc.robot.Util.LimeLight;
@@ -51,7 +52,7 @@ public class Robot extends TimedRobot {
     robotContainer.getFiringPins(), robotContainer.getIntake()));
     autoSelector.addOption("One-Ball", new OneBall(robotContainer.getDriveTrain(), robotContainer.getLazySusanSubsystem(), 
       robotContainer.getShooterSubsystem(), robotContainer.getFiringPins(), robotContainer.getIntake()));
-    autoSelector.addOption("Taxi", new Taxi(robotContainer.getDriveTrain(), robotContainer.getIntake()));
+    autoSelector.addOption("Taxi", new Taxi(robotContainer.getDriveTrain(), robotContainer.getIntake(), robotContainer.getLazySusanSubsystem()));
     autoSelector.addOption("Extake-Ball", new ExtakeBall(robotContainer.getIntake()));
     autoSelector.addOption("AutoCommand", new AutoCommand(robotContainer.getFiringPins(), 
       robotContainer.getShooterSubsystem(), robotContainer));
@@ -68,6 +69,10 @@ public class Robot extends TimedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
+    if (!robotContainer.getLazySusanSubsystem().getIsCal()) {
+      new ZeroTurnTable(robotContainer.getLazySusanSubsystem()).schedule();
+    }
+
     robotContainer.getIntake().disableInnerIntakeMotor();
     robotContainer.getShooterSubsystem().setOffsetSpeed(0);
     robotContainer.getLazySusanSubsystem().setMotorMode(IdleMode.kBrake);
@@ -151,7 +156,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousExit() {
     LimeLight.setLedMode(LedMode.OFF);
-    robotContainer.getLazySusanSubsystem().setTurretPosition(Rotation2d.fromDegrees(0));
+    //robotContainer.getLazySusanSubsystem().setTurretPosition(Rotation2d.fromDegrees(0));
     //robotContainer.getLazySusanSubsystem().setEncoderPosition(robotContainer.getLazySusanSubsystem().getEncoderPosition() - 4);
   }
 

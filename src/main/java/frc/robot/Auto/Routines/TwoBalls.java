@@ -16,6 +16,7 @@ import frc.robot.Shooter.LimelightSpinUp;
 import frc.robot.Shooter.ShooterSubsystem;
 import frc.robot.Shooter.TankDriveAiming;
 import frc.robot.Shooter.TurretAimingPID;
+import frc.robot.Shooter.ZeroTurnTable;
 import frc.robot.Util.RobotContainer;
 
 public class TwoBalls extends SequentialCommandGroup {
@@ -24,7 +25,41 @@ public class TwoBalls extends SequentialCommandGroup {
 
   public TwoBalls(RobotContainer robotContainer, Drivetrain drivetrain, LazySusanSubsystem lazySusanSubsystem, 
   ShooterSubsystem shooterSubsystem, FiringPins firingPins, Intake intake) {
-    addCommands(
+    if (!lazySusanSubsystem.getIsCal()) {
+      addCommands(
+      parallel(
+        new LimelightSpinUp(shooterSubsystem),
+        sequence(
+          // parallel(
+          //   new AutoLoad(intake),
+          //   new DriveForwardDistance(drivetrain, 0.5, intake)
+          // ),
+          parallel(
+            new ZeroTurnTable(lazySusanSubsystem),
+            new DriveForwardDistance(drivetrain, firstShotDistance, intake)
+          ),
+          // new DriveForwardDistance(drivetrain, twoBallsDistanceMeters),
+          new TurretAimingPID(lazySusanSubsystem, robotContainer.robotFieldWidget, drivetrain::getPose, 100),
+          new ActivateFiringPins(firingPins, intake),
+          parallel(
+            new AutoLoad(intake),
+            new DriveForwardDistance(drivetrain, twoBallsDistanceMeters, intake)
+          ),
+          // parallel(
+          //   new WaitCommand(5),
+          //   new InstantCommand(intake::enableInnerIntakeMotor)
+          // ),
+          new DriveBackwardDistance(drivetrain, twoBallsDistanceMeters),
+          new TurretAimingPID(lazySusanSubsystem, robotContainer.robotFieldWidget, drivetrain::getPose, 100),
+          new ActivateFiringPins(firingPins, intake)
+        )
+      ) 
+      // new InstantCommand(intake::disableInnerIntakeMotor)
+      // new SetpointSpinUp(shooterSubsystem, LimeLight.getTY()),
+      
+    );
+    } else {
+      addCommands(
       parallel(
         new LimelightSpinUp(shooterSubsystem),
         sequence(
@@ -51,7 +86,8 @@ public class TwoBalls extends SequentialCommandGroup {
       ) 
       // new InstantCommand(intake::disableInnerIntakeMotor)
       // new SetpointSpinUp(shooterSubsystem, LimeLight.getTY()),
-      
-    );
+     );
+    }
+    
   }
 }

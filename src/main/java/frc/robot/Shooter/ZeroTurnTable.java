@@ -17,8 +17,8 @@ public class ZeroTurnTable extends CommandBase {
 
     @Override
     public void initialize() {
-        targetRotation = lazySusanSubsystem.getRotationDegrees() + 50;
-        lazySusanSubsystem.setModSpeed(0.6);
+        targetRotation = lazySusanSubsystem.getRotationDegrees() + 189.5;
+        lazySusanSubsystem.setModSpeed(0.17);//0.4
         lazySusanSubsystem.setTurretPositionDegrees(targetRotation);
         lazySusanSubsystem.setIsCal(false);
         timer = new Timer();

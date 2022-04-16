@@ -32,8 +32,9 @@ public class LazySusanSubsystem extends SubsystemBase {
     private final Supplier<Pose2d> robotBasePose;
     private boolean isGyroLocking;
     private final double countsToDegreesFactor = (1.0 / 25.0) * (20.0 / 156.0) * 360.0;
+    private double maxModSpeed = 0.6;
     private double modSpeed = 1;
-    private final double kP = 0.008000, kI = 0.001700, kD = 0;// KI0.00004 kP = 0.060000, kI = 0.003000,  TODO: Tune PID Loop
+    private final double kP = 0.032000, kI = 0.001700, kD = 0;// KI0.00004 kP = 0.060000, kI = 0.003000,  TODO: Tune PID Loop
     private boolean isCal;
     //private boolean isDisabled;
     public DigitalInput calSwitch;
@@ -87,7 +88,7 @@ public class LazySusanSubsystem extends SubsystemBase {
         // motor.set(pidOutput * modSpeed);
 
         motor.set(
-            MathUtil.clamp(pidOutput, -this.modSpeed, this.modSpeed)
+            MathUtil.clamp(pidOutput, -this.modSpeed*this.maxModSpeed, this.modSpeed*this.maxModSpeed)
         );
         // System.out.println("FNIEGOIN: " + Math.abs(degrees - this.turretRotation.getDegrees()));
 
