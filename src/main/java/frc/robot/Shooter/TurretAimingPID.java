@@ -18,22 +18,31 @@ public class TurretAimingPID extends CommandBase {
     protected Field2d robotFieldWidget;
     protected Supplier<Pose2d> robotbase;
     protected Pose2d prevHubPosition = null;
+    protected int frames, maxFrames;
 
     public TurretAimingPID(LazySusanSubsystem lazySusanSubsystem, Field2d robotFieldWidget,
-            Supplier<Pose2d> robotbase) {
+    Supplier<Pose2d> robotbase, int maxFrames) {
         this.lazySusanSubsystem = lazySusanSubsystem;
         this.robotFieldWidget = robotFieldWidget;
         this.robotbase = robotbase;
+        this.maxFrames = maxFrames;
         addRequirements(lazySusanSubsystem);
+    }
+
+    public TurretAimingPID(LazySusanSubsystem lazySusanSubsystem,
+    Field2d robotFieldWidget, Supplier<Pose2d> robotbase) {
+        this(lazySusanSubsystem, robotFieldWidget, robotbase, -1);
     }
 
     @Override
     public void initialize() {
+        this.frames = 0;
         LimeLight.setLedMode(LedMode.ON);
     }
 
     @Override
     public void execute() {
+        this.frames++;
         double x = LimeLight.getTX();
         if (LimeLight.hasTarget()) {
             if(this.lazySusanSubsystem.getIsGyroLocking()) {
@@ -80,5 +89,10 @@ public class TurretAimingPID extends CommandBase {
     @Override
     public void end(boolean interrupt) {
         LimeLight.setLedMode(LedMode.OFF);
+    }
+
+    @Override
+    public boolean isFinished() {
+        return this.maxFrames == -1 ? false : this.frames >= this.maxFrames;
     }
 }

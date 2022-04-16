@@ -44,7 +44,8 @@ public class Robot extends TimedRobot {
     // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);
     // robotContainer.getLazySusanSubsystem().setEncoderPosition(0);
 
-    autoSelector.setDefaultOption("Two-Ball", new TwoBalls(robotContainer.getDriveTrain(), robotContainer.getShooterSubsystem(), 
+    autoSelector.setDefaultOption("Two-Ball", new TwoBalls(robotContainer, robotContainer.getDriveTrain(), 
+    robotContainer.getLazySusanSubsystem(), robotContainer.getShooterSubsystem(), 
     robotContainer.getFiringPins(), robotContainer.getIntake()));
     autoSelector.addOption("One-Ball", new OneBall(robotContainer.getDriveTrain(), robotContainer.getLazySusanSubsystem(), 
       robotContainer.getShooterSubsystem(), robotContainer.getFiringPins(), robotContainer.getIntake()));
@@ -66,7 +67,7 @@ public class Robot extends TimedRobot {
       autonomousCommand.cancel();
     }
     robotContainer.getIntake().disableInnerIntakeMotor();
-    robotContainer.getShooterSubsystem().setOffsetSpeed(150);
+    robotContainer.getShooterSubsystem().setOffsetSpeed(0);
     
     // if (!robotContainer.getLazySusanSubsystem().getIsCal()) {
     //   System.out.println("Zeroed");
@@ -100,7 +101,7 @@ public class Robot extends TimedRobot {
     LimeLight.setLedMode(LedMode.ON);
     //robotContainer.getLazySusanSubsystem().setTurretPositionDegrees(Rotation2d.fromDegrees(179.999));
     //robotContainer.getLazySusanSubsystem().setEncoderPosition(robotContainer.getLazySusanSubsystem().getEncoderPosition() + 4);
-    robotContainer.getShooterSubsystem().setOffsetSpeed(75);
+    robotContainer.getShooterSubsystem().setOffsetSpeed(0);//75
 
 
 

@@ -11,38 +11,41 @@ import frc.robot.Loader.AutoLoad;
 import frc.robot.Loader.Intake;
 import frc.robot.Shooter.ActivateFiringPins;
 import frc.robot.Shooter.FiringPins;
+import frc.robot.Shooter.LazySusanSubsystem;
 import frc.robot.Shooter.LimelightSpinUp;
 import frc.robot.Shooter.ShooterSubsystem;
 import frc.robot.Shooter.TankDriveAiming;
+import frc.robot.Shooter.TurretAimingPID;
+import frc.robot.Util.RobotContainer;
 
 public class TwoBalls extends SequentialCommandGroup {
-  private double firstShotDistance = 0.5;
+  private double firstShotDistance = 0.8;
   private double twoBallsDistanceMeters = 1.5;
 
-  public TwoBalls(Drivetrain drivetrain, ShooterSubsystem shooterSubsystem, 
-  FiringPins firingPins, Intake intake) {
+  public TwoBalls(RobotContainer robotContainer, Drivetrain drivetrain, LazySusanSubsystem lazySusanSubsystem, 
+  ShooterSubsystem shooterSubsystem, FiringPins firingPins, Intake intake) {
     addCommands(
-      new ParallelCommandGroup(
+      parallel(
         new LimelightSpinUp(shooterSubsystem),
-        new SequentialCommandGroup(
-          // new ParallelCommandGroup(
+        sequence(
+          // parallel(
           //   new AutoLoad(intake),
           //   new DriveForwardDistance(drivetrain, 0.5, intake)
           // ),
           new DriveForwardDistance(drivetrain, firstShotDistance, intake),
           // new DriveForwardDistance(drivetrain, twoBallsDistanceMeters),
-          new TankDriveAiming(drivetrain, 300),
+          new TurretAimingPID(lazySusanSubsystem, robotContainer.robotFieldWidget, drivetrain::getPose, 100),
           new ActivateFiringPins(firingPins, intake),
-          new ParallelCommandGroup(
+          parallel(
             new AutoLoad(intake),
             new DriveForwardDistance(drivetrain, twoBallsDistanceMeters, intake)
           ),
-          // new ParallelCommandGroup(
+          // parallel(
           //   new WaitCommand(5),
           //   new InstantCommand(intake::enableInnerIntakeMotor)
           // ),
           new DriveBackwardDistance(drivetrain, twoBallsDistanceMeters),
-          new TankDriveAiming(drivetrain, 300),
+          new TurretAimingPID(lazySusanSubsystem, robotContainer.robotFieldWidget, drivetrain::getPose, 100),
           new ActivateFiringPins(firingPins, intake)
         )
       ) 

@@ -39,17 +39,13 @@ public class DriveForwardDistance extends CommandBase {
   // @Override
   // public void initialize() {}
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     drivetrain.arcadeDriveSet(autoSpeed, 0);
   }
 
   public boolean withinBounds() {
-    if (this.getDisplacement() > distance) {
-      return true;
-    }
-    return false;
+    return this.getDisplacement() > distance;
   }
 
   private double getDisplacement() {

@@ -84,7 +84,7 @@ public class LazySusanSubsystem extends SubsystemBase {
         // motor.set(pidOutput * modSpeed);
 
         motor.set(
-            Math.abs(degrees - this.turretRotation.getDegrees()) < this.errorMargin ? 0 : pidOutput * modSpeed
+            pidOutput * modSpeed
         );
         // System.out.println("FNIEGOIN: " + Math.abs(degrees - this.turretRotation.getDegrees()));
 
@@ -95,6 +95,7 @@ public class LazySusanSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Turret/Desired Rotation", desiredRotation.getDegrees());
         SmartDashboard.putNumber("Turret/Rotation Degrees", turretRotation.getDegrees());
         SmartDashboard.putBoolean("Turret/Is Gyro Locking", isGyroLocking);
+        SmartDashboard.putNumber("Turret/ModSpeed", modSpeed);
     }
 
     public double getEncoderPosition() {
@@ -122,9 +123,9 @@ public class LazySusanSubsystem extends SubsystemBase {
         return isCal;
     }
     
-    public boolean getCalSensorState() {
-        return calSwitch.get();
-    }
+    // public boolean getCalSensorState() {
+    //     return calSwitch.get();
+    // }
 
     public void setIsCal(boolean isCal) {
         this.isCal = isCal;
@@ -173,7 +174,7 @@ public class LazySusanSubsystem extends SubsystemBase {
     }
 
     public boolean islimitSwitchPressed(){
-        return !calSwitch.get();
+        return calSwitch.get();
     }
 
     public double getDrawnCurrentAmps() {
