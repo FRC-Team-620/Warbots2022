@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ZeroTurnTable extends CommandBase {
     LazySusanSubsystem lazySusanSubsystem;
-    Rotation2d targetRotation;
+    double targetRotation;
     public ZeroTurnTable(LazySusanSubsystem lazySusanSubsystem) {
         addRequirements(lazySusanSubsystem);
         // calSwitch = new DigitalInput(Constants.calSwitchID);
@@ -15,9 +15,9 @@ public class ZeroTurnTable extends CommandBase {
 
     @Override
     public void initialize() {
-        targetRotation = lazySusanSubsystem.getRotation().plus(Rotation2d.fromDegrees(20));
+        targetRotation = lazySusanSubsystem.getRotationDegrees() + 45;
         lazySusanSubsystem.setModSpeed(0.8);
-        lazySusanSubsystem.setTurretPosition(targetRotation);
+        lazySusanSubsystem.setTurretPositionDegrees(targetRotation);
         lazySusanSubsystem.setIsCal(false);
     }
 

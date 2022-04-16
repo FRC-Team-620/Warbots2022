@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.revrobotics.CANSparkMax.IdleMode;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -68,6 +70,7 @@ public class Robot extends TimedRobot {
     }
     robotContainer.getIntake().disableInnerIntakeMotor();
     robotContainer.getShooterSubsystem().setOffsetSpeed(0);
+    robotContainer.getLazySusanSubsystem().setMotorMode(IdleMode.kBrake);
     
     // if (!robotContainer.getLazySusanSubsystem().getIsCal()) {
     //   System.out.println("Zeroed");
@@ -102,6 +105,7 @@ public class Robot extends TimedRobot {
     //robotContainer.getLazySusanSubsystem().setTurretPositionDegrees(Rotation2d.fromDegrees(179.999));
     //robotContainer.getLazySusanSubsystem().setEncoderPosition(robotContainer.getLazySusanSubsystem().getEncoderPosition() + 4);
     robotContainer.getShooterSubsystem().setOffsetSpeed(0);//75
+    robotContainer.getLazySusanSubsystem().setMotorMode(IdleMode.kBrake);
 
 
 
@@ -160,15 +164,18 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     //robotContainer.getShooterSubsystem().setTargetRPM(0);
     robotContainer.getDriveTrain().setBrake(true);
+    robotContainer.getLazySusanSubsystem().setMotorMode(IdleMode.kCoast);
     //robotContainer.getShooterSubsystem().setSpeed(0);
     //robotContainer.getShooterSubsystem().setTargetRPM(0);
     CommandScheduler.getInstance().cancelAll();
+
   }
 
   @Override
   public void testInit() {
     CommandScheduler.getInstance().cancelAll();
     robotContainer.init();
+    robotContainer.getLazySusanSubsystem().setMotorMode(IdleMode.kBrake);
     //LimeLight.setLedMode(LedMode.ON);
 	  //robotContainer.getLazySusanSubsystem().setEncoderPosition(0);
     // new LowerHooks(robotContainer.getClimberSubsystem()).schedule();

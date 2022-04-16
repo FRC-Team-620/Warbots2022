@@ -37,7 +37,7 @@ public class LazySusanSubsystem extends SubsystemBase {
     private boolean isCal;
     //private boolean isDisabled;
     public DigitalInput calSwitch;
-    private final double lowLimitDegrees = -220;
+    private final double lowLimitDegrees = -195;
     private final double highLimitDegrees = 220;
     private final double errorMargin = 2;
     // Left 45.690002, Right -45.356651, AbsoluteMaxRange 90
@@ -50,7 +50,7 @@ public class LazySusanSubsystem extends SubsystemBase {
         this.calSwitch = new DigitalInput(Constants.calSwitchID);
         this.motor.restoreFactoryDefaults();
         this.encoder = this.motor.getEncoder();
-        encoder.setPositionConversionFactor(countsToDegreesFactor);
+        encoder.setPositionConversionFactor(countsToDegreesFactor * 0.914);
         this.encoder.setPosition(Constants.stowedDegrees);
         IdleMode mode = IdleMode.kBrake; // brakes
         this.motor.setIdleMode(mode);
@@ -106,6 +106,10 @@ public class LazySusanSubsystem extends SubsystemBase {
         return encoder.getPosition();
     }
 
+    public void setMotorMode(IdleMode m) {
+        this.motor.setIdleMode(m);
+    }
+
     public double getModSpeed() {
         return modSpeed;
     }
@@ -141,12 +145,17 @@ public class LazySusanSubsystem extends SubsystemBase {
     public Rotation2d getDesiredRotation() {
         return Rotation2d.fromDegrees(desiredRotation);
     }
+
+    public double getDesiredRotationDegrees() {
+        return desiredRotation;
+    }
+
     public void setTurretPosition(Rotation2d rot) {
         desiredRotation = rot.getDegrees();
         // this.setTurretPosition(degrees/countToDegreesFactor);
     }
     public void setTurretPositionDegrees(double rot) {
-        desiredRotation = rot;
+        desiredRotation = MathUtil.clamp(rot, lowLimitDegrees, highLimitDegrees);
     }
 
     public double getRawSetpoint() {
@@ -171,7 +180,7 @@ public class LazySusanSubsystem extends SubsystemBase {
 
     public void setHomePosition() {
         setIsGyroLocking(false);
-        double limitPos = 205.5;//-45 205.5
+        double limitPos = 186.5;//-45 205.5
         setEncoderPosition(limitPos);
         lazySusanPID.reset();
         lazySusanPID.setSetpoint(limitPos);
