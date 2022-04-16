@@ -1,11 +1,13 @@
 package frc.robot.Shooter;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ZeroTurnTable extends CommandBase {
     LazySusanSubsystem lazySusanSubsystem;
     double targetRotation;
+    Timer timer;
     public ZeroTurnTable(LazySusanSubsystem lazySusanSubsystem) {
         addRequirements(lazySusanSubsystem);
         // calSwitch = new DigitalInput(Constants.calSwitchID);
@@ -15,19 +17,26 @@ public class ZeroTurnTable extends CommandBase {
 
     @Override
     public void initialize() {
-        targetRotation = lazySusanSubsystem.getRotationDegrees() + 45;
-        lazySusanSubsystem.setModSpeed(0.8);
+        targetRotation = lazySusanSubsystem.getRotationDegrees() + 50;
+        lazySusanSubsystem.setModSpeed(0.6);
         lazySusanSubsystem.setTurretPositionDegrees(targetRotation);
         lazySusanSubsystem.setIsCal(false);
+        timer = new Timer();
     }
 
     @Override
     public boolean isFinished() {
         // System.out.println( lazySusanSubsystem.atTurretPosition()); //lazySusanSubsystem.calSwitch.get() ||
         // System.out.println(lazySusanSubsystem.islimitSwitchPressed());
-        if(lazySusanSubsystem.atTurretPosition() || lazySusanSubsystem.islimitSwitchPressed()) {
-            if(lazySusanSubsystem.islimitSwitchPressed())
-                lazySusanSubsystem.setHomePosition();
+        if (lazySusanSubsystem.atTurretPosition()) {
+            timer.start();
+        }
+        if (timer.hasElapsed(1)) {
+            return true;
+        }
+
+        if(lazySusanSubsystem.islimitSwitchPressed()) {
+            lazySusanSubsystem.setHomePosition();
             // if(lazySusanSubsystem.getRotation().getDegrees() < 100) {
             //     //lazySusanSubsystem.setIsCal(true);
             //     lazySusanSubsystem.setHomePosition();
