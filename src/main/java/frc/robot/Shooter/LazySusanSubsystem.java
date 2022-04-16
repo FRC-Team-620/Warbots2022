@@ -87,7 +87,7 @@ public class LazySusanSubsystem extends SubsystemBase {
         // motor.set(pidOutput * modSpeed);
 
         motor.set(
-            pidOutput * modSpeed
+            MathUtil.clamp(pidOutput, -this.modSpeed, this.modSpeed)
         );
         // System.out.println("FNIEGOIN: " + Math.abs(degrees - this.turretRotation.getDegrees()));
 
