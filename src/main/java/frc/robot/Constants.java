@@ -141,7 +141,8 @@ public final class Constants {
         put(-12.3, 3375.0);
         put(-16.38, 3663.0);
         put(-19.09, 3930.0);
-        put(-20.39, 4302.0);//TODO: Out of range warning on the lights/consule
+        put(-20.39, 4302.0);
+        put(-22.13, 4575.0);//TODO: Out of range warning on the lights/consule
     }};
 
     // LazySusan
