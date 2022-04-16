@@ -22,9 +22,10 @@ public class AutoCommand extends SequentialCommandGroup {
             addCommands(
             //new Taxi(robotContainer.getDriveTrain())
             //new OneBall(robotContainer.getDriveTrain(), lazySusanSubsystem, shooterSubsystem, firingPins)
-            new TwoBalls(robotContainer.getDriveTrain(), shooterSubsystem, firingPins, robotContainer.getIntake())
+            new TwoBalls(robotContainer, robotContainer.getDriveTrain(), 
+            robotContainer.getLazySusanSubsystem(), robotContainer.getShooterSubsystem(), 
+            robotContainer.getFiringPins(), robotContainer.getIntake())
             //new ConditionalCommand(new WaitCommand(0), new ZeroTurnTable(lazySusanSubsystem), lazySusanSubsystem::getIsCal),
-            
             );
         
     }

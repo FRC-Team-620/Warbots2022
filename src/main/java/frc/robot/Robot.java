@@ -44,7 +44,8 @@ public class Robot extends TimedRobot {
     // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);
     // robotContainer.getLazySusanSubsystem().setEncoderPosition(0);
 
-    autoSelector.setDefaultOption("Two-Ball", new TwoBalls(robotContainer.getDriveTrain(), robotContainer.getShooterSubsystem(), 
+    autoSelector.setDefaultOption("Two-Ball", new TwoBalls(robotContainer, robotContainer.getDriveTrain(), 
+    robotContainer.getLazySusanSubsystem(), robotContainer.getShooterSubsystem(), 
     robotContainer.getFiringPins(), robotContainer.getIntake()));
     autoSelector.addOption("One-Ball", new OneBall(robotContainer.getDriveTrain(), robotContainer.getLazySusanSubsystem(), 
       robotContainer.getShooterSubsystem(), robotContainer.getFiringPins(), robotContainer.getIntake()));
