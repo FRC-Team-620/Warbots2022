@@ -18,7 +18,7 @@ public class ManualAimingPID extends CommandBase {
     @Override
     public void execute() {
         double controlInput = RobotMath.deadZone(operatorXbox.getLeftX(), 0.1, 0);
-        lazySusanSubsystem.setTurretPositionDegrees((lazySusanSubsystem.getDesiredDegrees().minus(Rotation2d.fromDegrees(maxSpeed *controlInput ))));
+        lazySusanSubsystem.setTurretPosition((lazySusanSubsystem.getDesiredRotation().minus(Rotation2d.fromDegrees(maxSpeed *controlInput ))));
         //lazySusanSubsystem.setTurretPosition(operatorXbox.getLeftX() * lazySusanSubsystem.highLimit);
     }
 

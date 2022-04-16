@@ -22,7 +22,7 @@ public class MoveTurretToPos extends CommandBase {
     @Override
     public void execute() {
         x = SmartDashboard.getNumber("TestPos: ", Constants.stowedDegrees);
-        lazySusanSubsystem.setTurretPositionDegrees(Rotation2d.fromDegrees(x));
+        lazySusanSubsystem.setTurretPosition(Rotation2d.fromDegrees(x));
         
     }
 
