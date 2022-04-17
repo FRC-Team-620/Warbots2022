@@ -34,9 +34,10 @@ public class LazySusanSubsystem extends SubsystemBase {
     private final double countsToDegreesFactor = (1.0 / 25.0) * (20.0 / 156.0) * 360.0;
     private double maxModSpeed = 0.6;
     private double modSpeed = 1;
-    private final double kP = 0.032000, kI = 0.001700, kD = 0;// KI0.00004 kP = 0.060000, kI = 0.003000,  TODO: Tune PID Loop
+    private final double kP = 0.032000, kI = 0.001700, kD = 0;// KI0.00004 kP = 0.060000, kI = 0.003000, TODO: Tune PID
+                                                              // Loop
     private boolean isCal;
-    //private boolean isDisabled;
+    // private boolean isDisabled;
     public DigitalInput calSwitch;
     private final double lowLimitDegrees = -195;
     private final double highLimitDegrees = 220;
@@ -65,15 +66,18 @@ public class LazySusanSubsystem extends SubsystemBase {
         // turretRotation =encoder.getPosition();
         // turretRotation = desiredRotation = Constants.stowedDegrees;
         isCal = false;
-        //isDisabled =
+        // isDisabled =
         SmartDashboard.putData("Turret/PIDController[12]", lazySusanPID);
     }
 
     @Override
     public void periodic() {
-        // this.turretRotation = Rotation2d.fromDegrees(encoder.getPosition());
-        double degrees = isGyroLocking ? Rotation2d.fromDegrees(desiredRotation).minus(robotBasePose.get().getRotation()).getDegrees() : desiredRotation;
+        double degrees = isGyroLocking
+                ? Rotation2d.fromDegrees(desiredRotation).minus(robotBasePose.get().getRotation()).getDegrees()
+                : desiredRotation;
 
+
+        degrees = solveTwoSolutionProblem(degrees, getRotationDegrees()); //Solve Two Solution Problem
         lazySusanPID.setSetpoint(MathUtil.clamp(degrees, lowLimitDegrees, highLimitDegrees));
         double pidOutput = MathUtil.clamp(lazySusanPID.calculate(encoder.getPosition()), -1, 1);
 
@@ -88,9 +92,9 @@ public class LazySusanSubsystem extends SubsystemBase {
         // motor.set(pidOutput * modSpeed);
 
         motor.set(
-            MathUtil.clamp(pidOutput, -this.modSpeed*this.maxModSpeed, this.modSpeed*this.maxModSpeed)
-        );
-        // System.out.println("FNIEGOIN: " + Math.abs(degrees - this.turretRotation.getDegrees()));
+                MathUtil.clamp(pidOutput, -this.modSpeed * this.maxModSpeed, this.modSpeed * this.maxModSpeed));
+        // System.out.println("FNIEGOIN: " + Math.abs(degrees -
+        // this.turretRotation.getDegrees()));
 
         SmartDashboard.putNumber("Turret/Raw Encoder", encoder.getPosition());
         SmartDashboard.putNumber("Turret/Motor Percentage", motor.get());
@@ -98,9 +102,28 @@ public class LazySusanSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Turret/Calibration Switch", islimitSwitchPressed());
         SmartDashboard.putNumber("Turret/Desired Rotation", desiredRotation);
         SmartDashboard.putNumber("Turret/Setpoint", this.lazySusanPID.getSetpoint());
-        // SmartDashboard.putNumber("Turret/Rotation Degrees", turretRotation.getDegrees());
         SmartDashboard.putBoolean("Turret/Is Gyro Locking", isGyroLocking);
         SmartDashboard.putNumber("Turret/ModSpeed", modSpeed);
+    }
+    public double solveTwoSolutionProblem(double targetRotation, double currentRotaiton){
+        double sol2 = getSecondSol(targetRotation);
+        double distance1 =  Math.abs(desiredRotation-this.getRotationDegrees());
+        double distance2 =  Math.abs(sol2-this.getRotationDegrees());
+        if( distance2 <  distance1 && sol2 > lowLimitDegrees && sol2 < highLimitDegrees){ //Find closest point
+           return sol2;
+        }
+        return targetRotation;
+    }
+
+    public double getSecondSol(double rot){
+        double sol2 = rot-360;
+        if(rot > 0){
+            sol2 =  rot-360;
+        }else{
+            sol2 = rot+360;
+        }
+   
+        return sol2;
     }
 
     public double getEncoderPosition() {
@@ -131,7 +154,7 @@ public class LazySusanSubsystem extends SubsystemBase {
     public boolean getIsCal() {
         return isCal;
     }
-    
+
     public void setIsCal(boolean isCal) {
         this.isCal = isCal;
     }
@@ -139,7 +162,8 @@ public class LazySusanSubsystem extends SubsystemBase {
     public Rotation2d getRotation() {
         return Rotation2d.fromDegrees(encoder.getPosition());
     }
-    public double getRotationDegrees(){
+
+    public double getRotationDegrees() {
         return encoder.getPosition();
     }
 
@@ -155,6 +179,7 @@ public class LazySusanSubsystem extends SubsystemBase {
         desiredRotation = rot.getDegrees();
         // this.setTurretPosition(degrees/countToDegreesFactor);
     }
+
     public void setTurretPositionDegrees(double rot) {
         desiredRotation = MathUtil.clamp(rot, lowLimitDegrees, highLimitDegrees);
     }
@@ -162,8 +187,6 @@ public class LazySusanSubsystem extends SubsystemBase {
     public double getRawSetpoint() {
         return lazySusanPID.getSetpoint();
     }
-
-    
 
     public boolean atTurretPosition() {
         return lazySusanPID.atSetpoint();
@@ -181,7 +204,7 @@ public class LazySusanSubsystem extends SubsystemBase {
 
     public void setHomePosition() {
         setIsGyroLocking(false);
-        double limitPos = 186.5;//-45 205.5
+        double limitPos = 186.5;// -45 205.5
         setEncoderPosition(limitPos);
         lazySusanPID.reset();
         lazySusanPID.setSetpoint(limitPos);
@@ -189,11 +212,11 @@ public class LazySusanSubsystem extends SubsystemBase {
         this.setTurretPositionDegrees(limitPos);
         // setTurretPositionDegrees(Rotation2d.fromDegrees(limitPos));
         // turretRotation = Rotation2d.fromDegrees(limitPos);
-        //stop();
+        // stop();
         setIsCal(true);
     }
 
-    public boolean islimitSwitchPressed(){
+    public boolean islimitSwitchPressed() {
         return calSwitch.get();
     }
 
@@ -213,9 +236,8 @@ public class LazySusanSubsystem extends SubsystemBase {
     private double simlastpos = 0;
     private double simoffset = 0;
 
-
     private void initSim() {
-        simlazySusan = new DCMotorSim(DCMotor.getNeo550(1),(1.0) /((1.0 / 25.0) * (20.0 / 156.0)),
+        simlazySusan = new DCMotorSim(DCMotor.getNeo550(1), (1.0) / ((1.0 / 25.0) * (20.0 / 156.0)),
                 Constants.kSimTurntableInertia); // TODO: add gear ratio
         simEncoder = RevEncoderSimWrapper.create(this.motor);
     }
@@ -229,17 +251,17 @@ public class LazySusanSubsystem extends SubsystemBase {
         simlazySusan.setInputVoltage(motor.get() * RobotController.getInputVoltage());
         simlazySusan.update(Constants.kSimUpdateTime);
         simEncoder.setVelocity(simlazySusan.getAngularVelocityRPM());
-        if(simEncoder.getPosition() != simlastpos){
-            System.out.println(simEncoder.getPosition() + " "  + simlastpos);
-            simoffset = (simlazySusan.getAngularPositionRotations()*360)-simEncoder.getPosition();
+        if (simEncoder.getPosition() != simlastpos) {
+            System.out.println(simEncoder.getPosition() + " " + simlastpos);
+            simoffset = (simlazySusan.getAngularPositionRotations() * 360) - simEncoder.getPosition();
             System.out.println("Encoder Position changed" + simoffset);
         }
-       
-        simEncoder.setDistance((simlazySusan.getAngularPositionRotations()*360)-simoffset);
+
+        simEncoder.setDistance((simlazySusan.getAngularPositionRotations() * 360) - simoffset);
         // TODO: Remove magic number 5 that represents the first gear reduction
         simlastpos = simEncoder.getPosition();
         SmartDashboard.putNumber("Turret/Velocity", encoder.getVelocity());
-        SmartDashboard.putNumber("Turret/Sim rotation", simlazySusan.getAngularPositionRotations()*360);
+        SmartDashboard.putNumber("Turret/Sim rotation", simlazySusan.getAngularPositionRotations() * 360);
         SmartDashboard.putNumber("Turret/Setpoint", this.lazySusanPID.getSetpoint());
     }
 }
