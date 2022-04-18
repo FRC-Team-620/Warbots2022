@@ -134,7 +134,11 @@ public class LazySusanSubsystem extends SubsystemBase {
     }
 
     public void setIsGyroLocking(boolean isGyroLocking) {
-        // TODO: Fix gyro locking problems (turning randomly?)
+        if (isGyroLocking) {
+            setTurretPosition(robotBasePose.get().getRotation().plus(getDesiredRotation()));
+        } else {
+            setTurretPosition(getDesiredRotation().minus(robotBasePose.get().getRotation()));
+        }
         this.isGyroLocking = isGyroLocking;
     }
 
