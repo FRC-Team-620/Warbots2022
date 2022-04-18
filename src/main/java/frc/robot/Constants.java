@@ -128,6 +128,8 @@ public final class Constants {
 
     //intake
     public static final int intakeSwitchID = 7;
+    public static final double intakeSwitchDebounceTime = 0.1; // Measured in seconds
+
     public static final I2C.Port i2cColorSensorPort = I2C.Port.kMXP;
     public static final int minColorSensorProximity = 100; // Increases with proximity
     public static final int frameCountUntilFloat = 50;
