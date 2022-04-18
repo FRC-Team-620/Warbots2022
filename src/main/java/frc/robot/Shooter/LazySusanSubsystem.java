@@ -104,6 +104,7 @@ public class LazySusanSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Turret/Desired Rotation", desiredRotation);
         SmartDashboard.putNumber("Turret/Setpoint", this.lazySusanPID.getSetpoint());
         SmartDashboard.putBoolean("Turret/Is Gyro Locking", isGyroLocking);
+        SmartDashboard.putBoolean("Turret/Is Hub Tracking", isHubTracking);
         SmartDashboard.putNumber("Turret/ModSpeed", modSpeed);
     }
 

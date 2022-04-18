@@ -101,8 +101,8 @@ public class Robot extends TimedRobot {
   
   @Override
   public void teleopExit() {
-    robotContainer.getLazySusanSubsystem().setIsGyroLocking(false);
-    //robotContainer.getLazySusanSubsystem().setEncoderPosition(robotContainer.getLazySusanSubsystem().getEncoderPosition() - 4);
+    // robotContainer.getLazySusanSubsystem().setIsGyroLocking(false);
+    // robotContainer.getLazySusanSubsystem().setEncoderPosition(robotContainer.getLazySusanSubsystem().getEncoderPosition() - 4);
   }
   @Override
   public void autonomousInit() {
