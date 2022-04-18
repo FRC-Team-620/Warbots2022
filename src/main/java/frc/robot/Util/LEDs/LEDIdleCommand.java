@@ -14,14 +14,14 @@ public class LEDIdleCommand extends CommandBase {
     protected LazySusanSubsystem lazySusanSubsystem;
 
     protected LEDAnimation noBallsAnimCalibrated = LEDManager.STRIP0.fadeAnimation(1,
-        60, 
-        Color.kYellow,
+        60,
+        Color.kForestGreen, 
         Color.kWhite
     );
     protected LEDAnimation noBallsAnimUncalibrated = LEDManager.STRIP0.fadeAnimation(1,
         60, 
-        Color.kForestGreen, 
-        Color.kWhite
+        Color.kBlack,
+        Color.kDarkRed
     );
     protected LEDAnimation oneBallAnim = LEDManager.STRIP0.gradientAnimation(1, 
         Color.kRed,

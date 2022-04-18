@@ -140,10 +140,11 @@ public class RobotContainer {
             //     false, controls.getOperatorController()));
 
         ControlBoard.toggleGyroButton.whenPressed(
-            new InstantCommand(() -> this.getLazySusanSubsystem().setIsGyroLocking(
-                !this.getLazySusanSubsystem().getIsGyroLocking()
-            ))
-        );
+            new InstantCommand(() -> {
+                this.getLazySusanSubsystem().setIsGyroLocking(!this.getLazySusanSubsystem().getIsGyroLocking());
+                this.getLazySusanSubsystem().setIsHubTracking(!this.getLazySusanSubsystem().getIsHubTracking());
+            }
+        ));
 
         ControlBoard.fireTurretTrigger.whenActive(
             new ParallelCommandGroup(  

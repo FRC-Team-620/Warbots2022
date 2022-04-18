@@ -1,5 +1,6 @@
 package frc.robot.Auto.Routines;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 //import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -17,7 +18,9 @@ import frc.robot.Shooter.ShooterSubsystem;
 import frc.robot.Shooter.TankDriveAiming;
 import frc.robot.Shooter.TurretAimingPID;
 import frc.robot.Shooter.ZeroTurnTable;
+import frc.robot.Util.LimeLight;
 import frc.robot.Util.RobotContainer;
+import frc.robot.Util.LimeLight.LedMode;
 
 public class TwoBalls extends SequentialCommandGroup {
   private double firstShotDistance = 0.8;
@@ -53,10 +56,10 @@ public class TwoBalls extends SequentialCommandGroup {
           new TurretAimingPID(lazySusanSubsystem, robotContainer.robotFieldWidget, drivetrain::getPose, 100, true),
           new ActivateFiringPins(firingPins, intake)
         )
-      )
+      ),
       // new InstantCommand(intake::disableInnerIntakeMotor)
       // new SetpointSpinUp(shooterSubsystem, LimeLight.getTY()),
-      
+      new InstantCommand(() -> LimeLight.setLedMode(LedMode.OFF))
     );
     } else {
       addCommands(
@@ -83,9 +86,10 @@ public class TwoBalls extends SequentialCommandGroup {
           new TurretAimingPID(lazySusanSubsystem, robotContainer.robotFieldWidget, drivetrain::getPose, 100, true),
           new ActivateFiringPins(firingPins, intake)
         )
-      ) 
+      ),
       // new InstantCommand(intake::disableInnerIntakeMotor)
       // new SetpointSpinUp(shooterSubsystem, LimeLight.getTY()),
+      new InstantCommand(() -> LimeLight.setLedMode(LedMode.OFF))
      );
     }
     

@@ -62,7 +62,7 @@ public class TurretAimingPID extends CommandBase {
             }
             // lazySusanSubsystem.setTurretPositionDegrees(robotbase.get().getRotation().minus(Rotation2d.fromDegrees(x)));
             this.prevHubPosition = this.calculateHubPosition(this.getLocalPose());
-        } else if (this.prevHubPosition != null) {
+        } else if (this.lazySusanSubsystem.getIsHubTracking() && this.prevHubPosition != null) {
             double deltaX = calculateHubDeltaX(this.robotbase.get(), this.prevHubPosition);
 
             if (this.lazySusanSubsystem.getIsGyroLocking()) {

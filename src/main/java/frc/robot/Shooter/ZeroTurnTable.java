@@ -17,7 +17,10 @@ public class ZeroTurnTable extends CommandBase {
 
     @Override
     public void initialize() {
-        targetRotation = lazySusanSubsystem.getRotationDegrees() + 189.5;
+        lazySusanSubsystem.setIsGyroLocking(false);
+        lazySusanSubsystem.setIsHubTracking(false);
+        lazySusanSubsystem.setSmartCurrentLimit(5);
+        targetRotation = lazySusanSubsystem.getRotationDegrees() - 189.5;
         lazySusanSubsystem.setModSpeed(0.17);//0.4
         lazySusanSubsystem.setTurretPositionDegrees(targetRotation);
         lazySusanSubsystem.setIsCal(false);
@@ -53,6 +56,10 @@ public class ZeroTurnTable extends CommandBase {
         
         // lazySusanSubsystem.stop();
         lazySusanSubsystem.setModSpeed(1);
+        lazySusanSubsystem.setSmartCurrentLimit(18);
+        lazySusanSubsystem.setIsGyroLocking(true);
+        lazySusanSubsystem.setIsHubTracking(true);
+        
 
         // System.out.println("\n\n\n\t\tOHGOEHGOHWROGHROWGOOBRNBOBN\n\n\n");
 

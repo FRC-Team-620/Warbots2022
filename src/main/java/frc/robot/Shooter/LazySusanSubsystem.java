@@ -32,7 +32,7 @@ public class LazySusanSubsystem extends SubsystemBase {
     private final Supplier<Pose2d> robotBasePose;
     private boolean isGyroLocking;
     private final double countsToDegreesFactor = (1.0 / 25.0) * (20.0 / 156.0) * 360.0;
-    private double maxModSpeed = 0.6;
+    private double maxModSpeed = 0.8;
     private double modSpeed = 1;
     private final double kP = 0.032000, kI = 0.001700, kD = 0;// KI0.00004 kP = 0.060000, kI = 0.003000, TODO: Tune PID
                                                               // Loop
@@ -42,11 +42,14 @@ public class LazySusanSubsystem extends SubsystemBase {
     private final double lowLimitDegrees = -195;
     private final double highLimitDegrees = 220;
     private final double errorMargin = 2;
+
+    private boolean isHubTracking;
     // Left 45.690002, Right -45.356651, AbsoluteMaxRange 90
     // private double turntableThresh = 35;
 
     public LazySusanSubsystem(Supplier<Pose2d> robotBasePose) {
-        this.isGyroLocking = false;
+        this.isGyroLocking = true;
+        this.isHubTracking = true;
         this.robotBasePose = robotBasePose;
         this.motor = new SimableCANSparkMax(Constants.lazySusanID, MotorType.kBrushless);
         this.calSwitch = new DigitalInput(Constants.calSwitchID);
@@ -57,7 +60,6 @@ public class LazySusanSubsystem extends SubsystemBase {
         IdleMode mode = IdleMode.kBrake; // brakes
         this.motor.setIdleMode(mode);
         this.motor.setSmartCurrentLimit(18);
-        this.isGyroLocking = false;
 
         // lazySusan.setInverted(true);
         lazySusanPID = new PIDController(kP, kI, kD);
@@ -113,6 +115,10 @@ public class LazySusanSubsystem extends SubsystemBase {
         ? solution2 : targetRotation; // Find which of the two solutions is closest
     }
 
+    public void setSmartCurrentLimit(int currentLimit) {
+        this.motor.setSmartCurrentLimit(currentLimit);
+    }
+
     public double getEncoderPosition() {
         return encoder.getPosition();
     }
@@ -140,6 +146,14 @@ public class LazySusanSubsystem extends SubsystemBase {
             setTurretPosition(getDesiredRotation().minus(robotBasePose.get().getRotation()));
         }
         this.isGyroLocking = isGyroLocking;
+    }
+
+    public boolean getIsHubTracking() {
+        return this.isHubTracking;
+    }
+
+    public void setIsHubTracking(boolean track) {
+        this.isHubTracking = track;
     }
 
     public boolean getIsCal() {

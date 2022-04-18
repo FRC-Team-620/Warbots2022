@@ -61,30 +61,30 @@ public class Intake extends SubsystemBase {
     // Floating intake was an idea from Team 836
 
     public void extendIntakeArms() {
-        //intakeArmsVirtualSolenoidA.set(true);
-        //intakeArmsVirtualSolenoidB.set(true);
+        intakeArmsVirtualSolenoidA.set(true);
+        intakeArmsVirtualSolenoidB.set(true);
     }
     
     public void retractIntakeArms() {
-        //intakeArmsVirtualSolenoidA.set(false);
-        //intakeArmsVirtualSolenoidB.set(false);    
+        intakeArmsVirtualSolenoidA.set(false);
+        intakeArmsVirtualSolenoidB.set(false);    
     }
 
     public void floatIntakeArms() {
-        //intakeArmsVirtualSolenoidA.set(false);
-        //intakeArmsVirtualSolenoidB.set(true);    
+        intakeArmsVirtualSolenoidA.set(false);
+        intakeArmsVirtualSolenoidB.set(true);    
     }
 
     public void enableIntakeArmsMotor() {
-        //intakeArmsMotor.set(-0.6);
+        intakeArmsMotor.set(-0.6);
     }
 
     public void disableIntakeArmsMotor() {
-        //intakeArmsMotor.set(0);
+        intakeArmsMotor.set(0);
     }
 
     public void reverseIntakeArmsMotor() {
-        //intakeArmsMotor.set(0.6);
+        intakeArmsMotor.set(0.6);
     }
 
     public double extendedIntakeArmsSpeed() {

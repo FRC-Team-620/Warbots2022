@@ -23,6 +23,7 @@ public class LimelightSpinUp extends CommandBase {
 
     @Override
     public void execute() {
+        LimeLight.setLedMode(LedMode.ON); // TODO: Less jank
         double y = LimeLight.getTY();
         // double distance = ShooterMath.getDistanceInMeters(Constants.azimuthAngle1, y, Constants.limelightHeight, Constants.hubHeight);
         // double targetRPM = ShooterMath.metersToRPM(distance);
