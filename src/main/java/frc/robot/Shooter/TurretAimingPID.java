@@ -44,8 +44,16 @@ public class TurretAimingPID extends CommandBase {
     public void execute() {
         this.frames++;
         double x = LimeLight.getTX();
+        // SmartDashboard.putNumber("LimeLight Distance", distance);
+        SmartDashboard.putNumber("LimeLight TY", LimeLight.getTY()); // TODO: Remove debug data
+        
+        // Don't track using the LimeLight if the turret is still turning in the opposite direction
+        if (Math.abs(lazySusanSubsystem.getRawSetpoint() - lazySusanSubsystem.getDesiredRotationDegrees()) > 180) {
+            return;
+        }
+
         if (LimeLight.hasTarget()) {
-            if(this.lazySusanSubsystem.getIsGyroLocking()) {
+            if (this.lazySusanSubsystem.getIsGyroLocking()) {
                 lazySusanSubsystem.setTurretPosition(this.robotbase.get().getRotation().plus(lazySusanSubsystem.getRotation()));
             } else {
                 lazySusanSubsystem.setTurretPosition(lazySusanSubsystem.getRotation().minus(Rotation2d.fromDegrees(x)));
@@ -53,12 +61,14 @@ public class TurretAimingPID extends CommandBase {
             // lazySusanSubsystem.setTurretPositionDegrees(robotbase.get().getRotation().minus(Rotation2d.fromDegrees(x)));
             this.prevHubPosition = this.calculateHubPosition(this.getLocalPose());
         } else if (this.prevHubPosition != null) {
-            double dX = calculateHubDeltaX(this.robotbase.get(), this.prevHubPosition);
-            lazySusanSubsystem.setTurretPosition(Rotation2d.fromDegrees(dX));
+            double deltaX = calculateHubDeltaX(this.robotbase.get(), this.prevHubPosition);
+            
+            if (this.lazySusanSubsystem.getIsGyroLocking()) {
+                lazySusanSubsystem.setTurretPosition(Rotation2d.fromDegrees(deltaX));
+            } else {
+                lazySusanSubsystem.setTurretPosition(this.robotbase.get().getRotation().times(-1).plus(Rotation2d.fromDegrees(deltaX)));
+            }
         }
-        // SmartDashboard.putNumber("LimeLight Distance", distance);
-        SmartDashboard.putNumber("LimeLight TY", LimeLight.getTY()); // TODO: Remove debug data
-
     }
 
     public Pose2d getLocalPose() {
