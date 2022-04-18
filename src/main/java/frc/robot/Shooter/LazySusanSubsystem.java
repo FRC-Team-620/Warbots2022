@@ -237,7 +237,7 @@ public class LazySusanSubsystem extends SubsystemBase {
     private double simoffset = 0;
 
     private void initSim() {
-        simlazySusan = new DCMotorSim(DCMotor.getNeo550(1), (1.0) / ((1.0 / 25.0) * (20.0 / 156.0)),
+        simlazySusan = new DCMotorSim(DCMotor.getNeo550(1), (1.0) / (((1.0 / 25.0) * (20.0 / 156.0)* 0.914)),
                 Constants.kSimTurntableInertia); // TODO: add gear ratio
         simEncoder = RevEncoderSimWrapper.create(this.motor);
     }
