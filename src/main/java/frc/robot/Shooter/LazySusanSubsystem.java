@@ -76,8 +76,7 @@ public class LazySusanSubsystem extends SubsystemBase {
                 ? Rotation2d.fromDegrees(desiredRotation).minus(robotBasePose.get().getRotation()).getDegrees()
                 : desiredRotation;
 
-
-        degrees = solveTwoSolutionProblem(degrees, getRotationDegrees()); //Solve Two Solution Problem
+        degrees = findClosestSolution(degrees, getRotationDegrees()); //Solve Two Solution Problem
         lazySusanPID.setSetpoint(MathUtil.clamp(degrees, lowLimitDegrees, highLimitDegrees));
         double pidOutput = MathUtil.clamp(lazySusanPID.calculate(encoder.getPosition()), -1, 1);
 
@@ -105,25 +104,13 @@ public class LazySusanSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Turret/Is Gyro Locking", isGyroLocking);
         SmartDashboard.putNumber("Turret/ModSpeed", modSpeed);
     }
-    public double solveTwoSolutionProblem(double targetRotation, double currentRotaiton){
-        double sol2 = getSecondSol(targetRotation);
-        double distance1 =  Math.abs(desiredRotation-this.getRotationDegrees());
-        double distance2 =  Math.abs(sol2-this.getRotationDegrees());
-        if( distance2 <  distance1 && sol2 > lowLimitDegrees && sol2 < highLimitDegrees){ //Find closest point
-           return sol2;
-        }
-        return targetRotation;
-    }
 
-    public double getSecondSol(double rot){
-        double sol2 = rot-360;
-        if(rot > 0){
-            sol2 =  rot-360;
-        }else{
-            sol2 = rot+360;
-        }
-   
-        return sol2;
+    public double findClosestSolution(double targetRotation, double currentRotation){
+        double solution2 = targetRotation - Math.signum(targetRotation) * 360;
+        double distance1 = Math.abs(desiredRotation - this.getRotationDegrees());
+        double distance2 = Math.abs(solution2 - this.getRotationDegrees());
+        return distance2 < distance1 && solution2 > lowLimitDegrees && solution2 < highLimitDegrees
+        ? solution2 : targetRotation; // Find which of the two solutions is closest
     }
 
     public double getEncoderPosition() {

@@ -44,6 +44,13 @@ public class TurretAimingPID extends CommandBase {
     public void execute() {
         this.frames++;
         double x = LimeLight.getTX();
+        // SmartDashboard.putNumber("LimeLight Distance", distance);
+        SmartDashboard.putNumber("LimeLight TY", LimeLight.getTY()); // TODO: Remove debug data
+        
+        // Don't track using the LimeLight if the turret is still turning in the opposite direction
+        if (Math.abs(lazySusanSubsystem.getRawSetpoint() - lazySusanSubsystem.getDesiredRotationDegrees()) > 180)
+            return;
+    
         if (LimeLight.hasTarget()) {
             if(this.lazySusanSubsystem.getIsGyroLocking()) {
                 lazySusanSubsystem.setTurretPosition(this.robotbase.get().getRotation().plus(lazySusanSubsystem.getRotation()));
@@ -56,9 +63,6 @@ public class TurretAimingPID extends CommandBase {
             double dX = calculateHubDeltaX(this.robotbase.get(), this.prevHubPosition);
             lazySusanSubsystem.setTurretPosition(Rotation2d.fromDegrees(dX));
         }
-        // SmartDashboard.putNumber("LimeLight Distance", distance);
-        SmartDashboard.putNumber("LimeLight TY", LimeLight.getTY()); // TODO: Remove debug data
-
     }
 
     public Pose2d getLocalPose() {
