@@ -14,24 +14,26 @@ import frc.robot.Util.LimeLight;
 import frc.robot.Util.LimeLight.LedMode;
 
 public class TurretAimingPID extends CommandBase {
-    protected LazySusanSubsystem lazySusanSubsystem;
-    protected Field2d robotFieldWidget;
-    protected Supplier<Pose2d> robotbase;
-    protected Pose2d prevHubPosition = null;
-    protected int frames, maxFrames;
+    private LazySusanSubsystem lazySusanSubsystem;
+    private Field2d robotFieldWidget;
+    private Supplier<Pose2d> robotbase;
+    private Pose2d prevHubPosition = null;
+    private int frames, maxFrames;
+    private boolean endOnSuccessfulTracking;
 
     public TurretAimingPID(LazySusanSubsystem lazySusanSubsystem, Field2d robotFieldWidget,
-    Supplier<Pose2d> robotbase, int maxFrames) {
+    Supplier<Pose2d> robotbase, int maxFrames, boolean endOnSuccessfulTracking) {
         this.lazySusanSubsystem = lazySusanSubsystem;
         this.robotFieldWidget = robotFieldWidget;
         this.robotbase = robotbase;
         this.maxFrames = maxFrames;
+        this.endOnSuccessfulTracking = endOnSuccessfulTracking;
         addRequirements(lazySusanSubsystem);
     }
 
     public TurretAimingPID(LazySusanSubsystem lazySusanSubsystem,
     Field2d robotFieldWidget, Supplier<Pose2d> robotbase) {
-        this(lazySusanSubsystem, robotFieldWidget, robotbase, -1);
+        this(lazySusanSubsystem, robotFieldWidget, robotbase, -1, false);
     }
 
     @Override
@@ -103,6 +105,9 @@ public class TurretAimingPID extends CommandBase {
 
     @Override
     public boolean isFinished() {
+        if (endOnSuccessfulTracking && this.frames < this.maxFrames) {
+            return Math.abs(LimeLight.getTX()) < Constants.limeLightTolerance;
+        }
         return this.maxFrames == -1 ? false : this.frames >= this.maxFrames;
     }
 }

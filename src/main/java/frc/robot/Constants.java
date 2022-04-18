@@ -119,6 +119,7 @@ public final class Constants {
     public static final double driverRumbleHighFreq = 0.1;
     public static final double operatorRumbleLowFreq = 1.0;
     public static final double operatorRumbleHighFreq = 0.1;
+    public static final double limeLightTolerance = 0.2; // Measured in degrees
 
     //Lazy susan
     public static final int calSwitchID = 9;
