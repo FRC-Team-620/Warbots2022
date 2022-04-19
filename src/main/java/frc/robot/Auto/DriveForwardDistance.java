@@ -52,8 +52,6 @@ public class DriveForwardDistance extends CommandBase {
     return this.initPose.getTranslation().getDistance(this.drivetrain.getPose().getTranslation());
   }
 
-
-
   // public double averageDistance() {
   //   return (drivetrain.getLeftPosition() + drivetrain.getRightPosition()) / 2;
   // }
@@ -65,7 +63,7 @@ public class DriveForwardDistance extends CommandBase {
   // // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return withinBounds() || this.intake.getIntakeSwitch();
+    return withinBounds();
   }
 
   @Override

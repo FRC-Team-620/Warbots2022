@@ -36,6 +36,6 @@ public class AutoLoad extends CommandBase{
 
     @Override
     public boolean isFinished() {
-        return this.intake.getIntakeSwitch() || this.frames > 60;
+        return this.intake.getIntakeSwitch() || this.frames > 100;
     }
 }

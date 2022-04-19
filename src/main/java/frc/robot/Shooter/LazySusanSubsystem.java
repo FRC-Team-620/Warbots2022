@@ -48,8 +48,8 @@ public class LazySusanSubsystem extends SubsystemBase {
     // private double turntableThresh = 35;
 
     public LazySusanSubsystem(Supplier<Pose2d> robotBasePose) {
-        this.isGyroLocking = true;
-        this.isHubTracking = true;
+        this.isGyroLocking = false;
+        this.isHubTracking = false;
         this.robotBasePose = robotBasePose;
         this.motor = new SimableCANSparkMax(Constants.lazySusanID, MotorType.kBrushless);
         this.calSwitch = new DigitalInput(Constants.calSwitchID);
