@@ -33,7 +33,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public double targetRpm;
     private boolean isBackward;
     private boolean powerDecel = true;
-    private double offsetSpeed = 150;
+    private double offsetSpeed = 0;
 
     //PIDs
     protected final PIDController leftShooterPID;
@@ -45,7 +45,7 @@ public class ShooterSubsystem extends SubsystemBase {
 	private final double kP = 0.000001, kI = 0.003500, kD = 0.010000;//0.00025 0.0004
     private double testRPM;
 
-    // When setting any non-speed value, make sure to set the isBackwards boolean!
+    // When setting any non-speed value, make sure to set the isBackward boolean!
 
     public ShooterSubsystem() {
         rightShooterMotor = new SimableCANSparkMax(Constants.rightShooterMotorID, MotorType.kBrushless);

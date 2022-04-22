@@ -24,8 +24,8 @@ import frc.robot.Util.LimeLight.LedMode;
 public class TwoBalls extends SequentialCommandGroup {
   // All distances are in meters
   private double firstShotDistance = 0.5;
-  private double twoBallsDistance = 0.8;
-  private double taxiDistance = 1.2;
+  private double twoBallsDistance = 1.3;
+  private double taxiDistance = 1.6;
 
   public TwoBalls(RobotContainer robotContainer, Drivetrain drivetrain, LazySusanSubsystem lazySusanSubsystem, 
   ShooterSubsystem shooterSubsystem, FiringPins firingPins, Intake intake) {
@@ -42,7 +42,7 @@ public class TwoBalls extends SequentialCommandGroup {
             new ZeroTurnTable(lazySusanSubsystem),
             new DriveForwardDistance(drivetrain, firstShotDistance, intake)
           ),
-          new WaitCommand(3),
+          new WaitCommand(2),
           // new DriveForwardDistance(drivetrain, twoBallsDistanceMeters),
           new TurretAimingPID(lazySusanSubsystem, robotContainer.robotFieldWidget, drivetrain::getPose, 100, false),
           new ActivateFiringPins(firingPins, intake),

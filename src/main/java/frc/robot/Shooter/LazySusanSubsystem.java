@@ -31,17 +31,19 @@ public class LazySusanSubsystem extends SubsystemBase {
     private double desiredRotation;
     private final Supplier<Pose2d> robotBasePose;
     private boolean isGyroLocking;
-    private final double countsToDegreesFactor = (1.0 / 25.0) * (20.0 / 156.0) * 360.0;
+    private final double countsToDegreesFactor = (1.0 / (5.23 * 5.23)) * (20.0 / 156.0) * 360.0;
     private double maxModSpeed = 0.8;
     private double modSpeed = 1;
-    private final double kP = 0.032000, kI = 0.001700, kD = 0;// KI0.00004 kP = 0.060000, kI = 0.003000, TODO: Tune PID
+    private final double kP = 0.038000, kI = 0.2, kD = 0.000400;// KI0.00004 kP = 0.060000, kI = 0.003000, TODO: Tune PID
                                                               // Loop
     private boolean isCal;
+    private double offsetAngle = -4;
     // private boolean isDisabled;
     public DigitalInput calSwitch;
     private final double lowLimitDegrees = -195;
     private final double highLimitDegrees = 220;
     private final double errorMargin = 2;
+    private double maxIntegrator = 0.7;
 
     private boolean isHubTracking;
     // Left 45.690002, Right -45.356651, AbsoluteMaxRange 90
@@ -55,7 +57,7 @@ public class LazySusanSubsystem extends SubsystemBase {
         this.calSwitch = new DigitalInput(Constants.calSwitchID);
         this.motor.restoreFactoryDefaults();
         this.encoder = this.motor.getEncoder();
-        encoder.setPositionConversionFactor(countsToDegreesFactor * 0.914);
+        encoder.setPositionConversionFactor(countsToDegreesFactor); //* 0.914
         this.encoder.setPosition(Constants.stowedDegrees);
         IdleMode mode = IdleMode.kBrake; // brakes
         this.motor.setIdleMode(mode);
@@ -64,16 +66,23 @@ public class LazySusanSubsystem extends SubsystemBase {
         // lazySusan.setInverted(true);
         lazySusanPID = new PIDController(kP, kI, kD);
         lazySusanPID.setTolerance(1);
-        lazySusanPID.setIntegratorRange(-10, 10);
+        lazySusanPID.setIntegratorRange(-this.maxIntegrator, this.maxIntegrator);
         // turretRotation =encoder.getPosition();
         // turretRotation = desiredRotation = Constants.stowedDegrees;
         isCal = false;
         // isDisabled =
         SmartDashboard.putData("Turret/PIDController[12]", lazySusanPID);
+        SmartDashboard.putNumber("Turret/offsetAngle", offsetAngle);
     }
 
     @Override
     public void periodic() {
+
+        //desiredRotation = SmartDashboard.getNumber("Turret/Desired Rotation", desiredRotation);
+        //offsetAngle = SmartDashboard.getNumber("Turret/offsetAngle", offsetAngle);
+        //this.maxIntegrator = SmartDashboard.getNumber("Turret/maxIntegrator", this.maxIntegrator);
+        //lazySusanPID.setIntegratorRange(-this.maxIntegrator, this.maxIntegrator);
+
         double degrees = isGyroLocking
                 ? Rotation2d.fromDegrees(desiredRotation).minus(robotBasePose.get().getRotation()).getDegrees()
                 : desiredRotation;
@@ -105,7 +114,9 @@ public class LazySusanSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Turret/Setpoint", this.lazySusanPID.getSetpoint());
         SmartDashboard.putBoolean("Turret/Is Gyro Locking", isGyroLocking);
         SmartDashboard.putBoolean("Turret/Is Hub Tracking", isHubTracking);
-        SmartDashboard.putNumber("Turret/ModSpeed", modSpeed);
+        SmartDashboard.putNumber("Turret/ModSpeed", modSpeed); 
+        SmartDashboard.putNumber("Turret/maxIntegrator", this.maxIntegrator);     
+        
     }
 
     public double findClosestSolution(double targetRotation, double currentRotation){
@@ -115,6 +126,15 @@ public class LazySusanSubsystem extends SubsystemBase {
         return distance2 < distance1 && solution2 > lowLimitDegrees && solution2 < highLimitDegrees
         ? solution2 : targetRotation; // Find which of the two solutions is closest
     }
+
+    public double getOffsetAngle() {
+        return offsetAngle;
+    }
+    
+    public void setOffsetAngle(double oA) {
+        offsetAngle = oA;
+    }
+
 
     public void setSmartCurrentLimit(int currentLimit) {
         this.motor.setSmartCurrentLimit(currentLimit);
@@ -200,6 +220,10 @@ public class LazySusanSubsystem extends SubsystemBase {
 
     public void setEncoderPosition(double p) {
         encoder.setPosition(p);
+    }
+
+    public void setMotorSpeed(double speed) {
+        this.motor.set(speed);
     }
 
     public void stop() {
