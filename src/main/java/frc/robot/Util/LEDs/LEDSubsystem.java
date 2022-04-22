@@ -11,7 +11,7 @@ public class LEDSubsystem extends SubsystemBase {
     
     public static enum LEDManager {
 
-        STRIP0(65, 9);
+        STRIP0(65, 9); // 65 lights, PWM port 9
 
         private LEDStrip strip;
         private LEDManager(int LEDCount, int PWMPort) {
@@ -30,8 +30,11 @@ public class LEDSubsystem extends SubsystemBase {
         public LEDAnimation solidColorAnimation(Color color) {
             return this.strip.solidColorAnimation(color);
         }
-        public LEDAnimation fadeAnimation(double speed, int steps, Color c1, Color c2) {
-            return this.strip.fadeAnimation(speed, steps, c1, c2);
+        public LEDAnimation fadeTwoAnimation(double speed, int steps, Color c1, Color c2) {
+            return this.strip.fadeTwoAnimation(speed, steps, c1, c2);
+        }
+        public LEDAnimation fadeAnimation(double speed, int stepsPer, Color... colors) {
+            return this.strip.fadeAnimation(speed, stepsPer, colors);
         }
 
         public void set(Color c) {
@@ -64,16 +67,16 @@ public class LEDSubsystem extends SubsystemBase {
             this.animation.accept((int)this.accumulation);
             this.accumulation += this.speed;
         }
-        public static LEDAnimation transposeBlinking(double speed, LEDAnimation... animations) {
+        public static LEDAnimation concatenate(double speed, LEDAnimation... animations) {
             return new LEDAnimation(speed, n -> animations[n%animations.length].step());
         }
     }
 
     private static class LEDStrip {
 
-        protected int PWMPort;
-        protected AddressableLED lights;
-        protected AddressableLEDBuffer buffer;
+        private int PWMPort;
+        private AddressableLED lights;
+        private AddressableLEDBuffer buffer;
     
         public LEDStrip(int numLights, int PWMPort) {
             this.PWMPort = PWMPort;
@@ -106,7 +109,7 @@ public class LEDSubsystem extends SubsystemBase {
             return new LEDAnimation(0, n -> this.setSolidColor(color));
         }
 
-        public LEDAnimation fadeAnimation(double speed, int steps, Color c1, Color c2) {
+        public LEDAnimation fadeTwoAnimation(double speed, int steps, Color c1, Color c2) {
             return new LEDAnimation(speed, n -> {
                 n %= 2*steps;
                 int i = -Math.abs(n-steps)+steps;
@@ -117,6 +120,20 @@ public class LEDSubsystem extends SubsystemBase {
                     proportion*(c2.blue-c1.blue)+c1.blue
                 ));
             });
+        }
+
+        public LEDAnimation fadeAnimation(double speed, int stepsPer, Color... colors) {
+            // Edge cases
+            if(colors.length <= 0) return null;
+            else if(colors.length == 1) 
+                return this.solidColorAnimation(colors[0]);
+            else if(colors.length == 2) 
+                return this.fadeTwoAnimation(speed, stepsPer, colors[0], colors[1]);
+            // Concatenating a series of fade animations
+            LEDAnimation[] fades = new LEDAnimation[colors.length];
+            for(int i = 0; i < colors.length; i++)
+                fades[i] = this.fadeTwoAnimation(speed, stepsPer, colors[i], colors[(i+1)%colors.length]);
+            return LEDAnimation.concatenate(stepsPer/speed, fades);
         }
     
         // returns an RGB representation of the light at a given index of the 'AddressableLEDBuffer'

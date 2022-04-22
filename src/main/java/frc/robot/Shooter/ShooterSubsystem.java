@@ -20,6 +20,8 @@ import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Controls.ControlBoard;
+import frc.robot.Util.LimeLight;
 import frc.robot.Util.sim.LimeLightPoseSim;
 import frc.robot.Util.sim.LimeLightSim;
 import frc.robot.Util.sim.RevEncoderSimWrapper;
@@ -83,33 +85,48 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+
+        boolean hasTargetAndInRange = LimeLight.hasTarget() && Constants.rpmMap.isKeyInBounds(LimeLight.getTY());
+
+        ControlBoard.setOperatorHighFreqRumble(hasTargetAndInRange);
+        ControlBoard.setDriverHighFreqRumble(hasTargetAndInRange);
         
-            // Debug Force both Pid loops to same setpoint; //TODO: Prob need to remove
-            //rightShooterPID.setSetpoint(leftShooterPID.getSetpoint());
+        // Debug Force both Pid loops to same setpoint; //TODO: Prob need to remove
+        //rightShooterPID.setSetpoint(leftShooterPID.getSetpoint());
 
-            leftShooterPID.calculate(leftShooterMotor.getEncoder().getVelocity());
-            rightShooterPID.calculate(rightShooterMotor.getEncoder().getVelocity());
+        leftShooterPID.calculate(leftShooterMotor.getEncoder().getVelocity());
+        rightShooterPID.calculate(rightShooterMotor.getEncoder().getVelocity());
 
-            double leftOutputVoltage = leftShooterPID.calculate(leftShooterMotor.getEncoder().getVelocity()) + 
-                feedForward.calculate(leftShooterPID.getSetpoint()/60);
-            double rightOutputVoltage = rightShooterPID.calculate(rightShooterMotor.getEncoder().getVelocity()) + 
-                feedForward.calculate(rightShooterPID.getSetpoint()/60);
-            if (!isBackward) {
-                leftShooterMotor.setVoltage(MathUtil.clamp(leftOutputVoltage, powerDecel || leftShooterPID.getSetpoint() <= 0 ? 0 : -13, 13));
-                rightShooterMotor.setVoltage(MathUtil.clamp(rightOutputVoltage, powerDecel || rightShooterPID.getSetpoint() <= 0 ? 0 : -13, 13));
-            } else {
-                leftShooterMotor.setVoltage(-13);
-                rightShooterMotor.setVoltage(-13);
-            }
+        double leftOutputVoltage = leftShooterPID.calculate(leftShooterMotor.getEncoder().getVelocity()) + 
+            feedForward.calculate(leftShooterPID.getSetpoint()/60);
+        double rightOutputVoltage = rightShooterPID.calculate(rightShooterMotor.getEncoder().getVelocity()) + 
+            feedForward.calculate(rightShooterPID.getSetpoint()/60);
+        if (!isBackward) {
+            leftShooterMotor.setVoltage(MathUtil.clamp(leftOutputVoltage, powerDecel || leftShooterPID.getSetpoint() <= 0 ? 0 : -13, 13));
+            rightShooterMotor.setVoltage(MathUtil.clamp(rightOutputVoltage, powerDecel || rightShooterPID.getSetpoint() <= 0 ? 0 : -13, 13));
+        } else {
+            leftShooterMotor.setVoltage(-13);
+            rightShooterMotor.setVoltage(-13);
+        }
 
-            SmartDashboard.putNumber("Flywheel/Right RPM", rightShooterMotor.getEncoder().getVelocity());
-            SmartDashboard.putNumber("Flywheel/Left RPM", leftShooterMotor.getEncoder().getVelocity());
-            SmartDashboard.putNumber("Flywheel/Left atTarget", leftShooterPID.atSetpoint() ? 5000 : 0);
-            SmartDashboard.putNumber("Flywheel/Right atTarget", rightShooterPID.atSetpoint() ? 5000 : 0);
-            SmartDashboard.putNumber("Flywheel/Right Setpoint", rightShooterPID.getSetpoint());
-            SmartDashboard.putNumber("Flywheel/Left Setpoint", leftShooterPID.getSetpoint());
-        
+        ControlBoard.setOperatorLowFreqRumble(hasTargetAndInRange && this.getWithinTolerance());
+        ControlBoard.setDriverLowFreqRumble(hasTargetAndInRange && this.getWithinTolerance());
+
+        SmartDashboard.putNumber("Flywheel/Right RPM", rightShooterMotor.getEncoder().getVelocity());
+        SmartDashboard.putNumber("Flywheel/Left RPM", leftShooterMotor.getEncoder().getVelocity());
+        SmartDashboard.putNumber("Flywheel/Left atTarget", leftShooterPID.atSetpoint() ? 5000 : 0);
+        SmartDashboard.putNumber("Flywheel/Right atTarget", rightShooterPID.atSetpoint() ? 5000 : 0);
+        SmartDashboard.putNumber("Flywheel/Right Setpoint", rightShooterPID.getSetpoint());
+        SmartDashboard.putNumber("Flywheel/Left Setpoint", leftShooterPID.getSetpoint());
+    
         //MathUtil.clamp(output,powerDecel ? -1: 0,1);
+    }
+
+    private boolean getWithinTolerance(){
+        return ShooterMath.withinTolerance(
+            this.getRPM(), 
+            this.getTargetRPM(), 
+            Constants.shooterVibrationTolerance);
     }
 
     public double getTestRPM() {

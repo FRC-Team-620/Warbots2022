@@ -13,12 +13,12 @@ public class LEDIdleCommand extends CommandBase {
     protected FiringPins firingPins;
     protected LazySusanSubsystem lazySusanSubsystem;
 
-    protected LEDAnimation noBallsAnimCalibrated = LEDManager.STRIP0.fadeAnimation(1,
+    protected LEDAnimation noBallsAnimCalibrated = LEDManager.STRIP0.fadeTwoAnimation(1,
         60,
         Color.kForestGreen, 
         Color.kWhite
     );
-    protected LEDAnimation noBallsAnimUncalibrated = LEDManager.STRIP0.fadeAnimation(1,
+    protected LEDAnimation noBallsAnimUncalibrated = LEDManager.STRIP0.fadeTwoAnimation(1,
         60, 
         Color.kBlack,
         Color.kDarkRed
