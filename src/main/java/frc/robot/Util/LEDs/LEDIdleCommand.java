@@ -14,10 +14,21 @@ public class LEDIdleCommand extends CommandBase {
     protected LazySusanSubsystem lazySusanSubsystem;
 
     protected LEDAnimation noBallsAnimCalibrated = LEDManager.STRIP0.fadeTwoAnimation(1,
-        60,
+        40,
         Color.kForestGreen, 
         Color.kWhite
     );
+    // protected LEDAnimation noBallsAnimCalibrated = LEDManager.STRIP0.fadeAnimation(1,
+    //     40,
+    //     Color.kRed,
+    //     // Color.kOrange,
+    //     // Color.kYellow,
+    //     Color.kGreen,
+    //     // Color.kCyan,
+    //     Color.kBlue
+    //     // Color.kViolet,
+    //     // Color.kMagenta
+    // );
     protected LEDAnimation noBallsAnimUncalibrated = LEDManager.STRIP0.fadeTwoAnimation(1,
         60, 
         Color.kBlack,
@@ -59,12 +70,12 @@ public class LEDIdleCommand extends CommandBase {
     @Override
     public void execute() {
         // if(this.firingPins.hasColor()) { 
-        if(this.intake.getIntakeSwitch()) { // TWO balls
+        if(this.intake.getIntakeSwitch()) {
             this.oneBallAnim.step();
             // } else { // ONE ball
             //     this.oneBallAnim.step();
             // }
-        } else if(this.lazySusanSubsystem.getIsCal()) { // NO balls
+        } else if(this.lazySusanSubsystem.getIsCal()) {
             this.noBallsAnimCalibrated.step();
         } else {
             this.noBallsAnimUncalibrated.step();

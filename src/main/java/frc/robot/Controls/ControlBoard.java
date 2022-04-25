@@ -43,7 +43,6 @@ public class ControlBoard {
         // driver controls
         intakeButton = new JoystickButton(driver, Button.kB.value);
         outakeButton = new JoystickButton(driver, Button.kA.value);
-        lowShotButton = new JoystickButton(driver, Button.kY.value);
         winchHoldButton = new JoystickButton(driver, Button.kX.value);
     }
 
@@ -51,13 +50,18 @@ public class ControlBoard {
         // operator controls
         extendArmsButton = new JoystickButton(operator, Button.kX.value);
         raiseArmsButton = new JoystickButton(operator, Button.kY.value);
-        climbSequenceButton = new JoystickButton(operator, Button.kB.value);
-        lowerHooksButton = new JoystickButton(operator, Button.kStart.value);
-        tankDriveAimButton = new JoystickButton(operator, Button.kLeftBumper.value);
-        aimTurretTrigger = new TriggerPressed(operator, Axis.kLeftTrigger.value);
-        fireTurretTrigger = new TriggerPressed(operator, Axis.kRightTrigger.value);
-        toggleGyroButton = new JoystickButton(operator, Button.kBack.value);
         reverseShooterWheelsButton = new JoystickButton(operator, Button.kA.value);
+        climbSequenceButton = new JoystickButton(operator, Button.kB.value);
+
+        aimTurretTrigger = new TriggerPressed(operator, Axis.kLeftTrigger.value);
+        tankDriveAimButton = new JoystickButton(operator, Button.kLeftBumper.value);
+        fireTurretTrigger = new TriggerPressed(operator, Axis.kRightTrigger.value);
+        lowShotButton = new JoystickButton(operator, Button.kRightBumper.value);
+
+        lowerHooksButton = new JoystickButton(operator, Button.kStart.value);
+        toggleGyroButton = new JoystickButton(operator, Button.kBack.value);
+
+        
     }
 
     // use these for now until the drive command is converted

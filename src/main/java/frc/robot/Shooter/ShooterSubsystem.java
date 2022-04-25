@@ -88,6 +88,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
         boolean hasTargetAndInRange = LimeLight.hasTarget() && Constants.rpmMap.isKeyInBounds(LimeLight.getTY());
 
+        SmartDashboard.putBoolean("Flywheel/TARGET", hasTargetAndInRange);
         ControlBoard.setOperatorHighFreqRumble(hasTargetAndInRange);
         ControlBoard.setDriverHighFreqRumble(hasTargetAndInRange);
         
@@ -109,6 +110,7 @@ public class ShooterSubsystem extends SubsystemBase {
             rightShooterMotor.setVoltage(-13);
         }
 
+        SmartDashboard.putBoolean("Flywheel/GOOD", hasTargetAndInRange && this.getWithinTolerance());
         ControlBoard.setOperatorLowFreqRumble(hasTargetAndInRange && this.getWithinTolerance());
         ControlBoard.setDriverLowFreqRumble(hasTargetAndInRange && this.getWithinTolerance());
 

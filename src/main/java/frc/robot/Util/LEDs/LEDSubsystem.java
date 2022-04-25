@@ -30,6 +30,9 @@ public class LEDSubsystem extends SubsystemBase {
         public LEDAnimation solidColorAnimation(Color color) {
             return this.strip.solidColorAnimation(color);
         }
+        public LEDAnimation fadeTwoAnimation(double speed, int steps, boolean bidirectional, Color c1, Color c2) {
+            return this.strip.fadeTwoAnimation(speed, steps, bidirectional, c1, c2);
+        }
         public LEDAnimation fadeTwoAnimation(double speed, int steps, Color c1, Color c2) {
             return this.strip.fadeTwoAnimation(speed, steps, c1, c2);
         }
@@ -109,10 +112,10 @@ public class LEDSubsystem extends SubsystemBase {
             return new LEDAnimation(0, n -> this.setSolidColor(color));
         }
 
-        public LEDAnimation fadeTwoAnimation(double speed, int steps, Color c1, Color c2) {
+        public LEDAnimation fadeTwoAnimation(double speed, int steps, boolean bidirectional, Color c1, Color c2) {
             return new LEDAnimation(speed, n -> {
-                n %= 2*steps;
-                int i = -Math.abs(n-steps)+steps;
+                n %= (bidirectional ? 2*steps : steps);
+                int i = bidirectional ? -Math.abs(n-steps)+steps : n;
                 double proportion = (double)i/steps;
                 this.setSolidColor(new Color(
                     proportion*(c2.red-c1.red)+c1.red,
@@ -122,18 +125,22 @@ public class LEDSubsystem extends SubsystemBase {
             });
         }
 
+        public LEDAnimation fadeTwoAnimation(double speed, int steps, Color c1, Color c2) {
+            return this.fadeTwoAnimation(speed, steps, true, c1, c2);
+        }
+
         public LEDAnimation fadeAnimation(double speed, int stepsPer, Color... colors) {
             // Edge cases
             if(colors.length <= 0) return null;
             else if(colors.length == 1) 
                 return this.solidColorAnimation(colors[0]);
             else if(colors.length == 2) 
-                return this.fadeTwoAnimation(speed, stepsPer, colors[0], colors[1]);
+                return this.fadeTwoAnimation(speed, stepsPer, true, colors[0], colors[1]);
             // Concatenating a series of fade animations
             LEDAnimation[] fades = new LEDAnimation[colors.length];
             for(int i = 0; i < colors.length; i++)
-                fades[i] = this.fadeTwoAnimation(speed, stepsPer, colors[i], colors[(i+1)%colors.length]);
-            return LEDAnimation.concatenate(stepsPer/speed, fades);
+                fades[i] = this.fadeTwoAnimation(speed, stepsPer, false, colors[i], colors[(i+1)%colors.length]);
+            return LEDAnimation.concatenate(speed/stepsPer, fades);
         }
     
         // returns an RGB representation of the light at a given index of the 'AddressableLEDBuffer'
@@ -198,7 +205,6 @@ public class LEDSubsystem extends SubsystemBase {
         private static Color[] colorGradient(Color startColor, Color endColor, int steps) {
             Color gradient[] = new Color[steps], color;
             double proportion;
-            
             for(int i = 0; i < gradient.length; i++) {
                 proportion = (double)i/(gradient.length-1);
                 color = new Color(

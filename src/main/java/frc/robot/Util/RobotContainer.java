@@ -157,7 +157,7 @@ public class RobotContainer {
         ControlBoard.reverseShooterWheelsButton.whenReleased(
             new InstantCommand(() -> this.shooter.setIsBackwards(false)));
 
-        //driver
+        //operator
         ControlBoard.lowShotButton.whileActiveOnce(new LowShotCommand(shooter));
 
         //ControlBoard.intakeButton.whileActiveOnce(new IntakeBall(intake));
