@@ -21,31 +21,31 @@ public class SmartIntake extends CommandBase {
     public void initialize() {
         frames = 0;
         // intake.enableInnerIntakeMotor();
-        this.intake.extendIntakeArms();
-        this.intake.enableIntakeArmsMotor();
+        // this.intake.extendIntakeArms();
+        // this.intake.enableIntakeArmsMotor();
         this.intake.enableInnerIntakeMotor();
     }
 
-    @Override
-    public void execute() {
-        if (++this.frames > Constants.frameCountUntilFloat) 
-            intake.floatIntakeArms();
+    // @Override
+    // public void execute() {
+    //     if (++this.frames > Constants.frameCountUntilFloat) 
+    //         intake.floatIntakeArms();
         
-        // if(this.firingPins.hasColor()) { 
-        //     if(this.intake.getIntakeSwitch()) { // TWO balls
-        //         this.intake.disableInnerIntakeMotor();
-        //     } else { // ONE ball
-        //         this.intake.setInnerIntakeMotor(0.9);
-        //     }
-        if (this.intake.getIntakeSwitch()) {
-            this.intake.disableInnerIntakeMotor();
-        } else {} // NO balls (add code here if needed)
-    }
+    //     // if(this.firingPins.hasColor()) { 
+    //     //     if(this.intake.getIntakeSwitch()) { // TWO balls
+    //     //         this.intake.disableInnerIntakeMotor();
+    //     //     } else { // ONE ball
+    //     //         this.intake.setInnerIntakeMotor(0.9);
+    //     //     }
+    //     if (this.intake.getIntakeSwitch()) {
+    //         this.intake.disableInnerIntakeMotor();
+    //     } else {} // NO balls (add code here if needed)
+    // }
 
     @Override
     public void end(boolean interrupted) {
         this.intake.disableInnerIntakeMotor();
-        this.intake.retractIntakeArms();
-        this.intake.disableIntakeArmsMotor();
+        // this.intake.retractIntakeArms();
+        // this.intake.disableIntakeArmsMotor();
     }
 }

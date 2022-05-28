@@ -97,28 +97,36 @@ public class RobotContainer {
     }
 
     private void initControls() {
-        // operator
-        ControlBoard.raiseArmsButton.whenPressed(
-                new RaisePistons(climberHooks));
 
-        ControlBoard.extendArmsButton.whenPressed(
-                new ParallelCommandGroup(
-                        new ExtendArmsAndStow(winch, climberHooks, intake)
-                        //new DirectTurret(turret, shooter, Constants.stowedPosition)
-                        ));
 
-        ControlBoard.climbSequenceButton.whenPressed(
-                new RaiseAndGrab(winch, climberHooks));
 
-        // controls.tankDriveAimButton.whileActiveOnce(
-        //     new TankDriveAutoAimAndSpinUp(getShooterSubsystem(), getDriveTrain(), 
-        //         false, controls.getOperatorController()));
+        
+        // // operator
+        // ControlBoard.raiseArmsButton.whenPressed(
+        //         new RaisePistons(climberHooks));
 
-        ControlBoard.lowerHooksButton.whenPressed(
-                new ToggleHooks(climberHooks));
+        // ControlBoard.extendArmsButton.whenPressed(
+        //         new ParallelCommandGroup(
+        //                 new ExtendArmsAndStow(winch, climberHooks, intake)
+        //                 //new DirectTurret(turret, shooter, Constants.stowedPosition)
+        //                 ));
 
-        ControlBoard.winchHoldButton.whenPressed(
-                new WinchHold(winch, winch.getWinchPosition(), Constants.holdTime));
+        // ControlBoard.climbSequenceButton.whenPressed(
+        //         new RaiseAndGrab(winch, climberHooks));
+
+        // // controls.tankDriveAimButton.whileActiveOnce(
+        // //     new TankDriveAutoAimAndSpinUp(getShooterSubsystem(), getDriveTrain(), 
+        // //         false, controls.getOperatorController()));
+
+
+
+
+
+        // ControlBoard.lowerHooksButton.whenPressed(
+        //         new ToggleHooks(climberHooks));
+
+        // ControlBoard.winchHoldButton.whenPressed(
+        //         new WinchHold(winch, winch.getWinchPosition(), Constants.holdTime));
 
         // TODO: here, now make a unified aiming/flywheel spinup command that we can use
         // for both auto and tele
