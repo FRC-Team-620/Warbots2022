@@ -78,44 +78,44 @@ public class LazySusanSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
 
-        //desiredRotation = SmartDashboard.getNumber("Turret/Desired Rotation", desiredRotation);
-        //offsetAngle = SmartDashboard.getNumber("Turret/offsetAngle", offsetAngle);
-        //this.maxIntegrator = SmartDashboard.getNumber("Turret/maxIntegrator", this.maxIntegrator);
-        //lazySusanPID.setIntegratorRange(-this.maxIntegrator, this.maxIntegrator);
+        // //desiredRotation = SmartDashboard.getNumber("Turret/Desired Rotation", desiredRotation);
+        // //offsetAngle = SmartDashboard.getNumber("Turret/offsetAngle", offsetAngle);
+        // //this.maxIntegrator = SmartDashboard.getNumber("Turret/maxIntegrator", this.maxIntegrator);
+        // //lazySusanPID.setIntegratorRange(-this.maxIntegrator, this.maxIntegrator);
 
-        double degrees = isGyroLocking
-                ? Rotation2d.fromDegrees(desiredRotation).minus(robotBasePose.get().getRotation()).getDegrees()
-                : desiredRotation;
+        // double degrees = isGyroLocking
+        //         ? Rotation2d.fromDegrees(desiredRotation).minus(robotBasePose.get().getRotation()).getDegrees()
+        //         : desiredRotation;
 
-        degrees = findClosestSolution(degrees, getRotationDegrees()); //Solve Two Solution Problem
-        lazySusanPID.setSetpoint(MathUtil.clamp(degrees, lowLimitDegrees, highLimitDegrees));
-        double pidOutput = MathUtil.clamp(lazySusanPID.calculate(encoder.getPosition()), -1, 1);
+        // degrees = findClosestSolution(degrees, getRotationDegrees()); //Solve Two Solution Problem
+        // lazySusanPID.setSetpoint(MathUtil.clamp(degrees, lowLimitDegrees, highLimitDegrees));
+        // double pidOutput = MathUtil.clamp(lazySusanPID.calculate(encoder.getPosition()), -1, 1);
 
-        if (encoder.getPosition() > highLimitDegrees) {
-            pidOutput = MathUtil.clamp(pidOutput, -1, 0);
-        }
+        // if (encoder.getPosition() > highLimitDegrees) {
+        //     pidOutput = MathUtil.clamp(pidOutput, -1, 0);
+        // }
 
-        if (encoder.getPosition() < lowLimitDegrees) {
-            pidOutput = MathUtil.clamp(pidOutput, 0, 1);
-        }
+        // if (encoder.getPosition() < lowLimitDegrees) {
+        //     pidOutput = MathUtil.clamp(pidOutput, 0, 1);
+        // }
 
-        // motor.set(pidOutput * modSpeed);
+        // // motor.set(pidOutput * modSpeed);
 
-        motor.set(
-                MathUtil.clamp(pidOutput, -this.modSpeed * this.maxModSpeed, this.modSpeed * this.maxModSpeed));
-        // System.out.println("FNIEGOIN: " + Math.abs(degrees -
-        // this.turretRotation.getDegrees()));
+        // motor.set(
+        //         MathUtil.clamp(pidOutput, -this.modSpeed * this.maxModSpeed, this.modSpeed * this.maxModSpeed));
+        // // System.out.println("FNIEGOIN: " + Math.abs(degrees -
+        // // this.turretRotation.getDegrees()));
 
-        SmartDashboard.putNumber("Turret/Raw Encoder", encoder.getPosition());
-        SmartDashboard.putNumber("Turret/Motor Percentage", motor.get());
-        SmartDashboard.putBoolean("Turret/Is Calibrated", isCal);
-        SmartDashboard.putBoolean("Turret/Calibration Switch", islimitSwitchPressed());
-        SmartDashboard.putNumber("Turret/Desired Rotation", desiredRotation);
-        SmartDashboard.putNumber("Turret/Setpoint", this.lazySusanPID.getSetpoint());
-        SmartDashboard.putBoolean("Turret/Is Gyro Locking", isGyroLocking);
-        SmartDashboard.putBoolean("Turret/Is Hub Tracking", isHubTracking);
-        SmartDashboard.putNumber("Turret/ModSpeed", modSpeed); 
-        SmartDashboard.putNumber("Turret/maxIntegrator", this.maxIntegrator);     
+        // SmartDashboard.putNumber("Turret/Raw Encoder", encoder.getPosition());
+        // SmartDashboard.putNumber("Turret/Motor Percentage", motor.get());
+        // SmartDashboard.putBoolean("Turret/Is Calibrated", isCal);
+        // SmartDashboard.putBoolean("Turret/Calibration Switch", islimitSwitchPressed());
+        // SmartDashboard.putNumber("Turret/Desired Rotation", desiredRotation);
+        // SmartDashboard.putNumber("Turret/Setpoint", this.lazySusanPID.getSetpoint());
+        // SmartDashboard.putBoolean("Turret/Is Gyro Locking", isGyroLocking);
+        // SmartDashboard.putBoolean("Turret/Is Hub Tracking", isHubTracking);
+        // SmartDashboard.putNumber("Turret/ModSpeed", modSpeed); 
+        // SmartDashboard.putNumber("Turret/maxIntegrator", this.maxIntegrator);     
         
     }
 

@@ -47,16 +47,16 @@ public class Robot extends TimedRobot {
     // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);
     // robotContainer.getLazySusanSubsystem().setEncoderPosition(0);
 
-    autoSelector.setDefaultOption("Two-Ball", new TwoBalls(robotContainer, robotContainer.getDriveTrain(), 
-    robotContainer.getLazySusanSubsystem(), robotContainer.getShooterSubsystem(), 
-    robotContainer.getFiringPins(), robotContainer.getIntake()));
-    autoSelector.addOption("One-Ball", new OneBall(robotContainer.getDriveTrain(), robotContainer.getLazySusanSubsystem(), 
-      robotContainer.getShooterSubsystem(), robotContainer.getFiringPins(), robotContainer.getIntake()));
-    autoSelector.addOption("Taxi", new Taxi(robotContainer.getDriveTrain(), robotContainer.getIntake(), robotContainer.getLazySusanSubsystem()));
-    autoSelector.addOption("Extake-Ball", new ExtakeBall(robotContainer.getIntake()));
-    autoSelector.addOption("AutoCommand", new AutoCommand(robotContainer.getFiringPins(), 
-      robotContainer.getShooterSubsystem(), robotContainer));
-    SmartDashboard.putData(autoSelector);
+    // autoSelector.setDefaultOption("Two-Ball", new TwoBalls(robotContainer, robotContainer.getDriveTrain(), 
+    // robotContainer.getLazySusanSubsystem(), robotContainer.getShooterSubsystem(), 
+    // robotContainer.getFiringPins(), robotContainer.getIntake()));
+    // autoSelector.addOption("One-Ball", new OneBall(robotContainer.getDriveTrain(), robotContainer.getLazySusanSubsystem(), 
+    //   robotContainer.getShooterSubsystem(), robotContainer.getFiringPins(), robotContainer.getIntake()));
+    // autoSelector.addOption("Taxi", new Taxi(robotContainer.getDriveTrain(), robotContainer.getIntake(), robotContainer.getLazySusanSubsystem()));
+    // autoSelector.addOption("Extake-Ball", new ExtakeBall(robotContainer.getIntake()));
+    // autoSelector.addOption("AutoCommand", new AutoCommand(robotContainer.getFiringPins(), 
+    //   robotContainer.getShooterSubsystem(), robotContainer));
+    // SmartDashboard.putData(autoSelector);
   }
 
   @Override
@@ -69,13 +69,13 @@ public class Robot extends TimedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
-    if (!robotContainer.getLazySusanSubsystem().getIsCal()) {
-      new ZeroTurnTable(robotContainer.getLazySusanSubsystem()).schedule();
-    }
+    // if (!robotContainer.getLazySusanSubsystem().getIsCal()) {
+    //   new ZeroTurnTable(robotContainer.getLazySusanSubsystem()).schedule();
+    // }
 
     robotContainer.getIntake().disableInnerIntakeMotor();
     robotContainer.getShooterSubsystem().setOffsetSpeed(0);
-    robotContainer.getLazySusanSubsystem().setMotorMode(IdleMode.kBrake);
+    // robotContainer.getLazySusanSubsystem().setMotorMode(IdleMode.kBrake);
     
     // if (!robotContainer.getLazySusanSubsystem().getIsCal()) {
     //   System.out.println("Zeroed");
@@ -110,7 +110,7 @@ public class Robot extends TimedRobot {
     //robotContainer.getLazySusanSubsystem().setTurretPositionDegrees(Rotation2d.fromDegrees(179.999));
     //robotContainer.getLazySusanSubsystem().setEncoderPosition(robotContainer.getLazySusanSubsystem().getEncoderPosition() + 4);
     robotContainer.getShooterSubsystem().setOffsetSpeed(0);//75
-    robotContainer.getLazySusanSubsystem().setMotorMode(IdleMode.kBrake);
+    // robotContainer.getLazySusanSubsystem().setMotorMode(IdleMode.kBrake);
 
 
 
@@ -147,10 +147,10 @@ public class Robot extends TimedRobot {
     // robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(),
     // robotContainer),
     // new AutoLoad(robotContainer.getLoaderSubsystem(), 1)));
-    autonomousCommand = autoSelector.getSelected();
-    if (autonomousCommand != null) {
-      autonomousCommand.schedule();
-    }
+    // autonomousCommand = autoSelector.getSelected();
+    // if (autonomousCommand != null) {
+    //   autonomousCommand.schedule();
+    // }
   }
 
   @Override
@@ -169,7 +169,7 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     //robotContainer.getShooterSubsystem().setTargetRPM(0);
     robotContainer.getDriveTrain().setBrake(true);
-    robotContainer.getLazySusanSubsystem().setMotorMode(IdleMode.kCoast);
+    // robotContainer.getLazySusanSubsystem().setMotorMode(IdleMode.kCoast);
     //robotContainer.getShooterSubsystem().setSpeed(0);
     //robotContainer.getShooterSubsystem().setTargetRPM(0);
     CommandScheduler.getInstance().cancelAll();
@@ -180,7 +180,7 @@ public class Robot extends TimedRobot {
   public void testInit() {
     CommandScheduler.getInstance().cancelAll();
     robotContainer.init();
-    robotContainer.getLazySusanSubsystem().setMotorMode(IdleMode.kBrake);
+    // robotContainer.getLazySusanSubsystem().setMotorMode(IdleMode.kBrake);
     //LimeLight.setLedMode(LedMode.ON);
 	  //robotContainer.getLazySusanSubsystem().setEncoderPosition(0);
     // new LowerHooks(robotContainer.getClimberSubsystem()).schedule();
@@ -209,31 +209,31 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void simulationPeriodic() {
-    // Here we calculate the battery voltage based on drawn current.
-    // As our robot draws more power from the battery its voltage drops.
-    // The estimated voltage is highly dependent on the battery's internal
-    // resistance.
-    double drawCurrent = robotContainer.getDriveTrain().getDrawnCurrentAmps(); //
-    // Current Seems to be too high look into
-    // later
-    drawCurrent += robotContainer.getShooterSubsystem().getDrawnCurrentAmps();
-    SmartDashboard.putNumber("Robot/Total Current", drawCurrent);
-    // BatterySim.calculateDefaultBatteryLoadedVoltage(currents)
-    double loadedVoltage = BatterySim.calculateDefaultBatteryLoadedVoltage(13,
-        0.02, drawCurrent);
-    SmartDashboard.putNumber("Robot/Robot Volts", loadedVoltage);
-    RoboRioSim.setVInVoltage(loadedVoltage);
+    // // Here we calculate the battery voltage based on drawn current.
+    // // As our robot draws more power from the battery its voltage drops.
+    // // The estimated voltage is highly dependent on the battery's internal
+    // // resistance.
+    // double drawCurrent = robotContainer.getDriveTrain().getDrawnCurrentAmps(); //
+    // // Current Seems to be too high look into
+    // // later
+    // drawCurrent += robotContainer.getShooterSubsystem().getDrawnCurrentAmps();
+    // SmartDashboard.putNumber("Robot/Total Current", drawCurrent);
+    // // BatterySim.calculateDefaultBatteryLoadedVoltage(currents)
+    // double loadedVoltage = BatterySim.calculateDefaultBatteryLoadedVoltage(13,
+    //     0.02, drawCurrent);
+    // SmartDashboard.putNumber("Robot/Robot Volts", loadedVoltage);
+    // RoboRioSim.setVInVoltage(loadedVoltage);
 
-    var robotpos = robotContainer.getDriveTrain().getPose();
-    robotContainer.robotFieldWidget.setRobotPose(robotpos);
-    var hubpos = new Pose2d(7.940, 4.08, new Rotation2d()); // Position of the hub
-    robotContainer.robotFieldWidget.getObject("hub").setPose(hubpos);
-    var tpos = new Pose2d(robotpos.getTranslation(),
-        robotpos.getRotation().plus(robotContainer.getLazySusanSubsystem().getRotation()));
-                                                                                                 // turrent position
-    robotContainer.robotFieldWidget.getObject("Turret").setPose(tpos);
+    // var robotpos = robotContainer.getDriveTrain().getPose();
+    // robotContainer.robotFieldWidget.setRobotPose(robotpos);
+    // var hubpos = new Pose2d(7.940, 4.08, new Rotation2d()); // Position of the hub
+    // robotContainer.robotFieldWidget.getObject("hub").setPose(hubpos);
+    // var tpos = new Pose2d(robotpos.getTranslation(),
+    //     robotpos.getRotation().plus(robotContainer.getLazySusanSubsystem().getRotation()));
+    //                                                                                              // turrent position
+    // robotContainer.robotFieldWidget.getObject("Turret").setPose(tpos);
 
-    robotContainer.getShooterSubsystem().possim.setPosition(tpos);
-    robotContainer.getShooterSubsystem().possim.update(Constants.kSimUpdateTime);
+    // robotContainer.getShooterSubsystem().possim.setPosition(tpos);
+    // robotContainer.getShooterSubsystem().possim.update(Constants.kSimUpdateTime);
   }
 }

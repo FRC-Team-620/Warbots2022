@@ -20,7 +20,7 @@ public class ControlBoard {
             lowerHooksButton,
             tankDriveAimButton,
             lowShotButton,
-            winchHoldButton,
+            // winchHoldButton,
             toggleGyroButton,
             reverseShooterWheelsButton;
 
@@ -43,7 +43,7 @@ public class ControlBoard {
         // driver controls
         intakeButton = new JoystickButton(driver, Button.kB.value);
         outakeButton = new JoystickButton(driver, Button.kA.value);
-        winchHoldButton = new JoystickButton(driver, Button.kX.value);
+        // winchHoldButton = new JoystickButton(driver, Button.kX.value);
     }
 
     private static void initOperatorControls() {

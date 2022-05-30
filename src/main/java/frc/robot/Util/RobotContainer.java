@@ -41,7 +41,7 @@ import frc.robot.Loader.OuttakeBall;
 import frc.robot.Loader.SmartIntake;
 import frc.robot.Shooter.ActivateFiringPins;
 import frc.robot.Shooter.FiringPins;
-import frc.robot.Shooter.LazySusanSubsystem;
+// import frc.robot.Shooter.LazySusanSubsystem;
 import frc.robot.Shooter.LimelightSpinUp;
 import frc.robot.Shooter.LowShotCommand;
 import frc.robot.Shooter.ManualAimingPID;
@@ -61,7 +61,7 @@ public class RobotContainer {
     private Intake intake;
     private ShooterSubsystem shooter;
     private FiringPins firingPins;
-    private LazySusanSubsystem turret;
+    // private LazySusanSubsystem turret;
     private ClimberSubsystem climberHooks;
     private ClimberMotorsSubsystem winch;
     private LEDSubsystem ledSubsystem;
@@ -88,12 +88,12 @@ public class RobotContainer {
         intake = new Intake();
         shooter = new ShooterSubsystem();
         firingPins = new FiringPins();
-        turret = new LazySusanSubsystem(drivetrain::getPose);
+        // turret = new LazySusanSubsystem(drivetrain::getPose);
         climberHooks = new ClimberSubsystem();
         winch = new ClimberMotorsSubsystem();
         ledSubsystem = new LEDSubsystem();
-        SmartDashboard.putData(new InstantCommand(turret::setHomePosition));
-        SmartDashboard.putData(new ZeroTurnTable(turret));
+        // SmartDashboard.putData(new InstantCommand(turret::setHomePosition));
+        // SmartDashboard.putData(new ZeroTurnTable(turret));
     }
 
     private void initControls() {
@@ -124,12 +124,12 @@ public class RobotContainer {
         // for both auto and tele
 
 
-        ControlBoard.aimTurretTrigger.whileActiveOnce(
-            new ParallelCommandGroup(   
-                new LimelightSpinUp(this.getShooterSubsystem()),
-                //new TurretAiming(this.getLazySusanSubsystem())
-                new TurretAimingPID(this.getLazySusanSubsystem(), robotFieldWidget, drivetrain::getPose)
-            ));
+        // ControlBoard.aimTurretTrigger.whileActiveOnce(
+        //     new ParallelCommandGroup(   
+        //         new LimelightSpinUp(this.getShooterSubsystem()),
+        //         //new TurretAiming(this.getLazySusanSubsystem())
+        //         new TurretAimingPID(this.getLazySusanSubsystem(), robotFieldWidget, drivetrain::getPose)
+        //     ));
 
         ControlBoard.tankDriveAimButton.whileActiveOnce(
             new ParallelCommandGroup(
@@ -141,8 +141,8 @@ public class RobotContainer {
 
         ControlBoard.toggleGyroButton.whenPressed(
             new InstantCommand(() -> {
-                this.getLazySusanSubsystem().setIsGyroLocking(!this.getLazySusanSubsystem().getIsGyroLocking());
-                this.getLazySusanSubsystem().setIsHubTracking(!this.getLazySusanSubsystem().getIsHubTracking());
+                // this.getLazySusanSubsystem().setIsGyroLocking(!this.getLazySusanSubsystem().getIsGyroLocking());
+                // this.getLazySusanSubsystem().setIsHubTracking(!this.getLazySusanSubsystem().getIsHubTracking());
             }
         ));
 
@@ -183,14 +183,27 @@ public class RobotContainer {
         //         controls.getOperatorController());
         // drivetrain.setDefaultCommand(driveWithJoystick);
 
-        turret.setDefaultCommand(new ManualAimingPID(turret, ControlBoard.getOperatorController()));
+        // turret.setDefaultCommand(new ManualAimingPID(turret, ControlBoard.getOperatorController()));
         //turret.setDefaultCommand(new MoveTurretToPos(turret));
         //TODO: setup turret
         // turret.setDefaultCommand(new TurretAimingPID(turret));
         // shooter.setDefaultCommand(new LimelightSpinUp(shooter));
 
+
+
+
+
+
+
         this.ledSubsystem.setDefaultCommand(
-            new LEDIdleCommand(this.ledSubsystem, this.intake, this.firingPins, this.turret));
+            new LEDIdleCommand(this.ledSubsystem)
+        );
+
+
+
+
+
+
 
         //shooterCommand = new ShooterCommand(shooter, turret, controls.getOperatorController(),
                 //controls.getDriverController());
@@ -204,10 +217,10 @@ public class RobotContainer {
         // ClimberManual(climberMotorsSubsystem, operator));
         new ToggleHooks(climberHooks).schedule();
 
-        SmartDashboard.putData(robotFieldWidget);
-        SmartDashboard.putData(trajectorySelector);
-        robotFieldWidget.getObject("Turret").setPose(new Pose2d());
-        trajectorySelector.linkField(robotFieldWidget);
+        // SmartDashboard.putData(robotFieldWidget);
+        // SmartDashboard.putData(trajectorySelector);
+        // robotFieldWidget.getObject("Turret").setPose(new Pose2d());
+        // trajectorySelector.linkField(robotFieldWidget);
 
         // trajectorySelector.setDefaultOption("No Trajectory", new Trajectory());
         // //Uncomment this to default to no trajectory vs the first file found or null.
@@ -227,9 +240,9 @@ public class RobotContainer {
         return climberHooks;
     }
 
-    public LazySusanSubsystem getLazySusanSubsystem() {
-        return turret;
-    }
+    // public LazySusanSubsystem getLazySusanSubsystem() {
+    //     return turret;
+    // }
 
     public Drivetrain getDriveTrain() {
         return drivetrain;
