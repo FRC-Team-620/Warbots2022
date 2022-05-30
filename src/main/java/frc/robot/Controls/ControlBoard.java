@@ -10,22 +10,22 @@ import frc.robot.Constants;
 public class ControlBoard {
 
     // driver
-    public static JoystickButton intakeButton,
-            outakeButton;
+    public static JoystickButton intakeButton;
+            // outakeButton;
 
     // operator
     public static JoystickButton extendArmsButton,
             raiseArmsButton,
             climbSequenceButton,
             lowerHooksButton,
-            tankDriveAimButton,
+            // tankDriveAimButton,
             lowShotButton,
-            // winchHoldButton,
-            toggleGyroButton,
-            reverseShooterWheelsButton;
-
-    public static TriggerPressed aimTurretTrigger,
             fireTurretTrigger;
+            // winchHoldButton,
+            // toggleGyroButton,
+            // reverseShooterWheelsButton;
+
+    public static TriggerPressed aimTurretTrigger;
 
     // actual controllers
     private static XboxController driver, operator;
@@ -41,25 +41,31 @@ public class ControlBoard {
 
     private static void initDriverControls() {
         // driver controls
-        intakeButton = new JoystickButton(driver, Button.kB.value);
-        outakeButton = new JoystickButton(driver, Button.kA.value);
+        intakeButton = new JoystickButton(driver, Button.kA.value);
+        // outakeButton = new JoystickButton(driver, Button.kA.value);
+        lowerHooksButton = new JoystickButton(driver, Button.kStart.value);
         // winchHoldButton = new JoystickButton(driver, Button.kX.value);
+        lowShotButton = new JoystickButton(driver, Button.kRightBumper.value);
+        fireTurretTrigger = new JoystickButton(driver, Button.kLeftBumper.value);
+        climbSequenceButton = new JoystickButton(driver, Button.kB.value);
+        raiseArmsButton = new JoystickButton(driver, Button.kY.value);
+        extendArmsButton = new JoystickButton(driver, Button.kX.value);
     }
 
     private static void initOperatorControls() {
         // operator controls
-        extendArmsButton = new JoystickButton(operator, Button.kX.value);
-        raiseArmsButton = new JoystickButton(operator, Button.kY.value);
-        reverseShooterWheelsButton = new JoystickButton(operator, Button.kA.value);
-        climbSequenceButton = new JoystickButton(operator, Button.kB.value);
+        
+        
+        // reverseShooterWheelsButton = new JoystickButton(operator, Button.kA.value);
+        
 
-        aimTurretTrigger = new TriggerPressed(operator, Axis.kLeftTrigger.value);
-        tankDriveAimButton = new JoystickButton(operator, Button.kLeftBumper.value);
-        fireTurretTrigger = new TriggerPressed(operator, Axis.kRightTrigger.value);
-        lowShotButton = new JoystickButton(operator, Button.kRightBumper.value);
+        // aimTurretTrigger = new TriggerPressed(operator, Axis.kLeftTrigger.value);
+        // tankDriveAimButton = new JoystickButton(operator, Button.kLeftBumper.value);
+        
+        
 
-        lowerHooksButton = new JoystickButton(operator, Button.kStart.value);
-        toggleGyroButton = new JoystickButton(operator, Button.kBack.value);
+        // lowerHooksButton = new JoystickButton(operator, Button.kStart.value);
+        // toggleGyroButton = new JoystickButton(operator, Button.kBack.value);
 
         
     }

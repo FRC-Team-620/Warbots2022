@@ -117,8 +117,8 @@ public class RobotContainer {
         ControlBoard.lowerHooksButton.whenPressed(
                 new ToggleHooks(climberHooks));
 
-        ControlBoard.winchHoldButton.whenPressed(
-                new WinchHold(winch, winch.getWinchPosition(), Constants.holdTime));
+        // ControlBoard.winchHoldButton.whenPressed(
+        //         new WinchHold(winch, winch.getWinchPosition(), Constants.holdTime));
 
         // TODO: here, now make a unified aiming/flywheel spinup command that we can use
         // for both auto and tele
@@ -131,31 +131,32 @@ public class RobotContainer {
         //         new TurretAimingPID(this.getLazySusanSubsystem(), robotFieldWidget, drivetrain::getPose)
         //     ));
 
-        ControlBoard.tankDriveAimButton.whileActiveOnce(
-            new ParallelCommandGroup(
-                new LimelightSpinUp(this.getShooterSubsystem()),
-                new TankDriveAiming(this.getDriveTrain())
-            ));
+        // ControlBoard.tankDriveAimButton.whileActiveOnce(
+        //     new ParallelCommandGroup(
+        //         new LimelightSpinUp(this.getShooterSubsystem()),
+        //         new TankDriveAiming(this.getDriveTrain())
+        //     ));
             // new AutoAimingAndSpinningUp(getShooterSubsystem(), getLazySusanSubsystem(), 
             //     false, controls.getOperatorController()));
 
-        ControlBoard.toggleGyroButton.whenPressed(
-            new InstantCommand(() -> {
-                // this.getLazySusanSubsystem().setIsGyroLocking(!this.getLazySusanSubsystem().getIsGyroLocking());
-                // this.getLazySusanSubsystem().setIsHubTracking(!this.getLazySusanSubsystem().getIsHubTracking());
-            }
-        ));
+        // ControlBoard.toggleGyroButton.whenPressed(
+        //     new InstantCommand(() -> {
+        //         // this.getLazySusanSubsystem().setIsGyroLocking(!this.getLazySusanSubsystem().getIsGyroLocking());
+        //         // this.getLazySusanSubsystem().setIsHubTracking(!this.getLazySusanSubsystem().getIsHubTracking());
+        //     }
+        // ));
 
-        ControlBoard.fireTurretTrigger.whenActive(
+        ControlBoard.fireTurretTrigger.whenPressed(
             new ParallelCommandGroup(  
-            new ActivateFiringPins(getFiringPins(), getIntake()),
-            new InstantCommand(this::logShot)
-        ));
+                new ActivateFiringPins(getFiringPins(), getIntake())
+            // new InstantCommand(this::logShot)
+            )
+        );
 
-        ControlBoard.reverseShooterWheelsButton.whenPressed(
-            new InstantCommand(() -> this.shooter.setIsBackwards(true)));
-        ControlBoard.reverseShooterWheelsButton.whenReleased(
-            new InstantCommand(() -> this.shooter.setIsBackwards(false)));
+        // ControlBoard.reverseShooterWheelsButton.whenPressed(
+        //     new InstantCommand(() -> this.shooter.setIsBackwards(true)));
+        // ControlBoard.reverseShooterWheelsButton.whenReleased(
+        //     new InstantCommand(() -> this.shooter.setIsBackwards(false)));
 
         //operator
         ControlBoard.lowShotButton.whileActiveOnce(new LowShotCommand(shooter));
@@ -163,7 +164,7 @@ public class RobotContainer {
         //ControlBoard.intakeButton.whileActiveOnce(new IntakeBall(intake));
         ControlBoard.intakeButton.whileActiveOnce(new SmartIntake(this.intake, this.firingPins));
 
-        ControlBoard.outakeButton.whileActiveOnce(new OuttakeBall(intake));
+        // ControlBoard.outakeButton.whileActiveOnce(new OuttakeBall(intake));
 
         // controls.aimTurretTrigger.whenActive(
         // new AimTurretCommand();
