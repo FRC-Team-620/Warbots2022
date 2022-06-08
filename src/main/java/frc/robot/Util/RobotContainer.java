@@ -92,6 +92,7 @@ public class RobotContainer {
         climberHooks = new ClimberSubsystem();
         winch = new ClimberMotorsSubsystem();
         ledSubsystem = new LEDSubsystem();
+        new SwerveVisualizer(2, 2);
         SmartDashboard.putData(new InstantCommand(turret::setHomePosition));
         SmartDashboard.putData(new ZeroTurnTable(turret));
     }

@@ -40,9 +40,11 @@
       "/LiveWindow/Ungrouped/PIDController[3]": "PIDController",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
       "/LiveWindow/Ungrouped/navX-Sensor[1]": "Gyro",
+      "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/Flywheel/Left/PIDControler[10]": "PIDController",
       "/SmartDashboard/Flywheel/Right/PIDControler[11]": "PIDController",
+      "/SmartDashboard/InstantCommand": "Command",
       "/SmartDashboard/PIDController[1]": "PIDController",
       "/SmartDashboard/PIDController[2]": "PIDController",
       "/SmartDashboard/PIDController[3]": "PIDController",
@@ -131,7 +133,7 @@
     "Plot <0>": {
       "plots": [
         {
-          "height": 382,
+          "height": -9,
           "series": [
             {
               "color": [
@@ -179,7 +181,7 @@
     "Plot <1>": {
       "plots": [
         {
-          "height": 216,
+          "height": -7,
           "series": [
             {
               "color": [
@@ -202,7 +204,7 @@
           ]
         },
         {
-          "height": 216,
+          "height": -7,
           "series": [
             {
               "color": [
