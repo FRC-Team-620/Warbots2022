@@ -53,6 +53,7 @@
       "/SmartDashboard/Turret/PIDController[12]": "PIDController",
       "/SmartDashboard/ZeroTurnTable": "Command",
       "/SmartDashboard/driver": "String Chooser",
+      "/SmartDashboard/f2": "Field2d",
       "/SmartDashboard/leftShooterPID: ": "PIDController",
       "/SmartDashboard/rightShooterPID: ": "PIDController",
       "/SmartDashboard/test/PIDControler[1]": "PIDController",
@@ -104,6 +105,11 @@
         "window": {
           "visible": true
         }
+      },
+      "/SmartDashboard/f2": {
+        "window": {
+          "visible": true
+        }
       }
     }
   },
@@ -133,7 +139,7 @@
     "Plot <0>": {
       "plots": [
         {
-          "height": -9,
+          "height": -18,
           "series": [
             {
               "color": [
@@ -181,7 +187,7 @@
     "Plot <1>": {
       "plots": [
         {
-          "height": -7,
+          "height": -16,
           "series": [
             {
               "color": [
@@ -204,7 +210,7 @@
           ]
         },
         {
-          "height": -7,
+          "height": -16,
           "series": [
             {
               "color": [

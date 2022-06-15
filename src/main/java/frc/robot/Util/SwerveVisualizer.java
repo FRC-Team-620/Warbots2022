@@ -6,6 +6,7 @@ import javax.xml.namespace.QName;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
@@ -18,6 +19,10 @@ public class SwerveVisualizer {
     FieldObject2d frontRightWheel;
     FieldObject2d backLeftWheel;
     FieldObject2d backRightWheel;
+    Translation2d frontLeftRelativeLocation;
+    Translation2d frontRightRelativeLocation;
+    Translation2d backLeftRelativeLocation;
+    Translation2d backRightRelativeLocation;
     double robotWidth;
     double robotLength;
 
@@ -28,48 +33,56 @@ public class SwerveVisualizer {
         this.robotLength = robotLength;
 
         robotBase = field.getObject("robotBase");
-        robotBase.setPose(new Pose2d(5,5,new Rotation2d()));
+        robotBase.setPose(new Pose2d());
 
         frontLeftWheel = field.getObject("frontLeftWheel");
-        Pose2d frontLeftOffset = new Pose2d(robotLength/2, robotWidth/2, new Rotation2d());
-        System.out.println(robotBase.getPose().toString());
-        Transform2d frontLeftTransform = new Transform2d(robotBase.getPose(), frontLeftOffset);
-        frontLeftWheel.setPose(robotBase.getPose().plus(frontLeftTransform));
-        // Transform2d temp0 = new Transform2d(frontLeftWheel.getPose().getTranslation(), robotBase.getPose().getRotation());
-        // frontLeftWheel.setPose(robotBase.getPose().plus(temp0));
+        frontLeftRelativeLocation = new Translation2d(this.robotLength/2, this.robotWidth/2);
 
         frontRightWheel = field.getObject("frontRightWheel");
-        Pose2d frontRightOffset = new Pose2d(robotLength/2, -robotWidth/2, new Rotation2d());
-        Transform2d frontRightTransform = new Transform2d(robotBase.getPose(), frontRightOffset);
-        frontRightWheel.setPose(robotBase.getPose().plus(frontRightTransform));
-        // Transform2d temp1 = new Transform2d(frontRightWheel.getPose().getTranslation(), robotBase.getPose().getRotation());
-        // frontLeftWheel.setPose(robotBase.getPose().plus(temp1));
+        frontRightRelativeLocation = new Translation2d(this.robotLength/2, -this.robotWidth/2);
 
         backLeftWheel = field.getObject("backLeftWheel");
-        Pose2d backLeftOffset = new Pose2d(-robotLength/2, robotWidth/2, new Rotation2d());
-        Transform2d backLeftTransform = new Transform2d(robotBase.getPose(), backLeftOffset);
-        backLeftWheel.setPose(robotBase.getPose().plus(backLeftTransform));
-        // Transform2d temp2 = new Transform2d(backLeftWheel.getPose().getTranslation(), robotBase.getPose().getRotation());
-        // frontLeftWheel.setPose(robotBase.getPose().plus(temp2));
+        backLeftRelativeLocation = new Translation2d(-this.robotLength/2, this.robotWidth/2);
 
         backRightWheel = field.getObject("backRightWheel");
-        Pose2d backRightOffset = new Pose2d(-robotLength/2, -robotWidth/2, new Rotation2d());
-        Transform2d backRightTransform = new Transform2d(robotBase.getPose(), backRightOffset);
-        backRightWheel.setPose(robotBase.getPose().plus(backRightTransform));
-        // Transform2d temp3 = new Transform2d(backRightWheel.getPose().getTranslation(), robotBase.getPose().getRotation());
-        // frontLeftWheel.setPose(robotBase.getPose().plus(temp3));
+        backRightRelativeLocation = new Translation2d(-this.robotLength/2, -this.robotWidth/2);
 
-        SmartDashboard.putData(field);
+        this.update(new Rotation2d(), new Rotation2d(), new Rotation2d(), new Rotation2d(), 
+            new Pose2d(new Translation2d(5, 4), Rotation2d.fromDegrees(45)));
+
+        SmartDashboard.putData("f2", field);
     }
 
-    public void update(Rotation2d fLWR, Rotation2d fRWR, Rotation2d bLWR, Rotation2d bRWR, Pose2d rBase) {
-        frontLeftWheel.setPose(new Pose2d(frontLeftWheel.getPose().getTranslation(), fLWR));
-        frontRightWheel.setPose(new Pose2d(frontRightWheel.getPose().getTranslation(), fLWR));
-        backLeftWheel.setPose(new Pose2d(backLeftWheel.getPose().getTranslation(), fLWR));
-        backRightWheel.setPose(new Pose2d(backRightWheel.getPose().getTranslation(), fLWR));
+    /**
+     * Updates each of the four swerve wheels as well as 'robotBase', rotating each of the wheels
+     * about the robot center.
+     * 
+     * @param flWheelRot The rotation of the front left wheel
+     * @param frWheelRot The rotation of the front left wheel
+     * @param blWheelRot The rotation of the front left wheel
+     * @param brWheelRot The rotation of the front left wheel
+     * @param rBase The Pose2d object representing the robot base, i.e. the chasse
+     */
+    public void update(Rotation2d flWheelRot, Rotation2d frWheelRot, Rotation2d blWheelRot, Rotation2d brWheelRot, Pose2d rBase) {
+        frontLeftWheel.setPose(revolveObject(frontLeftRelativeLocation, rBase, flWheelRot));
+        frontRightWheel.setPose(revolveObject(frontRightRelativeLocation, rBase, frWheelRot));
+        backLeftWheel.setPose(revolveObject(backLeftRelativeLocation, rBase, blWheelRot));
+        backRightWheel.setPose(revolveObject(backRightRelativeLocation, rBase, brWheelRot));
 
         robotBase.setPose(rBase);
     }
 
-
+    /**
+     * Revolves a Pose2d object about another Pose2d object, perserving their relative angles.
+     * 
+     * @param relativePos The position of the Pose2d to be rotated relative to the Pose2d origin
+     * @param rotateOrigin The Pose2d storing the origin
+     * @param rotateAngle The angle to rotate about the origin
+     * @return Pose2d
+     */
+    private Pose2d revolveObject(Translation2d relativePos, Pose2d rotateOrigin, Rotation2d rotateAngle) {
+        Transform2d rotDelta = new Transform2d(relativePos, rotateAngle);
+        return new Pose2d(rotDelta.getTranslation().rotateBy(rotateOrigin.getRotation()).plus(rotateOrigin.getTranslation()), 
+            rotateOrigin.getRotation().plus(rotDelta.getRotation()));
+    }
 }
