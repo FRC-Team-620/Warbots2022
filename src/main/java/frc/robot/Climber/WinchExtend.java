@@ -2,25 +2,19 @@ package frc.robot.Climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.Loader.Intake;
 
 public class WinchExtend extends CommandBase {
     protected ClimberMotorsSubsystem climberMotorsSubsystem;
-    protected Intake intake;
     protected double deltaCounts, targetCounts;
-    int frameCount = 0;
 
-    public WinchExtend(ClimberMotorsSubsystem climberMotorsSubsystem, Intake intake, double deltaCounts) {
+    public WinchExtend(ClimberMotorsSubsystem climberMotorsSubsystem, double deltaCounts) {
         addRequirements(climberMotorsSubsystem);
         this.climberMotorsSubsystem = climberMotorsSubsystem;
-        this.intake = intake;
         this.deltaCounts = deltaCounts;
     }
 
     @Override
     public void initialize() {
-        frameCount = 0;
-        this.intake.extendIntakeArms();
         System.out.println("Current: " + this.climberMotorsSubsystem.getWinchPosition());
         this.targetCounts = this.climberMotorsSubsystem.getWinchPosition() + this.deltaCounts;
         // System.out.println("Winch begins wind down");
@@ -30,20 +24,17 @@ public class WinchExtend extends CommandBase {
 
     @Override
     public void execute() {
-        frameCount++;
-
         System.out.println("Winch is winding");
     }
 
     @Override
     public void end(boolean interrupted) {
-        intake.floatIntakeArms();
         System.out.println("EXITING");
         this.climberMotorsSubsystem.setWinchSpeed(0);
     }
 
     @Override
-    public boolean isFinished() {//climberSubsystem.getWinchMotor().getEncoder().getPosition() >= counts
+    public boolean isFinished() {
         System.out.println("Pos: " + this.climberMotorsSubsystem.getWinchPosition());
         boolean flag = climberMotorsSubsystem.getWinchPosition() >= 
             Math.min(this.targetCounts, Constants.winchMaxLimit);

@@ -13,7 +13,7 @@ public class WinchReset extends CommandBase {
 
     @Override
     public void initialize() {
-        this.climberMotorsSubsystem.setWinchSpeed(-1);
+        this.climberMotorsSubsystem.setWinchSpeed(-0.75);
     }
 
     @Override

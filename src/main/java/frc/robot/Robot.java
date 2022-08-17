@@ -4,27 +4,12 @@
 
 package frc.robot;
 
-import com.revrobotics.CANSparkMax.IdleMode;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.simulation.BatterySim;
-import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Auto.AutoCommand;
-import frc.robot.Auto.Routines.ExtakeBall;
-import frc.robot.Auto.Routines.OneBall;
-import frc.robot.Auto.Routines.Taxi;
-import frc.robot.Auto.Routines.TwoBalls;
-import frc.robot.Climber.ToggleHooks;
-import frc.robot.Shooter.ZeroTurnTable;
-// import frc.robot.Shooter.AutoAimingAndSpinningUp;
-//import frc.robot.Util.LEDManager;
 import frc.robot.Util.LimeLight;
 import frc.robot.Util.LimeLight.LedMode;
 import frc.robot.Util.RobotContainer;
@@ -32,31 +17,14 @@ import frc.robot.Util.RobotContainer;
 public class Robot extends TimedRobot {
   protected RobotContainer robotContainer;
   protected Command autonomousCommand;
-
   protected SendableChooser<CommandBase> autoSelector = new SendableChooser<CommandBase>();
-  
-
   protected int LEDDisplacement = 0;
 
   @Override
   public void robotInit() {
     CommandScheduler.getInstance().cancelAll();
     robotContainer = new RobotContainer();
-    robotContainer.init();// TODO: make these happen on RobotContainer instantiation
-    // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(true);
-    // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);
-    // robotContainer.getLazySusanSubsystem().setEncoderPosition(0);
-
-    // autoSelector.setDefaultOption("Two-Ball", new TwoBalls(robotContainer, robotContainer.getDriveTrain(), 
-    // robotContainer.getLazySusanSubsystem(), robotContainer.getShooterSubsystem(), 
-    // robotContainer.getFiringPins(), robotContainer.getIntake()));
-    // autoSelector.addOption("One-Ball", new OneBall(robotContainer.getDriveTrain(), robotContainer.getLazySusanSubsystem(), 
-    //   robotContainer.getShooterSubsystem(), robotContainer.getFiringPins(), robotContainer.getIntake()));
-    // autoSelector.addOption("Taxi", new Taxi(robotContainer.getDriveTrain(), robotContainer.getIntake(), robotContainer.getLazySusanSubsystem()));
-    // autoSelector.addOption("Extake-Ball", new ExtakeBall(robotContainer.getIntake()));
-    // autoSelector.addOption("AutoCommand", new AutoCommand(robotContainer.getFiringPins(), 
-    //   robotContainer.getShooterSubsystem(), robotContainer));
-    // SmartDashboard.putData(autoSelector);
+    robotContainer.init();
   }
 
   @Override
@@ -69,95 +37,25 @@ public class Robot extends TimedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
-    // if (!robotContainer.getLazySusanSubsystem().getIsCal()) {
-    //   new ZeroTurnTable(robotContainer.getLazySusanSubsystem()).schedule();
-    // }
 
+    LimeLight.setLedMode(LedMode.OFF);
     robotContainer.getIntake().disableInnerIntakeMotor();
     robotContainer.getShooterSubsystem().setOffsetSpeed(0);
-    // robotContainer.getLazySusanSubsystem().setMotorMode(IdleMode.kBrake);
-    
-    // if (!robotContainer.getLazySusanSubsystem().getIsCal()) {
-    //   System.out.println("Zeroed");
-    //   new ZeroTurnTable(robotContainer.getLazySusanSubsystem()).schedule();
-    // } else {
-    //   System.out.println("Already zeroed");
-    // }
     robotContainer.setTeleopDrive();
 
-    //robotContainer.getLazySusanSubsystem().setIsGyroLocking(true);//TODO: SET TO FALSE LATER
-
-    //robotContainer.getShooterSubsystem().
-    // robotContainer.getLoaderSubsystem().setIsClimbing(false);
-    // TODO: move to initializer in robotContainer
-    new ToggleHooks(robotContainer.getClimberSubsystem()).schedule();
-    //robotContainer.getLazySusanSubsystem().setEncoderPosition(0);
     robotContainer.getDriveTrain().setBrake(true);
     robotContainer.getClimberMotorsSubsystem().getWinchMotor().getEncoder().setPosition(0);
-    // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(true);
-    // robotContainer.getLoaderSubsystem().getExtensionSolenoid().set(false);
-    //robotContainer.getLazySusanSubsystem().setEncoderPosition(robotContainer.getLazySusanSubsystem().getEncoderPosition() + 4);
   }
-  
-  @Override
-  public void teleopExit() {
-    // robotContainer.getLazySusanSubsystem().setIsGyroLocking(false);
-    // robotContainer.getLazySusanSubsystem().setEncoderPosition(robotContainer.getLazySusanSubsystem().getEncoderPosition() - 4);
-  }
+
   @Override
   public void autonomousInit() {
-    LimeLight.setLedMode(LedMode.ON);
-    //robotContainer.getLazySusanSubsystem().setTurretPositionDegrees(Rotation2d.fromDegrees(179.999));
-    //robotContainer.getLazySusanSubsystem().setEncoderPosition(robotContainer.getLazySusanSubsystem().getEncoderPosition() + 4);
-    robotContainer.getShooterSubsystem().setOffsetSpeed(0);//75
-    // robotContainer.getLazySusanSubsystem().setMotorMode(IdleMode.kBrake);
-
-
-
-  	/*
-    robotContainer.getDriveTrain().setEncoderPos(0);
-
-    // TODO: move to autonomousCommand in separate file.
-    robotContainer.getLazySusanSubsystem().setLazySusanPosition(0);
-	new ToggleHooks(robotContainer.getClimberSubsystem()).schedule();
-    //new DirectTurretAuto(robotContainer.getLazySusanSubsystem(), // -1.5*
-    //robotContainer.getShooterSubsystem(), 0),
-    autonomousCommand = new ParallelCommandGroup(
-     // new AutoCommand(robotContainer.getFiringPins(), robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(), robotContainer), 
-     // new AutoAimingAndSpinningUp(robotContainer.getShooterSubsystem(),  robotContainer.getLazySusanSubsystem(), true, robotContainer.getOperatorController()), 
-      new AutoLoad(robotContainer.getIntake())
-    );
-
-	robotContainer.getIntake().extendIntakeArmsSolenoid();
-	*/
-    // autonomousCommand = new SequentialCommandGroup(
-    //     new TurnDegrees(robotContainer.getDriveTrain(), 180),
-    //     new TurnDegrees(robotContainer.getDriveTrain(), -180),
-    //     new TurnDegrees(robotContainer.getDriveTrain(), 360),
-    //     new TurnDegrees(robotContainer.getDriveTrain(), -360));
-    // new LowerHooks(robotContainer.getClimberSubsystem()).schedule();
-    // autonomousCommand = new SequentialCommandGroup(
-    // new DirectTurretAuto(robotContainer.getLazySusanSubsystem(), // -1.5*
-    // robotContainer.getShooterSubsystem(), 0),
-    // new ParallelCommandGroup(
-    // new AutoAimingAndSpinningUp(robotContainer.getShooterSubsystem(),
-    // robotContainer.getLazySusanSubsystem(), true,
-    // robotContainer.getOperatorController()),
-    // new AutoCommand(robotContainer.getLoaderSubsystem(),
-    // robotContainer.getShooterSubsystem(), robotContainer.getLazySusanSubsystem(),
-    // robotContainer),
-    // new AutoLoad(robotContainer.getLoaderSubsystem(), 1)));
-    // autonomousCommand = autoSelector.getSelected();
-    // if (autonomousCommand != null) {
-    //   autonomousCommand.schedule();
-    // }
+    LimeLight.setLedMode(LedMode.OFF);
+    robotContainer.getShooterSubsystem().setOffsetSpeed(0);
   }
 
   @Override
   public void autonomousExit() {
     LimeLight.setLedMode(LedMode.OFF);
-    //robotContainer.getLazySusanSubsystem().setTurretPosition(Rotation2d.fromDegrees(0));
-    //robotContainer.getLazySusanSubsystem().setEncoderPosition(robotContainer.getLazySusanSubsystem().getEncoderPosition() - 4);
   }
 
   @Override
@@ -167,42 +65,15 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-    //robotContainer.getShooterSubsystem().setTargetRPM(0);
     robotContainer.getDriveTrain().setBrake(true);
-    // robotContainer.getLazySusanSubsystem().setMotorMode(IdleMode.kCoast);
-    //robotContainer.getShooterSubsystem().setSpeed(0);
-    //robotContainer.getShooterSubsystem().setTargetRPM(0);
     CommandScheduler.getInstance().cancelAll();
-
   }
 
   @Override
   public void testInit() {
     CommandScheduler.getInstance().cancelAll();
     robotContainer.init();
-    // robotContainer.getLazySusanSubsystem().setMotorMode(IdleMode.kBrake);
-    //LimeLight.setLedMode(LedMode.ON);
-	  //robotContainer.getLazySusanSubsystem().setEncoderPosition(0);
-    // new LowerHooks(robotContainer.getClimberSubsystem()).schedule();
-    // new SensorHooksUp(robotContainer.getClimberMotorsSubsystem(), robotContainer.getClimberSubsystem()).schedule();
   }
-
-
-  @Override
-  public void testPeriodic() {
-    //System.out.println("Cal State:" + robotContainer.getLazySusanSubsystem().getCalSensorState());
-    // LEDManager.STRIP0.setGradient(LEDDisplacement,
-    //   Color.kRed, 
-    //   Color.kOrange, 
-    //   Color.kYellow,
-    //   Color.kGreen,
-    //   Color.kBlue,
-    //   Color.kPurple,
-    //   Color.kMagenta
-    // );
-    // LEDDisplacement++;
-  }
-
 
   /**
    * Simulation Code

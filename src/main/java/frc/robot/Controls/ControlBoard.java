@@ -2,7 +2,6 @@ package frc.robot.Controls;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants;
@@ -10,73 +9,34 @@ import frc.robot.Constants;
 public class ControlBoard {
 
     // driver
-    public static JoystickButton intakeButton;
-            // outakeButton;
-
-    // operator
-    public static JoystickButton extendArmsButton,
-            raiseArmsButton,
-            climbSequenceButton,
-            lowerHooksButton,
-            // tankDriveAimButton,
-            lowShotButton,
-            fireTurretTrigger;
-            // winchHoldButton,
-            // toggleGyroButton,
-            // reverseShooterWheelsButton;
+    public static JoystickButton 
+        intakeButton,
+        lowShotButton,
+        extendArms,
+        retractArms;
 
     public static TriggerPressed aimTurretTrigger;
 
     // actual controllers
-    private static XboxController driver, operator;
+    private static XboxController driver;
 
     public static void init() {
         // controllers
         driver = new XboxController(0);
-        operator = new XboxController(1);
-
         ControlBoard.initDriverControls();
-        ControlBoard.initOperatorControls();
     }
 
     private static void initDriverControls() {
         // driver controls
         intakeButton = new JoystickButton(driver, Button.kA.value);
-        // outakeButton = new JoystickButton(driver, Button.kA.value);
-        lowerHooksButton = new JoystickButton(driver, Button.kStart.value);
-        // winchHoldButton = new JoystickButton(driver, Button.kX.value);
         lowShotButton = new JoystickButton(driver, Button.kRightBumper.value);
-        fireTurretTrigger = new JoystickButton(driver, Button.kLeftBumper.value);
-        climbSequenceButton = new JoystickButton(driver, Button.kB.value);
-        raiseArmsButton = new JoystickButton(driver, Button.kY.value);
-        extendArmsButton = new JoystickButton(driver, Button.kX.value);
-    }
-
-    private static void initOperatorControls() {
-        // operator controls
-        
-        
-        // reverseShooterWheelsButton = new JoystickButton(operator, Button.kA.value);
-        
-
-        // aimTurretTrigger = new TriggerPressed(operator, Axis.kLeftTrigger.value);
-        // tankDriveAimButton = new JoystickButton(operator, Button.kLeftBumper.value);
-        
-        
-
-        // lowerHooksButton = new JoystickButton(operator, Button.kStart.value);
-        // toggleGyroButton = new JoystickButton(operator, Button.kBack.value);
-
-        
+        extendArms = new JoystickButton(driver, Button.kX.value);
+        retractArms = new JoystickButton(driver, Button.kY.value);
     }
 
     // use these for now until the drive command is converted
     public static XboxController getDriverController() {
         return driver;
-    }
-
-    public static XboxController getOperatorController() {
-        return operator;
     }
 
     public static void setDriverRumble(boolean onOff) {
@@ -92,21 +52,6 @@ public class ControlBoard {
     public static void setDriverHighFreqRumble(boolean onOff) {
         double rumble = onOff ? Constants.operatorRumbleHighFreq : 0;
         driver.setRumble(RumbleType.kRightRumble, rumble);
-    }
-
-    public static void setOperatorRumble(boolean onOff) {
-        setOperatorLowFreqRumble(onOff);
-        setOperatorHighFreqRumble(onOff);
-    }
-
-    public static void setOperatorLowFreqRumble(boolean onOff) {
-        double rumble = onOff ? Constants.driverRumbleLowFreq : 0;
-        operator.setRumble(RumbleType.kLeftRumble, rumble);
-    }
-
-    public static void setOperatorHighFreqRumble(boolean onOff) {
-        double rumble = onOff ? Constants.driverRumbleHighFreq : 0;
-        operator.setRumble(RumbleType.kRightRumble, rumble);
     }
 
     // use these once drive command is converted
