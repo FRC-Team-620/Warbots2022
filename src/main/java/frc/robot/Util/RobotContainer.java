@@ -8,218 +8,66 @@
 
 package frc.robot.Util;
 
-import java.util.ResourceBundle.Control;
-
-import javax.sound.midi.Sequence;
-import javax.xml.crypto.Data;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.Climber.ClimberMotorsSubsystem;
-import frc.robot.Climber.ClimberSubsystem;
-import frc.robot.Climber.ExtendArmsAndStow;
-import frc.robot.Climber.RaiseAndGrab;
-import frc.robot.Climber.RaisePistons;
-import frc.robot.Climber.ToggleHooks;
-import frc.robot.Climber.WinchHold;
+import frc.robot.Climber.SensorWinchRetract;
+import frc.robot.Climber.WinchExtend;
+import frc.robot.Climber.WinchRetract;
 import frc.robot.Controls.ControlBoard;
 import frc.robot.Drive.DriveWithJoystick;
 import frc.robot.Drive.Drivetrain;
 import frc.robot.Loader.Intake;
-import frc.robot.Loader.IntakeBall;
-import frc.robot.Loader.OuttakeBall;
-import frc.robot.Loader.SmartIntake;
-import frc.robot.Shooter.ActivateFiringPins;
-import frc.robot.Shooter.FiringPins;
-import frc.robot.Shooter.LazySusanSubsystem;
-import frc.robot.Shooter.LimelightSpinUp;
 import frc.robot.Shooter.LowShotCommand;
-import frc.robot.Shooter.ManualAimingPID;
-import frc.robot.Shooter.MoveTurretToPos;
 import frc.robot.Shooter.ShooterSubsystem;
-import frc.robot.Shooter.TankDriveAiming;
-import frc.robot.Shooter.TurretAimingPID;
-import frc.robot.Shooter.ZeroTurnTable;
 import frc.robot.Util.LEDs.LEDIdleCommand;
 import frc.robot.Util.LEDs.LEDSubsystem;
 
-/** Add your docs here. */
 public class RobotContainer {
 
-    // initialize subsystems
     private Drivetrain drivetrain;
     private Intake intake;
     private ShooterSubsystem shooter;
-    private FiringPins firingPins;
-    private LazySusanSubsystem turret;
-    private ClimberSubsystem climberHooks;
     private ClimberMotorsSubsystem winch;
     private LEDSubsystem ledSubsystem;
-
     private DriveWithJoystick driveWithJoystick;
 
-    // TODO: *sighs emoji*
     TrajectorySelector trajectorySelector = new TrajectorySelector(
             Filesystem.getDeployDirectory().toPath().resolve("paths/"), true);
-    public Field2d robotFieldWidget = new Field2d(); // TODO: include Robot odometry
+    public Field2d robotFieldWidget = new Field2d();
 
     public RobotContainer() {
-		ControlBoard.init();
+        ControlBoard.init();
         initSubsystems();
         initControls();
         LimeLight.init();
         DataLogManager.start();
         DriverStation.startDataLog(DataLogManager.getLog());
-        // DriverStation.datal
     }
 
     private void initSubsystems() {
         drivetrain = new Drivetrain();
         intake = new Intake();
         shooter = new ShooterSubsystem();
-        firingPins = new FiringPins();
-        turret = new LazySusanSubsystem(drivetrain::getPose);
-        climberHooks = new ClimberSubsystem();
         winch = new ClimberMotorsSubsystem();
         ledSubsystem = new LEDSubsystem();
-        SmartDashboard.putData(new InstantCommand(turret::setHomePosition));
-        SmartDashboard.putData(new ZeroTurnTable(turret));
     }
 
     private void initControls() {
-
-
-
-        
-        // // operator
-        // ControlBoard.raiseArmsButton.whenPressed(
-        //         new RaisePistons(climberHooks));
-
-        // ControlBoard.extendArmsButton.whenPressed(
-        //         new ParallelCommandGroup(
-        //                 new ExtendArmsAndStow(winch, climberHooks, intake)
-        //                 //new DirectTurret(turret, shooter, Constants.stowedPosition)
-        //                 ));
-
-        // ControlBoard.climbSequenceButton.whenPressed(
-        //         new RaiseAndGrab(winch, climberHooks));
-
-        // // controls.tankDriveAimButton.whileActiveOnce(
-        // //     new TankDriveAutoAimAndSpinUp(getShooterSubsystem(), getDriveTrain(), 
-        // //         false, controls.getOperatorController()));
-
-
-
-
-
-        // ControlBoard.lowerHooksButton.whenPressed(
-        //         new ToggleHooks(climberHooks));
-
-        // ControlBoard.winchHoldButton.whenPressed(
-        //         new WinchHold(winch, winch.getWinchPosition(), Constants.holdTime));
-
-        // TODO: here, now make a unified aiming/flywheel spinup command that we can use
-        // for both auto and tele
-
-
-        ControlBoard.aimTurretTrigger.whileActiveOnce(
-            new ParallelCommandGroup(   
-                new LimelightSpinUp(this.getShooterSubsystem()),
-                //new TurretAiming(this.getLazySusanSubsystem())
-                new TurretAimingPID(this.getLazySusanSubsystem(), robotFieldWidget, drivetrain::getPose)
-            ));
-
-        ControlBoard.tankDriveAimButton.whileActiveOnce(
-            new ParallelCommandGroup(
-                new LimelightSpinUp(this.getShooterSubsystem()),
-                new TankDriveAiming(this.getDriveTrain())
-            ));
-            // new AutoAimingAndSpinningUp(getShooterSubsystem(), getLazySusanSubsystem(), 
-            //     false, controls.getOperatorController()));
-
-        ControlBoard.toggleGyroButton.whenPressed(
-            new InstantCommand(() -> {
-                this.getLazySusanSubsystem().setIsGyroLocking(!this.getLazySusanSubsystem().getIsGyroLocking());
-                this.getLazySusanSubsystem().setIsHubTracking(!this.getLazySusanSubsystem().getIsHubTracking());
-            }
-        ));
-
-        ControlBoard.fireTurretTrigger.whenActive(
-            new ParallelCommandGroup(  
-            new ActivateFiringPins(getFiringPins(), getIntake()),
-            new InstantCommand(this::logShot)
-        ));
-
-        ControlBoard.reverseShooterWheelsButton.whenPressed(
-            new InstantCommand(() -> this.shooter.setIsBackwards(true)));
-        ControlBoard.reverseShooterWheelsButton.whenReleased(
-            new InstantCommand(() -> this.shooter.setIsBackwards(false)));
-
-        //operator
         ControlBoard.lowShotButton.whileActiveOnce(new LowShotCommand(shooter));
-
-        //ControlBoard.intakeButton.whileActiveOnce(new IntakeBall(intake));
-        ControlBoard.intakeButton.whileActiveOnce(new SmartIntake(this.intake, this.firingPins));
-
-        ControlBoard.outakeButton.whileActiveOnce(new OuttakeBall(intake));
-
-        // controls.aimTurretTrigger.whenActive(
-        // new AimTurretCommand();
-        // );
-        // controls.fireTurretTrigger.whenPressed(
-        // new FireTriggerCommand();
-        // );
-
+        ControlBoard.intakeButton.whenPressed(new InstantCommand(intake::enableInnerIntakeMotor))
+        .whenReleased(new InstantCommand(intake::disableInnerIntakeMotor));
+        ControlBoard.extendArms.whenPressed(new WinchExtend(winch, Constants.winchMaxLimit));
+        ControlBoard.retractArms.whenPressed(new SensorWinchRetract(winch));
     }
 
     public void init() {
-        // TODO: :)))))))))
-        // will fix this later
-
-        // only valid for now so this is still functional and builds
-        // driveWithJoystick = new DriveWithJoystick(drivetrain, controls.getDriverController(),
-        //         controls.getOperatorController());
-        // drivetrain.setDefaultCommand(driveWithJoystick);
-
-        turret.setDefaultCommand(new ManualAimingPID(turret, ControlBoard.getOperatorController()));
-        //turret.setDefaultCommand(new MoveTurretToPos(turret));
-        //TODO: setup turret
-        // turret.setDefaultCommand(new TurretAimingPID(turret));
-        // shooter.setDefaultCommand(new LimelightSpinUp(shooter));
-
-        this.ledSubsystem.setDefaultCommand(
-            new LEDIdleCommand(this.ledSubsystem, this.intake, this.firingPins, this.turret));
-
-        //shooterCommand = new ShooterCommand(shooter, turret, controls.getOperatorController(),
-                //controls.getDriverController());
-        //shooter.setDefaultCommand(shooterCommand);
-        // shooterSubsystem.setDefaultCommand( new
-        // PIDShooterCommand(shooterSubsystem));//Show off pid shooter cmd Only works in
-        // sim rn
-
-        // climberCommand = new ClimberCommand(climberSubsystem);
-        // climberMotorsSubsystem.setDefaultCommand(new
-        // ClimberManual(climberMotorsSubsystem, operator));
-        new ToggleHooks(climberHooks).schedule();
-
-        SmartDashboard.putData(robotFieldWidget);
-        SmartDashboard.putData(trajectorySelector);
-        robotFieldWidget.getObject("Turret").setPose(new Pose2d());
-        trajectorySelector.linkField(robotFieldWidget);
-
-        // trajectorySelector.setDefaultOption("No Trajectory", new Trajectory());
-        // //Uncomment this to default to no trajectory vs the first file found or null.
-
+        this.ledSubsystem.setDefaultCommand(new LEDIdleCommand(this.ledSubsystem));
     }
 
     /**
@@ -228,15 +76,11 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public void logShot() {
-        DataLogManager.log("LeftRPM: " + this.getShooterSubsystem().getLeftRPM() + " RightRPM: " + this.getShooterSubsystem().getRightRPM() + " RPMSetpoint: " + this.getShooterSubsystem().getSetpoint() + " AtSetpoint: " + this.getShooterSubsystem().atTargetRPM() + " X LimeLight: " + LimeLight.getTX() + " Y LimeLight: " + LimeLight.getTY() + " EventName: " + DriverStation.getEventName() + " MatchNumber: " + DriverStation.getMatchNumber() + " MatchTime: " + DriverStation.getMatchTime());
-    }
-
-    public ClimberSubsystem getClimberSubsystem() {
-        return climberHooks;
-    }
-
-    public LazySusanSubsystem getLazySusanSubsystem() {
-        return turret;
+        DataLogManager.log("LeftRPM: " + this.getShooterSubsystem().getLeftRPM() + " RightRPM: "
+                + this.getShooterSubsystem().getRightRPM() + " RPMSetpoint: " + this.getShooterSubsystem().getSetpoint()
+                + " AtSetpoint: " + this.getShooterSubsystem().atTargetRPM() + " X LimeLight: " + LimeLight.getTX()
+                + " Y LimeLight: " + LimeLight.getTY() + " EventName: " + DriverStation.getEventName()
+                + " MatchNumber: " + DriverStation.getMatchNumber() + " MatchTime: " + DriverStation.getMatchTime());
     }
 
     public Drivetrain getDriveTrain() {
@@ -251,20 +95,8 @@ public class RobotContainer {
         return trajectorySelector;
     }
 
-    // public LoaderCommand getLoaderCommand() {
-    //     return loaderCommand;
-    // }
-
     public Intake getIntake() {
         return intake;
-    }
-
-    public FiringPins getFiringPins() {
-        return firingPins;
-    }
-
-    public XboxController getOperatorController() {
-        return ControlBoard.getOperatorController();
     }
 
     public ClimberMotorsSubsystem getClimberMotorsSubsystem() {
@@ -272,66 +104,10 @@ public class RobotContainer {
     }
 
     public void setTeleopDrive() {
-        driveWithJoystick = new DriveWithJoystick(drivetrain, ControlBoard.getDriverController(),
-            ControlBoard.getOperatorController());
+        driveWithJoystick = new DriveWithJoystick(
+            drivetrain, 
+            ControlBoard.getDriverController()
+        );
         drivetrain.setDefaultCommand(driveWithJoystick);
     }
-
-    //public Command getAutonomousCommand(Trajectory traj) {
-    //    // Create a voltage constraint to ensure we don't accelerate too fast
-    //    System.out.println("Auto Path Ran");
-    //    // var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
-    //   //         new SimpleMotorFeedforward(
-    //    //                 Constants.ksVolts,
-    //   //                 Constants.kvVoltSecondsPerMeter,
-    //    //                 Constants.kaVoltSecondsSquaredPerMeter),
-    //    //         Constants.kDriveKinematics,
-    //    //         5.02);
-
-    //    // // Create config for trajectory
-    //    // TrajectoryConfig config = new TrajectoryConfig(
-    //    //         Constants.kMaxSpeedMetersPerSecond,
-    //    //         Constants.kMaxAccelerationMetersPerSecondSquared)
-    //    //         // Add kinematics to ensure max speed is actually obeyed
-    //    //         .setKinematics(Constants.kDriveKinematics)
-    //    //         // Apply the voltage constraint
-    //    //         .addConstraint(autoVoltageConstraint);
-
-    //    // // An example trajectory to follow. All units in meters.
-    //    // Trajectory exampleTrajectory =
-    //    // TrajectoryGenerator.generateTrajectory(
-    //    // // Start at the origin facing the +X direction
-    //    // new Pose2d(0, 0, new Rotation2d(0)),
-    //    // // Pass through these two interior waypoints, making an 's' curve path
-    //    // List.of(new Translation2d(0.5, 0)),//, new Translation2d(2, -1)//1
-    //    // // End 3 meters straight ahead of where we started, facing forward
-    //    // new Pose2d(1, 0, new Rotation2d(0)),
-    //    // // Pass config
-    //    // config);
-    //    // Trajectory jsonTrajectory = trajectorySelector.getSelected();
-    //    Trajectory jsonTrajectory = traj;
-
-    //    RamseteCommand ramseteCommand = new RamseteCommand(
-    //            jsonTrajectory,
-    //            drivetrain::getPose,
-    //            new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta),
-    //            new SimpleMotorFeedforward(
-    //                    Constants.ksVolts,
-    //                    Constants.kvVoltSecondsPerMeter,
-    //                    Constants.kaVoltSecondsSquaredPerMeter),
-    //           Constants.kDriveKinematics,
-    //            drivetrain::getWheelSpeeds,
-    //            new PIDController(Constants.kPDriveVel, 0, 0),
-    //            new PIDController(Constants.kPDriveVel, 0, 0),
-    //            // RamseteCommand passes volts to the callback
-    //            drivetrain::tankDriveVolts,
-    //           drivetrain);
-
-    //    // Reset odometry to the starting pose of the trajectory.
-    //    drivetrain.resetOdometry(jsonTrajectory.getInitialPose());
-
-    //    // Run path following command, then stop at the end.
-    //    return ramseteCommand.andThen(() -> drivetrain.tankDriveVolts(0, 0));
-    //}
-
 }

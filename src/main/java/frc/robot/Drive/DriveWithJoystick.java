@@ -9,17 +9,15 @@ import frc.robot.Controls.ControlConstants;
 public class DriveWithJoystick extends CommandBase {
     protected Drivetrain drivetrain;
     protected XboxController driverXbox;
-    protected XboxController operatorXbox;
     protected double speedConstant = Constants.speedHigh;
     protected double rotationConstant = Constants.rotationHigh;
     protected double openLoopRampRateConstant = Constants.rampRate;
     protected boolean isDriving = false;
 
-    public DriveWithJoystick(Drivetrain drivetrain, XboxController driverXbox, XboxController operatorXbox) {
+    public DriveWithJoystick(Drivetrain drivetrain, XboxController driverXbox) {
         addRequirements(drivetrain);
         this.drivetrain = drivetrain;
         this.driverXbox = driverXbox;
-        this.operatorXbox = operatorXbox;
 
         SmartDashboard.putNumber("DriveWithJoystick/speed", speedConstant);
         SmartDashboard.putNumber("DriveWithJoystick/rotation", rotationConstant);

@@ -56,7 +56,6 @@ public class LimeLight {
     }
 
     public static void setLedMode(LedMode ledMode) {
-        // ledModeEntry.setNumber(ledMode.get());
         ledModeEntry.setNumber(LedMode.OFF.get());
     }
 

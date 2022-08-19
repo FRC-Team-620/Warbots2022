@@ -3,7 +3,6 @@ package frc.robot.Shooter;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.Controls.ControlBoard;
 import frc.robot.Util.LimeLight;
 import frc.robot.Util.LimeLight.LedMode;
 
@@ -22,14 +21,6 @@ public class SetpointSpinUp extends CommandBase {
     @Override
     public void execute() {
         shooterSubsystem.setTargetRPM(Constants.rpmMap.getInterpolated(offsetY));
-        ControlBoard.setOperatorRumble(getWithinTolerance());
-    }
-
-    private boolean getWithinTolerance() {
-        return ShooterMath.withinTolerance(
-            this.shooterSubsystem.getRPM(), 
-            this.shooterSubsystem.getTargetRPM(), 
-            Constants.shooterVibrationTolerance);
     }
     
     @Override
@@ -41,6 +32,5 @@ public class SetpointSpinUp extends CommandBase {
     public void end(boolean interrupt) {
         shooterSubsystem.setTargetRPM(0);
         LimeLight.setLedMode(LedMode.OFF);
-        ControlBoard.setOperatorRumble(false);
     }
 }
