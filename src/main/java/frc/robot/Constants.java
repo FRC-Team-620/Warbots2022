@@ -68,7 +68,7 @@ public final class Constants {
 
     public static final double speedHigh = 0.15;
     public static final double speedLow = 0.15;
-    public static final double rotationHigh = -0.60;
+    public static final double rotationHigh = -0.30;
     public static final double rotationLow = -0.30;
     public static final double rampRate = 0.2;
 

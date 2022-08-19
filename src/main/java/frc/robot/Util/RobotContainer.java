@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.Climber.ClimberMotorsSubsystem;
+import frc.robot.Climber.SensorWinchRetract;
 import frc.robot.Climber.WinchExtend;
 import frc.robot.Climber.WinchRetract;
 import frc.robot.Controls.ControlBoard;
@@ -55,7 +56,7 @@ public class RobotContainer {
         ControlBoard.intakeButton.whenPressed(new InstantCommand(intake::enableInnerIntakeMotor))
         .whenReleased(new InstantCommand(intake::disableInnerIntakeMotor));
         ControlBoard.extendArms.whenPressed(new WinchExtend(winch, Constants.winchMaxLimit));
-        ControlBoard.retractArms.whenPressed(new WinchRetract(winch, Constants.winchMaxLimit));
+        ControlBoard.retractArms.whenPressed(new SensorWinchRetract(winch));
     }
 
     public void init() {

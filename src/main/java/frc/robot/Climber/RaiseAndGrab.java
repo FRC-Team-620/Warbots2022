@@ -22,7 +22,7 @@ public class RaiseAndGrab extends SequentialCommandGroup {
             // ),
             new LowerHooks(climberSubsystem),
             //new WinchRetract(climberMotorsSubsystem, Constants.winchMaxLimit),
-            new SensorWinchRetract(climberMotorsSubsystem, climberSubsystem),
+            new SensorWinchRetract(climberMotorsSubsystem),
             // new RaiseHooks(climberMotorsSubsystem, climberSubsystem);
             new ParallelCommandGroup(
                 new RaiseHooks(climberSubsystem, climberMotorsSubsystem),

@@ -31,6 +31,6 @@ public class LEDIdleCommand extends CommandBase {
 
     @Override
     public void execute() {
-        this.madison.step();
+        this.rainbow.step();
     }
 }

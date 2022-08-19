@@ -14,10 +14,9 @@ public class SensorWinchRetract extends CommandBase {
   protected boolean isBarDetected;
   protected Timer timer;
 
-  public SensorWinchRetract(ClimberMotorsSubsystem climberMotorsSubsystem, ClimberSubsystem climberSubsystem) {
+  public SensorWinchRetract(ClimberMotorsSubsystem climberMotorsSubsystem) {
       addRequirements(climberMotorsSubsystem);
       this.climberMotorsSubsystem = climberMotorsSubsystem;
-      this.climberSubsystem = climberSubsystem;
   }
 
   @Override
