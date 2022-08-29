@@ -77,7 +77,7 @@ public class RobotContainer {
 		ControlBoard.init();
         initSubsystems();
         initControls();
-        LimeLight.init();
+        //LimeLight.init();
         DataLogManager.start();
         DriverStation.startDataLog(DataLogManager.getLog());
         // DriverStation.datal
@@ -126,15 +126,15 @@ public class RobotContainer {
 
         ControlBoard.aimTurretTrigger.whileActiveOnce(
             new ParallelCommandGroup(   
-                new LimelightSpinUp(this.getShooterSubsystem()),
+                //new LimelightSpinUp(this.getShooterSubsystem()),
                 //new TurretAiming(this.getLazySusanSubsystem())
-                new TurretAimingPID(this.getLazySusanSubsystem(), robotFieldWidget, drivetrain::getPose)
+                //new TurretAimingPID(this.getLazySusanSubsystem(), robotFieldWidget, drivetrain::getPose)
             ));
 
         ControlBoard.tankDriveAimButton.whileActiveOnce(
             new ParallelCommandGroup(
-                new LimelightSpinUp(this.getShooterSubsystem()),
-                new TankDriveAiming(this.getDriveTrain())
+                //new LimelightSpinUp(this.getShooterSubsystem()),
+                //new TankDriveAiming(this.getDriveTrain())
             ));
             // new AutoAimingAndSpinningUp(getShooterSubsystem(), getLazySusanSubsystem(), 
             //     false, controls.getOperatorController()));
@@ -179,9 +179,9 @@ public class RobotContainer {
         // will fix this later
 
         // only valid for now so this is still functional and builds
-        // driveWithJoystick = new DriveWithJoystick(drivetrain, controls.getDriverController(),
-        //         controls.getOperatorController());
-        // drivetrain.setDefaultCommand(driveWithJoystick);
+        driveWithJoystick = new DriveWithJoystick(drivetrain, ControlBoard.getDriverController(),
+                ControlBoard.getOperatorController());
+        drivetrain.setDefaultCommand(driveWithJoystick);
 
         turret.setDefaultCommand(new ManualAimingPID(turret, ControlBoard.getOperatorController()));
         //turret.setDefaultCommand(new MoveTurretToPos(turret));

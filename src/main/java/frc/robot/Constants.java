@@ -66,10 +66,10 @@ public final class Constants {
     // public static final double kEncoderDistancePerPulse = 0.0359;//0.00136
     // //TODO: Not used Remove?
 
-    public static final double speedHigh = 0.85;
-    public static final double speedLow = 0.35;
-    public static final double rotationHigh = -0.60;
-    public static final double rotationLow = -0.30;
+    public static final double speedHigh = 0.85/2;
+    public static final double speedLow = 0.35/2;
+    public static final double rotationHigh = -0.60/2;
+    public static final double rotationLow = -0.30/2;
     public static final double rampRate = 0.2;
 
     public static final double limelightHeight = 0.69; // based on last year's robot
