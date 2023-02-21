@@ -11,30 +11,12 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.I2C;
 import frc.robot.Util.InterpolatingDoubleMap;
 
-/**
- * The Constants class provides a convenient place for teams to hold robot-wide
- * numerical or boolean
- * constants. This class should not be used for any other purpose. All constants
- * should be declared
- * globally (i.e. public static). Do not put anything functional in this class.
- *
- * <p>
- * It is advised to statically import this class (or one of its inner classes)
- * wherever the
- * constants are needed, to reduce verbosity.
- */
 public final class Constants {
-    // These characterization values MUST be determined either experimentally or
-    // theoretically
-    // for *your* robot's drive.
-    // The Robot Characterization Toolsuite provides a convenient tool for obtaining
-    // these
-    // values for your robot.
+    public static final int NEO_CURRENT_LIMIT = 40;
+    public static final int NEO550_CURRENT_LIMIT = 20;
+    public static final boolean SQUARE_INPUTS = true;
+    public static final double INTAKE_SPEED = 1;
 
-    // Main Bot Character
-    //
-    //
-    //
     public static final double ksVolts = 0.13271;// 0.16249 0.13271
     public static final double kvVoltSecondsPerMeter = 2.1525;// 3.2952 2.1525
     public static final double kaVoltSecondsSquaredPerMeter = 0.40778;// 0.30496 0.40778

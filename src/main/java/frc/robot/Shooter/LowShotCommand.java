@@ -5,6 +5,7 @@
 package frc.robot.Shooter;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Controls.ControlBoard;
@@ -15,7 +16,6 @@ public class LowShotCommand extends CommandBase {
   protected XboxController operatorXbox;
     protected XboxController driverXbox;
     protected ShooterSubsystem shooterSubsystem;
-    protected LazySusanSubsystem lazySusanSubsystem;
     protected ControlBoard controlBoard;
   protected double acceleration; 
   /** Creates a new LowShotCommand. */
@@ -31,17 +31,7 @@ public class LowShotCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooterSubsystem.setTargetRPM(Constants.lowPoweredShotRPM);
-    // acceleration = Constants.diffConstShooter * (shooterSubsystem.getTargetRPM() - shooterSubsystem.getRPM());
-    //     SmartDashboard.putNumber("Acceleration: ", acceleration);
-    //     // if(Math.abs(rpm-currRPM) > (bangBangTolerance * rpm))
-    //     shooterSubsystem.setShooterSpeedAndUpdate(shooterSubsystem.getCurrentSpeed() + acceleration);
-    //     // System.out.println(rpm);
-    //     if(shooterSubsystem.getTargetRPM() == 0.0) {
-    //         shooterSubsystem.setShooterSpeedAndUpdate(0);
-    //     }
-    //     SmartDashboard.putNumber("Shooter RPM: ",
-    //             ShooterMath.roundUpToNearestMultiple(shooterSubsystem.getRPM(), 5));
+    shooterSubsystem.setTargetRPM(SmartDashboard.getNumber("Shooter/lowPoweredShotRPM", Constants.lowPoweredShotRPM));
   }
 
   // Called once the command ends or is interrupted.
