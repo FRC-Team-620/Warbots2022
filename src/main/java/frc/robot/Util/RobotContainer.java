@@ -10,26 +10,35 @@ package frc.robot.Util;
 
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.Climber.ClimberMotorsSubsystem;
+import frc.robot.Climber.SensorWinchRetract;
+import frc.robot.Climber.WinchExtend;
+import frc.robot.Climber.WinchRetract;
 import frc.robot.Controls.ControlBoard;
 import frc.robot.Drive.DriveWithJoystick;
 import frc.robot.Drive.Drivetrain;
 import frc.robot.Loader.Intake;
 import frc.robot.Shooter.LowShotCommand;
 import frc.robot.Shooter.ShooterSubsystem;
-// import frc.robot.Util.LEDs.LEDIdleCommand;
-// import frc.robot.Util.LEDs.LEDSubsystem;
+import frc.robot.Util.LEDs.LEDIdleCommand;
+import frc.robot.Util.LEDs.LEDSubsystem;
 
 public class RobotContainer {
 
     private Drivetrain drivetrain;
     private Intake intake;
     private ShooterSubsystem shooter;
-    // private LEDSubsystem ledSubsystem;
+    private ClimberMotorsSubsystem winch;
+    private LEDSubsystem ledSubsystem;
     private DriveWithJoystick driveWithJoystick;
 
+    TrajectorySelector trajectorySelector = new TrajectorySelector(
+            Filesystem.getDeployDirectory().toPath().resolve("paths/"), true);
     public Field2d robotFieldWidget = new Field2d();
 
     public RobotContainer() {
@@ -45,17 +54,20 @@ public class RobotContainer {
         drivetrain = new Drivetrain();
         intake = new Intake();
         shooter = new ShooterSubsystem();
-        // ledSubsystem = new LEDSubsystem();
+        winch = new ClimberMotorsSubsystem();
+        ledSubsystem = new LEDSubsystem();
     }
 
     private void initControls() {
-        ControlBoard.lowShotButton.whileTrue(new LowShotCommand(shooter));
-        ControlBoard.intakeButton.onTrue(new InstantCommand(intake::enableInnerIntakeMotor))
-        .onFalse(new InstantCommand(intake::disableInnerIntakeMotor));
+        ControlBoard.lowShotButton.whileActiveOnce(new LowShotCommand(shooter));
+        ControlBoard.intakeButton.whenPressed(new InstantCommand(intake::enableInnerIntakeMotor))
+        .whenReleased(new InstantCommand(intake::disableInnerIntakeMotor));
+        ControlBoard.extendArms.whenPressed(new WinchExtend(winch, Constants.winchMaxLimit));
+        ControlBoard.retractArms.whenPressed(new SensorWinchRetract(winch));
     }
 
     public void init() {
-        // this.ledSubsystem.setDefaultCommand(new LEDIdleCommand(this.ledSubsystem));
+        this.ledSubsystem.setDefaultCommand(new LEDIdleCommand(this.ledSubsystem));
     }
 
     /**
@@ -79,8 +91,16 @@ public class RobotContainer {
         return shooter;
     }
 
+    public TrajectorySelector getTrajectorySelector() {
+        return trajectorySelector;
+    }
+
     public Intake getIntake() {
         return intake;
+    }
+
+    public ClimberMotorsSubsystem getClimberMotorsSubsystem() {
+        return winch;
     }
 
     public void setTeleopDrive() {
