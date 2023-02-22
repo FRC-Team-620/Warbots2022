@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.Controls.ControlConstants;
 
 public class DriveWithJoystick extends CommandBase {
     protected Drivetrain drivetrain;
@@ -22,9 +23,9 @@ public class DriveWithJoystick extends CommandBase {
 
         SmartDashboard.putNumber("DriveWithJoystick/speed", speedConstant);
         SmartDashboard.putNumber("DriveWithJoystick/rotation", rotationConstant);
+        SmartDashboard.putNumber("DriveWithJoystick/fudgeFactor", fudgeFactor);
         SmartDashboard.putNumber("DriveWithJoystick/rampRate", rampRateConstant);
         SmartDashboard.putBoolean("DriveWithJoystick/squareInputs", squareInputsConstant);
-        SmartDashboard.putNumber("DriveWithJoystick/fudgeFactor", fudgeFactor);
         // drivetrain.setAllOpenLoopRampRates(openLoopRampRateConstant);
     }
 
@@ -32,7 +33,7 @@ public class DriveWithJoystick extends CommandBase {
     public void execute() {
         this.speedConstant = SmartDashboard.getNumber("DriveWithJoystick/speed", Constants.speedHigh);
         this.rotationConstant = SmartDashboard.getNumber("DriveWithJoystick/rotation", Constants.rotationHigh);
-        this.rampRateConstant = SmartDashboard.getNumber("DriveWithJoystick/rampRate", Constants.rampRate);
+                this.rampRateConstant = SmartDashboard.getNumber("DriveWithJoystick/rampRate", Constants.rampRate);
         this.squareInputsConstant = SmartDashboard.getBoolean("DriveWithJoystick/squareInputs", Constants.SQUARE_INPUTS);
         this.fudgeFactor = SmartDashboard.getNumber("DriveWithJoystick/fudgeFactor", fudgeFactor);
 
