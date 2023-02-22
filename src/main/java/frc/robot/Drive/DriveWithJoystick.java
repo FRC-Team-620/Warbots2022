@@ -13,6 +13,7 @@ public class DriveWithJoystick extends CommandBase {
     protected double rampRateConstant = Constants.rampRate;
     protected boolean squareInputsConstant = Constants.SQUARE_INPUTS;
     protected boolean isDriving = false;
+    protected double fudgeFactor = 0;
 
     public DriveWithJoystick(Drivetrain drivetrain, XboxController driverXbox) {
         addRequirements(drivetrain);
@@ -23,6 +24,7 @@ public class DriveWithJoystick extends CommandBase {
         SmartDashboard.putNumber("DriveWithJoystick/rotation", rotationConstant);
         SmartDashboard.putNumber("DriveWithJoystick/rampRate", rampRateConstant);
         SmartDashboard.putBoolean("DriveWithJoystick/squareInputs", squareInputsConstant);
+        SmartDashboard.putNumber("DriveWithJoystick/fudgeFactor", fudgeFactor);
         // drivetrain.setAllOpenLoopRampRates(openLoopRampRateConstant);
     }
 
@@ -32,6 +34,7 @@ public class DriveWithJoystick extends CommandBase {
         this.rotationConstant = SmartDashboard.getNumber("DriveWithJoystick/rotation", Constants.rotationHigh);
         this.rampRateConstant = SmartDashboard.getNumber("DriveWithJoystick/rampRate", Constants.rampRate);
         this.squareInputsConstant = SmartDashboard.getBoolean("DriveWithJoystick/squareInputs", Constants.SQUARE_INPUTS);
+        this.fudgeFactor = SmartDashboard.getNumber("DriveWithJoystick/fudgeFactor", fudgeFactor);
 
         // Xbox Controller Input
         double rightTriggerInput = Math.pow(driverXbox.getRightTriggerAxis(), 2); // Forwards
@@ -46,6 +49,7 @@ public class DriveWithJoystick extends CommandBase {
         double rotation = rotationConstant * rotationInput;
         
         drivetrain.curvatureInput(speed, rotation, true); // Always enable turning in place
+        drivetrain.setFudgeSpeed(fudgeFactor);
     }
 
     @Override
