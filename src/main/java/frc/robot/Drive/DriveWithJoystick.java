@@ -52,7 +52,7 @@ public class DriveWithJoystick extends CommandBase {
         drivetrain.setFudgeSpeed(fudgeFactor);
         if (speed > 0) drivetrain.setFudgeSpeed(fudgeFactor);
         else if (speed < 0) drivetrain.setFudgeSpeed(-fudgeFactor);
-    }
+        }
 
     @Override
     public boolean isFinished() {
