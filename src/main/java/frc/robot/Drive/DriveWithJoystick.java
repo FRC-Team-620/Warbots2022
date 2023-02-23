@@ -14,7 +14,7 @@ public class DriveWithJoystick extends CommandBase {
     protected double rampRateConstant = Constants.rampRate;
     protected boolean squareInputsConstant = Constants.SQUARE_INPUTS;
     protected boolean isDriving = false;
-    protected double fudgeFactor = 0;
+    protected double fudgeFactor = 0.07;
 
     public DriveWithJoystick(Drivetrain drivetrain, XboxController driverXbox) {
         addRequirements(drivetrain);
@@ -50,7 +50,8 @@ public class DriveWithJoystick extends CommandBase {
         double rotation = rotationConstant * rotationInput;
         
         drivetrain.curvatureInput(speed, rotation, true); // Always enable turning in place
-        drivetrain.setFudgeSpeed(fudgeFactor);
+        if (speed > 0) drivetrain.setFudgeSpeed(fudgeFactor);
+        else if (speed < 0) drivetrain.setFudgeSpeed(-fudgeFactor);
     }
 
     @Override

@@ -43,7 +43,7 @@ public class Drivetrain extends SubsystemBase {
         frontLeftMotor.set(frontLeftMotor.get() + fudgeFactor);
     }
     public void curvatureInput(double speed, double rotation, boolean quickTurn) {
-        drive.curvatureDrive(speed, -rotation, quickTurn);
+        drive.curvatureDrive(speed, rotation, quickTurn);
     }
 
     public void setEncoderPos(double pos) {
