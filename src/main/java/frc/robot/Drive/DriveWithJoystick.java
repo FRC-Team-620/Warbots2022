@@ -28,11 +28,15 @@ public class DriveWithJoystick extends CommandBase {
 
     @Override
     public void execute() {
-        this.speedConstant = SmartDashboard.getNumber("DriveWithJoystick/speed", Constants.speedHigh);
-        this.rotationConstant = SmartDashboard.getNumber("DriveWithJoystick/rotation", Constants.rotationHigh);
-        this.rampRateConstant = SmartDashboard.getNumber("DriveWithJoystick/rampRate", Constants.rampRate);
-        this.squareInputsConstant = SmartDashboard.getBoolean("DriveWithJoystick/squareInputs", Constants.SQUARE_INPUTS);
+        // this.speedConstant = SmartDashboard.getNumber("DriveWithJoystick/speed", Constants.speedHigh);
+        // this.rotationConstant = SmartDashboard.getNumber("DriveWithJoystick/rotation", Constants.rotationHigh);
+        // this.rampRateConstant = SmartDashboard.getNumber("DriveWithJoystick/rampRate", Constants.rampRate);
+        // this.squareInputsConstant = SmartDashboard.getBoolean("DriveWithJoystick/squareInputs", Constants.SQUARE_INPUTS);
 
+        this.speedConstant = 0.5;
+        this.rotationConstant = 0.5;
+        this.rampRateConstant = 0.2;
+        this.squareInputsConstant = true;
         // Xbox Controller Input
         double rightTriggerInput = Math.pow(driverXbox.getRightTriggerAxis(), 2); // Forwards
         double leftTriggerInput = Math.pow(driverXbox.getLeftTriggerAxis(), 2); // Backwards
@@ -41,11 +45,13 @@ public class DriveWithJoystick extends CommandBase {
         // Only apply the original sign if the factor is even
         if (squareInputsConstant) rotationInput *= Math.signum(driverXbox.getLeftX());
 
-        double direction = rightTriggerInput > leftTriggerInput ? rightTriggerInput : -leftTriggerInput;
+        double direction = rightTriggerInput - leftTriggerInput;
         double speed = direction * speedConstant;
         double rotation = rotationConstant * rotationInput;
-        
+        drivetrain.tankDriveSet(speed, 0);
         drivetrain.curvatureInput(speed, rotation, true); // Always enable turning in place
+        // double speed = driverXbox.getRightTriggerAxis();
+        // drivetrain.tankDriveSet(speed, 0);
     }
 
     @Override

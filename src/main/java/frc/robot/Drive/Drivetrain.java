@@ -27,6 +27,7 @@ public class Drivetrain extends SubsystemBase {
 
     public void curvatureInput(double speed, double rotation, boolean quickTurn) {
         drive.curvatureDrive(speed, -rotation, quickTurn);
+        // drive.arcadeDrive(speed, rotation);
     }
 
     public void setEncoderPos(double pos) {
@@ -38,9 +39,9 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void tankDriveSet(double leftSpeed, double rightSpeed) {
-        frontLeftMotor.set(leftSpeed);
-        frontRightMotor.set(rightSpeed);
-        // drive.tankDrive(leftSpeed, rightSpeed);
+        // frontLeftMotor.set(leftSpeed);
+        // frontRightMotor.set(rightSpeed);
+        drive.tankDrive(leftSpeed, rightSpeed);
     }
 
     public void arcadeDriveSet(double speed, double rotation) {
@@ -89,18 +90,24 @@ public class Drivetrain extends SubsystemBase {
         frontRightMotor = new CANSparkMax(DriveConstants.frontRightMotorID, MotorType.kBrushless);
         rearLeftMotor = new CANSparkMax(DriveConstants.rearLeftMotorID, MotorType.kBrushless);
         rearRightMotor = new CANSparkMax(DriveConstants.rearRightMotorID, MotorType.kBrushless);
+        
+        frontLeftMotor.restoreFactoryDefaults();
+        frontRightMotor.restoreFactoryDefaults();
+        rearRightMotor.restoreFactoryDefaults();
+        rearLeftMotor.restoreFactoryDefaults();
 
         rearRightMotor.follow(frontRightMotor);
         rearLeftMotor.follow(frontLeftMotor);
+
 
         frontRightMotor.setInverted(false);
         frontLeftMotor.setInverted(true);
 
         int currentLimit = Constants.NEO_CURRENT_LIMIT;
-        frontLeftMotor.setSmartCurrentLimit(currentLimit);
-        frontRightMotor.setSmartCurrentLimit(currentLimit);
-        rearLeftMotor.setSmartCurrentLimit(currentLimit);
-        rearRightMotor.setSmartCurrentLimit(currentLimit);
+        // frontLeftMotor.setSmartCurrentLimit(currentLimit);
+        // frontRightMotor.setSmartCurrentLimit(currentLimit);
+        // rearLeftMotor.setSmartCurrentLimit(currentLimit);
+        // rearRightMotor.setSmartCurrentLimit(currentLimit);
 
         frontRightMotor.setOpenLoopRampRate(DriveConstants.driveRampRate);
         frontLeftMotor.setOpenLoopRampRate(DriveConstants.driveRampRate);
