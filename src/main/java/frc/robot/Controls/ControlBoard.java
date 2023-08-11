@@ -24,7 +24,7 @@ public class ControlBoard {
 
     private static void initDriverControls() {
         // driver controls
-        intakeButton = new JoystickButton(driver, Button.kA.value);
+        intakeButton = new JoystickButton(driver, Button.kLeftBumper.value);
         lowShotButton = new JoystickButton(driver, Button.kRightBumper.value);
     }
 

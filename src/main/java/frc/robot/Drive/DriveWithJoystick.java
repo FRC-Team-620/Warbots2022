@@ -33,9 +33,9 @@ public class DriveWithJoystick extends CommandBase {
         // this.rampRateConstant = SmartDashboard.getNumber("DriveWithJoystick/rampRate", Constants.rampRate);
         // this.squareInputsConstant = SmartDashboard.getBoolean("DriveWithJoystick/squareInputs", Constants.SQUARE_INPUTS);
 
-        this.speedConstant = 0.5;
-        this.rotationConstant = 0.5;
-        this.rampRateConstant = 0.2;
+        this.speedConstant = Constants.speedHigh;
+        this.rotationConstant = Constants.rotationHigh;
+        this.rampRateConstant = Constants.rampRate;
         this.squareInputsConstant = true;
         // Xbox Controller Input
         double rightTriggerInput = Math.pow(driverXbox.getRightTriggerAxis(), 2); // Forwards
