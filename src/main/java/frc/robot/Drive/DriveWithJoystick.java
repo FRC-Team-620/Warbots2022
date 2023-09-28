@@ -49,7 +49,7 @@ public class DriveWithJoystick extends CommandBase {
         double speed = direction * speedConstant;
         double rotation = rotationConstant * rotationInput;
         drivetrain.tankDriveSet(speed, 0);
-        drivetrain.curvatureInput(speed, rotation, true); // Always enable turning in place
+        drivetrain.curvatureInput(speed, -rotation, true); // Always enable turning in place
         // double speed = driverXbox.getRightTriggerAxis();
         // drivetrain.tankDriveSet(speed, 0);
     }

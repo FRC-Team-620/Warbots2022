@@ -54,7 +54,7 @@ public class ShooterSubsystem extends SubsystemBase {
         for (CANSparkMax canSparkMax : List.of(rightShooterMotor, leftShooterMotor)) {
             canSparkMax.restoreFactoryDefaults();
             canSparkMax.setIdleMode(IdleMode.kCoast);
-            canSparkMax.setSmartCurrentLimit(Constants.NEO_CURRENT_LIMIT);
+            canSparkMax.setSmartCurrentLimit(50);
         }
         //leftShooterMotor.follow(rightShooterMotor, true);
         // rightShooterMotor.setInverted(true);
